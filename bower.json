@@ -1,0 +1,37 @@
+{
+  "name": "crime-app",
+  "version": "1.0.0",
+  "homepage": "https://github.com/volkovasystems/crime-app",
+  "authors": [
+    "Richeve S. Bebedor <volkovasystems@gmail.com>"
+  ],
+  "description": "Crime awareness and reporting application",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node",
+    "yui"
+  ],
+  "keywords": [
+    "crime"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "moment": "~2.8.3",
+    "react": "~0.11.2",
+    "angular-bootstrap": "~0.11.2",
+    "bootstrap": "~3.2.0",
+    "lodash": "~2.4.1",
+    "angular": "~1.2.25"
+  }
+}
