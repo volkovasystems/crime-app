@@ -1,2 +1,7 @@
 node_modules/
 bower_components/
+client/library
+build
+duo.json
+deploy
+temp

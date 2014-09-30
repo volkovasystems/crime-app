@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="Crime">
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -41,5 +41,20 @@
 
 		<section crime-progressbar>
 		</section>
+
+		<script type="text/javascript" src="library/LAB.min.js"></script>
+		<script type="text/javascript">
+			$LAB
+				.script( "library/jquery.min.js").wait( )
+				.script( "library/bootstrap.min.js" ).wait( )
+				.script( "library/angular.min.js").wait( )
+				.script( "library/ui-bootstrap-tpls.min.js" ).wait( )
+				.script( "script/crime-app.min.js" )
+				.wait( function onWait( ){
+					$( document ).ready( function onReady( ){
+						angular.bootstrap( document, [ "Crime" ] );
+					} );
+				} );
+		</script>
 	</body>
 </html>

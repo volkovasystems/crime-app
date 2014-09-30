@@ -1,2 +1,2 @@
 #!/bin/bash
-npm install -g duo bower gulp
+npm install -g bower gulp

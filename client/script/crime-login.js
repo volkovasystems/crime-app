@@ -1,7 +1,10 @@
-var Crime = require( "crime-app.js" );
-
-Crime.directive( "crimeHome", [
+Crime.directive( "crimeLogin", [
 	function directive( ){
+		return {
+			"restrict": "EA",
+			"link": function onLink( scope, element, attributeSet ){
 
+			}
+		};
 	}
 ] );

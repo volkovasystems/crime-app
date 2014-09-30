@@ -1,1 +1,1 @@
-var Crime = angular.module( "Crime", [ "ui-bootstrap" ] );
+var Crime = angular.module( "Crime", [ ] );
