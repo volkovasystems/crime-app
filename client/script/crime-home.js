@@ -4,7 +4,16 @@ Crime.directive( "crimeHome", [
 			"render": function onRender( ){
 				return (
 					<div className="crime-home-container">
-						<div className="crime-home-logo row col-md-2 col-md-offset-5"></div>
+						<div 
+							className={ [
+								"crime-home-logo",
+								"row",
+								"col-md-2",
+								"col-md-offset-5",
+								"col-xs-4",
+								"col-xs-offset-4"
+							].join( " " ) }>
+						</div>
 					</div>
 				);
 			}

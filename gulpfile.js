@@ -44,6 +44,9 @@ gulp.task( "default", [
 	"build-style",
 	"deploy-style",
 
+	"build-image",
+	"deploy-image",
+
 	"build-index",
 	"deploy-index"
 ] );
@@ -87,7 +90,7 @@ gulp.task( "copy-library",
 	} );
 
 
-gulp.task( "build", [ "clean-build", "build-script", "build-library", "build-less", "build-style", "build-index" ] );
+gulp.task( "build", [ "clean-build", "build-script", "build-library", "build-less", "build-style", "build-image", "build-index" ] );
 
 gulp.task( "clean-build",
 	[ "clean-library", "copy-library" ],
@@ -145,6 +148,14 @@ gulp.task( "build-style",
 			.pipe( gulp.dest( "build/style" ) );
 	} );
 
+gulp.task( "build-image",
+	[ "clean-build" ],
+	function buildTask( ){
+		return gulp
+			.src( "client/image/*.*" )
+			.pipe( gulp.dest( "build/image" ) );
+	} );
+
 gulp.task( "build-index",
 	[ "clean-build" ],
 	function buildTask( ){
@@ -159,7 +170,7 @@ gulp.task( "build-index",
 	} );
 
 
-gulp.task( "deploy", [ "clean-deploy", "deploy-script", "deploy-library", "deploy-style", "deploy-index" ] );
+gulp.task( "deploy", [ "clean-deploy", "deploy-script", "deploy-library", "deploy-style", "deploy-image", "deploy-index" ] );
 
 gulp.task( "clean-deploy",
 	[ "clean-library", "copy-library", "clean-build", "build-library" ],
@@ -198,6 +209,14 @@ gulp.task( "deploy-style",
 				"build/style/*.map"
 			] )
 			.pipe( gulp.dest( "deploy/style" ) )
+	} );
+
+gulp.task( "deploy-image",
+	[ "clean-build", "clean-deploy" ],
+	function deployTask( ){
+		return gulp
+			.src( "build/image/*.*" )
+			.pipe( gulp.dest( "deploy/image" ) );
 	} );
 
 gulp.task( "deploy-index",
