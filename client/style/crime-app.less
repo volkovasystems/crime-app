@@ -1,3 +1,56 @@
-@import crime-home.less
-@import crime-locate.less
-@import crime-login.less
+@import "crime-home.less";
+@import "crime-locate.less";
+@import "crime-login.less";
+
+html, body, section {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+section.half-page {
+	width: 50%;
+}
+
+section.status-active-only {
+	top: 10%;
+	height: 90%;
+}
+
+section.control-active-only {
+	bottom: 10%;
+	height: 90%;
+}
+
+section.full-state-active {
+	top: 10%;
+	height: 80%;
+}
+
+section.half-page-left {
+	right: 50%;
+}
+
+section.half-page-right{
+	left: 50%;
+}
+
+section.whole-page-left {
+	right: 100%;
+}
+
+section.whole-page-right {
+	left: 100%;
+}
+
+section.whole-page-down {
+	top: 100%;
+}
+
+section.whole-page-up {
+	bottom: 100%;
+}
