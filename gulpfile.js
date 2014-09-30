@@ -235,7 +235,7 @@ gulp.task( "server-static",
 		var server = connect( );
 		server
 			.use( serveStatic( "build" ) )
-			.listen( portNumber, done );
+			.listen( portNumber, "localhost", done );
 	} )
 
 var server = livereload( );

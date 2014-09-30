@@ -1,6 +1,18 @@
 Crime.directive( "crimeLogin", [
 	function directive( ){
 		var crimeLogin = React.createClass( {
+			"onClick": function onClick( ){
+				FB.getLoginStatus( function onReponseLoginStatus( response ){
+					if( response.status === "connected" ){
+						console.debug( response );
+					}else {
+						FB.login( function onLogin( response ){
+							console.debug( response );
+						} );
+					}
+				} );
+			},
+
 			"render": function onRender( ){
 				return ( 
 					<div className="crime-login-container">
@@ -15,6 +27,7 @@ Crime.directive( "crimeLogin", [
 							].join( " " ) }>
 							<button 
 								type="button"
+								onClick={ this.onClick }
 								className={ [
 									"facebook-login-button",
 									"btn",
@@ -34,7 +47,7 @@ Crime.directive( "crimeLogin", [
 		return {
 			"restrict": "EA",
 			"link": function onLink( scope, element, attributeSet ){
-				React.renderComponent( <crimeLogin />, element[ 0 ] );
+				React.renderComponent( <crimeLogin scope={ scope } />, element[ 0 ] );
 			}
 		};
 	}
