@@ -14,6 +14,7 @@ var less = require( "gulp-less" );
 var filter = require( "gulp-filter" );
 var livereload = require( "gulp-livereload" );
 var embedlr = require( "gulp-embedlr" );
+var plumber = require( "gulp-plumber" );
 
 var connect = require( "connect" );
 var serveStatic = require( "serve-static" );
@@ -55,7 +56,10 @@ gulp.task( "clean", [ "clean-library", "clean-build", "clean-deploy", "clean-tem
 
 gulp.task( "clean-temp",
 	function cleanTask( ){
-		return gulp.src( "temp", { "read": false } ).pipe( clean( { "force": true } ) );
+		return gulp
+			.src( "temp", { "read": false } )
+			.pipe( plumber( ) )
+			.pipe( clean( { "force": true } ) );
 	} );
 
 
@@ -63,7 +67,10 @@ gulp.task( "link-library", [ "clean-library", "copy-library" ] );
 
 gulp.task( "clean-library",
 	function cleanTask( ){
-		return gulp.src( "client/library", { "read": false } ).pipe( clean( { "force": true } ) );
+		return gulp
+			.src( "client/library", { "read": false } )
+			.pipe( plumber( ) )
+			.pipe( clean( { "force": true } ) );
 	} );
 
 gulp.task( "copy-library",
@@ -84,6 +91,7 @@ gulp.task( "copy-library",
 				"bower_components/*/lib/**/*.js",
 				"!**/Gruntfile.js"
 			] )
+			.pipe( plumber( ) )
 			.pipe( flatten( ) )
 			.pipe( changed( "client/library" ) )
 			.pipe( gulp.dest( "client/library" ) );
@@ -97,6 +105,7 @@ gulp.task( "clean-build",
 	function cleanTask( ){
 		return gulp
 			.src( "build", { "read": false } )
+			.pipe( plumber( ) )
 			.pipe( clean( { "force": true } ) );
 	} );
 
@@ -105,6 +114,7 @@ gulp.task( "build-script",
 	function buildTask( ){
 		return gulp
 			.src( "client/script/*.js" )
+			.pipe( plumber( ) )
 			.pipe( insert.prepend( REACTJS_DOM_FLAG ) )
 			.pipe( react( ) )
 			.pipe( sourcemaps.init( ) )
@@ -122,6 +132,7 @@ gulp.task( "build-library",
 	function buildTask( ){
 		return gulp
 			.src( "client/library/*.*" )
+			.pipe( plumber( ) )
 			.pipe( gulp.dest( "build/library" ) )
 	} );
 
@@ -130,6 +141,7 @@ gulp.task( "build-less",
 	function buildTask( ){
 		return gulp
 			.src( "client/style/*.less" )
+			.pipe( plumber( ) )
 			.pipe( less( ) )
 			.pipe( filter( [ "crime-app.css" ] ) )
 			.pipe( gulp.dest( "temp/style" ) );
@@ -140,6 +152,7 @@ gulp.task( "build-style",
 	function buildTask( ){
 		return gulp
 			.src( "temp/style/*.css" )
+			.pipe( plumber( ) )
 			.pipe( gulp.dest( "build/style" ) )
 			.pipe( sourcemaps.init( ) )
 			.pipe( cssmin( ) )
@@ -153,6 +166,7 @@ gulp.task( "build-image",
 	function buildTask( ){
 		return gulp
 			.src( "client/image/*.*" )
+			.pipe( plumber( ) )
 			.pipe( gulp.dest( "build/image" ) );
 	} );
 
@@ -161,6 +175,7 @@ gulp.task( "build-index",
 	function buildTask( ){
 		return gulp
 			.src( "client/index.html" )
+			.pipe( plumber( ) )
 			.pipe( replace( INCLUDE_SCRIPT_PATTERN, INCLUDE_SCRIPT_REPLACER ) )
 			.pipe( replace( INCLUDE_STYLE_PATTERN, INCLUDE_STYLE_REPLACER ) )
 			.pipe( replace( MINIFIED_SCRIPT_PATTERN, ".js" ) )
@@ -177,6 +192,7 @@ gulp.task( "clean-deploy",
 	function cleanTask( ){
 		return gulp
 			.src( "deploy", { "read": false } )
+			.pipe( plumber( ) )
 			.pipe( clean( { "force": true } ) );
 	} );
 
@@ -188,6 +204,7 @@ gulp.task( "deploy-script",
 				"build/script/*.js",
 				"build/script/*.map"
 			] )
+			.pipe( plumber( ) )
 			.pipe( gulp.dest( "deploy/script" ) )
 	} );
 
@@ -196,6 +213,7 @@ gulp.task( "deploy-library",
 	function deployTask( ){
 		return gulp
 			.src( "build/library/*.*" )
+			.pipe( plumber( ) )
 			.pipe( changed( "deploy/library" ) )
 			.pipe( gulp.dest( "deploy/library" ) )
 	} );
@@ -208,6 +226,7 @@ gulp.task( "deploy-style",
 				"build/style/*.css",
 				"build/style/*.map"
 			] )
+			.pipe( plumber( ) )
 			.pipe( gulp.dest( "deploy/style" ) )
 	} );
 
@@ -216,6 +235,7 @@ gulp.task( "deploy-image",
 	function deployTask( ){
 		return gulp
 			.src( "build/image/*.*" )
+			.pipe( plumber( ) )
 			.pipe( gulp.dest( "deploy/image" ) );
 	} );
 
@@ -224,6 +244,7 @@ gulp.task( "deploy-index",
 	function buildTask( ){
 		return gulp
 			.src( "client/index.html" )
+			.pipe( plumber( ) )
 			.pipe( replace( INCLUDE_SCRIPT_PATTERN, INCLUDE_SCRIPT_REPLACER ) )
 			.pipe( replace( INCLUDE_STYLE_PATTERN, INCLUDE_STYLE_REPLACER ) )
 			.pipe( gulp.dest( "deploy" ) );

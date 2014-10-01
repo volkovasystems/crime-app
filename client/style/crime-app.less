@@ -1,6 +1,7 @@
 @import "crime-home.less";
 @import "crime-locate.less";
 @import "crime-login.less";
+@import "crime-spinner.less";
 
 .hidden {
 	display: none !important;
@@ -18,6 +19,7 @@ html, body, section {
 	position: absolute;
 	top: 0px;
 	left: 0px;
+	cursor: default;
 }
 
 section.half-page {
@@ -62,3 +64,13 @@ section.whole-page-down {
 section.whole-page-up {
 	bottom: 100%;
 }
+
+section > div,
+section > .component-container {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+

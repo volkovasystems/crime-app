@@ -10,8 +10,8 @@ Crime.directive( "crimeHome", [
 								"row",
 								"col-md-2",
 								"col-md-offset-5",
-								"col-xs-4",
-								"col-xs-offset-4"
+								"col-xs-6",
+								"col-xs-offset-3"
 							].join( " " ) }>
 						</div>
 					</div>
