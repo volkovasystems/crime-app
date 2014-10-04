@@ -1,13 +1,23 @@
 Crime.directive( "crimeSpinner", [
-	function directive( ){
+	"PageFlow",
+	function directive( PageFlow ){
 		var crimeSpinner = React.createClass( {
 			"componentWillMount": function componentWillMount( ){
+				this.props.scope.$on( "spinner-header",
+					function onSpinnerHeader( ){
+						$( ".crime-spinner-component" ).spin( );
+
+						$( ".crime-spinner-component" )
+							.removeClass( "center whole footer header" )
+							.addClass( "header" );
+					} );
+
 				this.props.scope.$on( "spinner-footer",
 					function onSpinnerFooter( ){
 						$( ".crime-spinner-component" ).spin( );
 
 						$( ".crime-spinner-component" )
-							.removeClass( "center whole footer" )
+							.removeClass( "center whole footer header" )
 							.addClass( "footer" );
 					} );
 
@@ -16,7 +26,7 @@ Crime.directive( "crimeSpinner", [
 						$( ".crime-spinner-component" ).spin( );
 
 						$( ".crime-spinner-component" )
-							.removeClass( "center whole footer" )
+							.removeClass( "center whole footer header" )
 							.addClass( "center" );
 					} );
 
@@ -25,7 +35,7 @@ Crime.directive( "crimeSpinner", [
 						$( ".crime-spinner-component" ).spin( );
 
 						$( ".crime-spinner-component" )
-							.removeClass( "center whole footer" )
+							.removeClass( "center whole footer header" )
 							.addClass( "whole" );
 					} );
 
@@ -46,32 +56,41 @@ Crime.directive( "crimeSpinner", [
 
 			"componentDidMount": function componentDidMount( ){
 				$( ".crime-spinner-component" ).spin( false );
+				this.props.scope.$root.$broadcast( "crime-spinner-rendered" );	
 			}
 		} );
 
 		return {
 			"restrict": "EA",
+			"scope": true,
 			"link": function onLink( scope, element, attributeSet ){
-				element.addClass( "hidden" );
+				PageFlow( scope, element );
+
+				scope.wholePageUp( );
+
+				scope.$on( "spinner-header",
+					function onSpinnerHeader( ){
+						scope.wholePageCenter( );
+					} );
 
 				scope.$on( "spinner-footer",
 					function onSpinnerFooter( ){
-						element.removeClass( "hidden" ).addClass( "active" );
+						scope.wholePageCenter( );
 					} );
 
 				scope.$on( "spinner-center",
 					function onSpinnerCenter( ){
-						element.removeClass( "hidden" ).addClass( "active" );
+						scope.wholePageCenter( );
 					} );
 
 				scope.$on( "spinner-whole",
 					function onSpinnerWhole( ){
-						element.removeClass( "hidden" ).addClass( "active" );
+						scope.wholePageCenter( );
 					} );
 
 				scope.$on( "spinner-off",
 					function onSpinnerOff( ){
-						element.removeClass( "active" ).addClass( "hidden" );
+						scope.wholePageUp( );
 					} );
 
 				React.renderComponent( <crimeSpinner scope={ scope } />, element[ 0 ] );

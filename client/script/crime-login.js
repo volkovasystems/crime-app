@@ -1,5 +1,6 @@
 Crime.directive( "crimeLogin", [
-	function directive( ){
+	"PageFlow",
+	function directive( PageFlow ){
 		var crimeLogin = React.createClass( {
 			"getInitialState": function getInitialState( ){
 				return {
@@ -42,6 +43,26 @@ Crime.directive( "crimeLogin", [
 						} );
 					} );
 
+				this.props.scope.$on( "checking-login-status",
+					function onLoggingIn( ){
+						self.props.scope.$root.$broadcast( "spinner-footer" );
+
+						self.setState( {
+							"loginState": "logging-in",
+							"loginPrompt": "please wait"
+						} );
+					} );
+
+				this.props.scope.$on( "login-status-checked",
+					function onLoggingIn( ){
+						self.props.scope.$root.$broadcast( "spinner-off" );
+
+						self.setState( {
+							"loginState": "logging-in",
+							"loginPrompt": "please wait"
+						} );
+					} );
+
 				this.props.scope.$on( "logged-in",
 					function onLoggedIn( ){
 						self.props.scope.$root.$broadcast( "spinner-off" );
@@ -54,16 +75,57 @@ Crime.directive( "crimeLogin", [
 			},
 
 			"accessProfileData": function accessProfileData( onResponseProfileData ){
-				FB.api( "/me",
-					function onResponse( response ){
-						onResponseProfileData( response.error, null, response );
+				var profileData = { };
+
+				async.parallel( [
+					function requestProfileData( callback ){
+						FB.api( "/me",
+							function onResponse( response ){
+								if( response.error ){
+									callback( response.error );
+
+								}else{
+									profileData.profileName = response.name;
+									profileData.profileURL = response.link;
+
+									callback( null, response );
+								}
+							} );
+					},
+
+					function requestProfilePhoto( callback ){
+						FB.api( "/me/picture",
+							{
+								"redirect": false,
+								"height": 128,
+								"type": "square",
+								"width": 128
+							},
+							function onResponse( response ){
+								if( response.error ){
+									callback( response.error );
+
+								}else{
+									profileData.profileImage = response.data.url;
+
+									callback( null, response );
+								}
+							} );
+					}
+				],
+					function lastly( error, responseList ){
+						onResponseProfileData( error, profileData, responseList );
 					} );
+				
 			},
 
 			"getLoginStatus": function getLoginStatus( ){
 				var self = this;
 
+				this.props.scope.$root.$broadcast( "checking-login-status" );
 				FB.getLoginStatus( function onReponseLoginStatus( response ){
+					self.props.scope.$root.$broadcast( "login-status-checked" );
+
 					if( response.error ){
 						self.props.scope.$root.$broadcast( "error", "login-error", error, response );
 
@@ -86,8 +148,6 @@ Crime.directive( "crimeLogin", [
 				}
 
 				if( response.status === "connected" ){
-					this.props.scope.$root.$broadcast( "logged-in" );
-
 					var self = this;
 					this.accessProfileData( function onResponseProfileData( error, profileData, response ){
 						if( error ){
@@ -96,7 +156,22 @@ Crime.directive( "crimeLogin", [
 							}
 
 						}else{
+							self.props.scope.$root.$broadcast( "logged-in" );
+
 							self.props.scope.$root.$broadcast( "profile-data", profileData );
+
+							self.props.scope.$root.$broadcast( "notify-header", "loading", "please wait while we prepare your location." );
+
+							self.props.scope.$root.$broadcast( "spinner-header" );
+
+							//TODO: This is wrong at some point and we need to modify this.
+							var timeout = setTimeout( function onTimeout( ){
+								self.props.scope.hideAllPage( );
+
+								self.props.scope.$root.$broadcast( "show-normal-map" );
+
+								clearTimeout( timeout );
+							}, 3000 );
 						}
 					} );
 
@@ -178,12 +253,36 @@ Crime.directive( "crimeLogin", [
 						</div>
 					</div>
 				);
+			},
+
+			"componentDidMount": function componentDidMount( ){
+				this.props.scope.$root.$broadcast( "crime-login-rendered" );	
 			}
 		} );
 
 		return {
 			"restrict": "EA",
+			"scope": true,
 			"link": function onLink( scope, element, attributeSet ){
+				PageFlow( scope, element );
+
+				scope.defaultPage( );
+
+				scope.$on( "show-default-page",
+					function onShowDefaultPage( ){
+						scope.defaultPage( );
+					} );
+
+				scope.$on( "show-login",
+					function onShowMap( ){
+						scope.wholePageCenter( );
+					} );
+
+				scope.$on( "hide-login",
+					function onHideMap( ){
+						scope.wholePageUp( );
+					} );
+
 				scope.$on( "error",
 					function onError( event, errorType, errorData, referenceData ){
 
@@ -201,7 +300,7 @@ Crime.directive( "crimeLogin", [
 
 				scope.$on( "logged-in",
 					function onLoggedIn( ){
-
+						scope.$root.$broadcast( "show-facebook-profile" );
 					} );
 
 				React.renderComponent( <crimeLogin scope={ scope } />, element[ 0 ] );

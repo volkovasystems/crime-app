@@ -1,5 +1,6 @@
 Crime.directive( "crimeHome", [
-	function directive( ){
+	"PageFlow",
+	function directive( PageFlow ){
 		var crimeHome = React.createClass( {
 			"render": function onRender( ){
 				return (
@@ -16,13 +17,37 @@ Crime.directive( "crimeHome", [
 						</div>
 					</div>
 				);
+			},
+
+			"componentDidMount": function componentDidMount( ){
+				this.props.scope.$root.$broadcast( "crime-home-rendered" );	
 			}
 		} );
 
 		return {
 			"restrict": "EA",
+			"scope": true,
 			"link": function onLink( scope, element, attributeSet ){
-				React.renderComponent( <crimeHome />, element[ 0 ] );
+				PageFlow( scope, element );
+
+				scope.defaultPage( );
+
+				scope.$on( "show-default-page",
+					function onShowDefaultPage( ){
+						scope.defaultPage( );
+					} );
+
+				scope.$on( "show-home",
+					function onShowMap( ){
+						scope.wholePageCenter( );
+					} );
+
+				scope.$on( "hide-home",
+					function onHideMap( ){
+						scope.wholePageUp( );
+					} );
+
+				React.renderComponent( <crimeHome scope={ scope } />, element[ 0 ] );
 			}
 		};
 	}
