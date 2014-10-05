@@ -48,7 +48,20 @@ Crime.directive( "crimeSpinner", [
 			"render": function onRender( ){
 				return ( 
 					<div className="crime-spinner-container">
-						<div className="crime-spinner-component row col-md-2 col-md-offset-5 col-xs-4 col-xs-offset-4">
+						<div 
+							className={ [
+								"crime-spinner-component",
+								"container",
+								"row",
+								"col-xs-4",
+								"col-xs-offset-4",
+								"col-sm-4",
+								"col-sm-offset-4",
+								"col-md-2",
+								"col-md-offset-5",
+								"col-lg-2",
+								"col-lg-offset-5"
+							].join( " " ) }>
 						</div>
 					</div>
 				);

@@ -64,6 +64,16 @@ Crime.directive( "crimeNotify", [
 					<div className="crime-notify-container">
 						<div 
 							className={ [
+								"container",
+								"row",
+								"col-xs-10",
+								"col-xs-offset-1",
+								"col-sm-10",
+								"col-sm-offset-1",
+								"col-md-8",
+								"col-md-offset-2",
+								"col-lg-8",
+								"col-lg-offset-2",
 								"alert",
 								( this.state.notifyType == "success" )? "alert-success": "",
 								( this.state.notifyType == "default" )? "alert-info": "",
@@ -77,14 +87,18 @@ Crime.directive( "crimeNotify", [
 							<button 
 								type="button" 
 								className="close"
+								data-dismiss="alert"
 								onClick={ this.onClick }>
 								
 								<span aria-hidden="true">{ '\u00d7' }</span>
 								<span className="sr-only">Close</span>
 							</button>
 
-							<strong>{ this.state.notifyTitle.toUpperCase( ) }</strong>
-							<span>{ this.state.notifyMessage.toUpperCase( ) }</span>
+							<div className="container row">
+								<strong className="col-md-2">{ this.state.notifyTitle.toUpperCase( ) }</strong>
+								
+								<p className="text-center col-md-9">{ this.state.notifyMessage.toUpperCase( ) }</p>
+							</div>
 						</div>
 					</div>
 				);

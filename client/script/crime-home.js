@@ -8,11 +8,16 @@ Crime.directive( "crimeHome", [
 						<div 
 							className={ [
 								"crime-home-logo",
+								"container",
 								"row",
+								"col-xs-6",
+								"col-xs-offset-3",
+								"col-sm-6",
+								"col-sm-offset-3",
 								"col-md-2",
 								"col-md-offset-5",
-								"col-xs-6",
-								"col-xs-offset-3"
+								"col-lg-2",
+								"col-lg-offset-5"
 							].join( " " ) }>
 						</div>
 					</div>

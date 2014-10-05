@@ -163,11 +163,22 @@ Crime.run( [
 			function lastly( ){
 				$rootScope.$broadcast( "show-default-page" );
 
+				$rootScope.$broadcast( "show-normal-map" );
+
 				var mapLoaded = $rootScope.$on( "map-loaded", 
 					function onMapLoaded( ){		
 						$rootScope.$broadcast( "show-zen-map" );
 
 						mapLoaded( );
+
+						loggedIn( );
+					} );
+
+				var loggedIn = $rootScope.$on( "logged-in",
+					function onLoggedIn( ){
+						mapLoaded( );
+
+						loggedIn( );
 					} );
 			} );
 	}

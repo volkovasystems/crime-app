@@ -6,7 +6,7 @@ Crime.directive( "crimeProfile", [
 				return {
 					"profileName": "",
 					"profileLink": "",
-					"profileImage": "",
+					"profileImage": "./image/profile.png",
 					"imageScale": 64
 				};
 			},

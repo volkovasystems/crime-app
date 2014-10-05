@@ -12,7 +12,8 @@ Crime.directive( "crimeLocate", [
 					"mapOptionSet": { },
 					"position": { },
 					"finalPosition": { },
-					"mapState": "normal"
+					"mapState": "normal",
+					"resizeTimeout": null
 				};
 			},
 
@@ -37,44 +38,68 @@ Crime.directive( "crimeLocate", [
 						"scaleControl": true
 					} );
 
+					var pointerIcon = {
+						"path": google.maps.SymbolPath.CIRCLE,
+						"scale": 25,
+						"strokeWeight": 5,
+						"strokeColor": "#ff0000",
+						"origin": new google.maps.Point( 0, 0 ),
+						"anchor": new google.maps.Point( 0, 0 )
+					};
+
 					var mapPointer = new google.maps.Marker( {
 						"map": map,
 						"draggable": true,
-						"position": this.state.finalPosition
+						"position": this.state.finalPosition,
+						"icon": pointerIcon 
 					} );
 
 					google.maps.event.addListener( mapPointer, "dragstart",
 						function onDragStart( event ){
 							self.setState( {
-								"position": event.latlng
+								"position": mapPointer.getPosition( )
 							} );
 						} );
 
 					google.maps.event.addListener( mapPointer, "drag",
 						function onDrag( event ){
 							self.setState( {
-								"position": event.latlng
+								"position": mapPointer.getPosition( )
 							} );
 						} );
 
 					google.maps.event.addListener( mapPointer, "dragend",
 						function onDragEnd( event ){
 							self.setState( {
-								"position": event.latlng
+								"position": mapPointer.getPosition( )
 							} );
 						} );
 
 					google.maps.event.addListener( mapPointer, "mouseup",
 						function onDragEnd( event ){
 							self.setState( {
-								"finalPosition": event.latlng
+								"finalPosition": mapPointer.getPosition( )
 							} );
 						} );
 
 					google.maps.event.addListener( map, "tilesloaded",
 						function onTilesLoaded( event ){
 							self.props.scope.$root.$broadcast( "map-loaded" );
-						} );					
+						} );
+
+					google.maps.event.addListener( map, "zoomchanged",
+						function onZoomChanged( event ){
+							self.setState( {
+								"finalPosition": mapPointer.getPosition( )
+							} );
+						} );	
+
+					google.maps.event.addListener( map, "dragend",
+						function onDragEnd( event ){
+							self.setState( {
+								"finalPosition": map.getCenter( )
+							} );
+						} );				
 
 					this.setState( {
 						"map": map,
@@ -89,24 +114,42 @@ Crime.directive( "crimeLocate", [
 				}
 			},
 
-			"loadPositionAtAddress": function loadPositionAtAddress( address ){
+			"loadPositionAtAddress": function loadPositionAtAddress( address, callback ){
 				var self = this;
+				
+				this.props.scope.$root.$broadcast( "spinner-header" );
+
 				geoCoder.geocode( { "address": address }, 
 					function onGeoCodeResult( results, status ){
+						
+						self.props.scope.$root.$broadcast( "spinner-off" );
+
 						if( status == google.maps.GeocoderStatus.OK ){
 							self.setState( {
 								"position": results[ 0 ].geometry.location,
 								"finalPosition": results[ 0 ].geometry.location
 							} );
+
+							if( typeof callback == "function" ){
+								callback( null, results[ 0 ].geometry.location );
+							}
 						}
 					} );
 			},
 
 			"loadCurrentPosition": function loadCurrentPosition( ){
 				var self = this;
-				if( navigator.geolocation ){
+
+				if( this.state.finalPosition instanceof google.maps.LatLng ){
+					this.state.map.setCenter( this.state.finalPosition );
+
+				}else if( navigator.geolocation ){
+					this.props.scope.$root.$broadcast( "spinner-header" );
+
 					navigator.geolocation
 						.getCurrentPosition( function onCurrentPosition( position ){
+							self.props.scope.$root.$broadcast( "spinner-off" );
+
 							var position = new google.maps.LatLng( position.coords.latitude, position.coords.longitude );
 							
 							self.setState( {
@@ -124,7 +167,20 @@ Crime.directive( "crimeLocate", [
 			"componentWillMount": function componentWillMount( ){
 				var self = this;
 				$( window ).resize( function onResize( ){
-					self.loadCurrentPosition( );
+					if( self.state.resizeTimeout ){
+						clearTimeout( self.state.resizeTimeout );
+
+						self.state.resizeTimeout = null;
+					}
+
+					self.state.resizeTimeout = setTimeout( function onTimeout( ){
+						self.loadCurrentPosition( );
+
+						clearTimeout( self.state.resizeTimeout );
+
+						self.state.resizeTimeout = null;
+					}, 500 );
+					
 
 					if( self.state.mapState == "zen-mode" ){
 						self.props.scope.$root.$broadcast( "set-zen-mode" );
@@ -176,6 +232,11 @@ Crime.directive( "crimeLocate", [
 							"mapState": "normal"
 						} );
 					} );
+
+				this.props.scope.$on( "search-map-at-address",
+					function onSearchMapAtAddress( event, address, callback ){
+						self.loadPositionAtAddress( address, callback );
+					} );
 			},
 
 			"render": function onRender( ){
@@ -203,12 +264,15 @@ Crime.directive( "crimeLocate", [
 					this.state.finalPosition instanceof google.maps.LatLng )
 				{
 					this.state.map.setCenter( this.state.finalPosition );
-					this.state.mapPointer.setPosition( this.state.finalPosition );				
+					this.state.mapPointer.setPosition( this.state.finalPosition );	
+
+					this.props.scope.$root.$broadcast( "final-position-changed", this.state.finalPosition );			
 				}
 				
 				if( this.state.map instanceof google.maps.Map && 
 					this.state.position instanceof google.maps.LatLng &&
-					!_.isEqual( this.state.position, prevState.position ) )
+					!_.isEqual( this.state.position, prevState.position ) && 
+					!_.isEqual( this.state.position, this.state.finalPosition ) )
 				{
 					this.state.mapPointer.setPosition( this.state.position );
 				
