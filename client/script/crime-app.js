@@ -186,3 +186,23 @@ Crime.run( [
 			} );
 	}
 ] );
+
+Crime.run( [
+	"$rootScope",
+	function onRun( $rootScope ){
+		$( window ).resize( function onResize( ){
+			var bodyWidth = $( "body" ).width( ).toString( ).replace( "px", "" );
+			bodyWidth = parseInt( bodyWidth );
+
+			if( bodyWidth < 768 ){
+				$rootScope.$broadcast( "window-extra-small-mode" );
+			}else if( bodyWidth >= 768 ){
+				$rootScope.$broadcast( "window-small-mode" );
+			}else if( bodyWidth >= 992 ){
+				$rootScope.$broadcast( "window-medium-mode" );
+			}else{
+				$rootScope.$broadcast( "window-large-mode" );
+			}
+		} );
+	}
+] );

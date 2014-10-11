@@ -5,3 +5,5 @@ build
 duo.json
 deploy
 temp
+*.pem
+*.ppk

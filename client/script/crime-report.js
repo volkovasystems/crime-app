@@ -5,7 +5,8 @@ Crime.directive( "crimeReport", [
 			"getInitialState": function getInitialState( ){
 				return {
 					"previewPosition": null,
-					"mapAddress": ""
+					"mapAddress": "",
+					"apiKey": "AIzaSyB8ngCoWixjFPHb6ky4LIlQtrrhVnHy7W4"
 				};
 			},
 
@@ -29,7 +30,9 @@ Crime.directive( "crimeReport", [
 							[ "color", "red" ].join( ":" ),
 							[ latitude, longitude ].join( "," ) 
 						].join( "%7C" )
-					].join( "=" )
+					].join( "=" ),
+
+					[ "key", this.state.apiKey ].join( "=" )
 				].join( "&" );
 			},
 
