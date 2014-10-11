@@ -2,7 +2,3 @@ git clone https://github.com/volkovasystems/crime-app.git
 cd crime-app
 git checkout develop
 git pull
-
-sudo chmod uog+rwx install update
-
-npm install

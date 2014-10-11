@@ -15,9 +15,12 @@ var filter = require( "gulp-filter" );
 var livereload = require( "gulp-livereload" );
 var embedlr = require( "gulp-embedlr" );
 var plumber = require( "gulp-plumber" );
+var ssh = require( "gulp-ssh" );
 
 var connect = require( "connect" );
 var serveStatic = require( "serve-static" );
+var fs = require( "fs" );
+var async = require( "async" );
 
 const INCLUDE_SCRIPT_PATTERN = /\<\!\-\-\:\s*.+?\@include\-script\:(\"[^\"]+?\").+?\s*\-\-\>/g;
 const INCLUDE_STYLE_PATTERN = /\<\!\-\-\:\s*.+?\@include\-style\:(\"[^\"]+?\").+?\s*\-\-\>/g;
@@ -319,4 +322,59 @@ gulp.task( "watch",
 		[ "reload" ] );
 	} );
 
+var localData = JSON.parse( fs.readFileSync( "./local.json" ) );
 
+var sshConfigureOptionSet = {
+	"host": localData.remoteHost,
+	"privateKey": fs.readFileSync( localData.privateKeyPath ),
+	"passphrase": localData.privateKeyPassphrase,
+	"username": localData.remoteUsername
+};
+
+var sshCallback = function callback( error, channel, done ){
+	if( error ){
+		console.log( error );
+		done( error );
+
+	}else{
+		channel.on( "exit",
+			function onExit( ){
+				done( );		
+			} );
+
+		channel.stdout.on( "data",
+			function onData( data ){
+				console.log( data + "" );
+			} );
+	}
+};
+
+var sshEngine = function sshEngine( command, callback ){
+	ssh.exec( {
+		"command": command,
+		"sshConfig": sshConfigureOptionSet
+	}, function onCallback( error, channel ){
+		sshCallback( error, channel, callback );
+	} );
+};
+
+gulp.task( "upload",
+	function uploadTask( done ){
+		async.series( [
+			function configureServer( callback ){
+				sshEngine( localData.configure, callback );
+			},
+
+			function teleportProject( callback ){
+				sshEngine( localData.teleport, callback );		
+			},
+
+			function reconstructProject( callback ){
+				sshEngine( localData.reconstruct, callback );		
+			}
+		],
+			function lastly( error ){
+				done( error );
+			} );
+		
+	} );

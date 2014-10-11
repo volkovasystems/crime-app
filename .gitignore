@@ -7,3 +7,4 @@ deploy
 temp
 *.pem
 *.ppk
+local.json
