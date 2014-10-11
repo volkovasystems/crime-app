@@ -3,4 +3,6 @@ cd crime-app
 git checkout develop
 git pull
 
+sudo chmod uog+rwx install update
+
 npm install
