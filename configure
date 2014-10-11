@@ -2,7 +2,11 @@ sudo apt-get update -y
 
 sudo apt-get upgrade -y
 
-sudo apt-get install -y git nodejs build-essential
+sudo apt-get install -y git 
+
+sudo apt-get install -y nodejs 
+
+sudo apt-get install -y build-essential
 
 curl -O http://downloads.mongodb.org/linux/mongodb-linux-x86_64-2.6.4.tgz
 
@@ -10,7 +14,7 @@ tar -zxvf mongodb-linux-x86_64-2.6.4.tgz
 
 mkdir -p ~/mongodb
 
-mv -R -n mongodb-linux-x86_64-2.6.4/* ~/mongodb
+mv -n mongodb-linux-x86_64-2.6.4/* ~/mongodb
 
 echo "export PATH=~/mongodb/bin:$PATH" | sudo tee ~/.bashrc
 
