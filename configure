@@ -10,7 +10,7 @@ tar -zxvf mongodb-linux-x86_64-2.6.4.tgz
 
 mkdir -p ~/mongodb
 
-cp -R -n mongodb-linux-x86_64-2.6.4/ ~/mongodb
+mv -R -n mongodb-linux-x86_64-2.6.4/* ~/mongodb
 
 echo "export PATH=~/mongodb/bin:$PATH" | sudo tee ~/.bashrc
 
