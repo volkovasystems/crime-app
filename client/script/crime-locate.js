@@ -13,7 +13,8 @@ Crime.directive( "crimeLocate", [
 					"position": { },
 					"finalPosition": { },
 					"mapState": "normal",
-					"resizeTimeout": null
+					"resizeTimeout": null,
+					"readableAddress": ""
 				};
 			},
 
@@ -76,7 +77,7 @@ Crime.directive( "crimeLocate", [
 						} );
 
 					google.maps.event.addListener( mapPointer, "mouseup",
-						function onDragEnd( event ){
+						function onMouseUp( event ){
 							self.setState( {
 								"finalPosition": mapPointer.getPosition( )
 							} );
@@ -87,11 +88,13 @@ Crime.directive( "crimeLocate", [
 							self.props.scope.$root.$broadcast( "map-loaded" );
 						} );
 
-					google.maps.event.addListener( map, "zoomchanged",
+					google.maps.event.addListener( map, "zoom_changed",
 						function onZoomChanged( event ){
 							self.setState( {
 								"finalPosition": mapPointer.getPosition( )
 							} );
+							
+							self.loadAtPosition( mapPointer.getPosition( ) );
 						} );	
 
 					google.maps.event.addListener( map, "dragend",
@@ -99,7 +102,7 @@ Crime.directive( "crimeLocate", [
 							self.setState( {
 								"finalPosition": map.getCenter( )
 							} );
-						} );				
+						} );
 
 					this.setState( {
 						"map": map,
@@ -114,12 +117,58 @@ Crime.directive( "crimeLocate", [
 				}
 			},
 
+			"getAddressAtPosition": function getAddressAtPosition( position, callback ){
+				var self = this;
+
+				geoCoder.geocode( { "location": position }, 
+					function onGeoCodeResult( results, status ){
+						if( status == google.maps.GeocoderStatus.OK ){
+							var readableAddress = _.map( results[ 0 ].address_components,
+								function onEachAddressComponent( addressComponent ){
+									return addressComponent.long_name;
+								} )
+								.join( ", " );
+
+							self.setState( {
+								"readableAddress": readableAddress
+							} );
+
+							if( typeof callback == "function" ){
+								callback( null, readableAddress );
+							}
+						}
+					} );
+			},
+
 			"loadPositionAtAddress": function loadPositionAtAddress( address, callback ){
 				var self = this;
 				
 				this.props.scope.$root.$broadcast( "spinner-header" );
 
 				geoCoder.geocode( { "address": address }, 
+					function onGeoCodeResult( results, status ){
+						
+						self.props.scope.$root.$broadcast( "spinner-off" );
+
+						if( status == google.maps.GeocoderStatus.OK ){
+							self.setState( {
+								"position": results[ 0 ].geometry.location,
+								"finalPosition": results[ 0 ].geometry.location
+							} );
+
+							if( typeof callback == "function" ){
+								callback( null, results[ 0 ].geometry.location );
+							}
+						}
+					} );
+			},
+
+			"loadAtPosition": function loadAtPosition( position, callback ){
+				var self = this;
+				
+				this.props.scope.$root.$broadcast( "spinner-header" );
+
+				geoCoder.geocode( { "location": position }, 
 					function onGeoCodeResult( results, status ){
 						
 						self.props.scope.$root.$broadcast( "spinner-off" );
@@ -236,6 +285,11 @@ Crime.directive( "crimeLocate", [
 				this.props.scope.$on( "search-map-at-address",
 					function onSearchMapAtAddress( event, address, callback ){
 						self.loadPositionAtAddress( address, callback );
+					} );
+
+				this.props.scope.$on( "search-map-at-position",
+					function onSearchMapAtAddress( event, position, callback ){
+						self.getAddressAtPosition( position, callback );
 					} );
 			},
 

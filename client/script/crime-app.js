@@ -158,6 +158,9 @@ Crime.run( [
 			},
 			function checkRender( callback ){
 				$rootScope.$on( "crime-notify-rendered", function onRendered( ){ callback( ); } );
+			},
+			function checkRender( callback ){
+				$rootScope.$on( "crime-report-rendered", function onRendered( ){ callback( ); } );
 			}
 		],
 			function lastly( ){

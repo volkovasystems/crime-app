@@ -5,12 +5,13 @@
 @import "crime-profile.less";
 @import "crime-notify.less";
 @import "crime-search.less";
+@import "crime-report.less";
 
 .hidden {
 	display: none !important;
 }
 
-.active {
+.shown, .active {
 	display: block !important;
 }
 
@@ -106,6 +107,10 @@ section > .component-container {
 
 input, 
 button,
+textarea,
+ul,
+li,
+.panel,
 .alert {
 	border-radius: 0px !important;
 }

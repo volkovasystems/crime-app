@@ -38,6 +38,9 @@ gulp.task( "default", [
 	"build-library",
 	"deploy-library",
 
+	"build-font",
+	"deploy-font",
+
 	"build-script",
 	"deploy-script",
 
@@ -89,6 +92,7 @@ gulp.task( "copy-library",
 				"bower_components/*/dist/**/*.map",
 				"bower_components/*/dist/**/*.js",
 				"bower_components/*/lib/**/*.js",
+				"!bower_components/mathjs/lib/**/*.js",
 				"!**/Gruntfile.js"
 			] )
 			.pipe( plumber( ) )
@@ -98,7 +102,7 @@ gulp.task( "copy-library",
 	} );
 
 
-gulp.task( "build", [ "clean-build", "build-script", "build-library", "build-less", "build-style", "build-image", "build-index" ] );
+gulp.task( "build", [ "clean-build", "build-script", "build-library", "build-font", "build-less", "build-style", "build-image", "build-index" ] );
 
 gulp.task( "clean-build",
 	[ "clean-library", "copy-library" ],
@@ -134,6 +138,20 @@ gulp.task( "build-library",
 			.src( "client/library/*.*" )
 			.pipe( plumber( ) )
 			.pipe( gulp.dest( "build/library" ) )
+	} );
+
+gulp.task( "build-font",
+	[ "build-library" ],
+	function buildTask( ){
+		return gulp
+			.src( [
+				"client/library/*.eot",
+				"client/library/*.svg",
+				"client/library/*.ttf",
+				"client/library/*.woff"
+			] )
+			.pipe( gulp.dest( "client/fonts" ) )
+			.pipe( gulp.dest( "build/fonts" ) );
 	} );
 
 gulp.task( "build-less",
@@ -185,7 +203,7 @@ gulp.task( "build-index",
 	} );
 
 
-gulp.task( "deploy", [ "clean-deploy", "deploy-script", "deploy-library", "deploy-style", "deploy-image", "deploy-index" ] );
+gulp.task( "deploy", [ "clean-deploy", "deploy-script", "deploy-library", "deploy-font", "deploy-style", "deploy-image", "deploy-index" ] );
 
 gulp.task( "clean-deploy",
 	[ "clean-library", "copy-library", "clean-build", "build-library" ],
@@ -216,6 +234,19 @@ gulp.task( "deploy-library",
 			.pipe( plumber( ) )
 			.pipe( changed( "deploy/library" ) )
 			.pipe( gulp.dest( "deploy/library" ) )
+	} );
+
+gulp.task( "deploy-font",
+	[ "deploy-library" ],
+	function deployTask( ){
+		return gulp
+			.src( [
+				"build/library/*.eot",
+				"build/library/*.svg",
+				"build/library/*.ttf",
+				"build/library/*.woff"
+			] )
+			.pipe( gulp.dest( "deploy/fonts" ) );
 	} );
 
 gulp.task( "deploy-style",
@@ -267,7 +298,18 @@ gulp.task( "reload", [ "build" ],
 		done( );
 	} );
 
-gulp.task( "watch", [ "server-static" ],
+gulp.task( "watch", 
+	[ 
+		"clean-build", 
+		"build-script", 
+		"build-library",
+		"build-font",
+		"build-less", 
+		"build-style", 
+		"build-image", 
+		"build-index", 
+		"server-static" 
+	],
 	function watchTask( ){
 		gulp.watch( [ 
 			"client/script/**", 

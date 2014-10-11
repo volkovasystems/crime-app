@@ -34,6 +34,7 @@
     "lodash": "~2.4.1",
     "angular": "~1.2.25",
     "async": "~0.9.0",
-    "spin.js": "fgnass/spin.js#~2.0.1"
+    "spin.js": "fgnass/spin.js#~2.0.1",
+    "mathjs": "~1.0.1"
   }
 }

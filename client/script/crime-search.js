@@ -9,7 +9,8 @@ Crime.directive( "crimeSearch", [
 					"searchTimeout": null,
 					"confirmState": "standby",
 					"confirmPrompt": "confirm",
-					"searchPosition": null
+					"searchPosition": null,
+					"readableAddress": ""
 				};
 			},
 
@@ -28,7 +29,12 @@ Crime.directive( "crimeSearch", [
 			},
 
 			"onClick": function onClick( event ){
-
+				if( this.state.searchPosition instanceof google.maps.LatLng ){
+					this.props.scope.$root.$broadcast( "hide-map-search" );
+					this.props.scope.$root.$broadcast( "show-zen-map" );
+					this.props.scope.$root.$broadcast( "show-reporting" );
+					this.props.scope.$root.$broadcast( "confirmed-map-data", this.state.searchPosition );
+				}
 			},
 
 			"componentWillMount": function componentWillMount( ){
@@ -39,13 +45,34 @@ Crime.directive( "crimeSearch", [
 						self.setState( {
 							"searchPosition": finalPosition
 						} );
+
+						self.props.scope.$root.$broadcast( "search-map-at-position",
+							finalPosition,
+							function onSearchMapAtPosition( error, readableAddress ){
+								self.setState( {
+									"readableAddress": readableAddress
+								} );
+							} );
 					} );
 			},
 
 			"render": function onRender( ){
+				var readableAddress = this.state.readableAddress || "";
+				var latitude = "";
+				var longitude = "";
+				if( this.state.searchPosition instanceof google.maps.LatLng ){
+					latitude = this.state.searchPosition.lat( );
+					longitude = this.state.searchPosition.lng( );
+
+					var formatOption = { "notation": "fixed", "precision": 4 };
+					latitude = math.format( latitude, formatOption );
+					longitude = math.format( longitude, formatOption );
+				}
+
 				return ( 
 					<div className="crime-search-container">
-						<div className={ [
+						<div 
+							className={ [
 								"address-search-container",
 								"input-group",
 								"container",
@@ -60,30 +87,37 @@ Crime.directive( "crimeSearch", [
 								"col-lg-offset-2"
 							].join( " " ) }>
 
-							<input 
-								className="address-search-input form-control input-lg text-center" 
-								type="text"
-								placeholder="Search for location of crime."
-								value={ this.state.address }
-								onChange={ this.onChange }
-								onKeyPress={ this.onKeyPress }/>
+							<p className="location-description bg-info text-center">
+								You are currently pointing to { readableAddress }<br />
+								( { latitude + "\u00b0" }, { longitude + "\u00b0" } )
+							</p>
 
-							<span className="input-group-btn">
-								<button
-									className={ [
-										"confirm-address-button",
-										"btn",
-										"btn-lg",
-										( this.state.confirmState == "standby" )? "btn-default": "",
-										( this.state.confirmState == "ready" )? "btn-primary": ""
-									].join( " " ) }
-									type="button"
-									onClick={ this.onClick }>
+							<div className="input-group">
+								<input 
+									className="address-search-input form-control input-lg text-center" 
+									type="text"
+									placeholder="Search for location of crime."
+									value={ this.state.address }
+									onChange={ this.onChange }
+									onKeyPress={ this.onKeyPress }/>
 
-									{ this.state.confirmPrompt.toUpperCase( ) }
+								<span className="input-group-btn">
+									<button
+										className={ [
+											"confirm-address-button",
+											"btn",
+											"btn-lg",
+											( this.state.confirmState == "standby" )? "btn-default": "",
+											( this.state.confirmState == "ready" )? "btn-primary": ""
+										].join( " " ) }
+										type="button"
+										onClick={ this.onClick }>
 
-								</button>
-							</span>
+										{ this.state.confirmPrompt.toUpperCase( ) }
+
+									</button>
+								</span>
+							</div>
 						</div>
 					</div>
 				);
