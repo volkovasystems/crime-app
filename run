@@ -1,4 +1,4 @@
-sudo ~/nodejs/bin/npm start
+#sudo ~/nodejs/bin/npm start
 
 cd ~/crime-app
 sudo ~/nodejs/bin/node server/static.js &
