@@ -5,7 +5,7 @@ var app = express( );
 
 app.use( compression( ) );
 
-app.use( express.static( "deploy" ) );
+app.use( express.static( "build" ) );
 
 app.use( function onRequest( request, response, next ){
 	response.status( 404 )
