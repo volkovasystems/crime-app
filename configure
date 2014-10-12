@@ -1,29 +1,23 @@
 sudo apt-get update -y
-
 sudo apt-get upgrade -y
+sudo apt-get dist-upgrade -y
 
 sudo apt-get install -y git 
-
 sudo apt-get install -y build-essential
 
 curl -O http://nodejs.org/dist/v0.10.32/node-v0.10.32-linux-x64.tar.gz
-
 tar -zxvf node-v0.10.32-linux-x64.tar.gz
-
 mkdir -p ~/nodejs
-
 mv -n ~/node-v0.10.32-linux-x64/* ~/nodejs
 
-echo "export PATH=~/nodejs/bin:$PATH" | sudo tee -a ~/.bashrc
-
 curl -O http://downloads.mongodb.org/linux/mongodb-linux-x86_64-2.6.4.tgz
-
 tar -zxvf mongodb-linux-x86_64-2.6.4.tgz
-
 mkdir -p ~/mongodb
-
 mv -n mongodb-linux-x86_64-2.6.4/* ~/mongodb
 
-echo "export PATH=~/mongodb/bin:$PATH" | sudo tee -a ~/.bashrc
+echo "export PATH=~/mongodb/bin:~/nodejs/bin:$PATH" | sudo tee -a ~/.bashrc
 
 source ~/.bashrc
+
+sudo apt-get update -y
+sudo apt-get upgrade -y
