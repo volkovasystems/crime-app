@@ -326,7 +326,7 @@ gulp.task( "watch",
 
 var localData = { };
 var sshConfigureOptionSet = { };
-if( fs.existSync( "./local.json" ) ){
+if( fs.existsSync( "./local.json" ) ){
 	localData = JSON.parse( fs.readFileSync( "./local.json" ) );
 
 	sshConfigureOptionSet = {
