@@ -369,6 +369,11 @@ gulp.task( "upload-reconstruct",
 		sshEngine( localData.reconstruct, done );
 	} );
 
+gulp.task( "upload-run",
+	function uploadTask( done ){
+		sshEngine( localData.run, done );
+	} );
+
 gulp.task( "upload",
 	function uploadTask( done ){
 		async.series( [
@@ -390,6 +395,14 @@ gulp.task( "upload",
 
 				function onProcess( callback ){
 					childprocess.exec( "gulp upload-reconstruct", callback )
+						.stdout.on( "data",
+							function onData( data ){
+								console.log( data + "" );
+							} );
+				},
+
+				function onProcess( callback ){
+					childprocess.exec( "gulp upload-run", callback )
 						.stdout.on( "data",
 							function onData( data ){
 								console.log( data + "" );

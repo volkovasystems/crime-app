@@ -1,5 +1,3 @@
-source ~/.bashrc
-
 cd ~/crime-app
 
 sudo chmod uog+rwx install update

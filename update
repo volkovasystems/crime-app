@@ -3,4 +3,4 @@ cd ~/crime-app
 git checkout develop
 git pull
 
-npm update
+~/nodejs/bin/npm update
