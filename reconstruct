@@ -1,3 +1,5 @@
+cd ~/crime-app
+
 sudo chmod uog+rwx install update
 
 npm install

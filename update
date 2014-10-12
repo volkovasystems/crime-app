@@ -1,3 +1,5 @@
+cd ~/crime-app
+
 git checkout develop
 git pull
 
