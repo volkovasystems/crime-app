@@ -1,8 +1,9 @@
 var path = require( "path" );
+var compression = require( "compression" );
 var express = require( "express" );
 var app = express( );
 
-app.use( express.compress( ) );
+app.use( express.compression( ) );
 
 app.use( express.static( path.resolve( "crime-app/deploy" ) ) );
 
