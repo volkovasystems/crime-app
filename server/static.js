@@ -11,4 +11,4 @@ app.use( function onRequest( request, response, next ){
 	response.send( 404, "404: Welcome to the dark side." );
 } );
 
-app.listen( process.env.PORT );
+app.listen( process.env.PORT || 8080 );
