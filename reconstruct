@@ -2,6 +2,8 @@ cd ~/crime-app
 
 sudo chmod uog+rwx install update
 
+which npm
+
 npm install 2>&1
 
 gulp
