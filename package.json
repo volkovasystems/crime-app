@@ -7,7 +7,7 @@
     "preinstall": "./install",
     "postinstall": "bower install",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "PORT=80; node static.js &"
+    "start": "PORT=80; ~/nodejs/bin/node ~/crime-app/server/static.js &"
   },
   "repository": {
     "type": "git",

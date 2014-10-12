@@ -4,4 +4,4 @@ sudo chmod uog+rwx install update
 
 ~/nodejs/bin/npm install 2>&1
 
-gulp
+gulp 2>&1
