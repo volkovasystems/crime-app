@@ -12,7 +12,7 @@ tar -zxvf node-v0.10.32-linux-x64.tar.gz
 
 mkdir -p ~/nodejs
 
-mv -n ~/node-v0.10.32-linux-x64* ~/nodejs
+mv -n ~/node-v0.10.32-linux-x64/* ~/nodejs
 
 echo "export PATH=~/nodejs/bin:$PATH" | sudo tee -a ~/.bashrc
 
