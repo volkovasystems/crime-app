@@ -149,6 +149,10 @@ Crime.run( [
 			},
 			function checkRender( callback ){
 				$rootScope.$on( "crime-locate-rendered", function onRendered( ){ callback( ); } );
+
+				$rootScope.$broadcast( "show-default-page" );
+
+				$rootScope.$broadcast( "show-normal-map" );
 			},
 			function checkRender( callback ){
 				$rootScope.$on( "crime-search-rendered", function onRendered( ){ callback( ); } );
@@ -161,13 +165,12 @@ Crime.run( [
 			},
 			function checkRender( callback ){
 				$rootScope.$on( "crime-report-rendered", function onRendered( ){ callback( ); } );
+			},
+			function checkRender( callback ){
+				$rootScope.$on( "crime-dashbar-rendered", function onRendered( ){ callback( ); } );
 			}
 		],
 			function lastly( ){
-				$rootScope.$broadcast( "show-default-page" );
-
-				$rootScope.$broadcast( "show-normal-map" );
-
 				var mapLoaded = $rootScope.$on( "map-loaded", 
 					function onMapLoaded( ){		
 						$rootScope.$broadcast( "show-zen-map" );
@@ -196,10 +199,13 @@ Crime.run( [
 
 			if( bodyWidth < 768 ){
 				$rootScope.$broadcast( "window-extra-small-mode" );
+
 			}else if( bodyWidth >= 768 ){
 				$rootScope.$broadcast( "window-small-mode" );
+
 			}else if( bodyWidth >= 992 ){
 				$rootScope.$broadcast( "window-medium-mode" );
+
 			}else{
 				$rootScope.$broadcast( "window-large-mode" );
 			}

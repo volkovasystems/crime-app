@@ -1,4 +1,0 @@
-git clone https://github.com/volkovasystems/crime-app.git
-cd ~/crime-app
-git checkout develop
-git pull

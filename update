@@ -1,6 +1,0 @@
-cd ~/crime-app
-
-git checkout develop
-git pull
-
-~/nodejs/bin/npm update
