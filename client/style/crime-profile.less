@@ -1,23 +1,48 @@
 .crime-profile-container {
-	.profile-helper-container {
-		position: absolute;
-		bottom: 10%;
+	
+}
+
+section.profile {
+	right: 0px;
+}
+
+section.profile-standby {
+	display: none;
+}
+
+section.profile-minified {
+	width: 60px !important;
+	height: 60px !important;
+	margin: 5px;
+
+	.crime-profile-container {
+		background-color: transparent;
+
+		.profile-data-container {
+			width: 100%;
+			height: 100%;
+			margin: 0px;
+			padding: 0px;
+
+			.profile-image.profile-minified {
+				width: 100%;
+				height: 100%;
+
+				img {
+					width: 90%;
+					height: 90%;
+					position: relative;
+					top: 50%;
+					left: 50%;
+					transform: translateX( -50% ) translateY( -50% );
+				}
+			}
+		}	
 	}
+}
 
-	.profile-data-container {
-		padding: 10px;
-		background-color: rgba( 250, 250, 250, 0.7 );
-	}
-
-	.profile-image {
-
-	}
-
-	.profile-name {
-		margin-top: 10px;
-	}
-
-	.profile-link {
-
+section.profile-viewed {
+	.crime-profile-container {
+		
 	}
 }

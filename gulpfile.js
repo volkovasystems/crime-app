@@ -84,6 +84,10 @@ gulp.task( "copy-library",
 				"bower_components/*/*.css",
 				"bower_components/*/*.map",
 				"bower_components/*/*.js",
+				"bower_components/*/*.eot",
+				"bower_components/*/*.svg",
+				"bower_components/*/*.ttf",
+				"bower_components/*/*.woff",
 				"bower_components/*/dist/**/*.eot",
 				"bower_components/*/dist/**/*.svg",
 				"bower_components/*/dist/**/*.ttf",
@@ -97,7 +101,6 @@ gulp.task( "copy-library",
 			] )
 			.pipe( plumber( ) )
 			.pipe( flatten( ) )
-			.pipe( changed( "client/library" ) )
 			.pipe( gulp.dest( "client/library" ) );
 	} );
 
@@ -232,7 +235,6 @@ gulp.task( "deploy-library",
 		return gulp
 			.src( "build/library/*.*" )
 			.pipe( plumber( ) )
-			.pipe( changed( "deploy/library" ) )
 			.pipe( gulp.dest( "deploy/library" ) )
 	} );
 

@@ -77,9 +77,9 @@ Crime.directive( "crimeNotify", [
 								"alert",
 								( this.state.notifyType == "success" )? "alert-success": "",
 								( this.state.notifyType == "default" )? "alert-info": "",
-								_.isEmpty( this.state.notifyType )? "alert-info": "",
 								( this.state.notifyType == "warn" )? "alert-warning": "",
 								( this.state.notifyType == "error" )? "alert-danger": "",
+								_.isEmpty( this.state.notifyType )? "alert-info": "",
 								"alert-dismissible"
 							].join( " " ) } 
 							role="alert">

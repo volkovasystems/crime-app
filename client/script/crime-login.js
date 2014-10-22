@@ -4,256 +4,287 @@ Crime.directive( "crimeLogin", [
 		var crimeLogin = React.createClass( {
 			"getInitialState": function getInitialState( ){
 				return {
-					"loginState": "standby",
-					"loginPrompt": "login"
+					"componentState": "normal",
+					"loginState": "login-standby",
+					"loginPrompt": "",
+					"loginType": "facebook"
 				};
 			},
 
-			"accessProfileData": function accessProfileData( onResponseProfileData ){
-				var profileData = { };
+			"tryLoggingInFacebook": function tryLoggingInFacebook( callback ){
+				callback = callback || function callback( ){ };
 
-				async.parallel( [
-					function requestProfileData( callback ){
-						FB.api( "/me",
-							function onResponse( response ){
-								if( response.error ){
-									callback( response.error );
-
-								}else{
-									profileData.profileName = response.name;
-									profileData.profileURL = response.link;
-
-									callback( null, response );
-								}
-							} );
-					},
-
-					function requestProfilePhoto( callback ){
-						FB.api( "/me/picture",
-							{
-								"redirect": false,
-								"height": 128,
-								"type": "square",
-								"width": 128
-							},
-							function onResponse( response ){
-								if( response.error ){
-									callback( response.error );
-
-								}else{
-									profileData.profileImage = response.data.url;
-
-									callback( null, response );
-								}
-							} );
-					}
-				],
-					function lastly( error, responseList ){
-						onResponseProfileData( error, profileData, responseList );
-					} );
-			},
-
-			"getLoginStatus": function getLoginStatus( ){
-				var self = this;
-
-				this.props.scope.$root.$broadcast( "checking-login-status" );
-				FB.getLoginStatus( function onReponseLoginStatus( response ){
-					self.props.scope.$root.$broadcast( "login-status-checked" );
-
-					if( response.error ){
-						self.props.scope.$root.$broadcast( "error", "login-error", error, response );
-
-					}else{
-						self.onLogin( response,
-							function ifNotConnected( ){
-								self.login( true );
-							},
-							function ifError( error ){
-								self.props.scope.$root.$broadcast( "error", "login-error", error );
-							} );	
-					}
-				} );
-			},
-
-			"onLogin": function onLogin( response, ifNotConnected, ifError ){
-				if( ifNotConnected.name === "ifError" ){
-					ifError = ifNotConnected;
-					ifNotConnected = { };
-				}
-
-				if( response.status === "connected" ){
-					var self = this;
-					this.accessProfileData( function onResponseProfileData( error, profileData, response ){
-						if( error ){
-							if( ifError.name === "ifError" ){
-								ifError( error, response );
-							}
-
-						}else{
-							self.props.scope.$root.$broadcast( "logged-in" );
-
-							self.props.scope.$root.$broadcast( "profile-data", profileData );
-
-							self.props.scope.$root.$broadcast( "notify-header", "loading", "please wait while we prepare your location." );
-
-							self.props.scope.$root.$broadcast( "spinner-header" );
-
-							//TODO: This is wrong at some point and we need to modify this.
-							var timeout = setTimeout( function onTimeout( ){
-								self.props.scope.hideAllPage( );
-
-								self.props.scope.$root.$broadcast( "show-normal-map" );
-
-								self.props.scope.$root.$broadcast( "show-map-search" );
-
-								clearTimeout( timeout );
-							}, 5000 );
-						}
-					} );
-
-				}else if( ifNotConnected.name === "ifNotConnected" ){
-					ifNotConnected( );	
-				}
-			},
-
-			"login": function login( oneTimeLogin ){
-				this.props.scope.$root.$broadcast( "logging-in" );
-
-				var self = this;
 				FB.login( function onLogin( response ){
 					if( response.error ){
-						self.props.scope.$root.$broadcast( "error", "login-error", error, response );
+						callback( response.error, false, response );
 
-					}else if( oneTimeLogin ){
-						self.onLogin( response,
-							function ifNotConnected( ){
-								self.props.scope.$root.$broadcast( "error", "login-error", error, response );
-							},
-							function ifError( error ){
-								self.props.scope.$root.$broadcast( "error", "login-error", error, response );
-							} );
-
+					}else if( response.status == "connected" ){
+						callback( null, true, response );
+					
 					}else{
-						self.getLoginStatus( );
+						callback( null, false, response );
 					}
 				} );
 			},
 
-			"onClick": function onClick( ){
-				if( this.state.loginState == "login-error" ){
+			"tryLoggingIn": function tryLoggingIn( callback ){
+				callback = callback || function callback( ){ };
+
+				switch( this.state.loginType ){
+					case "facebook":
+						this.tryLoggingInFacebook( callback );
+						break;
+				}
+			},
+
+			"checkIfLoggedInFacebook": function checkIfLoggedInFacebook( callback ){
+				callback = callback || function callback( ){ };
+
+				FB.getLoginStatus( function onReponseLoginStatus( response ){
+					if( response.error ){
+						callback( response.error, false, response );
+
+					}else if( response.status === "connected" ){
+						callback( null, true, response );		
+
+					}else{
+						callback( null, false, response );
+					}
+				} );
+			},
+
+			"checkIfLoggedIn": function checkIfLoggedIn( callback ){
+				callback = callback || function callback( ){ };
+
+				switch( this.state.loginType ){
+					case "facebook":
+						this.checkIfLoggedInFacebook( callback );
+						break;
+				}	
+			},
+
+			"verifyIfLoggedIn": function verifyIfLoggedIn( loginState, responseList ){
+				if( typeof loginState == "object" ||
+					loginState instanceof Error )
+				{
+					var error = loginState;
+					this.props.scope.$root.$broadcast( "error", "login-error", error, responseList );
+					
 					this.setState( {
-						"loginState": "standby",
-						"loginPrompt": "login"
+						"loginState": "login-error",
+						"loginPrompt": "oops! please try again"
 					} );
 
-				}else if( this.state.loginState == "logged-in" ){
+				}else if( typeof loginState == "boolean" && loginState ){
+					this.setState( {
+						"loginState": "logged-in",
+						"loginPrompt": "welcome"
+					} );
 
 				}else{
-					this.getLoginStatus( );	
+					var error = new Error( "unable to log in" );
+					this.props.scope.$root.$broadcast( "error", "login-error", error, responseList );
+					
+					this.setState( {
+						"loginState": "login-error",
+						"loginPrompt": "oops! please try again"
+					} );					
 				}
+			},
+
+			"initiateLoginProcedure": function initiateLoginProcedure( ){
+				var self = this;
+
+				async.waterfall( [
+						function setLoggingInState( callback ){
+							self.setState( {
+								"loginState": "logging-in",
+								"loginPrompt": "please wait"
+							}, callback );
+						},
+
+						function checkIfLoggedIn( callback ){
+							self.checkIfLoggedIn( function onCheckIfLoggedIn( error, isLoggedIn, response ){
+								var loginState = error || isLoggedIn || undefined;
+
+								callback( loginState, response );
+							} );
+						},
+
+						function tryLoggingIn( response, callback ){
+							self.tryLoggingIn( function onTryLoggingIn( error, isLoggedIn, response ){
+								callback( error || isLoggedIn, response );
+							} );
+						}
+					],
+					function lastly( loginState, responseList ){
+						self.verifyIfLoggedIn( loginState, responseList );
+					} );
+			},
+
+			"proceedRapidFlow": function proceedRapidFlow( ){
+				this.props.scope.$root.$broadcast( "hide-home" );
+				this.props.scope.$root.$broadcast( "hide-login" );
+				this.props.scope.$root.$broadcast( "show-normal-map" );								
+			},
+
+			"onClickLogin": function onClickLogin( event ){
+				if( this.state.loginState == "login-standby" ){
+					this.initiateLoginProcedure( );
+					
+				}else if( this.state.loginState == "logged-in" ){
+					this.proceedRapidFlow( );
+				}
+			},
+
+			"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+				var self = this;
+
+				this.props.scope.$on( "show-home",
+					function onShowHome( ){
+						self.setState( {
+							"componentState": "home-component-shown"
+						} );
+					} );
 			},
 
 			"componentWillMount": function componentWillMount( ){
-				var self = this;
-				this.props.scope.$on( "error",
-					function onError( event, errorType, errorData, referenceData ){
-						if( errorType == "login-error" ){
-							self.props.scope.$root.$broadcast( "spinner-off" );
-
-							self.setState( {
-								"loginState": errorType,
-								"loginPrompt": "oops sorry"
-							} );	
-						}
-					} );
-
-				this.props.scope.$on( "login-cancelled",
-					function onLoginCancelled( ){
-						self.props.scope.$root.$broadcast( "spinner-off" );
-
-						self.setState( {
-							"loginState": "standby",
-							"loginPrompt": "login"
-						} );
-					} );
-
-				this.props.scope.$on( "logging-in",
-					function onLoggingIn( ){
-						self.props.scope.$root.$broadcast( "spinner-footer" );
-
-						self.setState( {
-							"loginState": "logging-in",
-							"loginPrompt": "please wait"
-						} );
-					} );
-
-				this.props.scope.$on( "checking-login-status",
-					function onLoggingIn( ){
-						self.props.scope.$root.$broadcast( "spinner-footer" );
-
-						self.setState( {
-							"loginState": "logging-in",
-							"loginPrompt": "please wait"
-						} );
-					} );
-
-				this.props.scope.$on( "login-status-checked",
-					function onLoggingIn( ){
-						self.props.scope.$root.$broadcast( "spinner-off" );
-
-						self.setState( {
-							"loginState": "logging-in",
-							"loginPrompt": "please wait"
-						} );
-					} );
-
-				this.props.scope.$on( "logged-in",
-					function onLoggedIn( ){
-						self.props.scope.$root.$broadcast( "spinner-off" );
-
-						self.setState( {
-							"loginState": "logged-in",
-							"loginPrompt": "welcome"
-						} );
-					} );
+				this.attachAllComponentEventListener( );		
 			},
 
 			"render": function onRender( ){
 				var loginState = this.state.loginState;
+				var loginType = this.state.loginType;
 				var loginPrompt = this.state.loginPrompt;
+				var componentState = this.state.componentState;
 
 				return ( 
 					<div className="crime-login-container">
 						<div 
 							className={ [
-								"facebook-login-container",
-								"row",
+								"login-component",
+								"col-xs-8",
+								"col-xs-offset-2",
+								"col-sm-4",
+								"col-sm-offset-4",
 								"col-md-4",
 								"col-md-offset-4",
-								"col-xs-8",
-								"col-xs-offset-2" 
+								"col-lg-4",
+								"col-lg-offset-4",
+								componentState,
+								loginState
 							].join( " " ) }>
+
+							<div
+								className={ [
+									"login-prompt",
+									"text-center",
+									"col-xs-12",
+									"col-sm-12",
+									"col-md-12",
+									"col-lg-6",
+									"col-lg-offset-3",
+									( loginState != "login-standby" )? "shown": "hidden",
+									( loginState == "login-error" )? "bg-danger": "",
+									( loginState == "logged-in" )? "bg-success": "",
+									( loginState == "logging-in" )? "bg-info": "",
+									loginState
+								].join( " " ) }>
+								{ loginPrompt.toUpperCase( ) }
+							</div>
+
+							{ /* Facebook login button. */ }
 							<button 
-								type="button"
-								onClick={ this.onClick }
-								disabled={ loginState == "logging-in" }
 								className={ [
 									"facebook-login-button",
 									"btn",
 									"btn-lg",
-									( loginState == "standby" )? "btn-primary": "",
-									( loginState == "logged-in" )? "btn-success": "",
-									( loginState == "login-error" )? "btn-danger": "",
+									"btn-primary",
+									"col-xs-12",
+									"col-sm-12",
 									"col-md-12",
-									"col-xs-12"
-								].join( " " ) }>
-
-								{ loginPrompt.toUpperCase( ) }
-
+									"col-lg-6",
+									"col-lg-offset-3",
+									( 
+										loginType == "facebook" &&
+										( 
+											loginState == "login-standby" || 
+											loginState == "logged-in" 
+										)
+									)? "shown": "hidden",
+									loginState
+								].join( " " ) }
+								value="facebook"
+								type="button"
+								onClick={ this.onClickLogin }>
+								<span
+									className={ [
+										"login-icon",
+										( loginState == "login-standby" )? "entypo-social facebook": "",
+										( loginState == "logged-in" )? "entypo thumbs-up": ""
+									].join( " " ) }>
+								</span>
+								<a
+									className={ [
+										"action-element"
+									].join( " " ) }
+									href={ [ 
+										"#",
+										loginState
+									].join( "/" ) }>
+									{ 
+										( loginState == "login-standby" )? "LOGIN" :
+										( loginState == "logged-in" )? "PROCEED" : ""
+									}
+								</a>
 							</button>
+
+							{ /* Twitter login button. */ }
+							<button 
+								className={ [
+									"twitter-login-button",
+									"btn",
+									"btn-lg",
+									"btn-primary",
+									"col-xs-12",
+									"col-sm-12",
+									"col-md-12",
+									"col-lg-6",
+									"col-lg-offset-3",
+									( 
+										loginType == "twitter" &&
+										( 
+											loginState == "login-standby" || 
+											loginState == "logged-in" 
+										)
+									)? "shown": "hidden",
+									loginState
+								].join( " " ) }
+								value="twitter"
+								type="button"
+								onClick={ this.onClickLogin }>
+								<span
+									className={ [
+										"login-icon",
+										( loginState == "login-standby" )? "entypo-social twitter": "",
+										( loginState == "logged-in" )? "entypo thumbs-up": ""
+									].join( " " ) }>
+								</span>
+								{ 
+									( loginState == "login-standby" )? "LOGIN" :
+									( loginState == "logged-in" )? "PROCEED" : ""
+								}
+							</button>
+
 						</div>
 					</div>
 				);
+			},
+
+			"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
+				if( this.state.loginState != prevState.loginState ){
+					this.props.scope.$root.$broadcast( this.state.loginState, this.state.loginType );
+				}
 			},
 
 			"componentDidMount": function componentDidMount( ){
@@ -267,41 +298,27 @@ Crime.directive( "crimeLogin", [
 			"link": function onLink( scope, element, attributeSet ){
 				PageFlow( scope, element );
 
-				scope.defaultPage( );
+				scope.wholePageDown( );
 
 				scope.$on( "show-default-page",
 					function onShowDefaultPage( ){
-						scope.defaultPage( );
+						scope.$root.$broadcast( "show-login" );
+					} );
+
+				scope.$on( "hide-default-page",
+					function onHideMap( ){
+						scope.$root.$broadcast( "hide-login" );
 					} );
 
 				scope.$on( "show-login",
 					function onShowMap( ){
+						scope.wholePageDown( );
 						scope.wholePageCenter( );
 					} );
 
 				scope.$on( "hide-login",
 					function onHideMap( ){
-						scope.wholePageUp( );
-					} );
-
-				scope.$on( "error",
-					function onError( event, errorType, errorData, referenceData ){
-
-					} );
-
-				scope.$on( "login-cancelled",
-					function onLoginCancelled( ){
-						
-					} );
-
-				scope.$on( "logging-in",
-					function onLoggedIn( ){
-
-					} );
-
-				scope.$on( "logged-in",
-					function onLoggedIn( ){
-						scope.$root.$broadcast( "show-facebook-profile" );
+						scope.wholePageDown( );
 					} );
 
 				React.renderComponent( <crimeLogin scope={ scope } />, element[ 0 ] );

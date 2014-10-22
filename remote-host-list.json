@@ -1,0 +1,12 @@
+{
+	"remoteHostList": [
+		{
+			"remoteID":				"54-171-91-108",
+			"remoteIP":				"54.171.91.108",
+			"remoteHost": 			"ec2-54-171-91-108.eu-west-1.compute.amazonaws.com",
+			"remoteUsername": 		"ubuntu",
+			"privateKeyPath": 		"key-54-171-91-108",
+			"privateKeyPassphrase": "webnified"
+		}
+	]
+}

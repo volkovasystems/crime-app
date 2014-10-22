@@ -1,21 +1,162 @@
 Crime.directive( "crimeLocate", [
 	"PageFlow",
 	function directive( PageFlow ){
-		var geoCoder = new google.maps.Geocoder( );
+		var DEFAULT_MAP_ADDRESS = "Manila, Philippines";
 
 		var crimeLocate = React.createClass( {
 			"getInitialState": function getInitialState( ){
 				return {
-					"map": { },
-					"mapPointer": { },
 					"mapZoom": 15,
+					"mapZoomStart": 15,
+					"mapZoomEnd": 25,
 					"mapOptionSet": { },
 					"position": { },
-					"finalPosition": { },
 					"mapState": "normal",
 					"resizeTimeout": null,
 					"readableAddress": ""
 				};
+			},
+
+			"createGeoCoder": function createGeoCoder( ){
+				if( "geoCoder" in this &&
+					this.geoCoder &&
+					this.geoCoder instanceof google.maps.Geocoder )
+				{
+					return this.geoCoder;
+				}
+
+				var geoCoder = new google.maps.Geocoder( );
+
+				this.geoCoder = geoCoder;
+
+				return geoCoder;
+			},
+
+			"createMapContainer": function createMapContainer( ){
+				if( "mapContainer" in this && 
+					this.mapContainer &&
+					this.mapContainer instanceof jQuery )
+				{
+					return this.mapContainer;
+				}
+
+				var mapContainer = $( ".map-container", this.getDOMNode( ) )[ 0 ];
+
+				this.mapContainer = mapContainer;
+
+				return mapContainer;
+			},
+
+			"createMap": function createMap( ){
+				if( "map" in this && 
+					this.map &&
+					this.map instanceof google.maps.Map )
+				{
+					return this.map;
+				}
+
+				var mapContainer = this.createMapContainer( );
+
+				var map = new google.maps.Map( mapContainer, {
+					"zoom": this.state.mapZoom,
+					"minZoom": this.state.mapZoomStart,
+					"maxZoom": this.state.mapZoomEnd,
+					"center": this.state.position,
+					"mapTypeControl": false,
+					"overviewMapControl": false,
+					"panControl": false,
+					"streetViewControl": false,
+					"scaleControl": false,
+					"disableDefaultUI": true
+				} );
+
+				this.map = map;
+
+				return map;
+			},
+
+			"createPointerIcon": function createPointerIcon( ){
+				if( "pointerIcon" in this && 
+					this.pointerIcon )
+				{
+					return this.pointerIcon;
+				}
+
+				var pointerIcon = {
+					"path": google.maps.SymbolPath.CIRCLE,
+					"scale": 25,
+					"strokeWeight": 5,
+					"strokeColor": "#ff0000",
+					"origin": new google.maps.Point( 0, 0 ),
+					"anchor": new google.maps.Point( 0, 0 )
+				};
+
+				this.pointerIcon = pointerIcon;
+
+				return pointerIcon;
+			},
+
+			"createMapPointer": function createMapPointer( ){
+				if( "mapPointer" in this && 
+					this.mapPointer &&
+					this.mapPointer instanceof google.maps.Marker )
+				{
+					return this.mapPointer;
+				}
+
+				var map = this.createMap( );
+				
+				var pointerIcon = this.createPointerIcon( );
+
+				var mapPointer = new google.maps.Marker( {
+					"map": map,
+					"draggable": true,
+					"position": this.state.position,
+					"icon": pointerIcon 
+				} );
+
+				this.mapPointer = mapPointer;
+
+				return mapPointer;
+			},
+
+			"attachAllMapListener": function attachAllMapListener( ){
+				var map = this.createMap( );
+				
+				var mapPointer = this.createMapPointer( );
+
+				var self = this;
+
+				google.maps.event.addListener( map, "tilesloaded",
+					function onTilesLoaded( event ){
+						self.props.scope.$root.$broadcast( "map-loaded" );
+					} );
+
+				google.maps.event.addListener( map, "zoom_changed",
+					function onZoomChanged( event ){
+						self.setPosition( map.getCenter( ) );
+					} );	
+
+				google.maps.event.addListener( map, "dragend",
+					function onDragEnd( event ){
+						self.setPosition( map.getCenter( ) );
+					} );
+			},
+
+			"attachAllMapPointerListener": function attachAllMapPointerListener( ){
+				var mapPointer = this.createMapPointer( );
+
+				var self = this;
+
+				google.maps.event.addListener( mapPointer, "dragend",
+					function onDragEnd( event ){
+						self.setPosition( mapPointer.getPosition( ) );
+					} );
+
+				google.maps.event.addListener( mapPointer, "mouseup",
+					function onMouseUp( event ){
+						self.setPosition( mapPointer.getPosition( ) );
+					} );
 			},
 
 			"initializeMap": function initializeMap( ){
@@ -25,95 +166,17 @@ Crime.directive( "crimeLocate", [
 					this.loadCurrentPosition( );
 
 				}else if( !( this.state.map instanceof google.maps.Map ) ){
-					var mapContainer = $( ".map-container", this.getDOMNode( ) )[ 0 ];
+					this.createMapContainer( );
 
-					var map = new google.maps.Map( mapContainer, {
-						"zoom": this.state.mapZoom,
-						"minZoom": this.state.mapZoom,
-						"maxZoom": this.state.mapZoom + 5,
-						"center": this.state.finalPosition,
-						"mapTypeControl": false,
-						"overviewMapControl": false,
-						"panControl": false,
-						"streetViewControl": false,
-						"scaleControl": true
-					} );
+					this.createMap( );
 
-					var pointerIcon = {
-						"path": google.maps.SymbolPath.CIRCLE,
-						"scale": 25,
-						"strokeWeight": 5,
-						"strokeColor": "#ff0000",
-						"origin": new google.maps.Point( 0, 0 ),
-						"anchor": new google.maps.Point( 0, 0 )
-					};
+					this.createPointerIcon( );
 
-					var mapPointer = new google.maps.Marker( {
-						"map": map,
-						"draggable": true,
-						"position": this.state.finalPosition,
-						"icon": pointerIcon 
-					} );
+					this.createMapPointer( );
 
-					google.maps.event.addListener( mapPointer, "dragstart",
-						function onDragStart( event ){
-							self.setState( {
-								"position": mapPointer.getPosition( )
-							} );
-						} );
+					this.attachAllMapListener( );
 
-					google.maps.event.addListener( mapPointer, "drag",
-						function onDrag( event ){
-							self.setState( {
-								"position": mapPointer.getPosition( )
-							} );
-						} );
-
-					google.maps.event.addListener( mapPointer, "dragend",
-						function onDragEnd( event ){
-							self.setState( {
-								"position": mapPointer.getPosition( )
-							} );
-						} );
-
-					google.maps.event.addListener( mapPointer, "mouseup",
-						function onMouseUp( event ){
-							self.setState( {
-								"finalPosition": mapPointer.getPosition( )
-							} );
-						} );
-
-					google.maps.event.addListener( map, "tilesloaded",
-						function onTilesLoaded( event ){
-							self.props.scope.$root.$broadcast( "map-loaded" );
-						} );
-
-					google.maps.event.addListener( map, "zoom_changed",
-						function onZoomChanged( event ){
-							self.setState( {
-								"finalPosition": mapPointer.getPosition( )
-							} );
-							
-							self.loadAtPosition( mapPointer.getPosition( ) );
-						} );	
-
-					google.maps.event.addListener( map, "dragend",
-						function onDragEnd( event ){
-							self.setState( {
-								"finalPosition": map.getCenter( )
-							} );
-						} );
-
-					this.setState( {
-						"map": map,
-						"mapPointer": mapPointer
-					} );
-
-					this.props.scope.$root.$broadcast( "map-data", {
-						"map": map,
-						"mapPointer": mapPointer,
-						"geoCoder": geoCoder
-					} );
+					this.attachAllMapPointerListener( );
 				}
 			},
 
@@ -129,157 +192,73 @@ Crime.directive( "crimeLocate", [
 								} )
 								.join( ", " );
 
-							self.setState( {
-								"readableAddress": readableAddress
-							} );
-
 							if( typeof callback == "function" ){
 								callback( null, readableAddress );
 							}
+
+						}else{
+							self.props.scope.$root.$broadcast( "error", "locate-error", status, results );
 						}
 					} );
 			},
 
-			"loadPositionAtAddress": function loadPositionAtAddress( address, callback ){
+			"getPositionAtAddress": function loadPositionAtAddress( address, callback ){
 				var self = this;
 				
-				this.props.scope.$root.$broadcast( "spinner-header" );
-
 				geoCoder.geocode( { "address": address }, 
 					function onGeoCodeResult( results, status ){
-						
-						self.props.scope.$root.$broadcast( "spinner-off" );
-
 						if( status == google.maps.GeocoderStatus.OK ){
-							self.setState( {
-								"position": results[ 0 ].geometry.location,
-								"finalPosition": results[ 0 ].geometry.location
-							} );
-
 							if( typeof callback == "function" ){
 								callback( null, results[ 0 ].geometry.location );
 							}
+
+						}else{
+							self.props.scope.$root.$broadcast( "error", "locate-error", status, results );
 						}
 					} );
 			},
 
-			"loadAtPosition": function loadAtPosition( position, callback ){
-				var self = this;
-				
-				this.props.scope.$root.$broadcast( "spinner-header" );
-
-				geoCoder.geocode( { "location": position }, 
-					function onGeoCodeResult( results, status ){
-						
-						self.props.scope.$root.$broadcast( "spinner-off" );
-
-						if( status == google.maps.GeocoderStatus.OK ){
-							self.setState( {
-								"position": results[ 0 ].geometry.location,
-								"finalPosition": results[ 0 ].geometry.location
-							} );
-
-							if( typeof callback == "function" ){
-								callback( null, results[ 0 ].geometry.location );
-							}
-						}
-					} );
+			"setPosition": function setPosition( position ){
+				this.setState( {
+					"position": position
+				} );
 			},
 
 			"loadCurrentPosition": function loadCurrentPosition( ){
 				var self = this;
 
-				if( this.state.finalPosition instanceof google.maps.LatLng ){
-					this.state.map.setCenter( this.state.finalPosition );
-
-				}else if( navigator.geolocation ){
-					this.props.scope.$root.$broadcast( "spinner-header" );
-
+				if( navigator.geolocation ){
 					navigator.geolocation
 						.getCurrentPosition( function onCurrentPosition( position ){
-							self.props.scope.$root.$broadcast( "spinner-off" );
-
 							var position = new google.maps.LatLng( position.coords.latitude, position.coords.longitude );
 							
-							self.setState( {
-								"position": position,
-								"finalPosition": position
-							} );
+							self.setPosition( position );				
 						} );
 
 				}else{
-					//Always point to Manila, Philippines.
-					this.loadPositionAtAddress( "Manila, Philippines" );
+					this.getPositionAtAddress( DEFAULT_MAP_ADDRESS,
+						function onResult( error, position ){
+							self.setPosition( position );
+						} );
 				}
 			},
 
-			"componentWillMount": function componentWillMount( ){
+			"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 				var self = this;
-				$( window ).resize( function onResize( ){
-					if( self.state.resizeTimeout ){
-						clearTimeout( self.state.resizeTimeout );
-
-						self.state.resizeTimeout = null;
-					}
-
-					self.state.resizeTimeout = setTimeout( function onTimeout( ){
-						self.loadCurrentPosition( );
-
-						clearTimeout( self.state.resizeTimeout );
-
-						self.state.resizeTimeout = null;
-					}, 500 );
-					
-
-					if( self.state.mapState == "zen-mode" ){
-						self.props.scope.$root.$broadcast( "set-zen-mode" );
-					}
-				} );
-
-				this.props.scope.$on( "disable-default-map-control-set",
-					function onDisableDefaultMapControlSet( ){
-						if( self.state.map instanceof google.maps.Map ){
-							self.state.map.setOptions( {
-								"disableDefaultUI": true
-							} );
-						}
-					} );
-
-				this.props.scope.$on( "enable-default-map-control-set",
-					function onDisableDefaultMapControlSet( ){
-						if( self.state.map instanceof google.maps.Map ){
-							self.state.map.setOptions( {
-								"disableDefaultUI": false
-							} );
-						}
-					} );
-
-				this.props.scope.$on( "hide-map-pointer",
-					function onHideMapPointer( ){
-						if( self.state.mapPointer instanceof google.maps.Marker ){
-							self.state.mapPointer.setVisible( false );
-						}
-					} );
-
-				this.props.scope.$on( "show-map-pointer",
-					function onShowMapPointer( ){
-						if( self.state.mapPointer instanceof google.maps.Marker ){
-							self.state.mapPointer.setVisible( true );
-						}
-					} );
 
 				this.props.scope.$on( "show-zen-map",
 					function onShowZenMap( ){
-						self.setState( {
-							"mapState": "zen-mode"
-						} );
+						self.setMapState( "zen" );
 					} );
 
 				this.props.scope.$on( "show-normal-map",
 					function onShowNormalMap( ){
-						self.setState( {
-							"mapState": "normal"
-						} );
+						self.setMapState( "normal" );
+					} );
+
+				this.props.scope.$on( "update-map-view",
+					function onUpdateMapView( ){
+						self.centerMapAtPosition( self.state.position );
 					} );
 
 				this.props.scope.$on( "search-map-at-address",
@@ -293,6 +272,24 @@ Crime.directive( "crimeLocate", [
 					} );
 			},
 
+			"centerMapAtPosition": function centerMapAtPosition( position ){
+				this.mapPointer.setPosition( position );
+
+				this.map.setCenter( position );
+			},
+
+			"setMapState": function setMapState( mapState ){
+				this.setState( {
+					"mapState": mapState
+				} );
+			},
+
+			"componentWillMount": function componentWillMount( ){
+				this.createGeoCoder( );
+
+				this.attachAllComponentEventListener( );
+			},
+
 			"render": function onRender( ){
 				return ( 
 					<div className="crime-locate-container">
@@ -302,40 +299,33 @@ Crime.directive( "crimeLocate", [
 			},
 
 			"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-				if( !( this.state.position instanceof google.maps.LatLng ) ){
-					this.loadCurrentPosition( );
-
-				}else if( !( this.state.map instanceof google.maps.Map ) && 
+				if( !( this.map instanceof google.maps.Map ) && 
 					this.state.position instanceof google.maps.LatLng )
 				{
 					this.initializeMap( );
-
-				}else if( this.state.searchAddress != prevState.searchAddress ){
-					this.loadPositionAtAddress( this.state.searchAddress );
 				}
 
-				if( this.state.map instanceof google.maps.Map && 
-					this.state.finalPosition instanceof google.maps.LatLng )
-				{
-					this.state.map.setCenter( this.state.finalPosition );
-					this.state.mapPointer.setPosition( this.state.finalPosition );	
-
-					this.props.scope.$root.$broadcast( "final-position-changed", this.state.finalPosition );			
+				if( !_.isEqual( this.state.position, prevState.position ) ){
+					this.centerMapAtPosition( this.state.position );
 				}
-				
-				if( this.state.map instanceof google.maps.Map && 
-					this.state.position instanceof google.maps.LatLng &&
-					!_.isEqual( this.state.position, prevState.position ) && 
-					!_.isEqual( this.state.position, this.state.finalPosition ) )
-				{
-					this.state.mapPointer.setPosition( this.state.position );
-				
+
+				if( this.state.mapState != prevState.mapState ){
+					switch( this.state.mapState ){
+						case "zen":
+							this.mapPointer.setVisible( false );
+							break;
+
+						case "normal":
+							this.mapPointer.setVisible( true );
+							break;
+					}
 				}
 			},
 
 			"componentDidMount": function componentDidMount( ){
 				this.loadCurrentPosition( );
-				this.props.scope.$root.$broadcast( "crime-locate-rendered" );	
+
+				this.props.scope.$root.$broadcast( "crime-locate-rendered" );
 			}
 		} );
 
@@ -345,7 +335,7 @@ Crime.directive( "crimeLocate", [
 			"link": function onLink( scope, element, attributeSet ){
 				PageFlow( scope, element );
 
-				scope.wholePageUp( );
+				scope.wholePageLeft( );
 
 				scope.$on( "show-map",
 					function onShowMap( ){
@@ -354,32 +344,22 @@ Crime.directive( "crimeLocate", [
 
 				scope.$on( "hide-map",
 					function onHideMap( ){
-						scope.wholePageUp( );
+						scope.wholePageLeft( );
 					} );
 
 				scope.$on( "show-zen-map",
 					function onShowZenMap( ){
-						scope.$root.$broadcast( "set-zen-mode" );
 						scope.wholePageCenter( );
 					} );
 
 				scope.$on( "show-normal-map",
 					function onShowNormalMap( ){
-						scope.$root.$broadcast( "set-normal-mode" );
 						scope.wholePageCenter( );
 					} );
 
-				scope.$on( "set-zen-mode",
-					function onSetZenMode( ){
-						scope.$root.$broadcast( "disable-default-map-control-set" );
-						scope.$root.$broadcast( "hide-map-pointer" );
-					} );
-
-				scope.$on( "set-normal-mode",
-					function onSetNormalMode( ){
-						scope.$root.$broadcast( "enable-default-map-control-set" );
-						scope.$root.$broadcast( "show-map-pointer" );
-					} );
+				$( window ).resize( function onResize( ){
+					scope.$root.$broadcast( "update-map-view" );
+				} );
 
 				React.renderComponent( <crimeLocate scope={ scope } />, element[ 0 ] );
 			}

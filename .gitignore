@@ -8,3 +8,5 @@ temp
 *.pem
 *.ppk
 local.json
+client/fonts/
+key-*
