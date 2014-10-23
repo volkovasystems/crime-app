@@ -7,18 +7,59 @@ Crime.directive( "crimeData", [
 			"getInitialState": function getInitialState( ){
 				return {
 					"dataList": [ ],
+					"dataReference": "",
+
 					"columnList": [ ],
 					"columnSet": { },
 					"columnDataSet": { },
-					"dataReference": "",
-					"groupReference": "",
+
 					"groupSet": { },
 					"collapsedGroupList": [ ],
+					"groupReference": "",
+					"groupingState": "grouping-disabled",
+
 					"componentState": "data-standby"
 				};
 			},
 
-			"getColumnSet": function getColumnSet( columnList ){
+			"createGroupSet": function createGroupSet( groupReference ){
+				var dataList = this.state.dataList;
+
+				var groupSet = _( dataList )
+					.groupBy( function onEachData( data ){
+						return data[ groupReference ];
+					} )
+					.value( );
+
+				this.setState( {
+					"groupSet": groupSet
+				} );
+			},
+
+			"enableGrouping": function enableGrouping( ){
+				this.setState( {
+					"groupingState": "grouping-enabled"
+				} );
+			},
+
+			"disableGrouping": function disableGrouping( ){
+				this.setState( {
+					"groupingState": "grouping-disabled"
+				} );
+			},
+
+			"updateGroupSet": function updateGroupSet( groupingState ){
+				if( groupingState == "grouping-disabled" ){
+					this.setState( {
+						"groupSet": { }
+					} );
+
+				}else if( groupingState == "grouping-enabled" ){
+					//: @todo: Should we request for an update of database?
+				}
+			},
+
+			"constructColumnSet": function getColumnSet( columnList ){
 				var columnSet = _( columnList )
 					.pluck( "name" )
 					.object( columnList )
@@ -29,7 +70,7 @@ Crime.directive( "crimeData", [
 				} );
 			},
 
-			"getColumnList": function getColumnList( dataList ){
+			"createColumnList": function createColumnList( dataList ){
 				var columnList = _( dataList )
 					.first( )
 					.keys( )
@@ -52,32 +93,32 @@ Crime.directive( "crimeData", [
 
 			"updateColumnData": function updateColumnData( columnDataSet ){
 				var columnList = this.state.columnList;
-			},
 
-			"reconstructGroupSet": function reconstructGroupSet( groupReference ){
-		   	    var dataList = this.state.dataList;
-
-				var groupSet = _( dataList )
-					.groupBy( function onEachData( data ){
-						return data[ groupReference ];
+				columnList = _( columnList )
+					.groupBy( function onEachColumn( columnData ){
+						return columnData.name;
 					} )
-					.value( );
+					.map( function onEachGroup( columnDataList, columnName ){
+						var columnData = columnDataList[ 0 ];
+
+						return _.extend( columnData, columnDataSet[ columnName ] );
+					} );
 
 				this.setState( {
-					"groupSet": groupSet
+					"columnList": columnList
 				} );
 			},
 
 			"loadDataList": function loadDataList( dataList, dataSetting ){
 				this.setState( {
 					"dataList": dataList,
-					"dataReference": dataSetting.dataReference,
-					"groupReference": dataSetting.groupReference,
-					"columnDataSet": dataSetting.columnDataSet
+					"dataReference": dataSetting.dataReference || "",
+					"groupReference": dataSetting.groupReference || "",
+					"columnDataSet": dataSetting.columnDataSet || ""
 				} );
 			},
 
-			"updataDataList": function updataDataList( dataList ){
+			"updateDataList": function updateDataList( dataList ){
 			 	this.setState( {
 					"dataList": dataList
 			    } );
@@ -85,20 +126,19 @@ Crime.directive( "crimeData", [
 
 			"updateDataSetting": function updateDataSetting( dataSetting ){
 				this.setState( {
-					"dataReference": dataSetting.dataReference,
-					"groupReference": dataSetting.groupReference,
-					"columnDataSet": dataSetting.columnDataSet
+					"dataReference": dataSetting.dataReference || this.state.dataReference,
+					"groupReference": dataSetting.groupReference || this.state.groupReference,
+					"columnDataSet": dataSetting.columnDataSet || this.state.columnDataSet
 				} );
-			},
-
-			"viewDataList": function viewDataList( ){
-
 			},
 
 			"onEachColumnHeader": function onEachColumnHeader( columnData, index ){
 				var isHidden = columnData.isHidden;
+
 				var isCollapsed = columnData.isCollapsed;
+
 				var name = columnData.name;
+
 				var title = columnData.title;
 
 				var key = [ name, index ].join( ":" );
@@ -121,8 +161,11 @@ Crime.directive( "crimeData", [
 
 			"onEachColumnFooter": function onEachColumnFooter( columnData ){
 				var isHidden = columnData.isHidden;
+
 				var isCollapsed = columnData.isCollapsed;
+
 				var name = columnData.name;
+
 				var title = columnData.title;
 
 				var key = [ name, index ].join( ":" );
@@ -293,12 +336,34 @@ Crime.directive( "crimeData", [
 				);
 			},
 
+			"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+				this.props.scope.$on( "load-data-list",
+					function onLoadDataList( event, dataList, dataSetting ){
+
+					} );
+
+				this.props.scope.$on( "update-data-list",
+					function onUpdateDataList( event, dataList ){
+
+					} );
+
+				this.props.scope.$on( "update-data-setting",
+					function onUpdateDataSetting( ){
+
+					} );
+			},
+
 			"componentWillMount": function componentWillMount( ){
+				this.attachAllComponentEventListener( );
 			},
 
 			"render": function onRender( ){
 				var componentState = this.state.componentState;
+
+				var groupingState = this.state.groupingState;
+
 				var groupSet = this.state.groupSet;
+
 				var columnList = this.state.columnList;
 
 				return (
@@ -320,9 +385,9 @@ Crime.directive( "crimeData", [
 								</tr>
 							</thead>
 
-							{ _.map( groupSet, this.onEachGroup ) }
+							{ ( groupingState == "grouping-enabled" )? _.map( groupSet, this.onEachGroup ) : "" }
 
-							{ this.renderDataList( ) }
+							{ ( groupingState == "grouping-disabled" )? this.renderDataList( ) : "" }
 
 							<tfoot
 								className={ [
@@ -339,19 +404,26 @@ Crime.directive( "crimeData", [
 
 			"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
 				if( !_.isEqual( this.state.dataList, prevState.dataList ) ){
-					this.getColumnList( this.state.dataList );
+					this.createColumnList( this.state.dataList );
 				}
 
 				if( !_.isEqual( this.state.columnDataSet, prevState.columnDataSet ) ){
-
+					this.updateColumnData( this.state.columnDataSet );
 				}
 
 				if( !_.isEqual( this.state.columnList, prevState.columnList ) ){
-					this.getColumnSet( this.state.columnList );
+					this.constructColumnSet( this.state.columnList );
 				}
 
 				if( this.state.groupReference !== prevState.groupReference ){
-					this.reconstructGroupSet( this.state.groupReference );
+					this.createGroupSet( this.state.groupReference );
+					this.enableGrouping( );
+				}
+
+				if( this.state.groupingState != prevState.groupingState ){
+					this.updateGroupSet( this.state.groupingState );
+
+					this.props.scope.$root.$broadcast( "data-grouping-state-changed", groupingState, this );
 				}
 			},
 
