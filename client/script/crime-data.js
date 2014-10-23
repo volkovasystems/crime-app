@@ -9,6 +9,7 @@ Crime.directive( "crimeData", [
 					"dataList": [ ],
 					"columnList": [ ],
 					"columnSet": { },
+					"columnDataSet": { },
 					"dataReference": "",
 					"groupReference": "",
 					"groupSet": { },
@@ -49,6 +50,10 @@ Crime.directive( "crimeData", [
 				} );
 			},
 
+			"updateColumnData": function updateColumnData( columnDataSet ){
+				var columnList = this.state.columnList;
+			},
+
 			"reconstructGroupSet": function reconstructGroupSet( groupReference ){
 		   	    var dataList = this.state.dataList;
 
@@ -63,11 +68,26 @@ Crime.directive( "crimeData", [
 				} );
 			},
 
-			"loadDataList": function loadDataList( dataList, dataReference, groupReference ){
+			"loadDataList": function loadDataList( dataList, dataSetting ){
 				this.setState( {
 					"dataList": dataList,
-					"dataReference": dataReference,
-					"groupReference": groupReference
+					"dataReference": dataSetting.dataReference,
+					"groupReference": dataSetting.groupReference,
+					"columnDataSet": dataSetting.columnDataSet
+				} );
+			},
+
+			"updataDataList": function updataDataList( dataList ){
+			 	this.setState( {
+					"dataList": dataList
+			    } );
+			},
+
+			"updateDataSetting": function updateDataSetting( dataSetting ){
+				this.setState( {
+					"dataReference": dataSetting.dataReference,
+					"groupReference": dataSetting.groupReference,
+					"columnDataSet": dataSetting.columnDataSet
 				} );
 			},
 
@@ -84,7 +104,7 @@ Crime.directive( "crimeData", [
 				var key = [ name, index ].join( ":" );
 
 				return (
-					<td
+					<th
 						key={ key }
 						className={ [
 							"column-header",
@@ -95,7 +115,7 @@ Crime.directive( "crimeData", [
 						value={ name }
 						data-index={ index }>
 						{ title }
-					</td>
+					</th>
 				);
 			},
 
@@ -123,25 +143,122 @@ Crime.directive( "crimeData", [
 				);
 			},
 
-			"onEachData": function onEachData( data, index ){
+			"onDataElementClick": function onDataElementClick( event ){
+				this.props.scope.$root.$broadcast( "data-element-clicked", event.currentTarget, this );
+			},
 
+			"onActionCellClick": function onActionCellClick( event ){
+				this.props.scope.$root.$broadcast( "action-cell-clicked", event.currentTarget, this );
+			},
+
+			"onExtendedCellClick": function onActionCellClick( event ){
+				this.props.scope.$root.$broadcast( "extended-cell-clicked", event.currentTarget, this );
+			},
+
+			"onEachDataElement": function onEachDataElement( value, columnName ){
+				var columnSet = this.state.columnSet;
+
+				var columnData = columnSet[ columnName ];
+
+				var hashedValue = btoa( value.toString( ) );
+
+				var key = [ hashedValue, columnName ].join( ":" );
+
+				var id = hashedValue;
+
+				var isHidden = columnData.isHidden;
+
+				var isCollapsed = columnData.isCollapsed;
+
+				return (
+					<td
+						id={ id }
+						key={ key }
+						className={ [
+						    "data-element",
+							( isHidden )? "hidden": "shown",
+							( isCollapsed )? "collapsed": "expanded"
+						].join( " " ) }
+						value={ hashedValue }
+						onClick={ this.onDataElementClick }>
+
+						<span
+							className={ [
+							    "action-cell"
+							].join( " " ) }
+							onClick={ this.onActionCellClick }>
+							{ value || "" }
+						</span>
+
+						<div
+							className={ [
+							    "extended-cell"
+							].join( " " ) }
+							onClick={ this.onExtendedCellClick }>
+						</div>
+					</td>
+				);
+			},
+
+			"onDataRowClick": function onDataRowClick( event ){
+				this.props.scope.$root.$broadcast( "data-row-clicked", event.currentTarget, this );
+			},
+
+			"onEachDataRow": function onEachDataRow( data, index ){
+				var hashedValue = btoa( JSON.stringify( data ) );
+
+				var key = [ hashedValue, index ].join( ":" );
+
+				var id = data._id || hashedValue;
+
+				return (
+					<tr
+						id={ id }
+						key={ key }
+						className={ [
+						    "data-row"
+						].join( " " ) }
+						value={ hashedValue }
+						onClick={ this.onDataRowClick }>
+						{ _.map( data, this.onEachDataElement ) }
+					</tr>
+				);
 			},
 
 			"onGroupHeaderClick": function onGroupHeaderClick( event ){
+				var collapsedGroupList = this.state.collapsedGroupList;
 
+				var groupName = event.currentTarget.props.value;
+
+				if( _.contains( collapsedGroupList, groupName ) ){
+					this.setState( {
+						"collapsedGroupList": _.without( collapsedGroupList, groupName )
+					} );
+
+				}else{
+					this.setState( {
+						"collapsedGroupList": collapsedGroupList.concat( [ groupName ] )
+					} );
+				}
 			},
 
 			"onEachGroup": function onEachGroup( groupData, groupName ){
-				var key = groupName;
+				var hashedValue = btoa( JSON.stringify( groupData ) );
+
+				var key = [ hashedValue, groupName ].join( ":" );
 
 				var collapsedGroupList = this.state.collapsedGroupList;
 
 				var isCollapsed = _.contains( collapsedGroupList, groupName );
 
+				var id = hashedValue;
+
 				return (
 					<tbody
+						id={ id }
 						key={ key }
 						className={ [
+							"data-group",
 							"group"
 						].join( " " ) }>
 
@@ -157,15 +274,23 @@ Crime.directive( "crimeData", [
 							</td>
 						</tr>
 
-						{ ( isCollapsed )? groupData.map( this.onEachData ) : "" }
+						{ ( isCollapsed )? groupData.map( this.onEachDataRow ) : "" }
 					</tbody>
 				)
 			},
 
 			"renderDataList": function renderDataList( ){
 				var dataList = this.state.dataList;
-				var columnSet = this.state.columnSet;
 
+				return (
+					<tbody
+						className={ [
+							"data-list"
+						].join( " " ) }>
+
+						{ dataList.map( this.onEachDataRow ) }
+					</tbody>
+				);
 			},
 
 			"componentWillMount": function componentWillMount( ){
@@ -182,8 +307,14 @@ Crime.directive( "crimeData", [
 							"crime-data-container",
 							componentState
 						].join( " " ) }>
-						<table>
-							<thead>
+						<table
+							className={ [
+								"data-table"
+							].join( " " ) }>
+							<thead
+								className={ [
+									"data-header"
+								].join( " " ) }>
 								<tr>
 									{ columnList.map( this.onEachColumnHeader ) }
 								</tr>
@@ -193,7 +324,10 @@ Crime.directive( "crimeData", [
 
 							{ this.renderDataList( ) }
 
-							<tfoot>
+							<tfoot
+								className={ [
+									"data-footer"
+								].join( " " ) }>
 								<tr>
 									{ columnList.map( this.onEachColumnFooter ) }
 								</tr>
@@ -206,6 +340,10 @@ Crime.directive( "crimeData", [
 			"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
 				if( !_.isEqual( this.state.dataList, prevState.dataList ) ){
 					this.getColumnList( this.state.dataList );
+				}
+
+				if( !_.isEqual( this.state.columnDataSet, prevState.columnDataSet ) ){
+
 				}
 
 				if( !_.isEqual( this.state.columnList, prevState.columnList ) ){
