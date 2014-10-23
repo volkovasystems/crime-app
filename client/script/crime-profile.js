@@ -69,7 +69,7 @@ Crime.directive( "crimeProfile", [
 				}
 			},
 
-			"onClickCloseProfile": function onClickCloseProfile( event ){
+			"onProfileCloseButtonClick": function onProfileCloseButtonClick( event ){
 
 			},
 
@@ -103,6 +103,7 @@ Crime.directive( "crimeProfile", [
 				var self = this;
 				this.props.scope.$on( "logged-in",
 					function onLoggedIn( event, profileType ){
+						self.props.scope.$root.$broadcast( "show-profile" );
 						self.initiateBasicProfileDataRetrieval( profileType );	
 					} );
 			},
@@ -127,40 +128,69 @@ Crime.directive( "crimeProfile", [
 							profileState
 						].join( " " ) }>
 						
+						<div 
+							className={ [
+								"profile-close-button",
+								"text-center",
+								profileState,
+								componentState
+							].join( " " ) }
+							onClick={ this.onProfileCloseButtonClick }>
+							<a 
+								className={ [
+									"action-element"
+								].join( " " ) }
+								href={ [
+									"#",
+									"close-profile"
+								].join( "/" ) }>
+								
+								<span 
+									className={ [
+										"profile-close-icon",
+										"entypo",
+										"list"
+									].join( " " ) }>
+								</span>
+							</a>
+						</div>
+
 						<div
 							className={ [
 								"profile-data-container",
-								"media",
 								"col-md-8",
 								"col-md-offset-2",
 								componentState,
 								profileState
 							].join( " " ) }>
 
-							<a 
+							<div
 								className={ [
 									"profile-image",
-									"action-element",
-									"pull-left",
 									componentState,
 									profileState
-								].join( " " ) } 
-								href={ [ 
-									"#", 
-									profileState 
-								].join( "/" ) }>
-								<img 
+								].join( " " ) }>
+								<a 
 									className={ [
-										"media-object",
-										"img-circle"
+										"action-element"
 									].join( " " ) } 
-									src={ profileImage } />
-							</a>
+									href={ [ 
+										"#", 
+										profileState 
+									].join( "/" ) }>
+									<img 
+										className={ [
+											"media-object",
+											"img-circle",
+											profileState
+										].join( " " ) } 
+										src={ profileImage } />
+								</a>
+							</div>
 
 							<div 
 								className={ [ 
 									"profile-data",
-									"media-body",
 									componentState,
 									profileState
 								].join( " " ) }>
@@ -168,21 +198,27 @@ Crime.directive( "crimeProfile", [
 								<h4 
 									className={ [
 										"profile-name",
-										"media-heading",
 										profileState,
 										componentState
 									].join( " " ) }>
 									{ profileName }
 								</h4>
 
-								<a 
+								<div
 									className={ [
 										"profile-link",
 										profileState,
 										componentState
-									].join( " " ) }
-									href={ profileURL }>
-									<h5>
+									].join( " " ) }>
+									<a 
+										className={ [
+											"action-element"
+										].join( " " ) }
+										href={ [ 
+											profileURL,
+											"#", 
+											"go-to-profile-page" 
+										].join( "/" ) }>
 										<span
 											className={ [
 												"entypo-social",
@@ -190,8 +226,8 @@ Crime.directive( "crimeProfile", [
 											].join( " " ) }>
 										</span>
 										Go to Profile Page
-									</h5>
-								</a>
+									</a>
+								</div>								
 							</div>
 						</div>
 					</div>
@@ -208,10 +244,6 @@ Crime.directive( "crimeProfile", [
 					};
 
 					this.props.scope.$root.$broadcast( this.state.profileState, profileData );
-
-					if( this.state.profileState == "profile-ready" ){
-						this.props.scope.$root.$broadcast( "show-profile" );
-					}
 
 					this.props.scope.$broadcast( "profile-state-changed", this.state.profileState, this.state.componentState );
 				}
@@ -235,9 +267,9 @@ Crime.directive( "crimeProfile", [
 						scope.reflow( "shown", "profile-minified" );
 					} );
 
-				scope.$on( "show-viewed-profile",
+				scope.$on( "show-expanded-profile",
 					function onShowMap( ){
-						scope.reflow( "shown", "profile-viewed" );
+						scope.reflow( "shown", "profile-expanded" );
 					} );
 
 				scope.$on( "show-profile",
@@ -248,11 +280,6 @@ Crime.directive( "crimeProfile", [
 				scope.$on( "hide-profile",
 					function onHideMap( ){
 						scope.reflow( "hidden", "profile-minified" );
-					} );
-
-				scope.$on( "profile-data",
-					function onProfileData( ){
-						scope.$root.$broadcast( "show-minified-profile" );
 					} );
 
 				scope.$on( "profile-state-changed",

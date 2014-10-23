@@ -265,10 +265,11 @@ Crime.run( [
 				$rootScope.$on( "crime-login-rendered", function onRendered( ){ callback( ); } );
 			},
 			function checkRender( callback ){
-				$rootScope.$on( "crime-notify-rendered", function onRendered( ){ callback( ); } );
-			}
-			/*function checkRender( callback ){
 				$rootScope.$on( "crime-profile-rendered", function onRendered( ){ callback( ); } );
+			}
+			/*
+			function checkRender( callback ){
+				$rootScope.$on( "crime-notify-rendered", function onRendered( ){ callback( ); } );
 			},
 			function checkRender( callback ){
 				$rootScope.$on( "crime-locate-rendered", function onRendered( ){ callback( ); } );
@@ -281,10 +282,11 @@ Crime.run( [
 			},
 			function checkRender( callback ){
 				$rootScope.$on( "crime-report-rendered", function onRendered( ){ callback( ); } );
-			},*/
+			},
 			function checkRender( callback ){
 				$rootScope.$on( "crime-data-rendered", function onRendered( ){ callback( ); } );
-			}
+			}*/
+			
 		],
 			function lastly( ){
 				$rootScope.$broadcast( "show-default-page" );
