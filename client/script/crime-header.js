@@ -56,12 +56,12 @@ Crime.directive( "crimeHeader", [
 					} );
 
 				scope.$on( "show-header",
-					function onShowMap( ){
+					function onShowHeader( ){
 						scope.applyFlow( "shown" );
 					} );
 
 				scope.$on( "hide-header",
-					function onHideMap( ){
+					function onHideHeader( ){
 						scope.applyFlow( "hidden" );
 					} );
 
