@@ -1,7 +1,7 @@
 Crime.directive( "crimeAccount", [
 	"PageFlow",
 	function directive( PageFlow ){
-		var crimeHeader = React.createClass( {
+		var crimeAccount = React.createClass( {
 			"getInitialState": function getInitialState( ){
 				return {
 					"componentState": "account-standby"
@@ -20,6 +20,7 @@ Crime.directive( "crimeAccount", [
 							"crime-account-container",
 							componentState
 						].join( " " ) }>
+
 					</div>
 				);
 			},
@@ -40,12 +41,9 @@ Crime.directive( "crimeAccount", [
 
 				scope.reflow( "hidden", "account-standby" );
 
-				scope.$on( "show-normal-header",
-					function onShowNormalHeader( ){
-						scope.reflow( "shown", "account-standby" );
-					} );
+				scope.$on( "show-previewed" )
 
-				scope.$on( "show-expanded-header",
+				scope.$on( "show-expanded-account",
 					function onShowExpandedHeader( ){
 						scope.reflow( "shown", "header-expanded" );
 					} );

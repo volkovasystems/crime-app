@@ -38,6 +38,6 @@
     "mathjs": "~1.0.1",
     "entypo": "https://github.com/volkovasystems/entypo.git",
     "stringjs": "~2.2.0",
-    "material-design-icons": "~1.0.0"
+    "material-design-icons-lite": "https://github.com/volkovasystems/material-design-icons-lite.git"
   }
 }
