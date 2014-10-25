@@ -1,164 +1,155 @@
 Crime.directive( "crimeSearch", [
 	"PageFlow",
 	function directive( PageFlow ){
+		var SEARCH_ADDRESS = "search address";
+
 		var crimeSearch = React.createClass( {
 			"getInitialState": function getInitialState( ){
 				return {
-					"address": "",
 					"searchAddress": "",
-					"searchTimeout": null,
-					"confirmState": "standby",
-					"confirmPrompt": "confirm",
-					"searchPosition": null,
-					"readableAddress": ""
+					"position": null,
+					"searchState": "search-empty"
 				};
 			},
 
-			"onKeyPress": function onKeyPress( event ){
-				if( event.key == "Enter" ){
-					this.setState( {
-						"searchAddress": event.target.value
+			"searchAddress": function searchAddress( address ){
+				var self = this;
+
+				async.waterfall( 
+					[
+						function searchMapAtAddress( callback ){
+							self.props.scope.$root.$broadcast( "search-map-at-address", address,
+								function onResult( error, position ){
+									callback( null, position );
+
+									self.setState( {
+										"position": position
+									} );
+								} );	
+						},
+
+						function searchMapAtPosition( position, callback ){
+							self.props.scope.$root.$broadcast( "search-map-at-position", position,
+								function onResult( error, readableAddress ){
+									callback( null, position, readableAddress );
+
+									self.setState( {
+										"searchAddress": readableAddress
+									} );
+								} );	
+						}
+					],
+					function lastly( error, position, readableAddress ){
+						self.setState( {
+							"searchState": "search-done"
+						} );
 					} );
-				}
 			},
 
-			"onChange": function onChange( event ){
+			"moveMapToPosition": function moveMapToPosition( position ){
+				this.props.scope.$root.$broadcast( "set-map-position", position );
+			},
+
+			"onSearchAddressChange": function onSearchAddressChange( event ){
+				var address = event.target.value;
+
+				if( this.timeoutChange ){
+					clearTimeout( this.timeoutChange );
+					this.timeoutChange = null;
+				}
+
+				if( _.isEmpty( address ) ){
+					this.setState( {
+						"searchAddress": address,
+						"searchState": "search-empty"
+					} );
+
+					return;
+				}
+
+				var self = this;
+				this.timeoutChange = setTimeout( function onTimeout( ){
+					self.searchAddress( address );
+
+					clearTimeout( self.timeoutChange );
+					self.timeoutChange = null;
+				}, 1000 );
+
 				this.setState( {
-					"address": event.target.value
+					"searchAddress": address,
+					"searchState": "search-filled"
 				} );
 			},
 
-			"onClick": function onClick( event ){
-				if( this.state.searchPosition instanceof google.maps.LatLng ){
-					this.props.scope.$root.$broadcast( "hide-map-search" );
-					this.props.scope.$root.$broadcast( "show-zen-map" );
-					this.props.scope.$root.$broadcast( "show-reporting" );
-					this.props.scope.$root.$broadcast( "confirmed-map-data", this.state.searchPosition );
+			"onClearSearchClick": function onClearSearchClick( event ){
+				if( this.state.searchState != "search-empty" ){
+					this.setState( {
+						"searchAddress": "",
+						"searchState": "search-empty"
+					} );
 				}
 			},
 
 			"componentWillMount": function componentWillMount( ){
-				var self = this;
-
-				this.props.scope.$on( "final-position-changed",
-					function onFinalPositionChanged( event, finalPosition ){
-						self.setState( {
-							"searchPosition": finalPosition
-						} );
-
-						self.props.scope.$root.$broadcast( "search-map-at-position",
-							finalPosition,
-							function onSearchMapAtPosition( error, readableAddress ){
-								self.setState( {
-									"readableAddress": readableAddress
-								} );
-							} );
-					} );
+				
 			},
 
 			"render": function onRender( ){
-				var readableAddress = this.state.readableAddress || "";
-				var latitude = "";
-				var longitude = "";
-				if( this.state.searchPosition instanceof google.maps.LatLng ){
-					latitude = this.state.searchPosition.lat( );
-					longitude = this.state.searchPosition.lng( );
-
-					var formatOption = { "notation": "fixed", "precision": 4 };
-					latitude = math.format( latitude, formatOption );
-					longitude = math.format( longitude, formatOption );
-				}
-
+				var searchAddress = this.state.searchAddress;
+				var searchState = this.state.searchState;
+				
 				return ( 
 					<div className="crime-search-container">
 						<div 
 							className={ [
-								"address-search-container",
-								"input-group",
-								"container",
-								"row",
-								"col-xs-10",
-								"col-xs-offset-1",
-								"col-sm-10",
-								"col-sm-offset-1",
-								"col-md-8",
-								"col-md-offset-2",
-								"col-lg-8",
-								"col-lg-offset-2"
+								"search-address-container"
 							].join( " " ) }>
 
-							<p className="location-description bg-info text-center">
-								You are currently pointing to { readableAddress }<br />
-								( { latitude + "\u00b0" }, { longitude + "\u00b0" } )
-							</p>
-
-							<div className="input-group">
-								<input 
-									className="address-search-input form-control input-lg text-center" 
-									type="text"
-									placeholder="Search for location of crime."
-									value={ this.state.address }
-									onChange={ this.onChange }
-									onKeyPress={ this.onKeyPress }/>
-
-								<span className="input-group-btn">
-									<button
-										className={ [
-											"confirm-address-button",
-											"btn",
-											"btn-lg",
-											( this.state.confirmState == "standby" )? "btn-default": "",
-											( this.state.confirmState == "ready" )? "btn-primary": ""
-										].join( " " ) }
-										type="button"
-										onClick={ this.onClick }>
-
-										{ this.state.confirmPrompt.toUpperCase( ) }
-
-									</button>
-								</span>
+							<div
+								className={ [
+									"search-icon",
+								].join( " " ) }>
+								<icon
+									name="ic_search_24px"
+									src="../library/svg-sprite-action.svg" />
 							</div>
+
+							<div
+								className={ [
+									"search-input-container"
+								].join( " " ) }>
+								<input 
+									type="text" 
+									className={ [
+										"search-input"
+									].join( " " ) }
+									placeholder={ SEARCH_ADDRESS.toUpperCase( ) }
+									value={ searchAddress }
+									onChange={ this.onSearchAddressChange } />
+
+								<div
+									className={ [
+										"clear-search",
+										searchState
+									].join( " " ) }
+									onClick={ this.onClearSearchClick }>
+									<icon
+										className={ [
+											"clear-search-icon"
+										].join( " " ) }
+										name="ic_clear_24px"
+										src="../library/svg-sprite-content.svg" />
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				);
 			},
 
 			"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-				var self = this;
-
-				if( this.state.address != prevState.address ){
-					this.setState( {
-						"confirmState": "standby"
-					} );
-
-					if( this.state.searchTimeout ){
-						clearTimeout( this.state.searchTimeout );
-
-						this.state.searchTimeout = null;
-					}
-
-					this.state.searchTimeout = setTimeout( function onTimeout( ){
-						self.props.scope.$root.$broadcast( "search-map-at-address", 
-							self.state.address,
-							function callback( error, position ){
-								if( error ){
-
-								}else{
-									self.setState( {
-										"searchPosition": position
-									} );
-								}
-
-								clearTimeout( self.state.searchTimeout );
-
-								self.state.searchTimeout = null;
-							} );
-					}, 3000 );
-
-				}else if( !_.isEqual( this.state.searchPosition, prevState.searchPosition ) ){
-					this.setState( {
-						"confirmState": "ready"
-					} );
+				if( !_.isEqual( prevState.position, this.state.position ) ){
+					this.moveMapToPosition( this.state.position );
 				}
 			},
 
@@ -171,19 +162,18 @@ Crime.directive( "crimeSearch", [
 			"restrict": "EA",
 			"scope": true,
 			"link": function onLink( scope, element, attributeSet ){
-				PageFlow( scope, element );
+				PageFlow( scope, element, "search" );
 
-				scope.wholePageUp( );
+				scope.$broadcast( "hide-search" );
 
-				scope.$on( "show-map-search",
-					function onShowMap( ){
-						scope.clearFlow( );
-						scope.applyFlow( "search-footer" );
+				scope.$on( "show-search",
+					function onShowSearch( ){
+						scope.toggleFlow( "!hidden", "shown" );
 					} );
 
-				scope.$on( "hide-map-search",
-					function onHideMap( ){
-						scope.wholePageUp( );
+				scope.$on( "hide-search",
+					function onHideSearch( ){
+						scope.toggleFlow( "!shown", "hidden" );
 					} );
 
 				React.renderComponent( <crimeSearch scope={ scope } />, element[ 0 ] );

@@ -2,6 +2,30 @@
 	background-color: #121212;
 	color: #dedede;
 
+	.profile-close-button {
+		display: none;
+
+		position: absolute;
+		right: 0px;
+		top: 0px;
+
+		width: 60px;
+		height: 60px;
+		margin: 5px;
+
+		z-index: 1;
+
+		svg {
+			fill: #ffffff;
+		}
+	}
+
+	.profile-close-button:hover {
+		svg {
+			fill: #801515;
+		}
+	}
+
 	.profile-data-container {
 		width: 100%;
 		height: 100%;
@@ -13,16 +37,38 @@
 			height: 100%;
 
 			a {
-				width: 100%;
-				height: 100%;
-				display: block;
+				display: block;	
+			}
 
-				img {
-					position: relative;
-					top: 50%;
-					left: 50%;
-					transform: translateX( -50% ) translateY( -50% );
-				}
+			img {
+				position: relative;
+				top: 50%;
+				left: 50%;
+				transform: translateX( -50% ) translateY( -50% );
+			}
+		}
+
+		.profile-data {
+			position: absolute;
+			bottom: 0px;
+			
+			height: 170px;
+			width: inherit;
+		}
+
+		.profile-link{
+			padding: 5px;
+			background-color: transparent;
+
+			border-radius: 20px;
+			border-color: #cccccc;
+			border-width: 1px;
+			border-style: solid;
+
+			margin-top: 10px;
+
+			span {
+				margin-right: 3px;
 			}
 		}
 	}
@@ -65,22 +111,36 @@ section.profile-minified {
 }
 
 section.profile-expanded {
-	width: 25% !important;
+	width: 20% !important;
 	height: 50% !important;
 	
 	.crime-profile-container {
+		.profile-close-button {
+			display: block;
+
+			a {
+				display: block;
+			}
+		}
+
 		.profile-data-container {
 			.profile-image {
-				width: 100%;
-				height: 100%;
-
+				position: relative;
+				left: 50%;
+				top: 75px;
+				transform: translateX(-50%);
+				
+				width: 224px;
+				height: 224px;
+				
 				img {
 					width: 90%;
 					height: 90%;
-				}
-			}
 
-			.profile-data {
+					border-color: #ffffff;
+					border-width: 4px;
+					border-style: solid;
+				}
 			}
 		}	
 	}

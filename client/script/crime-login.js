@@ -125,7 +125,8 @@ Crime.directive( "crimeLogin", [
 			"proceedRapidFlow": function proceedRapidFlow( ){
 				this.props.scope.$root.$broadcast( "hide-home" );
 				this.props.scope.$root.$broadcast( "hide-login" );
-				this.props.scope.$root.$broadcast( "show-normal-map" );								
+				this.props.scope.$root.$broadcast( "show-normal-map" );
+				this.props.scope.$root.$broadcast( "show-search" );								
 			},
 
 			"onClickLogin": function onClickLogin( event ){

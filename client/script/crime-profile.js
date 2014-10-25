@@ -1,6 +1,8 @@
 Crime.directive( "crimeProfile", [
 	"PageFlow",
 	function directive( PageFlow ){
+		var GO_TO_PROFILE_PAGE = "go to profile page";
+
 		var crimeProfile = React.createClass( {
 			"getInitialState": function getInitialState( ){
 				return {
@@ -70,7 +72,23 @@ Crime.directive( "crimeProfile", [
 			},
 
 			"onProfileCloseButtonClick": function onProfileCloseButtonClick( event ){
+				if( this.state.componentState != "profile-minified" ){
+					this.props.scope.$root.$broadcast( "show-minified-profile" );
 
+					this.setState( {
+						"componentState": "profile-minified"
+					} );	
+				}
+			},
+
+			"onProfileImageClick": function onProfileImageClick( event ){
+				if( this.state.componentState != "profile-expanded" ){
+					this.props.scope.$root.$broadcast( "show-expanded-profile" );
+
+					this.setState( {
+						"componentState": "profile-expanded"
+					} );	
+				}
 			},
 
 			"initiateBasicProfileDataRetrieval": function initiateBasicProfileDataRetrieval( profileType ){
@@ -114,10 +132,15 @@ Crime.directive( "crimeProfile", [
 
 			"render": function onRender( ){
 				var componentState = this.state.componentState;
+
 				var profileName = this.state.profileName;
+
 				var profileURL = this.state.profileURL;
+
 				var profileImage = this.state.profileImage;
+
 				var profileType = this.state.profileType;
+				
 				var profileState = this.state.profileState;
 
 				return ( 
@@ -145,13 +168,12 @@ Crime.directive( "crimeProfile", [
 									"close-profile"
 								].join( "/" ) }>
 								
-								<span 
+								<icon
 									className={ [
-										"profile-close-icon",
-										"entypo",
-										"list"
-									].join( " " ) }>
-								</span>
+										"profile-close-icon"
+									].join( " " ) }
+									name="ic_close_24px"
+									src="../library/svg-sprite-navigation.svg" />
 							</a>
 						</div>
 
@@ -169,7 +191,8 @@ Crime.directive( "crimeProfile", [
 									"profile-image",
 									componentState,
 									profileState
-								].join( " " ) }>
+								].join( " " ) }
+								onClick={ this.onProfileImageClick }>
 								<a 
 									className={ [
 										"action-element"
@@ -195,18 +218,23 @@ Crime.directive( "crimeProfile", [
 									profileState
 								].join( " " ) }>
 
-								<h4 
+								<h2 
 									className={ [
 										"profile-name",
+										"col-md-10",
+										"col-md-offset-1",
 										profileState,
 										componentState
 									].join( " " ) }>
-									{ profileName }
-								</h4>
+									{ profileName.toUpperCase( ) }
+								</h2>
 
 								<div
 									className={ [
 										"profile-link",
+										"col-md-6",
+										"col-md-offset-3",
+										"text-center",
 										profileState,
 										componentState
 									].join( " " ) }>
@@ -214,18 +242,15 @@ Crime.directive( "crimeProfile", [
 										className={ [
 											"action-element"
 										].join( " " ) }
-										href={ [ 
-											profileURL,
-											"#", 
-											"go-to-profile-page" 
-										].join( "/" ) }>
+										href={ profileURL }>
 										<span
 											className={ [
 												"entypo-social",
 												profileType
 											].join( " " ) }>
 										</span>
-										Go to Profile Page
+										
+										{ GO_TO_PROFILE_PAGE.toUpperCase( ) }
 									</a>
 								</div>								
 							</div>

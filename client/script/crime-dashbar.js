@@ -166,13 +166,12 @@ Crime.directive( "crimeDashbar", [
 									"open-dashbar"
 								].join( "/" ) }>
 								
-								<span 
+								<icon
 									className={ [
-										"dashbar-minified-icon",
-										"entypo",
-										"list"
-									].join( " " ) }>
-								</span>
+										"dashbar-minified-icon"
+									].join( " " ) }
+									name="ic_menu_24px"
+									src="../library/svg-sprite-navigation.svg" />
 							</a>
 						</div>
 

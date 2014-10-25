@@ -183,7 +183,7 @@ Crime.directive( "crimeLocate", [
 			"getAddressAtPosition": function getAddressAtPosition( position, callback ){
 				var self = this;
 
-				geoCoder.geocode( { "location": position }, 
+				this.geoCoder.geocode( { "location": position }, 
 					function onGeoCodeResult( results, status ){
 						if( status == google.maps.GeocoderStatus.OK ){
 							var readableAddress = _.map( results[ 0 ].address_components,
@@ -202,10 +202,10 @@ Crime.directive( "crimeLocate", [
 					} );
 			},
 
-			"getPositionAtAddress": function loadPositionAtAddress( address, callback ){
+			"getPositionAtAddress": function getPositionAtAddress( address, callback ){
 				var self = this;
 				
-				geoCoder.geocode( { "address": address }, 
+				this.geoCoder.geocode( { "address": address }, 
 					function onGeoCodeResult( results, status ){
 						if( status == google.maps.GeocoderStatus.OK ){
 							if( typeof callback == "function" ){
@@ -263,12 +263,17 @@ Crime.directive( "crimeLocate", [
 
 				this.props.scope.$on( "search-map-at-address",
 					function onSearchMapAtAddress( event, address, callback ){
-						self.loadPositionAtAddress( address, callback );
+						self.getPositionAtAddress( address, callback );
 					} );
 
 				this.props.scope.$on( "search-map-at-position",
 					function onSearchMapAtAddress( event, position, callback ){
 						self.getAddressAtPosition( position, callback );
+					} );
+
+				this.props.scope.$on( "set-map-position",
+					function onSetMapPosition( event, position ){
+						self.setPosition( position );
 					} );
 			},
 

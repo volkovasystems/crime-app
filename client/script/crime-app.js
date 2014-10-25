@@ -80,10 +80,16 @@ Crime.factory( "PageFlow", [
 
 			flowPatternList = new RegExp( _.flatten( _.toArray( arguments ) )
 				.filter( function onEachFlow( flow ){
-					return S( flow ).endsWith( "*" );
+					flow = S( flow );
+
+					return flow.endsWith( "*" ) || flow.startsWith( "!" );
 				} )
 				.map( function onEachFlowPattern( flowPattern ){
-					return "(@pattern)".replace( "@pattern", flowPattern.replace( "*", "[^\\s]+" ) );
+					flowPattern = flowPattern
+						.replace( "*", "[^\\s]+" )
+						.replace( "!", "" );
+
+					return "(@pattern)".replace( "@pattern", flowPattern );
 				} )
 				.join( "|" ), "g" );
 
@@ -266,6 +272,9 @@ Crime.run( [
 			},
 			function checkRender( callback ){
 				$rootScope.$on( "crime-profile-rendered", function onRendered( ){ callback( ); } );
+			},
+			function checkRender( callback ){
+				$rootScope.$on( "crime-search-rendered", function onRendered( ){ callback( ); } );
 			}
 			/*
 			function checkRender( callback ){
@@ -274,9 +283,7 @@ Crime.run( [
 			function checkRender( callback ){
 				$rootScope.$on( "crime-locate-rendered", function onRendered( ){ callback( ); } );
 			},
-			function checkRender( callback ){
-				$rootScope.$on( "crime-search-rendered", function onRendered( ){ callback( ); } );
-			},
+			
 			function checkRender( callback ){
 				$rootScope.$on( "crime-spinner-rendered", function onRendered( ){ callback( ); } );
 			},
