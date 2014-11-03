@@ -1,9 +1,10 @@
-Crime.directive( "crimeSearch", [
+Crime.directive( "search", [
 	"PageFlow",
-	function directive( PageFlow ){
+	"Event",
+	function directive( PageFlow, Event ){
 		var SEARCH_ADDRESS = "search address";
 
-		var crimeSearch = React.createClass( {
+		var search = React.createClass( {
 			"getInitialState": function getInitialState( ){
 				return {
 					"searchAddress": "",
@@ -18,7 +19,7 @@ Crime.directive( "crimeSearch", [
 				async.waterfall( 
 					[
 						function searchMapAtAddress( callback ){
-							self.props.scope.$root.$broadcast( "search-map-at-address", address,
+							self.scope.broadcast( "search-map-at-address", address,
 								function onResult( error, position ){
 									callback( null, position );
 
@@ -29,7 +30,7 @@ Crime.directive( "crimeSearch", [
 						},
 
 						function searchMapAtPosition( position, callback ){
-							self.props.scope.$root.$broadcast( "search-map-at-position", position,
+							self.scope.broadcast( "search-map-at-position", position,
 								function onResult( error, readableAddress ){
 									callback( null, position, readableAddress );
 
@@ -47,7 +48,7 @@ Crime.directive( "crimeSearch", [
 			},
 
 			"moveMapToPosition": function moveMapToPosition( position ){
-				this.props.scope.$root.$broadcast( "set-map-position", position );
+				this.scope.broadcast( "set-map-position", position );
 			},
 
 			"onSearchAddressChange": function onSearchAddressChange( event ){
@@ -72,6 +73,7 @@ Crime.directive( "crimeSearch", [
 					self.searchAddress( address );
 
 					clearTimeout( self.timeoutChange );
+
 					self.timeoutChange = null;
 				}, 1000 );
 
@@ -91,15 +93,16 @@ Crime.directive( "crimeSearch", [
 			},
 
 			"componentWillMount": function componentWillMount( ){
-				
+				this.scope = this.props.scope;
 			},
 
 			"render": function onRender( ){
 				var searchAddress = this.state.searchAddress;
+				
 				var searchState = this.state.searchState;
 				
 				return ( 
-					<div className="crime-search-container">
+					<div className="search-container">
 						<div 
 							className={ [
 								"search-address-container"
@@ -141,7 +144,6 @@ Crime.directive( "crimeSearch", [
 										src="../library/svg-sprite-content.svg" />
 								</div>
 							</div>
-							
 						</div>
 					</div>
 				);
@@ -154,7 +156,7 @@ Crime.directive( "crimeSearch", [
 			},
 
 			"componentDidMount": function componentDidMount( ){
-				this.props.scope.$root.$broadcast( "crime-search-rendered" );	
+				this.scope.broadcast( "search-rendered" );	
 			}
 		} );
 
@@ -162,21 +164,23 @@ Crime.directive( "crimeSearch", [
 			"restrict": "EA",
 			"scope": true,
 			"link": function onLink( scope, element, attributeSet ){
+				Event( scope );
+
 				PageFlow( scope, element, "search" );
 
-				scope.$broadcast( "hide-search" );
+				scope.broadcast( "hide-search" );
 
-				scope.$on( "show-search",
+				scope.on( "show-search",
 					function onShowSearch( ){
-						scope.toggleFlow( "!hidden", "shown" );
+						scope.showPage( );
 					} );
 
-				scope.$on( "hide-search",
+				scope.on( "hide-search",
 					function onHideSearch( ){
-						scope.toggleFlow( "!shown", "hidden" );
+						scope.hidePage( );
 					} );
 
-				React.renderComponent( <crimeSearch scope={ scope } />, element[ 0 ] );
+				React.renderComponent( <search scope={ scope } />, element[ 0 ] );
 			}
 		};
 	}

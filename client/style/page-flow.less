@@ -1,15 +1,3 @@
-@import "crime-home.less";
-@import "crime-locate.less";
-@import "crime-login.less";
-@import "crime-spinner.less";
-@import "crime-profile.less";
-@import "crime-notify.less";
-@import "crime-search.less";
-@import "crime-report.less";
-@import "crime-dashbar.less";
-@import "crime-header.less";
-@import "crime-data.less";
-
 .hidden {
 	display: none !important;
 }
@@ -18,22 +6,37 @@
 	display: block !important;
 }
 
-html, body {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-
-	width: 100%;
-	height: 100%;
-
-	overflow: hidden;
-	cursor: default;
+.shown.inline-block {
+	display: inline-block !important; 
 }
 
-section {
-	overflow: hidden;
+* {
+	box-sizing: border-box !important;
+}
+
+html, body {
+	position: absolute !important;
+	top: 0px !important;
+	left: 0px !important;
+
+	width: 100% !important;
+	height: 100% !important;
+
+	overflow: hidden !important;
+
+	cursor: default !important;
+
+	background-color: transparent !important;
+}
+
+section.page {
 	position: absolute;
+
+	overflow: hidden;
+
 	cursor: default;
+
+	background-color: transparent;
 }
 
 section.whole-page {
@@ -44,6 +47,16 @@ section.whole-page {
 section.half-page {
 	width: 50% !important;
 	height: 100% !important;
+}
+
+section.half-page-vertical {
+	width: 50% !important;
+	height: 100% !important;	
+}
+
+section.half-page-horizontal {
+	width: 100% !important;
+	height: 50% !important;
 }
 
 section.status-active-only {
@@ -100,21 +113,4 @@ section > .component-container {
 
 	width: 100%;
 	height: 100%;
-}
-
-.action-element {
-	width: 100%;
-	height: 100%;
-
-	color: inherit !important;
-	text-decoration: inherit !important;
-}
-
-.action-element:hover {
-	color: inherit !important;
-	text-decoration: inherit !important;
-}
-
-* {
-	box-sizing: border-box;
 }

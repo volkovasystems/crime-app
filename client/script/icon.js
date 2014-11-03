@@ -2,14 +2,68 @@ var icon = React.createClass( {
 	"statics": {
 		"SVG_SOURCE_PATTERN": /\.svg$/,
 		"PREFIX_DASH_PATTERN": /^-/,
-		"svgElementSourceSet": { },
+		
 		"defaultIconSymbolWidth": "34",
-		"defaultIconSymbolHeight": "34"
+		"defaultIconSymbolHeight": "34",
+		"defaultIconImage": "../image/empty.png",
+
+		"svgElementSourceSet": { },
+
+		/*:
+			This will act as a preloader for all the icon sets that will be used.
+
+			@note: This will only set the source list, a separate method should be called to fetch them.
+		*/
+		"setSourceList": function setSourceList( sourceList ){
+			icon.sourceList = sourceList;
+
+			return icon;
+		},
+
+		/*:
+			This will fetch the icon sets based from the source list.
+		*/
+		"requestAllSVGElementFromSourceList": function requestAllSVGElementFromSourceList( callback ){
+			icon.sourceList.forEach( function onEachSourceURL( sourceURL ){
+				$.get( sourceURL,
+					function onResult( svgData ){
+						var svgElementFromSource = $( svgData );
+						
+						icon.svgElementSourceSet[ sourceURL ] = svgElementFromSource;
+
+						if( _.values( icon.svgElementSourceSet ).length == icon.sourceList.length ){
+							if( typeof callback == "function" ){
+								callback( );
+							}
+						}
+					} );
+			} );
+
+			return icon;
+		},
+
+		"searchSourceBasedFromSVGElementName": function searchSourceBasedFromSVGElementName( svgElementName ){
+			return _( icon.svgElementSourceSet )
+				.map( function onEachSVGElementSource( svgElementSource, sourceURL ){
+					var selectorID = [ "#", svgElementName ].join( "" );
+					
+					if( $( selectorID, svgElementSource ).length == 1 ){
+						return sourceURL;
+
+					}else{
+						return null;
+					}
+				} )
+				.compact( )
+				.value( )[ 0 ];
+		}
 	},
 
 	"getInitialState": function getInitialState( ){
 		return {
 			"classList": [ ],
+
+			"sourceURL": "",
 
 			"svgElementFromSource": null,
 			"svgElement": null,
@@ -27,8 +81,8 @@ var icon = React.createClass( {
 			"className": "",
 			"width": this.defaultIconSymbolWidth,
 			"height": this.defaultIconSymbolHeight,
-			"src": "../image/empty.png",
-		}
+			"src": this.defaultIconImage,
+		};
 	},
 
 	"getWidth": function getWidth( props ){
@@ -184,6 +238,8 @@ var icon = React.createClass( {
 
 		var svgSourceState = this.state.svgSourceState;
 
+		var rawSVGElement = this.state.rawSVGElement;
+
 		return ( 
 			<div
 				className={ 
@@ -224,7 +280,7 @@ var icon = React.createClass( {
 					}
 					dangerouslySetInnerHTML={
 						{ 
-							"__html": this.state.rawSVGElement
+							"__html": rawSVGElement
 						}
 					}>
 				</div>
@@ -233,6 +289,10 @@ var icon = React.createClass( {
 	},
 
 	"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
+		if( prevState.sourceURL != this.state.sourceURL ){
+			this.determineSource( this.state.sourceURL );
+		}
+
 		if( prevProps.className != this.props.className ){
 			this.buildClassList( this.props.className );
 		}
@@ -240,7 +300,7 @@ var icon = React.createClass( {
 		if( prevState.sourceState != this.state.sourceState &&
 			this.state.sourceState == "svg-source" )
 		{
-			this.getSVGFromSource( this.props.src );
+			this.getSVGFromSource( this.state.sourceURL || this.props.src );
 		}
 
 		if( !_.isEqual( prevState.svgElementFromSource, this.state.svgElementFromSource ) ){
@@ -274,8 +334,42 @@ var icon = React.createClass( {
 		}
 	},
 
+	"initiateSourceURLWatch": function initiateSourceURLWatch( ){
+		if( "timeout" in this ){
+			clearTimeout( this.timeout );
+
+			this.timeout = null;
+		}
+
+		var self = this;
+
+		this.timeout = setTimeout( function onTimeout( ){
+			if( self.props.src != icon.defaultIconImage ){
+				self.determineSource( this.props.src );
+
+			}else if( "name" in self.props ){
+				var sourceURL = icon.searchSourceBasedFromSVGElementName( self.props.name );
+
+				if( _.isEmpty( sourceURL ) ){
+					console.warn( "source url for the specified icon name was not found", self.props.name );
+
+					self.initiateSourceURLWatch( );
+
+				}else{
+					self.setState( { 
+						"sourceURL": sourceURL 
+					} );
+				}
+			}
+
+			clearTimeout( self.timeout );
+
+			self.timeout = null;
+		}, 1000 );
+	},
+
 	"componentDidMount": function componentDidMount( ){
-		this.determineSource( this.props.src );
+		this.initiateSourceURLWatch( );
 
 		this.buildClassList( this.props.className );
 	}

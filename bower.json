@@ -38,6 +38,8 @@
     "mathjs": "~1.0.1",
     "entypo": "https://github.com/volkovasystems/entypo.git",
     "stringjs": "~2.2.0",
-    "material-design-icons-lite": "https://github.com/volkovasystems/material-design-icons-lite.git"
+    "material-design-icons-lite": "https://github.com/volkovasystems/material-design-icons-lite.git",
+    "pubsub.js": "https://github.com/Sahadar/pubsub.js.git",
+    "angular-loading-bar": "~0.6.0"
   }
 }

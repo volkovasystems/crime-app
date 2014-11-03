@@ -1,4 +1,4 @@
-Crime.directive( "crimeLocate", [
+Crime.directive( "locate", [
 	"PageFlow",
 	function directive( PageFlow ){
 		var DEFAULT_MAP_ADDRESS = "Manila, Philippines";
@@ -338,7 +338,7 @@ Crime.directive( "crimeLocate", [
 			"restrict": "EA",
 			"scope": true,
 			"link": function onLink( scope, element, attributeSet ){
-				PageFlow( scope, element );
+				PageFlow( scope, element, "locate" );
 
 				scope.wholePageLeft( );
 

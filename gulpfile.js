@@ -9,7 +9,7 @@ var flatten = require( "gulp-flatten" );
 var replace = require( "gulp-replace" );
 var insert = require( "gulp-insert" );
 var react = require( "gulp-react" );
-var cssmin = require( "gulp-cssmin" );
+var minifyCSS = require( "gulp-minify-css" );
 var less = require( "gulp-less" );
 var filter = require( "gulp-filter" );
 var livereload = require( "gulp-livereload" );
@@ -28,6 +28,8 @@ const INCLUDE_STYLE_REPLACER = "<link rel=\"stylesheet\" type=\"text/css\" href=
 const REACTJS_DOM_FLAG = "/** @jsx React.DOM */\n";
 const REACTJS_DOM_FLAG_PATTERN = /\/\*\*\s*\@jsx\s+React\.DOM\s*\*\/\n/g;
 const REACTJS_DOM_FLAG_REPLACER = "";
+
+var scriptList = require( "./script-list.js" ).scriptList;
 
 gulp.task( "default", [
 	"clean-library",
@@ -96,8 +98,11 @@ gulp.task( "copy-library",
 				"bower_components/*/dist/**/*.map",
 				"bower_components/*/dist/**/*.js",
 				"bower_components/*/lib/**/*.js",
+				"bower_components/*/build/**/*.js",
+				"bower_components/*/build/**/*.css",
 				"!bower_components/mathjs/lib/**/*.js",
-				"!**/Gruntfile.js"
+				"!**/Gruntfile.js",
+				"!**/index.js"
 			] )
 			.pipe( plumber( ) )
 			.pipe( flatten( ) )
@@ -120,7 +125,7 @@ gulp.task( "build-script",
 	[ "clean-build" ],
 	function buildTask( ){
 		return gulp
-			.src( "client/script/*.js" )
+			.src( scriptList )
 			.pipe( plumber( ) )
 			.pipe( insert.prepend( REACTJS_DOM_FLAG ) )
 			.pipe( react( ) )
@@ -164,7 +169,8 @@ gulp.task( "build-less",
 			.src( "client/style/*.less" )
 			.pipe( plumber( ) )
 			.pipe( less( ) )
-			.pipe( filter( [ "crime-app.css" ] ) )
+			.pipe( filter( [ "app.css" ] ) )
+			.pipe( rename( "crime-app.css" ) )
 			.pipe( gulp.dest( "temp/style" ) );
 	} );
 
@@ -176,7 +182,7 @@ gulp.task( "build-style",
 			.pipe( plumber( ) )
 			.pipe( gulp.dest( "build/style" ) )
 			.pipe( sourcemaps.init( ) )
-			.pipe( cssmin( ) )
+			.pipe( minifyCSS( { "keepBreaks": true } ) )
 			.pipe( rename( "crime-app.min.css" ) )
 			.pipe( sourcemaps.write( "./" ) )
 			.pipe( gulp.dest( "build/style" ) );

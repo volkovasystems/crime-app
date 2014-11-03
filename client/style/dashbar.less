@@ -1,0 +1,121 @@
+section.dashbar {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 300px;
+	height: 100%;
+
+	.dashbar-container {
+		background-color: #121212;
+		color: #dedede;
+
+		.dashbar-minified-button {
+			width: 70px;
+			height: 70px;
+			display: none;
+			background-color: transparent;
+		}
+		
+		.dash-header-item {
+			display: none;
+		}
+
+		.dash-list {
+			position: absolute;
+			top: 50%;
+			transform: translateY( -50% );
+			width: 100%;
+		}
+
+		.dash-item {
+			font-size: 25px;
+			height: 70px !important;
+
+			a {
+				display: block;
+			}
+
+			.dash-item-icon {
+				position: absolute;
+				width: 70px;
+				height: 70px;
+
+				svg {
+					fill: #ffffff;
+				}
+			}
+
+			.dash-item-label {
+				position: relative;
+				height: 70px;
+				width: 230px;
+				float: right;
+
+				span {
+					position: absolute;
+					top: 50%;
+					transform: translateY( -50% );
+				}
+			}
+		}
+
+		.dash-item:hover {
+			background-color: #000000;
+
+			svg {
+				fill: #801515;
+			}
+		}
+	}
+}
+
+section.dashbar-minified {
+	width: 70px !important;
+	height: 70px !important;
+	
+	.dashbar-container {
+		.dashbar-minified-button {
+			display: block;
+		}
+
+		.dash-list {
+			display: none;
+		}
+	}
+}
+
+section.dashbar-iconified {
+	width: 70px !important;
+	height: 100% !important;
+
+	.dashbar-container {
+		.dash-item {
+			width: 70px;
+			height: 70px;
+
+			span {
+				display: none;
+			}
+		}
+
+		.dash-header-item {
+			display: block;	
+		}
+
+		.dashbar-minified-button {
+			display: none;
+		}
+	}
+}
+
+section.dashbar-listed {
+	.dashbar-container {
+		.dash-header-item {
+			display: block;	
+		}
+
+		.dashbar-minified-button {
+			display: none;
+		}
+	}
+}
