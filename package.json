@@ -4,7 +4,7 @@
   "description": "Crime awareness and reporting application",
   "main": "main.js",
   "scripts": {
-    "preinstall": ";",
+    "preinstall": "npm update",
     "postinstall": "bower install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "PORT=80; ~/nodejs/bin/node ~/crime-app/server/static.js &"
