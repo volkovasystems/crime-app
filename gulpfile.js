@@ -291,7 +291,7 @@ gulp.task( "deploy-index",
 
 gulp.task( "server-static",
 	function serverTask( done ){
-		var portNumber = process.config.port || process.env.PORT || 8080;
+		var portNumber = process.config.port || process.env.PORT || 8000;
 		var server = connect( );
 		server
 			.use( serveStatic( "build" ) )

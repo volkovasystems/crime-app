@@ -1,4 +1,4 @@
-var serverSet = require( "package.js" ).packageData.serverSet;
+var serverSet = require( "./package.js" ).packageData.serverSet;
 var serverData = serverSet[ "static" ];
 var host = serverData.host;
 var port = serverData.port;
@@ -10,7 +10,13 @@ var app = express( );
 
 app.use( compression( ) );
 
-app.use( express[ "static" ]( "build" ) );
+app.use( function onRequest( request, response, next ){
+	console.log( request.path );
+
+	next( );
+} );
+
+app.use( express[ "static" ]( "deploy" ) );
 
 app.use( function onRequest( request, response, next ){
 	//: @todo: Serve 404 page properly.
