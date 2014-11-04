@@ -1,5 +1,9 @@
 angular.module( "PageFlow", [ "Event" ] )
+
 	.constant( "PAGE_LIST", [ ] )
+
+	.constant( "EVENT_PAGE_RESIZE", "page-resize" )
+
 	.factory( "checkIfPageIsRegisteredInPageList", [
 		"PAGE_LIST",
 		function factory( PAGE_LIST ){
@@ -8,6 +12,7 @@ angular.module( "PageFlow", [ "Event" ] )
 			};
 		}
 	] )
+
 	.factory( "isPageRegistered", [
 		"PAGE_LIST",
 		"checkIfPageIsRegisteredInPageList",
@@ -20,6 +25,7 @@ angular.module( "PageFlow", [ "Event" ] )
 			};
 		}
 	] )
+
 	.factory( "registerPageInPageList", [
 		"PAGE_LIST",
 		"checkIfPageIsRegisteredInPageList",
@@ -31,6 +37,7 @@ angular.module( "PageFlow", [ "Event" ] )
 			};
 		}
 	] )
+
 	.factory( "getPageList", [
 		"PAGE_LIST",
 		function factory( PAGE_LIST ){
@@ -45,6 +52,7 @@ angular.module( "PageFlow", [ "Event" ] )
 			};
 		}
 	] )
+
 	.factory( "PageFlow", [
 		"Event",
 		"registerPageInPageList",
@@ -231,7 +239,7 @@ angular.module( "PageFlow", [ "Event" ] )
 
 				getPageList( )
 					.forEach( function onEachPage( page ){
-						if( this.page !== page ){
+						if( self.page !== page ){
 							page.hidePage( );
 						}
 					} );
@@ -266,6 +274,28 @@ angular.module( "PageFlow", [ "Event" ] )
 				this.pageContainer = pageContainer;
 
 				var self = this;
+
+				Event( page );
+
+				$( window ).resize( function onResize( ){
+					self.page.publish( "page-resize" );
+				} );
+
+				/*:
+					Generally we want this kind of approach:
+
+						page.when( "my-event" )
+							.applyFlow( "my-flow" );
+
+						This state that when "my-event" is fired, do "my-flow".
+
+					But for the mean time we can do a simple approach.
+				*/
+				this.page.when = function when( eventName, eventHandler ){
+					self.page.subscribe( eventName, eventHandler );
+
+					return self.page;
+				};
 
 				this.page.applyFlow = function applyFlow( flowList ){
 					PageFlow.prototype.applyFlow.apply( self, _.toArray( arguments ) );
@@ -318,14 +348,24 @@ angular.module( "PageFlow", [ "Event" ] )
 					return self.page;
 				};
 
+				this.page.subscribe( "hide-all-page",
+					function onHideAllPage( ){
+						PageFlow.prototype.hideAllPage.apply( self );
+					} );
+
 				this.page.hideAllPage = function hideAllPage( ){
-					PageFlow.prototype.hideAllPage.apply( self );
+					self.page.publish( "hide-all-page" );
 
 					return self.page;
 				};
 
+				this.page.subscribe( "hide-other-page",
+					function onHideOtherPage( self ){
+						PageFlow.prototype.hideOtherPage.apply( self );
+					} );
+
 				this.page.hideOtherPage = function hideOtherPage( ){
-					PageFlow.prototype.hideOtherPage.apply( self );
+					self.page.publish( "hide-other-page", self );
 
 					return self.page;
 				};

@@ -9,7 +9,9 @@ var scriptList = [
 	"event.js",
 	"page-flow.js",
 	"progress-bar.js",
-
+	"map-locate.js",
+	"map-view.js",
+	
 	"app.js",
 
 	"crime-icon.js",

@@ -3,7 +3,9 @@ var Crime = angular.module( "Crime", [
 	"PageFlow", 
 	"Event",
 	"ProgressBar",
-	"Dashbar"
+	"Dashbar",
+	"MapView",
+	"MapLocate"
 ] );
 
 Crime
@@ -68,6 +70,12 @@ Crime
 				},
 				function checkRender( callback ){
 					$rootScope.on( "profile-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "map-view-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );

@@ -365,7 +365,7 @@ var icon = React.createClass( {
 			clearTimeout( self.timeout );
 
 			self.timeout = null;
-		}, 1000 );
+		}, 1 );
 	},
 
 	"componentDidMount": function componentDidMount( ){

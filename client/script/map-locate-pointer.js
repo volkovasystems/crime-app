@@ -6,14 +6,8 @@ Crime.directive( "locate", [
 		var crimeLocate = React.createClass( {
 			"getInitialState": function getInitialState( ){
 				return {
-					"mapZoom": 15,
-					"mapZoomStart": 15,
-					"mapZoomEnd": 25,
-					"mapOptionSet": { },
 					"position": { },
-					"mapState": "normal",
-					"resizeTimeout": null,
-					"readableAddress": ""
+					"completeAddress": ""
 				};
 			},
 

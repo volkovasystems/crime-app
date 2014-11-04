@@ -36,6 +36,10 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 
 				"getInitialState": function getInitialState( ){
 					return {
+						"dashList": null,
+						"dashItemIconSet": null,
+						"hiddenDashItemList": null,
+						"disabledDashItemList": null,
 						"componentState": "dashbar-minified"
 					};
 				},
@@ -47,6 +51,22 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 						"hiddenDashItemList": [ ],
 						"disabledDashItemList": [ ]
 					};
+				},
+
+				"getDashList": function getDashList( ){
+					return this.state.dashList || this.props.dashList;
+				},
+
+				"getDashItemIconSet": function getDashItemIconSet( ){
+					return this.state.dashItemIconSet || this.props.dashItemIconSet;
+				},
+
+				"getHiddenDashItemList": function getHiddenDashItemList( ){
+					return this.state.hiddenDashItemList || this.props.hiddenDashItemList;
+				},
+
+				"getDisabledDashItemList": function getDisabledDashItemList( ){
+					return this.state.disabledDashItemList || this.props.disabledDashItemList;
 				},
 
 				"onDashbarItemClick": function onDashbarItemClick( event ){
@@ -70,11 +90,11 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 
 					var key = [ dashItem, index ].join( ":" );
 
-					var dashItemIcon = this.props.dashItemIconSet[ dashItem ]; 
+					var dashItemIcon = this.getDashItemIconSet( )[ dashItem ]; 
 
-					var disabledDashItemList = this.props.disabledDashItemList;
+					var disabledDashItemList = this.getDisabledDashItemList( );
 
-					var hiddenDashItemList = this.props.hiddenDashItemList;
+					var hiddenDashItemList = this.getHiddenDashItemList( );
 
 					var isDisabled = _.contains( disabledDashItemList, dashItem );
 
@@ -170,7 +190,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 				"render": function onRender( ){
 					var componentState = this.state.componentState;
 
-					var dashList = this.props.dashList;
+					var dashList = this.getDashList( );
 
 					return (
 						<div 
