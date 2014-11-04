@@ -21,13 +21,19 @@ var serveStatic = require( "serve-static" );
 
 const INCLUDE_SCRIPT_PATTERN = /\<\!\-\-\:\s*.+?\@include\-script\:(\"[^\"]+?\").+?\s*\-\-\>/g;
 const INCLUDE_STYLE_PATTERN = /\<\!\-\-\:\s*.+?\@include\-style\:(\"[^\"]+?\").+?\s*\-\-\>/g;
+
 const MINIFIED_SCRIPT_PATTERN = /\.min\.js/g;
 const MINIFIED_STYLE_PATTERN = /\.min\.css/g;
+
 const INCLUDE_SCRIPT_REPLACER = "<script type=\"text/javascript\" src=$1></script>";
 const INCLUDE_STYLE_REPLACER = "<link rel=\"stylesheet\" type=\"text/css\" href=$1>";
+
 const REACTJS_DOM_FLAG = "/** @jsx React.DOM */\n";
 const REACTJS_DOM_FLAG_PATTERN = /\/\*\*\s*\@jsx\s+React\.DOM\s*\*\/\n/g;
 const REACTJS_DOM_FLAG_REPLACER = "";
+
+const PRODUCTION_MODE_PATTERN = /\<\!\-\-:\s*.+?\@production\-mode\:\s*([^]+?)\s*\@end\-production\-mode\s*\-\-\>/gm;
+const PRODUCTION_MODE_REPLACER = "$1";
 
 var scriptList = require( "./script-list.js" ).scriptList;
 
@@ -286,6 +292,7 @@ gulp.task( "deploy-index",
 			.pipe( plumber( ) )
 			.pipe( replace( INCLUDE_SCRIPT_PATTERN, INCLUDE_SCRIPT_REPLACER ) )
 			.pipe( replace( INCLUDE_STYLE_PATTERN, INCLUDE_STYLE_REPLACER ) )
+			.pipe( replace( PRODUCTION_MODE_PATTERN, PRODUCTION_MODE_REPLACER ) ) 
 			.pipe( gulp.dest( "deploy" ) );
 	} );
 

@@ -1,6 +1,12 @@
 window.fbAsyncInit = function( ){
+	var appID = "725798337493212";
+	
+	if( window.production ){
+		appID = "1536844313229530";
+	}
+
 	FB.init( {
-		"appId": "725798337493212",
+		"appId": appID,
 		"xfbml": true,
 		"cookie": true,
 		"version": "v2.1"
