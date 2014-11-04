@@ -3,6 +3,7 @@ var serverData = serverSet[ "static" ];
 var host = serverData.host;
 var port = serverData.port;
 
+var argv = require( "yargs" ).argv;
 var path = require( "path" );
 var compression = require( "compression" );
 var express = require( "express" );
@@ -29,4 +30,9 @@ app.get( "/get/all/api/endpoint",
 		response.status( 200 ).json( serverSet );
 	} );
 
-app.listen( port, host );
+if( argv.production ){
+	app.listen( port );
+	
+}else{
+	app.listen( port, host );	
+}
