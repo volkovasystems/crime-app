@@ -2,29 +2,25 @@ var path = require( "path" );
 var fs = require( "fs" );
 
 var scriptList = [
-	"facebook-bootstrap-sdk.js",
-
-	"icon.js",
-	
 	"event.js",
 	"page-flow.js",
+	
+	"icon.js",
 	"progress-bar.js",
 	"map-locate.js",
 	"map-view.js",
-	
+
+	"home.js",
+	"forehead.js",
+	"dashbar.js",
+	"login.js",
+	"profile.js",
 	"app.js",
 
+	"crime-app.js",
 	"crime-icon.js",
-	
-	"home.js",
-
-	"crime-dashbar.js",
-	"dashbar.js",
-
-	"forehead.js",
-
-	"login.js",
-	"profile.js"
+	"crime-login.js",
+	"crime-dashbar.js"
 ]
 .map( function onEachScriptFile( scriptFile ){
 	return path.resolve( ".", "client", "script", scriptFile );

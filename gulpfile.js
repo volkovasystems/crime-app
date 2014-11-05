@@ -133,11 +133,11 @@ gulp.task( "build-script",
 		return gulp
 			.src( scriptList )
 			.pipe( plumber( ) )
-			.pipe( insert.prepend( REACTJS_DOM_FLAG ) )
+			//.pipe( insert.prepend( REACTJS_DOM_FLAG ) )
 			.pipe( react( ) )
 			.pipe( sourcemaps.init( ) )
 			.pipe( concat( "crime-app.js" ) )
-			.pipe( replace( REACTJS_DOM_FLAG, REACTJS_DOM_FLAG_REPLACER ) )
+			//.pipe( replace( REACTJS_DOM_FLAG, REACTJS_DOM_FLAG_REPLACER ) )
 			.pipe( gulp.dest( "build/script" ) )
 			.pipe( uglify( ) )
 			.pipe( rename( "crime-app.min.js" ) )

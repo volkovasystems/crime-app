@@ -1,31 +1,21 @@
-var Crime = angular.module( "Crime", [
-	"ui.bootstrap", 
-	"PageFlow", 
-	"Event",
-	"ProgressBar",
-	"Dashbar",
-	"MapView",
-	"MapLocate"
-] );
-
-Crime
-	.constant( "ROOT_ON_MAP_LOADED_REFERENCE", "root:on-map-loaded" )
-	
-	.constant( "ROOT_ON_LOGGED_IN_REFERENCE", "root:on-logged-in" )
-	
+angular
+	.module( "App", [
+		"ui.bootstrap", 
+		"ProgressBar",
+		"Event",
+		"Home",
+		"Forehead",
+		"Dashbar",
+		"Login",
+		"Profile",
+		"MapView",
+		"MapLocate"
+	] )
 	.run( [
 		"$rootScope",
 		"ProgressBar",
 		"Event",
-		"ROOT_ON_MAP_LOADED_REFERENCE",
-		"ROOT_ON_LOGGED_IN_REFERENCE",
-		function onRun( 
-			$rootScope,
-			ProgressBar,
-			Event, 
-			ROOT_ON_MAP_LOADED_REFERENCE,
-			ROOT_ON_LOGGED_IN_REFERENCE 
-		){
+		function onRun( $rootScope, ProgressBar, Event ){
 			ProgressBar( $rootScope );
 
 			Event( $rootScope );

@@ -71,11 +71,11 @@ angular.module( "ProgressBar", [ "cfp.loadingBar" ] )
 	] )
 
 	.run( [
-		"Event",
 		"$rootScope",
+		"Event",
 		"startLoading",
 		"finishLoading",
-		function onRun( Event, $rootScope, startLoading, finishLoading ){
+		function onRun( $rootScope, Event, startLoading, finishLoading ){
 			Event( $rootScope );
 
 			$rootScope.subscribe( "start-loading",

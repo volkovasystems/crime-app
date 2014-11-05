@@ -1,14 +1,15 @@
-Crime
+angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
+	
 	.constant( "GO_TO_PROFILE_PAGE", "go to profile page" )
-	.directive( "profile", [
-		"PageFlow",
-		"Event",
+	
+	.factory( "Profile", [
+		"Icon",
 		"GO_TO_PROFILE_PAGE",
-		function directive( PageFlow, Event, GO_TO_PROFILE_PAGE ){
-			var profile = React.createClass( {
+		function factory( Icon, GO_TO_PROFILE_PAGE ){
+			var Profile = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
-						React.renderComponent( <profile scope={ scope } />, container[ 0 ] );
+						React.render( <Profile scope={ scope } />, container[ 0 ] );
 
 						return this;
 					}
@@ -213,7 +214,7 @@ Crime
 										"close-profile"
 									].join( "/" ) }>
 									
-									<icon
+									<Icon
 										className={ [
 											"profile-close-icon"
 										].join( " " ) }
@@ -322,6 +323,16 @@ Crime
 				}
 			} );
 
+			return Profile;
+		}
+	] )
+
+	.directive( "profile", [
+		"Event",
+		"PageFlow",
+		"GO_TO_PROFILE_PAGE",
+		"Profile",
+		function directive( Event, PageFlow, GO_TO_PROFILE_PAGE, Profile ){
 			return {
 				"restrict": "EA",
 				"scope": true,
@@ -363,7 +374,7 @@ Crime
 
 					scope.publish( "hide-profile" );
 
-					profile.attach( scope, element );
+					Profile.attach( scope, element );
 				}
 			};
 		}

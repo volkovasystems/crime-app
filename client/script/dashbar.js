@@ -1,36 +1,45 @@
-angular.module( "Dashbar", [ "PageFlow", "Event" ] )
-	.directive( "dashbar", [
-		"PageFlow",
-		"Event",
-		function directive( PageFlow, Event ){
-			var dashbar = React.createClass( {
+angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
+
+	.factory( "Dashbar", [
+		"Icon",
+		function factory( Icon ){
+			var Dashbar = React.createClass( {
 				"statics": {
+					"dashList": [ ],
+
+					"dashItemIconSet": { },
+
+					"hiddenDashItemList": [ ],
+
+					"disabledDashItemList": [ ],
+
 					"configure": function configure( dashbarConfiguration ){
-						dashbar.dashList = dashbarConfiguration.dashList;
+						//: Don't be annoyed by this. I made this explicit so that I know what I'm doing here.
+						this.dashList = dashbarConfiguration.dashList;
 
-						dashbar.dashItemIconSet = dashbarConfiguration.dashItemIconSet;
+						this.dashItemIconSet = dashbarConfiguration.dashItemIconSet;
 
-						dashbar.hiddenDashItemList = dashbarConfiguration.hiddenDashItemList;
+						this.hiddenDashItemList = dashbarConfiguration.hiddenDashItemList;
 
-						dashbar.disabledDashItemList = dashbarConfiguration.disabledDashItemList;
+						this.disabledDashItemList = dashbarConfiguration.disabledDashItemList;
 
-						return dashbar;
+						return this;
 					},
 
 					"attach": function attach( scope, container ){
-						var dashbarComponent = <dashbar scope={ scope } 
+						var dashbarComponent = <Dashbar scope={ scope } 
 
-							dashList={ dashbar.dashList }
+							dashList={ this.dashList }
 
-							dashItemIconSet={ dashbar.dashItemIconSet }
+							dashItemIconSet={ this.dashItemIconSet }
 
-							hiddenDashItemList={ dashbar.hiddenDashItemList }
+							hiddenDashItemList={ this.hiddenDashItemList }
 
-							disabledDashItemList={ dashbar.disabledDashItemList }/>
+							disabledDashItemList={ this.disabledDashItemList }/>
 
-						React.renderComponent( dashbarComponent, container[ 0 ] );
+						React.render( dashbarComponent, container[ 0 ] );
 
-						return dashbar;
+						return this;
 					}
 				},
 
@@ -126,7 +135,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 									className={ [
 										"dash-item-icon"
 									].join( " " ) } >
-									<icon name={ dashItemIcon } />
+									<Icon name={ dashItemIcon } />
 								</div>
 
 								<div
@@ -219,7 +228,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 										className={ [ 
 											"dash-item-icon" 
 										].join( " " ) }>
-										<icon 
+										<Icon 
 											className={ [
 												"dashbar-minified-icon"
 											].join( " " ) } 
@@ -249,7 +258,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 										className={ [ 
 											"dash-item-icon" 
 										].join( " " ) }>
-										<icon 
+										<Icon 
 											className={ [
 												"dashbar-close-icon"
 											].join( " " ) } 
@@ -284,6 +293,15 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 				}
 			} );
 
+			return Dashbar;
+		}
+	] )
+
+	.directive( "dashbar", [
+		"PageFlow",
+		"Event",
+		"Dashbar",
+		function directive( PageFlow, Event, Dashbar ){
 			return {
 				"restrict": "EA",
 				"scope": true,
@@ -330,7 +348,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event" ] )
 
 					scope.publish( "hide-dashbar" );
 
-					dashbar
+					Dashbar
 						.configure( scope )
 						.attach( scope, element );
 				}

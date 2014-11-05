@@ -2,20 +2,17 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 
 	.constant( "DEFAULT_POSITION", new google.maps.LatLng( 14.5980716, 120.9797033 ) )
 
-	.directive( "mapView", [
-		"Event",
-		"PageFlow",
+	.factory( "MapView", [
 		"DEFAULT_POSITION",
-		"EVENT_PAGE_RESIZE",
-		function directive( Event, PageFlow, DEFAULT_POSITION, EVENT_PAGE_RESIZE ){
-			var mapUI = React.createClass( {
+		function factory( DEFAULT_POSITION ){
+			var MapView = React.createClass( {
 				"statics": {
 					"configure": function configure( scope ){
 
 					},
 
 					"attach": function attach( scope, container ){
-						React.renderComponent( <mapUI scope={ scope } />, container[ 0 ] );
+						React.render( <MapView scope={ scope } />, container[ 0 ] );
 
 						return this;
 					}
@@ -188,9 +185,20 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 				},
 
 				"render": function onRender( ){
+					var componentState = this.state.componentState;
+
 					return ( 
-						<div className="map-view-container">
-							<div className="map-component"></div>
+						<div 
+							className={ [
+								"map-view-container",
+								componentState
+							].join( " " ) }>
+							<div 
+								className={ [
+									"map-component",
+									componentState
+								].join( " " ) }>
+							</div>
 						</div>
 					);
 				},
@@ -212,6 +220,16 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 				}
 			} );
 
+			return MapView;
+		}
+	] )
+
+	.directive( "mapView", [
+		"Event",
+		"PageFlow",
+		"EVENT_PAGE_RESIZE",
+		"MapView",
+		function directive( Event, PageFlow, EVENT_PAGE_RESIZE, MapView ){
 			return {
 				"restrict": "EA",
 				"scope": true,
@@ -235,7 +253,7 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 
 					scope.publish( "show-map-view" );
 
-					mapUI.attach( scope, element );
+					MapView.attach( scope, element );
 				}
 			};
 		}

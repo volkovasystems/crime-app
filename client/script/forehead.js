@@ -1,86 +1,95 @@
-Crime.directive( "forehead", [
-	"PageFlow",
-	"Event",
-	function directive( PageFlow, Event ){
-		var forehead = React.createClass( {
-			"statics": {
-				"attach": function attach( scope, container ){
-					React.renderComponent( <forehead scope={ scope } />, container[ 0 ] );
+angular.module( "Forehead", [ "Event", "PageFlow" ] )
+	
+	.factory( "Forehead", [
+		function factory( ){
+			var Forehead = React.createClass( {
+				"statics": {
+					"attach": function attach( scope, container ){
+						React.render( <Forehead scope={ scope } />, container[ 0 ] );
 
-					return this;
+						return this;
+					}
+				},
+
+				"getInitialState": function getInitialState( ){
+					return {
+						"componentState": "forehead-normal"
+					};
+				},
+
+				"componentWillMount": function componentWillMount( ){
+					this.scope = this.props.scope;
+				},
+
+				"render": function onRender( ){
+					var componentState = this.state.componentState;
+
+					return ( 
+						<div 
+							className={ [
+								"forehead-container",
+								componentState
+							].join( " " ) }>
+						</div>
+					);
+				},
+
+				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
+				},
+
+				"componentDidMount": function componentDidMount( ){
+					this.scope.broadcast( "forehead-rendered" );	
 				}
-			},
+			} );
 
-			"getInitialState": function getInitialState( ){
-				return {
-					"componentState": "forehead-normal"
-				};
-			},
+			return Forehead;
+		}
+	] )
 
-			"componentWillMount": function componentWillMount( ){
-				this.scope = this.props.scope;
-			},
+	.directive( "forehead", [
+		"PageFlow",
+		"Event",
+		"Forehead",
+		function directive( PageFlow, Event, Forehead ){
+			return {
+				"restrict": "EA",
+				"scope": true,
+				"link": function onLink( scope, element, attributeSet ){
+					Event( scope );
 
-			"render": function onRender( ){
-				var componentState = this.state.componentState;
+					PageFlow( scope, element, "forehead" );
 
-				return ( 
-					<div 
-						className={ [
-							"forehead-container",
-							componentState
-						].join( " " ) }>
-					</div>
-				);
-			},
+					scope.on( "show-default-page",
+						function onShowDefaultPage( ){
+							scope.broadcast( "show-normal-forehead" );
+						} );
 
-			"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-			},
+					scope.on( "show-normal-forehead",
+						function onShowNormalForehead( ){
+							scope.showPage( )
+								.toggleFlow( "!forehead-expanded", "forehead-normal" );
+						} );
 
-			"componentDidMount": function componentDidMount( ){
-				this.scope.broadcast( "forehead-rendered" );	
-			}
-		} );
+					scope.on( "show-expanded-forehead",
+						function onShowExpandedForehead( ){
+							scope.showPage( )
+								.toggleFlow( "!forehead-normal", "forehead-expanded" );
+						} );
 
-		return {
-			"restrict": "EA",
-			"scope": true,
-			"link": function onLink( scope, element, attributeSet ){
-				Event( scope );
+					scope.on( "show-forehead",
+						function onShowForehead( ){
+							scope.showPage( );
+						} );
 
-				PageFlow( scope, element, "forehead" );
+					scope.on( "hide-forehead",
+						function onHideForehead( ){
+							scope.hidePage( );
+						} );
 
-				scope.on( "show-default-page",
-					function onShowDefaultPage( ){
-						scope.broadcast( "show-normal-forehead" );
-					} );
+					scope.publish( "hide-forehead" );
 
-				scope.on( "show-normal-forehead",
-					function onShowNormalForehead( ){
-						scope.showPage( )
-							.toggleFlow( "!forehead-expanded", "forehead-normal" );
-					} );
-
-				scope.on( "show-expanded-forehead",
-					function onShowExpandedForehead( ){
-						scope.showPage( )
-							.toggleFlow( "!forehead-normal", "forehead-expanded" );
-					} );
-
-				scope.on( "show-forehead",
-					function onShowForehead( ){
-						scope.showPage( );
-					} );
-
-				scope.on( "hide-forehead",
-					function onHideForehead( ){
-						scope.hidePage( );
-					} );
-
-				scope.publish( "hide-forehead" );
-
-				forehead.attach( scope, element );
-			}
-		};
-	}
-] );
+					Forehead.attach( scope, element );
+				}
+			};
+		}
+	] );
