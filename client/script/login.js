@@ -1,14 +1,96 @@
 angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
+
+	.value( "LOGGED_IN_PROMPT", "welcome" )
+
+	.value( "LOGGING_IN_PROMPT", "please wait" )
+
+	.value( "LOGIN_ERROR_PROMPT", "oops! please try again" )
+
+	.constant( "FACEBOOK_LOGIN_TYPE", "facebook" )
 	
 	.factory( "Login", [
 		"APP_LOGO_IMAGE_SOURCE",
-		function factory( APP_LOGO_IMAGE_SOURCE ){
+		"FACEBOOK_LOGIN_TYPE",
+		"LOGGING_IN_PROMPT",
+		"LOGGED_IN_PROMPT",
+		"LOGIN_ERROR_PROMPT",
+		function factory( 
+			APP_LOGO_IMAGE_SOURCE, 
+			FACEBOOK_LOGIN_TYPE,
+			LOGGING_IN_PROMPT,
+			LOGGED_IN_PROMPT,
+			LOGIN_ERROR_PROMPT
+		){
 			var Login = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
 						React.render( <Login scope={ scope } />, container[ 0 ] );
 
 						return this;
+					},
+
+					"tryLoggingInFacebook": function tryLoggingInFacebook( callback ){
+						callback = callback || function callback( ){ };
+
+						FB.login( function onLogin( response ){
+							if( response.error ){
+								callback( response.error, false, null, response );
+
+							}else if( response.status == "connected" ){
+								var loginData = {
+									"loginType": FACEBOOK_LOGIN_TYPE,
+									"userID": response.authResponse.userID,
+									"accessToken": response.authResponse.accessToken
+								};
+
+								callback( null, true, loginData, response );
+							
+							}else{
+								callback( null, false, null, response );
+							}
+						} );
+					},
+
+					"tryLoggingIn": function tryLoggingIn( loginType, callback ){
+						callback = callback || function callback( ){ };
+
+						switch( loginType ){
+							case FACEBOOK_LOGIN_TYPE:
+								this.tryLoggingInFacebook( callback );
+								break;
+						}
+					},
+
+					"checkIfLoggedInFacebook": function checkIfLoggedInFacebook( callback ){
+						callback = callback || function callback( ){ };
+
+						FB.getLoginStatus( function onReponseLoginStatus( response ){
+							if( response.error ){
+								callback( response.error, false, null, response );
+
+							}else if( response.status === "connected" ){
+								var loginData = {
+									"loginType": FACEBOOK_LOGIN_TYPE,
+									"userID": response.authResponse.userID,
+									"accessToken": response.authResponse.accessToken
+								};
+
+								callback( null, true, loginData, response );		
+
+							}else{
+								callback( null, false, null, response );
+							}
+						} );
+					},
+
+					"checkIfLoggedIn": function checkIfLoggedIn( loginType, callback ){
+						callback = callback || function callback( ){ };
+
+						switch( loginType ){
+							case FACEBOOK_LOGIN_TYPE:
+								this.checkIfLoggedInFacebook( callback );
+								break;
+						}	
 					}
 				},
 
@@ -16,7 +98,7 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 					return {
 						"loginPrompt": "",
 						
-						"loginType": "facebook",
+						"loginType": FACEBOOK_LOGIN_TYPE,
 
 						"loginState": "logged-out",
 						"componentState": "login-standby",
@@ -24,58 +106,6 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 						"userID": "",
 						"accessToken": ""
 					};
-				},
-
-				"tryLoggingInFacebook": function tryLoggingInFacebook( callback ){
-					callback = callback || function callback( ){ };
-
-					FB.login( function onLogin( response ){
-						if( response.error ){
-							callback( response.error, false, response );
-
-						}else if( response.status == "connected" ){
-							callback( null, true, response );
-						
-						}else{
-							callback( null, false, response );
-						}
-					} );
-				},
-
-				"tryLoggingIn": function tryLoggingIn( callback ){
-					callback = callback || function callback( ){ };
-
-					switch( this.state.loginType ){
-						case "facebook":
-							this.tryLoggingInFacebook( callback );
-							break;
-					}
-				},
-
-				"checkIfLoggedInFacebook": function checkIfLoggedInFacebook( callback ){
-					callback = callback || function callback( ){ };
-
-					FB.getLoginStatus( function onReponseLoginStatus( response ){
-						if( response.error ){
-							callback( response.error, false, response );
-
-						}else if( response.status === "connected" ){
-							callback( null, true, response );		
-
-						}else{
-							callback( null, false, response );
-						}
-					} );
-				},
-
-				"checkIfLoggedIn": function checkIfLoggedIn( callback ){
-					callback = callback || function callback( ){ };
-
-					switch( this.state.loginType ){
-						case "facebook":
-							this.checkIfLoggedInFacebook( callback );
-							break;
-					}	
 				},
 
 				"verifyIfLoggedIn": function verifyIfLoggedIn( loginState, responseList ){
@@ -87,13 +117,13 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 						
 						this.setState( {
 							"loginState": "login-error",
-							"loginPrompt": "oops! please try again"
+							"loginPrompt": LOGIN_ERROR_PROMPT
 						} );
 
 					}else if( typeof loginState == "boolean" && loginState ){
 						this.setState( {
 							"loginState": "logged-in",
-							"loginPrompt": "welcome"
+							"loginPrompt": LOGGED_IN_PROMPT
 						} );
 
 					}else{
@@ -102,17 +132,9 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 						
 						this.setState( {
 							"loginState": "login-error",
-							"loginPrompt": "oops! please try again"
+							"loginPrompt": LOGIN_ERROR_PROMPT
 						} );					
 					}
-				},
-
-				"sendLoginData": function sendLoginData( ){
-					this.scope.publish( "get-profile-data",
-						this.state.loginType,
-						function onGetProfileData( ){
-
-						} );
 				},
 
 				"initiateLoginProcedure": function initiateLoginProcedure( ){
@@ -128,37 +150,42 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 						function setLoggingInState( callback ){
 							self.setState( {
 								"loginState": "logging-in",
-								"loginPrompt": "please wait"
+								"loginPrompt": LOGGING_IN_PROMPT
 							}, function onSetState( ){
 								callback( );
 							} );
 						},
 
 						function checkIfLoggedIn( callback ){
-							self.checkIfLoggedIn( function onCheckIfLoggedIn( error, isLoggedIn, response ){
-								var loginState = error || isLoggedIn || undefined;
+							Login.checkIfLoggedIn( self.state.loginType,
+								function onCheckIfLoggedIn( error, isLoggedIn, loginData, response ){
+									var loginState = error || isLoggedIn || undefined;
 
-								callback( loginState, response );
-							} );
+									if( isLoggedIn ){
+										self.setState( {
+											"userID": loginData.userID,
+											"accessToken": loginData.accessToken
+										} );
+									}
+
+									callback( loginState, loginData, response );
+								} );
 						},
 
 						function tryLoggingIn( response, callback ){
-							self.tryLoggingIn( function onTryLoggingIn( error, isLoggedIn, response ){
-								callback( error || isLoggedIn, response );
-							} );
+							Login.tryLoggingIn( self.state.loginType,
+								function onTryLoggingIn( error, isLoggedIn, loginData, response ){
+									callback( error || isLoggedIn, loginData, response );
+								} );
 						},
 
-						function setLoginData( response, callback ){
+						function setLoginData( loginData, response, callback ){
 							self.setState( {
-								"userID": response.authResponse.userID,
-								"accessToken": response.authResponse.accessToken
+								"userID": loginData.userID,
+								"accessToken": loginData.accessToken
 							}, function onSetState( ){
 								callback( null, response );
 							} );
-						},
-
-						function sendLoginData( response, callback ){
-
 						}
 					],
 						function lastly( loginState, responseList ){
@@ -173,7 +200,11 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 						this.initiateLoginProcedure( );
 						
 					}else if( this.state.loginState == "logged-in" ){
-						this.scope.publish( "proceed-default-app-flow" );
+						this.scope.publish( "proceed-default-app-flow", {
+							"loginType": this.state.loginType,
+							"userID": this.state.userID,
+							"accessToken": this.state.accessToken
+						} );
 					}
 				},
 

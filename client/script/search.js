@@ -133,10 +133,8 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 Crime.directive( "search", [
 	"PageFlow",
 	"Event",
-	function directive( PageFlow, Event ){
-		
-		
-
+	"Search",
+	function directive( PageFlow, Event, Search ){
 		return {
 			"restrict": "EA",
 			"scope": true,
@@ -144,8 +142,6 @@ Crime.directive( "search", [
 				Event( scope );
 
 				PageFlow( scope, element, "search" );
-
-				scope.broadcast( "hide-search" );
 
 				scope.on( "show-search",
 					function onShowSearch( ){
@@ -157,7 +153,9 @@ Crime.directive( "search", [
 						scope.hidePage( );
 					} );
 
-				React.renderComponent( <search scope={ scope } />, element[ 0 ] );
+				scope.publish( "hide-search" );
+
+				Search.attach( scope, element );
 			}
 		};
 	}

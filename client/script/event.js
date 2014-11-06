@@ -271,7 +271,7 @@ angular.module( "Event", [ ] )
 							eventHandler.apply( this.eventEngine, parameterList );	
 						} );
 
-				this.subscribeToPublicNotification.apply( this, parameterList );
+				this.subscribeToPublicNotification( eventHandlerReference, eventHandler );
 
 				return this;
 			};
@@ -280,7 +280,7 @@ angular.module( "Event", [ ] )
 				var eventNamespace = [ "public-notify", eventHandlerReference ].join( ":" );
 				
 				this.subscribe( eventNamespace,
-					function publicNotifyHandler( ){
+					function publicNotifyHandler( eventParameterList ){
 						//: @todo: Support internal handler scope environment passing.
 						eventHandler.apply( this, _.toArray( arguments ) );
 					} );
@@ -295,29 +295,29 @@ angular.module( "Event", [ ] )
 			Event.prototype.publish = function publish( eventHandlerReference, eventParameterList ){
 				var parameterList = _.toArray( arguments );
 
-				pubsub.publish.apply( pubsub, parameterList );
+				pubsub.publish.apply( pubsub, [ parameterList[ 0 ], _.rest( parameterList ) ] );
 
 				var eventNamespace = [ "public-notify", eventHandlerReference ].join( ":" );
 
-				pubsub.publish.apply( pubsub, [ eventNamespace ].concat( _.rest( parameterList ) ) );
+				pubsub.publish.apply( pubsub, [ eventNamespace, _.rest( parameterList ) ] );
 
 				return this;
 			};
 
-			Event.prototype.subscribe = function subscribe( eventHandlerReference, eventParameterList ){
-				pubsub.subscribe.apply( pubsub, _.toArray( arguments ) );
+			Event.prototype.subscribe = function subscribe( eventHandlerReference, eventHandler ){
+				pubsub.subscribe( eventHandlerReference, eventHandler );
 
 				return this;
 			};
 
-			Event.prototype.subscribeOnce = function subscribeOnce( eventHandlerReference, eventParameterList ){
-				pubsub.subscribeOnce.apply( pubsub, _.toArray( arguments ) );
+			Event.prototype.subscribeOnce = function subscribeOnce( eventHandlerReference, eventHandler ){
+				pubsub.subscribeOnce( eventHandlerReference, eventHandler );
 
 				return this;
 			};
 
 			Event.prototype.unsubscribe = function unsubscribe( subscription ){
-				pubsub.unsubscribe.apply( pubsub, _.toArray( arguments ) );
+				pubsub.unsubscribe( subscription );
 
 				return this;
 			};

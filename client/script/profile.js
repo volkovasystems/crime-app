@@ -1,17 +1,76 @@
 angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 	
-	.constant( "GO_TO_PROFILE_PAGE", "go to profile page" )
+	.value( "GO_TO_PROFILE_PAGE", "go to profile page" )
+
+	.constant( "FACEBOOK_PROFILE_TYPE", "facebook" )
 	
 	.factory( "Profile", [
 		"Icon",
+		"FACEBOOK_PROFILE_TYPE",
 		"GO_TO_PROFILE_PAGE",
-		function factory( Icon, GO_TO_PROFILE_PAGE ){
+		function factory( Icon, FACEBOOK_PROFILE_TYPE, GO_TO_PROFILE_PAGE ){
 			var Profile = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
 						React.render( <Profile scope={ scope } />, container[ 0 ] );
 
 						return this;
+					},
+
+					"getBasicProfileDataFromFacebook": function getBasicProfileDataFromFacebook( callback ){
+						callback = callback || function callback( ){ };
+
+						var profileData = { };
+
+						async.parallel( [
+							function requestProfileData( callback ){
+								FB.api( "/me",
+									function onResponse( response ){
+										if( response.error ){
+											callback( response.error, response );
+
+										}else{
+											profileData.profileName = response.name;
+											profileData.profileURL = response.link;
+
+											callback( null, response );
+										}
+									} );
+							},
+
+							function requestProfilePhoto( callback ){
+								FB.api( "/me/picture",
+									{
+										"redirect": false,
+										"height": 128,
+										"type": "square",
+										"width": 128
+									},
+									function onResponse( response ){
+										if( response.error ){
+											callback( response.error, response );
+
+										}else{
+											profileData.profileImage = response.data.url;
+
+											callback( null, response );
+										}
+									} );
+							}
+						],
+							function lastly( error, responseList ){
+								callback( error, profileData, responseList );
+							} );
+					},
+
+					"getBasicProfileData": function getBasicProfileData( profileType, callback ){
+						callback = callback || function callback( ){ };
+
+						switch( profileType ){
+							case FACEBOOK_PROFILE_TYPE:
+								this.getBasicProfileDataFromFacebook( callback );
+								break;
+						}
 					}
 				},
 
@@ -21,69 +80,13 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 						"profileURL": "",
 						"profileImage": "./image/profile.png",
 						
-						"profileType": "facebook",
+						"profileType": FACEBOOK_PROFILE_TYPE,
 						
 						"profileState": "profile-empty",
 						"componentState": "profile-minified"
 					};
 				},
-
-				"getBasicProfileDataFromFacebook": function getBasicProfileDataFromFacebook( callback ){
-					callback = callback || function callback( ){ };
-
-					var profileData = { };
-
-					async.parallel( [
-						function requestProfileData( callback ){
-							FB.api( "/me",
-								function onResponse( response ){
-									if( response.error ){
-										callback( response.error, response );
-
-									}else{
-										profileData.profileName = response.name;
-										profileData.profileURL = response.link;
-
-										callback( null, response );
-									}
-								} );
-						},
-
-						function requestProfilePhoto( callback ){
-							FB.api( "/me/picture",
-								{
-									"redirect": false,
-									"height": 128,
-									"type": "square",
-									"width": 128
-								},
-								function onResponse( response ){
-									if( response.error ){
-										callback( response.error, response );
-
-									}else{
-										profileData.profileImage = response.data.url;
-
-										callback( null, response );
-									}
-								} );
-						}
-					],
-						function lastly( error, responseList ){
-							callback( error, profileData, responseList );
-						} );
-				},
-
-				"getBasicProfileData": function getBasicProfileData( callback ){
-					callback = callback || function callback( ){ };
-
-					switch( this.state.profileType ){
-						case "facebook":
-							this.getBasicProfileDataFromFacebook( callback );
-							break;
-					}
-				},
-
+				
 				"onProfileCloseButtonClick": function onProfileCloseButtonClick( event ){
 					if( this.state.componentState != "profile-minified" ){
 						this.scope.broadcast( "show-minified-profile" );
@@ -111,63 +114,33 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 							"profileState": "profile-processing"
 						},
 						function onStateChanged( ){
-							self.getBasicProfileData( function onResult( error, profileData, responseList ){
-								if( error ){
-									self.scope.broadcast( "error", "login-error", error, responseList );
+							Profile.getBasicProfileData( self.state.profileType,
+								function onResult( error, profileData, responseList ){
+									if( error ){
+										self.scope.broadcast( "error", "login-error", error, responseList );
 
-									self.setState( {
-										"profileState": "profile-error",
-									} );
+										self.setState( {
+											"profileState": "profile-error",
+										} );
 
-								}else{
-									self.setState( {
-										"profileName": profileData.profileName,
-										"profileURL": profileData.profileURL,
-										"profileImage": profileData.profileImage,
-										"profileState": "profile-ready"
-									} );
-								}
-							} );
+									}else{
+										self.setState( {
+											"profileName": profileData.profileName,
+											"profileURL": profileData.profileURL,
+											"profileImage": profileData.profileImage,
+											"profileState": "profile-ready"
+										} );
+									}
+								} );
 						} );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 					
-					this.scope.on( "logged-in",
-						function onLoggedIn( profileType ){
-							self.scope.broadcast( "show-profile" );
-							
-							self.initiateBasicProfileDataRetrieval( profileType );	
-						} );
-
-					this.scope.on( "get-profile-data",
-						function onGetLoginData( profileType, callback ){
-							if( self.stte.profileState == "profile-ready" ){
-								callback( {
-									"profileName": self.state.profileName,
-									"profileURL": self.state.profileURL,
-									"profileImage": self.state.profileImage
-								} );
-
-								return;
-							
-							}else if( self.state.profileState != "profile-processing" ){
-								//: It was not initiated before this was called then we have to force it.
-								//: This is rarely be called, but we still need to handle this.
-								self.initiateBasicProfileDataRetrieval( profileType );
-							}
-
-							//: Profile is in processing mode. Listen to a single instance event.
-							//: @todo: This should be removed once it does what it does.
-							self.scope.on( "profile-ready",
-								function onProfileReady( ){
-									callback( {
-										"profileName": self.state.profileName,
-										"profileURL": self.state.profileURL,
-										"profileImage": self.state.profileImage
-									} );
-								} );
+					this.scope.on( "initiate-basic-profile-data-retrieval",
+						function onInitiateBasicProfileDataRetrieval( profileType ){
+							self.initiateBasicProfileDataRetrieval( profileType );
 						} );
 				},
 
@@ -330,9 +303,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 	.directive( "profile", [
 		"Event",
 		"PageFlow",
-		"GO_TO_PROFILE_PAGE",
 		"Profile",
-		function directive( Event, PageFlow, GO_TO_PROFILE_PAGE, Profile ){
+		function directive( Event, PageFlow, Profile ){
 			return {
 				"restrict": "EA",
 				"scope": true,
