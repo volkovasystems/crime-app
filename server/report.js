@@ -9,7 +9,7 @@ require( "./report-data.js" );
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-
+		next( );
 	} );
 
 app.get( "/api/:accessID/report/get/all",

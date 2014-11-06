@@ -1,11 +1,11 @@
 angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 
-	.value( "SEARCH_ADDRESS", "search address" )
+	.value( "SEARCH_PROMPT", "search something" )
 
 	.factory( "Search", [
 		"Icon",
-		"SEARCH_ADDRESS"
-		function factory( Icon, SEARCH_ADDRESS ){
+		"SEARCH_PROMPT",
+		function factory( Icon, SEARCH_PROMPT ){
 			var Search = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -26,15 +26,15 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 				"onSearchTextChange": function onSearchTextChange( event ){
 					var searchText = event.target.value;
 
-					if( this.timeoutChange ){
-						clearTimeout( this.timeoutChange );
+					if( this.timeout ){
+						clearTimeout( this.timeout );
 						
-						this.timeoutChange = null;
+						this.timeout = null;
 					}
 
-					if( _.isEmpty( address ) ){
+					if( _.isEmpty( searchText ) ){
 						this.setState( {
-							"searchAddress": address,
+							"searchText": "",
 							"searchState": "search-empty"
 						} );
 
@@ -42,16 +42,16 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 					}
 
 					var self = this;
-					this.timeoutChange = setTimeout( function onTimeout( ){
-						self.searchAddress( address );
+					this.timeout = setTimeout( function onTimeout( ){
+						self.scope.publish( "search-text-changed", self.state.searchText );
 
-						clearTimeout( self.timeoutChange );
+						clearTimeout( self.timeout );
 
-						self.timeoutChange = null;
+						self.timeout = null;
 					}, 1000 );
 
 					this.setState( {
-						"searchText": address,
+						"searchText": searchText,
 						"searchState": "search-filled"
 					} );
 				},
@@ -59,7 +59,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 				"onClearSearchClick": function onClearSearchClick( event ){
 					if( this.state.searchState != "search-empty" ){
 						this.setState( {
-							"searchAddress": "",
+							"searchText": "",
 							"searchState": "search-empty"
 						} );
 					}
@@ -75,7 +75,10 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 					var searchState = this.state.searchState;
 					
 					return ( 
-						<div className="search-container">
+						<div 
+							className={ [
+								"search-container"
+							].join( " " ) }>
 							<div 
 								className={ [
 									"search-component"
@@ -97,9 +100,9 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 										className={ [
 											"search-input"
 										].join( " " ) }
-										placeholder={ SEARCH_ADDRESS.toUpperCase( ) }
-										value={ searchAddress }
-										onChange={ this.onSearchAddressChange } />
+										placeholder={ SEARCH_PROMPT.toUpperCase( ) }
+										value={ searchText }
+										onChange={ this.onSearchTextChange } />
 
 									<div
 										className={ [
@@ -127,36 +130,39 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 					this.scope.broadcast( "search-rendered" );	
 				}
 			} );	
+
+			return Search;
 		}
 	] )
 
-Crime.directive( "search", [
-	"PageFlow",
-	"Event",
-	"Search",
-	function directive( PageFlow, Event, Search ){
-		return {
-			"restrict": "EA",
-			"scope": true,
-			"link": function onLink( scope, element, attributeSet ){
-				Event( scope );
+	.directive( "search", [
+		"PageFlow",
+		"Event",
+		"Search",
+		function directive( PageFlow, Event, Search ){
+			return {
+				"restrict": "EA",
+				"scope": true,
+				"priority": 2,
+				"link": function onLink( scope, element, attributeSet ){
+					Event( scope );
 
-				PageFlow( scope, element, "search" );
+					PageFlow( scope, element, "search" );
 
-				scope.on( "show-search",
-					function onShowSearch( ){
-						scope.showPage( );
-					} );
+					scope.on( "show-search",
+						function onShowSearch( ){
+							scope.showPage( );
+						} );
 
-				scope.on( "hide-search",
-					function onHideSearch( ){
-						scope.hidePage( );
-					} );
+					scope.on( "hide-search",
+						function onHideSearch( ){
+							scope.hidePage( );
+						} );
 
-				scope.publish( "hide-search" );
+					scope.publish( "hide-search" );
 
-				Search.attach( scope, element );
-			}
-		};
-	}
-] );
+					Search.attach( scope, element );
+				}
+			};
+		}
+	] );

@@ -57,7 +57,7 @@
   "tinyPNGAPIKey": "ZkqieBkRhKIbPdlPy8Yhjz9lBjD16oVQ",
   "serverSet": {
     "static": {
-      "remote": "",
+      "remote": "ec2-54-171-91-108.eu-west-1.compute.amazonaws.com",
       "host": "127.0.0.1",
       "port": 8000
     },
@@ -67,7 +67,7 @@
       "port": 9000
     },
     "report": {
-      "remote": "",
+      "remote": "ec2-54-77-242-9.eu-west-1.compute.amazonaws.com",
       "host": "127.0.0.1",
       "port": 9001
     }

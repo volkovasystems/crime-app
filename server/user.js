@@ -17,7 +17,7 @@ app.use( bodyParser.json( ) );
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-		
+		next( );		
 	} );
 
 app.get( "/api/:accessID/user/get/all",

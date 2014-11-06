@@ -8,6 +8,7 @@ angular
 		"Dashbar",
 		"Login",
 		"Profile",
+		"Search",
 		"MapView",
 		"MapLocate"
 	] )
@@ -69,28 +70,13 @@ angular
 						function onRendered( ){ 
 							callback( ); 
 						} );
-				}/*,
+				},
 				function checkRender( callback ){
-					$rootScope.on( "search-rendered", function onRendered( ){ callback( ); } );
+					$rootScope.on( "search-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
 				}
-				
-				function checkRender( callback ){
-					$rootScope.on( "notify-rendered", function onRendered( ){ callback( ); } );
-				},
-				function checkRender( callback ){
-					$rootScope.on( "locate-rendered", function onRendered( ){ callback( ); } );
-				},
-				
-				function checkRender( callback ){
-					$rootScope.on( "spinner-rendered", function onRendered( ){ callback( ); } );
-				},
-				function checkRender( callback ){
-					$rootScope.on( "report-rendered", function onRendered( ){ callback( ); } );
-				},
-				function checkRender( callback ){
-					$rootScope.on( "data-rendered", function onRendered( ){ callback( ); } );
-				}*/
-				
 			],
 				function lastly( ){
 					$rootScope.broadcast( "show-default-page" );
