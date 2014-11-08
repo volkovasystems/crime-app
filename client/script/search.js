@@ -23,6 +23,20 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 					};
 				},
 
+				"changeSearchState": function changeSearchState( ){
+					var searchText = this.state.searchText;
+					if( _.isEmpty( searchText ) ){
+						this.setState( {
+							"searchState": "search-empty"
+						} );
+
+					}else{
+						this.setState( {
+							"searchState": "search-filled"
+						} );
+					}
+				},
+
 				"onSearchTextChange": function onSearchTextChange( event ){
 					var searchText = event.target.value;
 
@@ -137,7 +151,9 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-					
+					if( prevState.searchText != this.state.searchText ){
+						this.changeSearchState( );
+					}
 				},
 
 				"componentDidMount": function componentDidMount( ){

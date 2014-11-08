@@ -117,7 +117,8 @@ angular.module( "MapLocate", [ "Event" ] )
 						function onMapRendered( ){
 							getCurrentPosition( function callback( error, currentPosition ){
 								if( error ){
-
+									//: @todo: Do some error handling here!
+										
 								}else{
 									scope.mapComponent.setCenter( currentPosition );	
 								}
@@ -127,8 +128,13 @@ angular.module( "MapLocate", [ "Event" ] )
 					scope.on( "set-position-at-address",
 						function onSetPositionAtAddress( address ){
 							getPositionAtAddress( address,
-								function callback( position ){
-									scope.mapComponent.setCenter( position );
+								function callback( error, position ){
+									if( error ){
+										//: @todo: Do some error handling here!
+										
+									}else{
+										scope.mapComponent.setCenter( position );
+									}
 								} );
 						} );
 				}

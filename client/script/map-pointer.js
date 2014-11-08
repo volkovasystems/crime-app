@@ -77,6 +77,8 @@ angular.module( "MapPointer", [ "Event" ] )
 						function onMapViewRendered( ){
 							var mapPointer = createMapPointer( scope.mapComponent );
 
+							mapPointer.setVisible( true );
+
 							attachMapPointerEventListener( mapPointer, scope );
 						} );
 				}

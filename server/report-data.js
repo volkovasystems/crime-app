@@ -22,6 +22,7 @@ database.createDatabase( "Report", "reportdb", host, databasePort,
 				"reportID": String,
 				"reportState": String,
 				"reporterID": String,
+				"reporterState": String,
 				"reportTimestamp": Date,
 				"reportLocation": {
 					"latitude": Number,
