@@ -9,7 +9,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 			var Search = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
-						React.renderComponent( <Search scope={ scope } />, container[ 0 ] );
+						React.render( <Search scope={ scope } />, container[ 0 ] );
 
 						return this;
 					}

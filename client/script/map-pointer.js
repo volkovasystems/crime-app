@@ -57,7 +57,7 @@ angular.module( "MapPointer", [ "Event" ] )
 		}
 	] )
 
-	.directive( "map-pointer", [
+	.directive( "mapPointer", [
 		"Event",
 		"createMapPointer",
 		"attachMapPointerEventListener",
@@ -80,6 +80,10 @@ angular.module( "MapPointer", [ "Event" ] )
 							mapPointer.setVisible( true );
 
 							attachMapPointerEventListener( mapPointer, scope );
+
+							scope.mapPointer = mapPointer;
+
+							scope.publish( "map-pointer-created", mapPointer );
 						} );
 				}
 			};

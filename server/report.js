@@ -23,6 +23,12 @@ app.all( "/api/:accessID/*",
 app.get( "/api/:accessID/report/get/all",
 	function onReportGetAll( request, response ){
 		var Report = mongoose.model( "Report" );
+		Report
+			.find( { 
+				"userID": request.param( "userID" ) 
+			}, function onResult( error, reportList ){
+
+			} );
 	} );
 
 app.get( "/api/:accessID/report/:reportID/get",

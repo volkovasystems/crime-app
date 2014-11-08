@@ -10,7 +10,8 @@ angular
 		"Profile",
 		"Search",
 		"MapView",
-		"MapLocate"
+		"MapLocate",
+		"MapPointer"
 	] )
 	.run( [
 		"$rootScope",
