@@ -65,8 +65,21 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 					}
 				},
 
+				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+					var self = this;
+
+					this.scope.on( "set-search-text",
+						function onSetSearchText( searchText ){
+							self.setState( {
+								"searchText": searchText
+							} );
+						} );
+				},
+
 				"componentWillMount": function componentWillMount( ){
 					this.scope = this.props.scope;
+
+					this.attachAllComponentEventListener( );
 				},
 
 				"render": function onRender( ){
@@ -95,6 +108,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 									className={ [
 										"search-input-container"
 									].join( " " ) }>
+
 									<input 
 										type="text" 
 										className={ [
@@ -103,19 +117,19 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 										placeholder={ SEARCH_PROMPT.toUpperCase( ) }
 										value={ searchText }
 										onChange={ this.onSearchTextChange } />
+								</div>
 
-									<div
+								<div
+									className={ [
+										"clear-search-button",
+										searchState
+									].join( " " ) }
+									onClick={ this.onClearSearchClick }>
+									<Icon
 										className={ [
-											"clear-search",
-											searchState
+											"clear-search-icon"
 										].join( " " ) }
-										onClick={ this.onClearSearchClick }>
-										<Icon
-											className={ [
-												"clear-search-icon"
-											].join( " " ) }
-											name="ic_clear_24px" />
-									</div>
+										name="ic_clear_24px" />
 								</div>
 							</div>
 						</div>

@@ -1,11 +1,19 @@
-var serverData = require( "package.js" ).packageData.serverSet.report;
+var serverData = require( "./package.js" ).packageData.serverSet.user;
 var host = serverData.host;
 var port = serverData.port;
 
+var util = require( "util" );
+
 var express = require( "express" );
+var bodyParser = require( "body-parser" );
 var app = express( );
 
+var mongoose = require( "mongoose" );
 require( "./report-data.js" );
+
+var async = require( "async" );
+
+app.use( bodyParser.json( ) );
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
@@ -14,7 +22,7 @@ app.all( "/api/:accessID/*",
 
 app.get( "/api/:accessID/report/get/all",
 	function onReportGetAll( request, response ){
-
+		var Report = mongoose.model( "Report" );
 	} );
 
 app.get( "/api/:accessID/report/:reportID/get",
@@ -24,7 +32,19 @@ app.get( "/api/:accessID/report/:reportID/get",
 
 app.post( "/api/:accessID/report/add",
 	function onReportAdd( request, response ){
+		var Report = mongoose.model( "Report" );
+		async.waterfall( [
+			function checkIfReportIsExisting( callback ){
 
+			},
+
+			function saveReport( callback ){
+
+			}
+		],
+			function lastly( ){
+
+			} );
 	} );
 
 app.post( "/api/:accessID/report/:reportID/update",

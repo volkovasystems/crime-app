@@ -43,13 +43,16 @@ Crime
 
 	.directive( "loginController", [
 		"Event",
-		function directive( Event ){
+		"CRIME_LOGO_IMAGE_SOURCE",
+		function directive( Event, CRIME_LOGO_IMAGE_SOURCE ){
 			return {
 				"restrict": "A",
 				"scope": true,
 				"priority": 1,
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
+
+					scope.publish( "change-logo-image", CRIME_LOGO_IMAGE_SOURCE );
 
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){

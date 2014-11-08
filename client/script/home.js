@@ -16,6 +16,7 @@ angular.module( "Home", [ "Event", "PageFlow" ] )
 
 				"getInitialState": function getInitialState( ){
 					return {
+						"appLogoImageSource": APP_LOGO_IMAGE_SOURCE,
 						"componentState": "home-standby"
 					};
 				},
@@ -28,6 +29,13 @@ angular.module( "Home", [ "Event", "PageFlow" ] )
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
+
+					this.scope.on( "change-logo-image",
+						function onChangeLogoImage( appLogoImageSource ){
+							self.setState( {
+								"appLogoImageSource": appLogoImageSource
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -37,6 +45,8 @@ angular.module( "Home", [ "Event", "PageFlow" ] )
 				},
 
 				"render": function onRender( ){
+					var appLogoImageSource = this.state.appLogoImageSource;
+
 					var componentState = this.state.componentState;
 
 					return (
@@ -54,7 +64,7 @@ angular.module( "Home", [ "Event", "PageFlow" ] )
 										"logo",
 										componentState
 									].join( " " ) }
-									src={ APP_LOGO_IMAGE_SOURCE } />
+									src={ appLogoImageSource } />
 							</div>
 						</div>
 					);
@@ -77,6 +87,7 @@ angular.module( "Home", [ "Event", "PageFlow" ] )
 			return {
 				"restrict": "EA",
 				"scope": true,
+				"priority": 2,
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 

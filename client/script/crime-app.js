@@ -1,4 +1,9 @@
-var Crime = angular.module( "Crime", [ "App", "Login", "Event" ] );
+var Crime = angular.module( "Crime", [ 
+	"App",
+	"Login",
+	"Event",
+	"MapLocate" 
+] );
 
 Crime
 	.run( [
@@ -17,12 +22,12 @@ Crime
 			Event( $rootScope );
 
 			//: @todo: Get the server list from the static server.
-			$http.get( "/get/all/api/endpoint" )
+			/*$http.get( "/get/all/api/endpoint" )
 				.success( function onSuccess( data, status ){
 					//$rootScope.publish( "" )
 				} )
 				.error( function onError( data, status ){
 						
-				} );
+				} );*/
 		}
 	] );

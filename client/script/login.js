@@ -96,6 +96,8 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 
 				"getInitialState": function getInitialState( ){
 					return {
+						"appLogoImageSource": APP_LOGO_IMAGE_SOURCE,
+
 						"loginPrompt": "",
 						
 						"loginType": FACEBOOK_LOGIN_TYPE,
@@ -172,7 +174,7 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 								} );
 						},
 
-						function tryLoggingIn( response, callback ){
+						function tryLoggingIn( loginData, response, callback ){
 							Login.tryLoggingIn( self.state.loginType,
 								function onTryLoggingIn( error, isLoggedIn, loginData, response ){
 									callback( error || isLoggedIn, loginData, response );
@@ -210,6 +212,13 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
+
+					this.scope.on( "change-logo-image",
+						function onChangeLogoImage( appLogoImageSource ){
+							self.setState( {
+								"appLogoImageSource": appLogoImageSource
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -219,6 +228,8 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 				},
 
 				"render": function onRender( ){
+					var appLogoImageSource = this.state.appLogoImageSource;
+
 					var loginType = this.state.loginType;
 					
 					var loginPrompt = this.state.loginPrompt;
@@ -254,7 +265,7 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 											"logo",
 											componentState
 										].join( " " ) }
-										src={ APP_LOGO_IMAGE_SOURCE } />
+										src={ appLogoImageSource } />
 								</div>
 
 								<div

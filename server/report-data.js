@@ -1,32 +1,38 @@
-var serverData = require( "package.js" ).packageData.serverSet.report;
+var serverData = require( "./package.js" ).packageData.serverSet.report;
+var host = serverData.host;
 var port = serverData.port;
-
-var databasePort = port + 2;
 
 var database = require( "./database.js" );
 
 var mongoose = require( "mongoose" );
-var report = mongoose.Schema( {
-	"reportID": String
-}, { "collection": "reports" } );
 
-database.createDatabase( "Report", "../reportdb", databasePort,
+var databasePort = port + 2;
+
+database.createDatabase( "Report", "reportdb", host, databasePort,
 	function onDatabaseCreated( error, callback ){
 		if( error ){
-			callback( error );
+			console.error( error );
 
 		}else{
-			mongoose
-				.createConnection( host, "reportdb", databasePort )
-				.on( "error",
-					function onDatabaseConnectionError( error ){
-						callback( error );
-					} )
-				.once( "open",
-					function onConnected( ){
-						callback( null, mongoose.model( "Report", user ) );
+			var connectionString = [ "mongodb://", host, ":", databasePort, "/", "reportdb" ].join( "" );
 
-						global.Report = database.Report;
-					} );
+			mongoose.connect( connectionString );	
+
+			var report = mongoose.Schema( {
+				"reportID": String,
+				"reportState": String,
+				"reporterID": String,
+				"reportTimestamp": Date,
+				"reportLocation": {
+					"latitude": Number,
+					"longitude": Number
+				},
+				"reportTitle": String,
+				"reportDescription": String,
+				"reportCaseType": String,
+				"reportMediaList": Array
+			} );
+
+			mongoose.model( "Report", report );
 		}
 	} );
