@@ -12,7 +12,12 @@ Crime
 
 					Event( scope );
 
-					scope.on( "control-click:confirm-location",
+					scope.on( "control-click:crime-report-cancel",
+						function onReportCancel( ){
+							scope.publish( "hide-report" );
+						} );
+
+					scope.on( "control-click:crime-confirm-location",
 						function onConfirmLocation( ){
 							async.waterfall( [
 								function initiateLoading( callback ){
@@ -57,6 +62,38 @@ Crime
 								function lastly( error ){
 									scope.finishLoading( );
 								} );
+						} );
+
+					scope.on( "show-report",
+						function onShowReport( ){
+							scope.publish( "set-control-list",
+								[
+									{
+										"reference": "crime-report",
+										"name": "report-control-group",
+										"controlList": [
+											{
+												"reference": "crime-report",
+												"name": "crime-report-cancel",
+												"title": "cancel",
+												"icon": "ic_cancel_24px"
+											},
+											{
+												"reference": "crime-report",
+												"name": "crime-report-send",
+												"title": "send",
+												"icon": "ic_send_24px"
+											}
+										]
+									}
+								], true );
+							
+							scope.publish( "show-control" );
+						} );
+
+					scope.on( "hide-report",
+						function onHideReport( ){
+							scope.publish( "remove-control", "crime-report" );
 						} );
 				}
 			}

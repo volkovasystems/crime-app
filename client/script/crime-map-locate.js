@@ -28,8 +28,8 @@ Crime
 							scope.broadcast( "set-control-list",
 								[
 									{
-										"reference": "map-locate",
-										"name": "confirm-location",
+										"reference": "crime-map-locate",
+										"name": "crime-confirm-location",
 										"title": "confirm",
 										"icon": "ic_place_24px"
 									}

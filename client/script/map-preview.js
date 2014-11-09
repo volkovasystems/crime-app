@@ -131,7 +131,12 @@ angular.module( "MapPreview", [ "MapView" ] )
 									"map-address",
 									"information",
 									"main-heading"
-								].join( " " ) }>
+								].join( " " ) }
+								style={
+									{
+										"marginTop": "5px"
+									}
+								}>
 								{ address }
 							</p>
 

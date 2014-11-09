@@ -77,6 +77,61 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 					} );
 				},
 
+				"removeControl": function removeControl( reference ){
+					var controlList = this.state.controlList;
+
+					controlList = _.first( controlList,
+						function onEachControl( controlData ){
+							return controlData.reference !== reference
+						} );
+
+					this.setState( {
+						"controlList": controlList
+					} );
+				},
+
+				"flattenControlList": function flattenControlList( controlList ){
+					var flattenControlList = _( controlList )
+						.map( function onEachControl( controlData ){
+							return controlData.controlList || controlData;
+						} )
+						.flatten( );
+
+					return flattenControlList;
+				},
+
+				"extractControlReferenceList": function extractControlReferenceList( controlList ){
+					var controlReferenceList = _( this.flattenControlList( controlList ) )
+						.map( function onEachControl( controlData ){
+							return [ controlData.reference, controlData.name ].join( ":" );
+						} );
+
+					return controlReferenceList;
+				},
+
+				"checkIfControlListExist": function checkIfControlListExist( controlList ){
+					return !_.isEmpty( 
+						_.intersection( 
+							this.extractControlReferenceList( controlList ),
+							this.extractControlReferenceList( this.state.controlList ) 
+						) 
+					);
+				},
+
+				"setControlList": function setControlList( controlList, isAppend ){
+					if( this.checkIfControlListExist( controlList ) ){
+						return;
+					}
+
+					if( isAppend ){
+						controlList = this.getControlList( ).concat( controlList );
+					}
+
+					this.setState( {
+						"controlList": controlList
+					} );
+				},
+
 				"getControlList": function getControlList( ){
 					return this.state.controlList || this.props.controlList;
 				},
@@ -97,7 +152,7 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 					this.scope.publish( eventNamespace );
 				},
 
-				"onEachControlItem": function onEachControlItem( controlData ){
+				"onEachControlItem": function onEachControlItem( controlData, percentageWidth ){
 					var componentState = this.state.componentState;
 
 					var hiddenControlList = this.getHiddenControlList( );
@@ -120,6 +175,11 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 
 					var isDisabled = _.contains( disabledControlList, name );
 
+					var style = { };
+					if( isDescriptive ){
+						style.width = [ percentageWidth, "%" ].join( "" );
+					}
+
 					return (
 						<div
 							className={ [
@@ -132,7 +192,8 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 								componentState
 							].join( " " ) }
 							onClick={ this.onClickControlItem }
-							value={ name }>
+							value={ name }
+							style={ style }>
 
 							<div
 								className={ [
@@ -165,13 +226,24 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 
 					var controlList = controlData.controlList;
 
+					var percentageWidth = Math.floor( 100 / controlList.length );
+
+					var self = this;
+
 					return (
 						<div
 							className={ [
 								"control-group",
+								"shown",
+								"inline-block",
+								controlData.name,
 								componentState
 							].join( " " ) }>
-							{ controlList.map( this.onEachControlItem ) }
+							{ 
+								controlList.map( function onEachControlItemDelegate( controlData ){
+									return self.onEachControlItem( controlData, percentageWidth );
+								} )
+							}
 						</div>
 					);
 				},
@@ -190,16 +262,15 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 					this.scope.on( "set-control-list",
 						function onSetControlList( controlList, isAppend ){
 							var timeout = setTimeout( function onTimeout( ){
-								if( isAppend ){
-									controlList = self.getControlList( ).concat( controlList );
-								}
-
-								self.setState( {
-									"controlList": controlList
-								} );
+								self.setControlList( controlList, isAppend );
 
 								clearTimeout( timeout );
 							}, 100 );
+						} );
+
+					this.scope.on( "remove-control",
+						function onRemoveControl( reference ){
+							self.removeControl( reference );
 						} );
 				},
 

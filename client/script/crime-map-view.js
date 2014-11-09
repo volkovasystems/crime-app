@@ -14,12 +14,12 @@ Crime
 							scope.broadcast( "set-control-list",
 								[
 									{
-										"reference": "map-view",
+										"reference": "crime-map-view",
 										"name": "zoom-in",
 										"icon": "ic_add_circle_outline_24px"
 									},
 									{
-										"reference": "map-view",
+										"reference": "crime-map-view",
 										"name": "zoom-out",
 										"icon": "ic_remove_circle_outline_24px"
 									}
