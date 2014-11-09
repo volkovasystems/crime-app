@@ -23,8 +23,11 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 				"statics": {
 					"configure": function configure( mapViewConfiguration ){
 						this.mapZoom = mapViewConfiguration.mapZoom || DEFAULT_MAP_ZOOM;
+						
 						this.mapZoomStart = mapViewConfiguration.mapZoomStart || DEFAULT_MAP_ZOOM_START;
+						
 						this.mapZoomEnd = mapViewConfiguration.mapZoomEnd || DEFAULT_MAP_ZOOM_END;
+						
 						this.currentPosition = mapViewConfiguration.currentPosition || DEFAULT_POSITION;
 
 						return this;
@@ -32,10 +35,15 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 
 					"attach": function attach( scope, container ){
 						var mapViewComponent = <MapView 
+							
 							scope={ scope }
+							
 							mapZoom={ this.mapZoom }
+							
 							mapZoomStart={ this.mapZoomStart }
+							
 							mapZoomEnd={ this.mapZoomEnd }
+							
 							currentPosition={ this.currentPosition }/>
 
 						React.render( mapViewComponent, container[ 0 ] );
@@ -175,10 +183,16 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 
 				"mapZoomIn": function mapZoomIn( ){
 					var mapZoomStart = this.state.mapZoomStart;
-					var mapZoomEnd = this.state.mapZoomEnd + 1;
+					
+					var mapZoomEnd = this.state.mapZoomEnd;
+					
 					var mapZoom = this.state.mapZoom;
 
-					mapZoom = ( mapZoom + 1 ) % mapZoomEnd || mapZoomStart;
+					mapZoom = mapZoom + 1;
+
+					if( mapZoom > mapZoomEnd ){
+						mapZoom = mapZoomStart;
+					}
 
 					this.setState( {
 						"mapZoom": mapZoom
@@ -187,10 +201,16 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 
 				"mapZoomOut": function mapZoomOut( ){
 					var mapZoomStart = this.state.mapZoomStart;
-					var mapZoomEnd = this.state.mapZoomEnd + 1;
+					
+					var mapZoomEnd = this.state.mapZoomEnd;
+					
 					var mapZoom = this.state.mapZoom;
 
-					mapZoom = ( mapZoom - 1 ) || mapZoomEnd;
+					mapZoom = mapZoom - 1;
+
+					if( mapZoom < mapZoomStart ){
+						mapZoom = mapZoomEnd;
+					}
 
 					this.setState( {
 						"mapZoom": mapZoom
@@ -217,6 +237,11 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 							if( currentMapZoom != mapZoom ){
 								self.setMapZoom( currentMapZoom );
 							}
+						} );
+
+					this.scope.on( "get-map-zoom",
+						function onGetMapZoom( callback ){
+							callback( null, self.mapComponent.getZoom( ) );
 						} );
 				},
 

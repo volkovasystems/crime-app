@@ -21,7 +21,22 @@ Crime
 										scope.publish( "set-current-address", address );	
 									}
 								} );
-						} );		
+						} );	
+
+					scope.on( "proceed-default-app-flow",
+						function onProceedDefaultAppFlow( ){
+							scope.broadcast( "set-control-list",
+								[
+									{
+										"reference": "map-locate",
+										"name": "confirm-location",
+										"title": "confirm",
+										"icon": "ic_place_24px"
+									}
+								], true );
+							
+							scope.publish( "show-control" );
+						} );	
 				}
 			};
 		}

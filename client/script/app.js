@@ -1,17 +1,20 @@
 angular
 	.module( "App", [
+		"angular-loading-bar",
 		"ui.bootstrap", 
 		"ProgressBar",
 		"Event",
 		"Home",
 		"Forehead",
 		"Dashbar",
+		"Control",
 		"Login",
 		"Profile",
 		"Search",
 		"MapView",
 		"MapLocate",
-		"MapPointer"
+		"MapPointer",
+		"Report"
 	] )
 	.run( [
 		"$rootScope",
@@ -49,6 +52,12 @@ angular
 					} );
 				},
 				function checkRender( callback ){
+					$rootScope.on( "control-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+					} );
+				},
+				function checkRender( callback ){
 					$rootScope.on( "forehead-rendered", 
 						function onRendered( ){ 
 							callback( ); 
@@ -68,6 +77,12 @@ angular
 				},
 				function checkRender( callback ){
 					$rootScope.on( "map-view-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "search-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );

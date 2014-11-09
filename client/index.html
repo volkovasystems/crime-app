@@ -23,18 +23,26 @@
 		<!--: @production-mode:
 		<script type="text/javascript">
 			window.production=true;
+			window.GOOGLE_API_KEY="AIzaSyB8ngCoWixjFPHb6ky4LIlQtrrhVnHy7W4";
 		</script>
 		@end-production-mode -->
+
+		<!--: @development-mode:
+		<script type="text/javascript">
+			window.development=true;
+			window.GOOGLE_API_KEY="AIzaSyB8ngCoWixjFPHb6ky4LIlQtrrhVnHy7W4";
+		</script>
+		@end-development-mode -->
 	</head>
 	<body>
 		<div id="fb-root"></div>
 		
 		<section 
-			map-configuration
-			map-marker
-			map-locate
 			map-view
 			map-pointer
+			map-locate
+			map-marker
+			map-view-controller
 			map-locate-controller
 			map-pointer-controller>
 		</section>
@@ -65,7 +73,9 @@
 		<section report-list>
 		</section>
 
-		<section report>
+		<section 
+			report
+			report-controller>
 		</section>
 
 		<section account>
@@ -97,7 +107,14 @@
 		<section control>
 		</section>
 
-		<!--: @include-script:"https://maps.googleapis.com/maps/api/js?key=AIzaSyB8ngCoWixjFPHb6ky4LIlQtrrhVnHy7W4" -->
+		<!--: @production-mode:
+			@include-script:"https://maps.googleapis.com/maps/api/js?key=AIzaSyB8ngCoWixjFPHb6ky4LIlQtrrhVnHy7W4"
+		@end-production-mode -->
+
+		<!--: @development-mode:
+			@include-script:"https://maps.googleapis.com/maps/api/js?key=AIzaSyB8ngCoWixjFPHb6ky4LIlQtrrhVnHy7W4"
+		@end-development-mode -->
+		
 		<!--: @include-script:"library/jquery.min.js" -->
 		<!--: @include-script:"library/bootstrap.min.js" -->
 		<!--: @include-script:"library/angular.min.js" -->

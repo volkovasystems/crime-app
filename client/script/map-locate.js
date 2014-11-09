@@ -137,6 +137,16 @@ angular.module( "MapLocate", [ "Event" ] )
 									}
 								} );
 						} );
+
+					scope.on( "get-current-position",
+						function getCurrentPosition( callback ){
+							callback( null, scope.mapComponent.getCenter( ) );
+						} );
+
+					scope.on( "get-current-address",
+						function getCurrentAddress( callback ){
+							getAddressAtPosition( scope.mapComponent.getCenter( ), callback );
+						} );
 				}
 			};
 		}

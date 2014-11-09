@@ -1,110 +1,85 @@
-.crime-report-container {
-	padding-top: 5%;
+section.report {
+	position: absolute;
+	top: 0px;
+	right: 0px;
 
-	.crime-report-header span {
-		font-size: 20px;
-	}
+	height: 100%;
+	width: 500px;
 
-	.crime-report-body {
-		padding-top: 0px;
-	}
+	.report-container {
+		background-color: #121212;
 
-	.crime-report-footer button:nth-child( n + 1 ) {
-		margin-left: 10px;	
-	}
+		.report-component {
+			width: inherit;
+			height: auto;
 
-	.input-container:nth-child( n + 1 ) {
-		margin-top: 10px;
-	}
-}
+			overflow-y: auto;
+			overflow-x: hidden;
 
-.crime-map-position-preview-container {
-	.map-preview {
-		height: 150px;
-		border-bottom: 1px solid #cccccc;
-	}
+			.report-header {
+				position: absolute;
+				top: 0px;
+				left: 0px;
 
-	.map-address {
-		padding: 10px;
-		padding-left: 15%;
-		padding-right: 15%;
-	}
-}
+				width: inherit;
+				height: 70px;
 
-.crime-report-container {
-	.crime-date-input-container {
-		.input-group-addon {
-			border-left: 0px;
-			border-right: 0px;
-			background-color: #ffffff;
-			padding-left: 3px;
-			padding-right: 3px;
-		}
+				.header-icon {
+					position: relative;
+					width: 70px;
+					height: 70px;
 
-		input:nth-of-type( 1 ) {
-			border-right-color: #ffffff;
-		}
+					svg {
+						fill: #ffffff;
+					}
+				}
 
-		input:nth-of-type( 2 ) {
-			border-left-color: #ffffff;
-			border-right-color: #ffffff;
-		}
+				.header-title {
+					position: relative;
+					height: 70px;
+					width: 300px;
 
-		input:nth-of-type( 3 ) {
-			border-left-color: #ffffff;
-		}
+					font-size: 25px;
+					color: #ffffff;
 
-		input:nth-of-type( 1 ):focus {
-			border-right-color: #66afe9;
-		}
+					span {
+						position: absolute;
+						top: 50%;
+						transform: translateY( -50% );
+					}
+				}
+			}
 
-		input:nth-of-type( 2 ):focus {
-			border-left-color: #66afe9;
-			border-right-color: #66afe9;
-		}
+			.report-form {
+				position: absolute;
+				top: 70px;
 
-		input:nth-of-type( 3 ):focus {
-			border-left-color: #66afe9;
-		}
-	}
-}
+				width: inherit;
+				height: auto;
 
-.crime-report-container {
-	.crime-time-input-container {
-		.input-group-addon {
-			border-left: 0px;
-			border-right: 0px;
-			background-color: #ffffff;
-			padding-left: 3px;
-			padding-right: 3px;
-		}
+				padding: 20px;
+			}
 
-		input:nth-of-type( 1 ) {
-			border-right-color: #ffffff;
-		}
+			.report-form > * {
+				margin-bottom: 20px;
+			}
 
-		input:nth-of-type( 2 ),
-		input:nth-of-type( 3 ) {
-			border-left-color: #ffffff;
-			border-right-color: #ffffff;
-		}
+			.report-form label {
+				font-size: 20px;
+				color: #ffffff;
+			}
 
-		input:nth-of-type( 4 ) {
-			border-left-color: #ffffff;
-		}
+			.report-form .information {
+				color: #ffffff;
+			}
 
-		input:nth-of-type( 1 ):focus {
-			border-right-color: #66afe9;
-		}
+			.report-form .main-heading {
+				font-size: 20px;
+			}
 
-		input:nth-of-type( 2 ):focus,
-		input:nth-of-type( 3 ):focus {
-			border-left-color: #66afe9;
-			border-right-color: #66afe9;
-		}
-
-		input:nth-of-type( 4 ):focus {
-			border-left-color: #66afe9;
+			.report-form .sub-heading {
+				font-size: 15px;
+			}
 		}
 	}
 }
