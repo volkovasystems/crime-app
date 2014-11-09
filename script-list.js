@@ -22,6 +22,7 @@ var scriptList = [
 	"profile.js",
 	"search.js",
 	"report.js",
+	"report-list.js",
 	"app.js",
 
 	"crime-app.js",
@@ -34,7 +35,8 @@ var scriptList = [
 	"crime-map-view.js",
 	"crime-map-locate.js",
 	"crime-map-pointer.js",
-	"crime-report.js"
+	"crime-report.js",
+	"crime-report-list.js"
 ]
 .map( function onEachScriptFile( scriptFile ){
 	return path.resolve( ".", "client", "script", scriptFile );

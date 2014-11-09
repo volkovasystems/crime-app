@@ -14,7 +14,8 @@ angular
 		"MapView",
 		"MapLocate",
 		"MapPointer",
-		"Report"
+		"Report",
+		"ReportList"
 	] )
 	.run( [
 		"$rootScope",

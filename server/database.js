@@ -43,6 +43,7 @@ var createDatabase = function createDatabase( databaseName, directoryPath, host,
 						"--port", port,
 						"--bind_ip", host,
 						"--dbpath", directoryPath,
+						"--smallfiles",
 					"&"
 				].join( " " ) );
 

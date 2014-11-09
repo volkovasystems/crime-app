@@ -219,6 +219,16 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 								"appLogoImageSource": appLogoImageSource
 							} );
 						} );
+
+					this.scope.on( "get-user-account-data",
+						function onGetUserAccountData( callback ){
+							var userAccountData = {
+								"userID": self.state.userID,
+								"accessToken": self.state.accessToken
+							};
+
+							callback( null, userAccountData );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){

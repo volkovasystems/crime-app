@@ -337,3 +337,23 @@ gulp.task( "watch",
 		], 
 		[ "reload" ] );
 	} );
+
+gulp.task( "serverless-watch", 
+	[ 
+		"clean-build", 
+		"build-script", 
+		"build-library",
+		"build-font",
+		"build-less", 
+		"build-style", 
+		"build-image", 
+		"build-index" 
+	],
+	function watchTask( ){
+		gulp.watch( [ 
+			"client/script/**", 
+			"client/style/**", 
+			"client/index.html" 
+		], 
+		[ "reload" ] );
+	} );

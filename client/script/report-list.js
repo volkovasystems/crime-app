@@ -1,152 +1,164 @@
-Crime.directive( "reportList", [
-	"PageFlow",
-	function directive( PageFlow ){
-		var crimeAccount = React.createClass( {
-			"getInitialState": function getInitialState( ){
-				return {
-					"reportList": [ ],
-					"componentState": "report-list-standby",
-					"expandedReportItem": ""
-				};
-			},
+angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
+	.factory( "ReportList", [
+		"Icon",
+		function factory( Icon ){
+			var ReportList = React.createClass( {
+				"getInitialState": function getInitialState( ){
+					return {
+						"reportList": [ ],
+						"expandedItemList": [ ],
+						"componentState": "report-list-normal"
+					};
+				},
 
-			"onReportItemExpandButtonClick": function onReportItemExpandButtonClick( event ){
+				"onEachReportItem": function onEachReportList( reportItem, index ){
+					var hashedValue = reportItem.hashedValue || btoa( JSON.stringify( reportItem ) );
 
-			},
+					var key = [ hashedValue, index ].join( ":" )
+					
+					var expandedItemList = this.state.expandedItemList;
 
-			"componentWillMount": function componentWillMount( ){
-			},
+					var reportID = reportItem.reportID;
 
-			"onEachReportItem": function onEachReportList( reportItem, index ){
-				var hashedValue = reportItem.hashedValue || btoa( JSON.stringify( reportItem ) );
+					var reportTitle = reportItem.reportTitle.toUpperCase( );
 
-				var key = [ hashedValue, index ].join( ":" )
-				
-				var id = hashedValue;
+					var reportTimestamp = reportItem.reportTimestamp;
 
-				var expandedReportItem = this.state.expandedReportItem;
-				var isExpanded = ( expandedReportItem === id );
+					var isExpanded = _.contains( expandedItemList, reportID );
 
-				return (
-					<li
-						className={ [
-							"report-item"
-						].join( " " ) }>
-						<div
+					var timeFromNow = moment( reportTimestamp ).fromNow( ).toUpperCase( );
+
+					var descriptiveDate = moment( reportTimestamp ).format( "dddd, MMMM Do YYYY" ).toUpperCase( );
+
+					var descriptiveTime = moment( reportTimestamp ).format( "h:mm:ss a" ).toUpperCase( );
+
+					return (
+						<li
+							key={ key }
 							className={ [
-								"report-item-container"
+								"report-item",
+								( isExpanded )? "expanded" : "collapsed"
 							].join( " " ) }>
+
 							<div
 								className={ [
-									"report-item-map-preview",
-									( isExpanded )? "expanded": "collapsed"
+									"report-item-icon",
+									( isExpanded )? "expanded" : "collapsed"
+								].join( " " ) }>
+								<Icon name={ ( isExpanded )? "ic_expand_less_24px" : "ic_expoand_more_24px" }>
+							</div>
+
+							<div
+								className={ [
+									"report-item-header",
+									( isExpanded )? "expanded" : "collapsed"
 								].join( " " ) }>
 
-							</div>
-							<div
-								className={ [
-									"report-item-header"
-								].join( " " ) }>
 								<div
 									className={ [
-										"report-item-category-image"
+										"report-time-from-now"
 									].join( " " ) }>
-									<div
-										className={ [
-											"report-item-expand-button"
-										].join( " " ) }
-										onClick={ this.onReportItemExpandButtonClick }>
-										<icon
-											className={ [
-												"report-item-expand-icon"
-											].join( " " ) }
-											name={
-												( isExpanded )? "ic_expand_less_24px" : "ic_expand_more_24px"
-											}
-											src="../library/svg-sprite-navigation.svg" />
-									</div>
+									{ timeFromNow.toUpperCase( ) }
 								</div>
-								<h2
+
+								<div
 									className={ [
-										"report-item-title"
+										"report-title"
 									].join( " " ) }>
-								</h2>
-								<span
+									{ reporTitle.toUpperCase( ) }
+								</div>
+
+								<div
 									className={ [
-										"report-item-time"
+										"report-date"
 									].join( " " ) }>
-								</span>
+									{ descriptiveDate.toUpperCase( ) }
+								</div>
+
+								<div
+									className={ [
+										"report-time"
+									].join( " " ) }>
+									{ descriptiveTime.toUpperCase( ) }
+								<div>
 							</div>
+						</li>
+					);
+				},
+
+				"componentWillMount": function componentWillMount( ){
+					this.scope = this.props.scope;
+				},
+
+				"render": function onRender( ){
+					var componentState = this.state.componentState;
+
+					var reportList = this.state.reportList;
+
+					return ( 
+						<div 
+							className={ [
+								"report-list-container",
+								componentState
+							].join( " " ) }>
+
 							<div
 								className={ [
-									"report-item-footer"
+									"report-list-component",
+									componentState
 								].join( " " ) }>
-								<p
+								<ul 
 									className={ [
-										"report-item-address"
+										"list-container" 
 									].join( " " ) }>
-								</p>
-								<p
-									className={ [
-										"report-item-description"
-									].join( " " ) }>
-								</p>
+									{ reportList.map( this.onEachReportItem ) }
+								</ul>
 							</div>
 						</div>
-					</li>
-				);
-			},
+					);
+				},
 
-			"render": function onRender( ){
-				var componentState = this.state.componentState;
+				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
+				},
 
-				var reportList = this.state.reportList;
+				"componentDidMount": function componentDidMount( ){
+					this.scope.broadcast( "report-list-rendered" );	
+				}
+			} );
 
-				return ( 
-					<div 
-						className={ [
-							"crime-report-list-container",
-							componentState
-						].join( " " ) }>
+			return ReportList;
+		}
+	] )
 
-						<ul 
-							className={ [
-								"report-list" 
-							].join( " " ) }>
-							{ reportList.map( this.onEachReportItem ) }
-						</ul>
-					</div>
-				);
-			},
+	.directive( "reportList", [
+		"Event",
+		"PageFlow",
+		"ReportList",
+		function directive( Event, PageFlow, ReportList ){
+			return {
+				"restrict": "EA",
+				"scope": true,
+				"priority": 2,
+				"link": function onLink( scope, element, attributeSet ){
+					Event( scope );
 
-			"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-			},
+					PageFlow( scope, element, "report-list" );
 
-			"componentDidMount": function componentDidMount( ){
-				this.props.scope.$root.$broadcast( "crime-report-list-rendered" );	
-			}
-		} );
+					scope.on( "show-report-list",
+						function onShowReportList( ){
+							scope.showPage( );
+						} );
 
-		return {
-			"restrict": "EA",
-			"scope": true,
-			"link": function onLink( scope, element, attributeSet ){
-				PageFlow( scope, element, "report-list" );
+					scope.on( "hide-report-list",
+						function onHideReportList( ){
+							scope.hidePage( );
+						} );
 
-				scope.hidePage( );
+					scope.publish( "hide-report-list" );
 
-				scope.$on( "show-report-list",
-					function onShowReportList( ){
-						scope.showPage( );
-					} );
-
-				scope.$on( "hide-report-list",
-					function onHideReportList( ){
-						scope.hidePage( );
-					} );
-
-				React.renderComponent( <reportList scope={ scope } />, element[ 0 ] );
-			}
-		};
-	}
-] );
+					ReportList
+						.attach( scope, element );
+				}
+			};
+		}
+	] );

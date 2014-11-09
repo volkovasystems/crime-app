@@ -152,7 +152,11 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 					this.scope.publish( eventNamespace );
 				},
 
-				"onEachControlItem": function onEachControlItem( controlData, percentageWidth ){
+				"onEachControlItem": function onEachControlItem( controlData, percentageWidth, index ){
+					var hashedValue = btoa( JSON.stringify( controlData ) );
+
+					var key = [ hashedValue, index ].join( ":" );
+
 					var componentState = this.state.componentState;
 
 					var hiddenControlList = this.getHiddenControlList( );
@@ -182,6 +186,7 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 
 					return (
 						<div
+							key={ key }
 							className={ [
 								"control-item",
 								"inline-block",
@@ -221,17 +226,22 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 					);
 				},
 
-				"onEachControlGroup": function onEachControlGroup( controlData ){
+				"onEachControlGroup": function onEachControlGroup( controlData, index ){
+					var self = this;
+
+					var hashedValue = btoa( JSON.stringify( controlData ) );
+
+					var key = [ hashedValue, index ].join( ":" );
+
 					var componentState = this.state.componentState;
 
 					var controlList = controlData.controlList;
 
 					var percentageWidth = Math.floor( 100 / controlList.length );
 
-					var self = this;
-
 					return (
 						<div
+							key={ key }
 							className={ [
 								"control-group",
 								"shown",
@@ -240,20 +250,20 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 								componentState
 							].join( " " ) }>
 							{ 
-								controlList.map( function onEachControlItemDelegate( controlData ){
-									return self.onEachControlItem( controlData, percentageWidth );
+								controlList.map( function onEachControlItemDelegate( controlData, index ){
+									return self.onEachControlItem( controlData, percentageWidth, index );
 								} )
 							}
 						</div>
 					);
 				},
 
-				"onEachControl": function onEachControl( controlData ){
+				"onEachControl": function onEachControl( controlData, index ){
 					if( "controlList" in controlData ){
-						return this.onEachControlGroup( controlData );
+						return this.onEachControlGroup( controlData, index );
 					}
 					
-					return this.onEachControlItem( controlData );
+					return this.onEachControlItem( controlData, index );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){

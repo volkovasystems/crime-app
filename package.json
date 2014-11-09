@@ -58,17 +58,17 @@
   "serverSet": {
     "static": {
       "remote": "ec2-54-171-91-108.eu-west-1.compute.amazonaws.com",
-      "host": "127.0.0.1",
+      "host": "localhost",
       "port": 8000
     },
     "user": {
       "remote": "",
-      "host": "127.0.0.1",
+      "host": "localhost",
       "port": 9000
     },
     "report": {
       "remote": "ec2-54-77-242-9.eu-west-1.compute.amazonaws.com",
-      "host": "127.0.0.1",
+      "host": "localhost",
       "port": 9001
     }
   }

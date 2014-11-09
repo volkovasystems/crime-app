@@ -1,0 +1,329 @@
+2014-11-09T16:54:43.147+0800 [initandlisten] MongoDB starting : pid=8136 port=9003 dbpath=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb 64-bit host=volkovasystem
+2014-11-09T16:54:43.147+0800 [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2014-11-09T16:54:43.147+0800 [initandlisten] db version v2.6.5
+2014-11-09T16:54:43.147+0800 [initandlisten] git version: e99d4fcb4279c0279796f237aa92fe3b64560bf6
+2014-11-09T16:54:43.147+0800 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2014-11-09T16:54:43.147+0800 [initandlisten] allocator: system
+2014-11-09T16:54:43.147+0800 [initandlisten] options: { net: { bindIp: "127.0.0.1", port: 9003 }, storage: { dbPath: "C:\Users\volkova\Dropbox\code\web\crime-app\reportdb", smallFiles: true } }
+2014-11-09T16:54:43.253+0800 [initandlisten] journal dir=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal
+2014-11-09T16:54:43.313+0800 [initandlisten] recover : no journal files present, no recovery needed
+2014-11-09T16:54:44.513+0800 [initandlisten] preallocateIsFaster=true 2.02
+2014-11-09T16:54:46.020+0800 [initandlisten] allocating new ns file C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\local.ns, filling with zeroes...
+2014-11-09T16:54:49.385+0800 [FileAllocator] allocating new datafile C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\local.0, filling with zeroes...
+2014-11-09T16:54:49.420+0800 [FileAllocator] creating directory C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\_tmp
+2014-11-09T16:54:52.180+0800 [FileAllocator] done allocating datafile C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\local.0, size: 16MB,  took 2.702 secs
+2014-11-09T16:54:52.190+0800 [initandlisten] ExtentManager took 2 seconds to open: C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\local.0
+2014-11-09T16:54:52.202+0800 [initandlisten] build index on: local.startup_log properties: { v: 1, key: { _id: 1 }, name: "_id_", ns: "local.startup_log" }
+2014-11-09T16:54:52.202+0800 [initandlisten] 	 added index to empty collection
+2014-11-09T16:54:52.202+0800 [initandlisten] command local.$cmd command: create { create: "startup_log", size: 10485760, capped: true } ntoreturn:1 keyUpdates:0 numYields:0  reslen:37 6183ms
+2014-11-09T16:54:52.202+0800 [initandlisten] waiting for connections on port 9003
+2014-11-09T16:54:52.252+0800 [initandlisten] connection accepted from 127.0.0.1:55543 #1 (1 connection now open)
+2014-11-09T16:54:52.253+0800 [initandlisten] connection accepted from 127.0.0.1:55544 #2 (2 connections now open)
+2014-11-09T16:54:52.270+0800 [initandlisten] connection accepted from 127.0.0.1:55545 #3 (3 connections now open)
+2014-11-09T16:54:52.283+0800 [initandlisten] connection accepted from 127.0.0.1:55546 #4 (4 connections now open)
+2014-11-09T16:54:52.294+0800 [initandlisten] connection accepted from 127.0.0.1:55547 #5 (5 connections now open)
+2014-11-09T16:55:48.212+0800 [clientcursormon] mem (MB) res:37 virt:208
+2014-11-09T16:55:48.212+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T16:55:48.212+0800 [clientcursormon]  connections:5
+2014-11-09T17:00:48.246+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T17:00:48.246+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:00:48.246+0800 [clientcursormon]  connections:5
+2014-11-09T17:05:48.286+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T17:05:48.286+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:05:48.286+0800 [clientcursormon]  connections:5
+2014-11-09T17:10:48.323+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T17:10:48.323+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:10:48.323+0800 [clientcursormon]  connections:5
+2014-11-09T17:15:48.367+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T17:15:48.367+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:15:48.367+0800 [clientcursormon]  connections:5
+2014-11-09T17:20:48.407+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T17:20:48.407+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:20:48.407+0800 [clientcursormon]  connections:5
+2014-11-09T17:25:48.449+0800 [clientcursormon] mem (MB) res:2 virt:206
+2014-11-09T17:25:48.449+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:25:48.449+0800 [clientcursormon]  connections:5
+2014-11-09T17:30:48.487+0800 [clientcursormon] mem (MB) res:2 virt:206
+2014-11-09T17:30:48.487+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:30:48.488+0800 [clientcursormon]  connections:5
+2014-11-09T17:35:48.534+0800 [clientcursormon] mem (MB) res:2 virt:206
+2014-11-09T17:35:48.534+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:35:48.534+0800 [clientcursormon]  connections:5
+2014-11-09T17:40:48.574+0800 [clientcursormon] mem (MB) res:2 virt:206
+2014-11-09T17:40:48.574+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:40:48.574+0800 [clientcursormon]  connections:5
+2014-11-09T17:43:11.115+0800 [initandlisten] MongoDB starting : pid=2736 port=9003 dbpath=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb 64-bit host=volkovasystem
+2014-11-09T17:43:11.116+0800 [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2014-11-09T17:43:11.116+0800 [initandlisten] db version v2.6.5
+2014-11-09T17:43:11.116+0800 [initandlisten] git version: e99d4fcb4279c0279796f237aa92fe3b64560bf6
+2014-11-09T17:43:11.116+0800 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2014-11-09T17:43:11.116+0800 [initandlisten] allocator: system
+2014-11-09T17:43:11.116+0800 [initandlisten] options: { net: { bindIp: "127.0.0.1", port: 9003 }, storage: { dbPath: "C:\Users\volkova\Dropbox\code\web\crime-app\reportdb", smallFiles: true } }
+2014-11-09T17:43:11.467+0800 [initandlisten] journal dir=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal
+2014-11-09T17:43:11.470+0800 [initandlisten] recover : no journal files present, no recovery needed
+2014-11-09T17:43:12.616+0800 [initandlisten] preallocateIsFaster=true 4.86
+2014-11-09T17:43:14.468+0800 [initandlisten] waiting for connections on port 9003
+2014-11-09T17:43:14.699+0800 [initandlisten] connection accepted from 127.0.0.1:63489 #1 (1 connection now open)
+2014-11-09T17:43:14.701+0800 [initandlisten] connection accepted from 127.0.0.1:63490 #2 (2 connections now open)
+2014-11-09T17:43:14.913+0800 [initandlisten] connection accepted from 127.0.0.1:63491 #3 (3 connections now open)
+2014-11-09T17:43:15.116+0800 [initandlisten] connection accepted from 127.0.0.1:63492 #4 (4 connections now open)
+2014-11-09T17:43:15.464+0800 [initandlisten] connection accepted from 127.0.0.1:63493 #5 (5 connections now open)
+2014-11-09T17:44:14.465+0800 [clientcursormon] mem (MB) res:37 virt:208
+2014-11-09T17:44:14.465+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:44:14.465+0800 [clientcursormon]  connections:5
+2014-11-09T17:49:14.507+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T17:49:14.507+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:49:14.507+0800 [clientcursormon]  connections:5
+2014-11-09T17:54:14.548+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T17:54:14.548+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:54:14.548+0800 [clientcursormon]  connections:5
+2014-11-09T17:59:14.597+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T17:59:14.597+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T17:59:14.597+0800 [clientcursormon]  connections:5
+2014-11-09T18:04:14.639+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T18:04:14.639+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:04:14.639+0800 [clientcursormon]  connections:5
+2014-11-09T18:09:14.678+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T18:09:14.678+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:09:14.678+0800 [clientcursormon]  connections:5
+2014-11-09T18:14:14.718+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T18:14:14.718+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:14:14.718+0800 [clientcursormon]  connections:5
+2014-11-09T18:19:14.759+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T18:19:14.759+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:19:14.759+0800 [clientcursormon]  connections:5
+2014-11-09T18:24:14.803+0800 [clientcursormon] mem (MB) res:34 virt:206
+2014-11-09T18:24:14.803+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:24:14.803+0800 [clientcursormon]  connections:5
+2014-11-09T18:29:14.840+0800 [clientcursormon] mem (MB) res:33 virt:206
+2014-11-09T18:29:14.840+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:29:14.840+0800 [clientcursormon]  connections:5
+2014-11-09T18:33:27.270+0800 [initandlisten] MongoDB starting : pid=5664 port=9003 dbpath=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb 64-bit host=volkovasystem
+2014-11-09T18:33:27.271+0800 [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2014-11-09T18:33:27.271+0800 [initandlisten] db version v2.6.5
+2014-11-09T18:33:27.271+0800 [initandlisten] git version: e99d4fcb4279c0279796f237aa92fe3b64560bf6
+2014-11-09T18:33:27.271+0800 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2014-11-09T18:33:27.271+0800 [initandlisten] allocator: system
+2014-11-09T18:33:27.271+0800 [initandlisten] options: { net: { bindIp: "localhost", port: 9003 }, storage: { dbPath: "C:\Users\volkova\Dropbox\code\web\crime-app\reportdb", smallFiles: true } }
+2014-11-09T18:33:27.554+0800 [initandlisten] journal dir=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal
+2014-11-09T18:33:27.583+0800 [initandlisten] recover : no journal files present, no recovery needed
+2014-11-09T18:33:29.467+0800 [initandlisten] waiting for connections on port 9003
+2014-11-09T18:33:29.558+0800 [initandlisten] connection accepted from 127.0.0.1:65186 #1 (1 connection now open)
+2014-11-09T18:33:29.559+0800 [initandlisten] connection accepted from 127.0.0.1:65187 #2 (2 connections now open)
+2014-11-09T18:33:29.786+0800 [initandlisten] connection accepted from 127.0.0.1:65188 #3 (3 connections now open)
+2014-11-09T18:33:29.838+0800 [initandlisten] connection accepted from 127.0.0.1:65189 #4 (4 connections now open)
+2014-11-09T18:33:30.060+0800 [initandlisten] connection accepted from 127.0.0.1:65190 #5 (5 connections now open)
+2014-11-09T18:34:29.526+0800 [clientcursormon] mem (MB) res:37 virt:208
+2014-11-09T18:34:29.526+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:34:29.526+0800 [clientcursormon]  connections:5
+2014-11-09T18:39:29.679+0800 [clientcursormon] mem (MB) res:37 virt:205
+2014-11-09T18:39:29.679+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:39:29.679+0800 [clientcursormon]  connections:5
+2014-11-09T18:44:29.721+0800 [clientcursormon] mem (MB) res:37 virt:205
+2014-11-09T18:44:29.721+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:44:29.721+0800 [clientcursormon]  connections:5
+2014-11-09T18:46:10.178+0800 [initandlisten] MongoDB starting : pid=9388 port=9003 dbpath=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb 64-bit host=volkovasystem
+2014-11-09T18:46:10.178+0800 [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2014-11-09T18:46:10.178+0800 [initandlisten] db version v2.6.5
+2014-11-09T18:46:10.178+0800 [initandlisten] git version: e99d4fcb4279c0279796f237aa92fe3b64560bf6
+2014-11-09T18:46:10.178+0800 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2014-11-09T18:46:10.178+0800 [initandlisten] allocator: system
+2014-11-09T18:46:10.178+0800 [initandlisten] options: { net: { bindIp: "localhost", port: 9003 }, storage: { dbPath: "C:\Users\volkova\Dropbox\code\web\crime-app\reportdb", smallFiles: true } }
+2014-11-09T18:46:10.227+0800 [initandlisten] journal dir=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal
+2014-11-09T18:46:10.229+0800 [initandlisten] recover : no journal files present, no recovery needed
+2014-11-09T18:46:11.806+0800 [initandlisten] waiting for connections on port 9003
+2014-11-09T18:46:11.837+0800 [initandlisten] connection accepted from 127.0.0.1:49234 #1 (1 connection now open)
+2014-11-09T18:46:11.838+0800 [initandlisten] connection accepted from 127.0.0.1:49235 #2 (2 connections now open)
+2014-11-09T18:46:11.862+0800 [initandlisten] connection accepted from 127.0.0.1:49236 #3 (3 connections now open)
+2014-11-09T18:46:11.894+0800 [initandlisten] connection accepted from 127.0.0.1:49237 #4 (4 connections now open)
+2014-11-09T18:46:11.930+0800 [initandlisten] connection accepted from 127.0.0.1:49238 #5 (5 connections now open)
+2014-11-09T18:47:11.817+0800 [clientcursormon] mem (MB) res:37 virt:208
+2014-11-09T18:47:11.817+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:47:11.817+0800 [clientcursormon]  connections:5
+2014-11-09T18:52:11.854+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T18:52:11.854+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:52:11.854+0800 [clientcursormon]  connections:5
+2014-11-09T18:57:11.896+0800 [clientcursormon] mem (MB) res:37 virt:206
+2014-11-09T18:57:11.896+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:57:11.896+0800 [clientcursormon]  connections:5
+2014-11-09T18:57:39.810+0800 [initandlisten] MongoDB starting : pid=6784 port=9003 dbpath=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb 64-bit host=volkovasystem
+2014-11-09T18:57:39.810+0800 [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2014-11-09T18:57:39.810+0800 [initandlisten] db version v2.6.5
+2014-11-09T18:57:39.810+0800 [initandlisten] git version: e99d4fcb4279c0279796f237aa92fe3b64560bf6
+2014-11-09T18:57:39.810+0800 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2014-11-09T18:57:39.810+0800 [initandlisten] allocator: system
+2014-11-09T18:57:39.810+0800 [initandlisten] options: { net: { bindIp: "localhost", port: 9003 }, storage: { dbPath: "C:\Users\volkova\Dropbox\code\web\crime-app\reportdb", smallFiles: true } }
+2014-11-09T18:57:39.868+0800 [initandlisten] journal dir=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal
+2014-11-09T18:57:39.871+0800 [initandlisten] recover : no journal files present, no recovery needed
+2014-11-09T18:57:41.387+0800 [initandlisten] waiting for connections on port 9003
+2014-11-09T18:57:41.416+0800 [initandlisten] connection accepted from 127.0.0.1:63208 #1 (1 connection now open)
+2014-11-09T18:57:41.418+0800 [initandlisten] connection accepted from 127.0.0.1:63209 #2 (2 connections now open)
+2014-11-09T18:57:41.442+0800 [initandlisten] connection accepted from 127.0.0.1:63210 #3 (3 connections now open)
+2014-11-09T18:57:41.475+0800 [initandlisten] connection accepted from 127.0.0.1:63211 #4 (4 connections now open)
+2014-11-09T18:57:41.494+0800 [initandlisten] connection accepted from 127.0.0.1:63212 #5 (5 connections now open)
+2014-11-09T18:58:37.613+0800 [conn3] allocating new ns file C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\reportdb.ns, filling with zeroes...
+2014-11-09T18:58:41.388+0800 [clientcursormon] mem (MB) res:38 virt:209
+2014-11-09T18:58:41.388+0800 [clientcursormon]  mapped (incl journal view):64
+2014-11-09T18:58:41.388+0800 [clientcursormon]  connections:5
+2014-11-09T18:58:41.425+0800 [FileAllocator] allocating new datafile C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\reportdb.0, filling with zeroes...
+2014-11-09T18:58:41.431+0800 [FileAllocator] creating directory C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\_tmp
+2014-11-09T18:58:44.541+0800 [FileAllocator] done allocating datafile C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\reportdb.0, size: 16MB,  took 3.045 secs
+2014-11-09T18:58:44.549+0800 [conn3] ExtentManager took 3 seconds to open: C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\reportdb.0
+2014-11-09T18:58:44.553+0800 [conn3] build index on: reportdb.reports properties: { v: 1, key: { _id: 1 }, name: "_id_", ns: "reportdb.reports" }
+2014-11-09T18:58:44.553+0800 [conn3] 	 added index to empty collection
+2014-11-09T18:58:44.554+0800 [conn3] insert reportdb.reports query: { reportID: "eyJ0aXRsZSI6Im0iLCJkZXNjcmlwdGlvbiI6Im0iLCJ0aW1lc3RhbXAiOjE0MTU1MzA3MTcxNzcsImNhdGVnb3J5Ijoibm8tY2F0ZWdvcnkiLCJwb3NpdGlvbiI6eyJsYXRpdHVkZSI6OC40ODAxOT...", reportState: "pending", reporterID: "10204888580322591", reporterState: "anonymous", reportTimestamp: new Date(1415530717177), reportMapImageURL: "https://maps.googleapis.com/maps/api/staticmap?&center=8.480198099999999,124.64452189999997&zoom=15&size=500x400&markers=color:red%7C8.480198099999999...", reportTitle: "m", reportDescription: "m", reportCaseType: "no-category", reportAddress: "Yacapin Street, Cagayan de Oro, Misamis Oriental, Northern Mindanao, Philippines", _id: ObjectId('545f48dd23aed580204eac40'), reportMediaList: [], reportLocation: { latitude: 8.480198099999999, longitude: 124.6445219, zoom: 15 }, __v: 0 } ninserted:1 keyUpdates:0 numYields:0 locks(micros) w:6942274 6942ms
+2014-11-09T18:58:44.554+0800 [conn3] command reportdb.$cmd command: insert { $msg: "query not recording (too large)" } keyUpdates:0 numYields:0 locks(micros) w:420 reslen:40 6945ms
+2014-11-09T18:59:41.396+0800 [clientcursormon] mem (MB) res:37 virt:269
+2014-11-09T18:59:41.396+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T18:59:41.396+0800 [clientcursormon]  connections:5
+2014-11-09T19:01:08.465+0800 [initandlisten] connection accepted from 127.0.0.1:63376 #6 (6 connections now open)
+2014-11-09T19:04:41.439+0800 [clientcursormon] mem (MB) res:37 virt:270
+2014-11-09T19:04:41.439+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:04:41.439+0800 [clientcursormon]  connections:6
+2014-11-09T19:07:47.269+0800 [initandlisten] MongoDB starting : pid=7464 port=9003 dbpath=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb 64-bit host=volkovasystem
+2014-11-09T19:07:47.270+0800 [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2014-11-09T19:07:47.270+0800 [initandlisten] db version v2.6.5
+2014-11-09T19:07:47.270+0800 [initandlisten] git version: e99d4fcb4279c0279796f237aa92fe3b64560bf6
+2014-11-09T19:07:47.270+0800 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2014-11-09T19:07:47.270+0800 [initandlisten] allocator: system
+2014-11-09T19:07:47.270+0800 [initandlisten] options: { net: { bindIp: "localhost", port: 9003 }, storage: { dbPath: "C:\Users\volkova\Dropbox\code\web\crime-app\reportdb", smallFiles: true } }
+2014-11-09T19:07:47.575+0800 [initandlisten] journal dir=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal
+2014-11-09T19:07:47.578+0800 [initandlisten] recover : no journal files present, no recovery needed
+2014-11-09T19:07:48.782+0800 [initandlisten] preallocateIsFaster=true 5.44
+2014-11-09T19:07:50.352+0800 [initandlisten] waiting for connections on port 9003
+2014-11-09T19:07:50.484+0800 [initandlisten] connection accepted from 127.0.0.1:63466 #1 (1 connection now open)
+2014-11-09T19:07:50.484+0800 [initandlisten] connection accepted from 127.0.0.1:63467 #2 (2 connections now open)
+2014-11-09T19:07:50.485+0800 [initandlisten] connection accepted from 127.0.0.1:63468 #3 (3 connections now open)
+2014-11-09T19:07:50.485+0800 [initandlisten] connection accepted from 127.0.0.1:63469 #4 (4 connections now open)
+2014-11-09T19:07:50.485+0800 [initandlisten] connection accepted from 127.0.0.1:63470 #5 (5 connections now open)
+2014-11-09T19:08:50.299+0800 [clientcursormon] mem (MB) res:37 virt:272
+2014-11-09T19:08:50.299+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:08:50.299+0800 [clientcursormon]  connections:5
+2014-11-09T19:08:51.142+0800 [initandlisten] connection accepted from 127.0.0.1:63527 #6 (6 connections now open)
+2014-11-09T19:13:50.390+0800 [clientcursormon] mem (MB) res:37 virt:271
+2014-11-09T19:13:50.390+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:13:50.390+0800 [clientcursormon]  connections:6
+2014-11-09T19:18:50.434+0800 [clientcursormon] mem (MB) res:37 virt:271
+2014-11-09T19:18:50.434+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:18:50.434+0800 [clientcursormon]  connections:6
+2014-11-09T19:23:50.480+0800 [clientcursormon] mem (MB) res:2 virt:271
+2014-11-09T19:23:50.480+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:23:50.480+0800 [clientcursormon]  connections:6
+2014-11-09T19:28:50.519+0800 [clientcursormon] mem (MB) res:2 virt:271
+2014-11-09T19:28:50.519+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:28:50.520+0800 [clientcursormon]  connections:6
+2014-11-09T19:33:50.567+0800 [clientcursormon] mem (MB) res:2 virt:271
+2014-11-09T19:33:50.567+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:33:50.567+0800 [clientcursormon]  connections:6
+2014-11-09T19:38:50.634+0800 [clientcursormon] mem (MB) res:2 virt:271
+2014-11-09T19:38:50.634+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:38:50.634+0800 [clientcursormon]  connections:6
+2014-11-09T19:43:50.723+0800 [clientcursormon] mem (MB) res:2 virt:271
+2014-11-09T19:43:50.724+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T19:43:50.724+0800 [clientcursormon]  connections:6
+2014-11-09T21:10:00.504+0800 [clientcursormon] mem (MB) res:2 virt:271
+2014-11-09T21:10:00.504+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T21:10:00.504+0800 [clientcursormon]  connections:6
+2014-11-09T22:42:06.704+0800 [initandlisten] MongoDB starting : pid=864 port=9003 dbpath=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb 64-bit host=volkovasystem
+2014-11-09T22:42:06.704+0800 [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2014-11-09T22:42:06.704+0800 [initandlisten] db version v2.6.5
+2014-11-09T22:42:06.704+0800 [initandlisten] git version: e99d4fcb4279c0279796f237aa92fe3b64560bf6
+2014-11-09T22:42:06.704+0800 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2014-11-09T22:42:06.704+0800 [initandlisten] allocator: system
+2014-11-09T22:42:06.704+0800 [initandlisten] options: { net: { bindIp: "localhost", port: 9003 }, storage: { dbPath: "C:\Users\volkova\Dropbox\code\web\crime-app\reportdb", smallFiles: true } }
+2014-11-09T22:42:06.813+0800 [initandlisten] journal dir=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal
+2014-11-09T22:42:06.813+0800 [initandlisten] recover begin
+2014-11-09T22:42:06.813+0800 [initandlisten] recover lsn: 107826
+2014-11-09T22:42:06.813+0800 [initandlisten] recover C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal\j._0
+2014-11-09T22:42:06.845+0800 [initandlisten] recover skipping application of section seq:0 < lsn:107826
+2014-11-09T22:42:07.226+0800 [initandlisten] recover cleaning up
+2014-11-09T22:42:07.226+0800 [initandlisten] removeJournalFiles
+2014-11-09T22:42:07.335+0800 [initandlisten] recover done
+2014-11-09T22:42:08.741+0800 [initandlisten] preallocateIsFaster=true 4.28
+2014-11-09T22:42:10.439+0800 [initandlisten] preallocateIsFaster check took 3.089 secs
+2014-11-09T22:42:11.157+0800 [initandlisten] waiting for connections on port 9003
+2014-11-09T22:42:11.204+0800 [initandlisten] connection accepted from 127.0.0.1:51374 #1 (1 connection now open)
+2014-11-09T22:42:11.204+0800 [initandlisten] connection accepted from 127.0.0.1:51375 #2 (2 connections now open)
+2014-11-09T22:42:11.236+0800 [initandlisten] connection accepted from 127.0.0.1:51376 #3 (3 connections now open)
+2014-11-09T22:42:11.267+0800 [initandlisten] connection accepted from 127.0.0.1:51377 #4 (4 connections now open)
+2014-11-09T22:42:11.298+0800 [initandlisten] connection accepted from 127.0.0.1:51378 #5 (5 connections now open)
+2014-11-09T22:43:11.273+0800 [clientcursormon] mem (MB) res:53 virt:272
+2014-11-09T22:43:11.273+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T22:43:11.273+0800 [clientcursormon]  connections:5
+2014-11-09T22:43:32.979+0800 [initandlisten] MongoDB starting : pid=6720 port=9003 dbpath=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb 64-bit host=volkovasystem
+2014-11-09T22:43:32.979+0800 [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2014-11-09T22:43:32.979+0800 [initandlisten] db version v2.6.5
+2014-11-09T22:43:32.979+0800 [initandlisten] git version: e99d4fcb4279c0279796f237aa92fe3b64560bf6
+2014-11-09T22:43:32.979+0800 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2014-11-09T22:43:32.979+0800 [initandlisten] allocator: system
+2014-11-09T22:43:32.979+0800 [initandlisten] options: { net: { bindIp: "localhost", port: 9003 }, storage: { dbPath: "C:\Users\volkova\Dropbox\code\web\crime-app\reportdb", smallFiles: true } }
+2014-11-09T22:43:33.026+0800 [initandlisten] journal dir=C:\Users\volkova\Dropbox\code\web\crime-app\reportdb\journal
+2014-11-09T22:43:33.026+0800 [initandlisten] recover : no journal files present, no recovery needed
+2014-11-09T22:43:34.745+0800 [initandlisten] waiting for connections on port 9003
+2014-11-09T22:43:34.776+0800 [initandlisten] connection accepted from 127.0.0.1:51395 #1 (1 connection now open)
+2014-11-09T22:43:34.776+0800 [initandlisten] connection accepted from 127.0.0.1:51396 #2 (2 connections now open)
+2014-11-09T22:43:34.792+0800 [initandlisten] connection accepted from 127.0.0.1:51397 #3 (3 connections now open)
+2014-11-09T22:43:34.808+0800 [initandlisten] connection accepted from 127.0.0.1:51398 #4 (4 connections now open)
+2014-11-09T22:43:34.823+0800 [initandlisten] connection accepted from 127.0.0.1:51399 #5 (5 connections now open)
+2014-11-09T22:43:49.656+0800 [initandlisten] connection accepted from 127.0.0.1:51400 #6 (6 connections now open)
+2014-11-09T22:44:34.889+0800 [clientcursormon] mem (MB) res:53 virt:273
+2014-11-09T22:44:34.889+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T22:44:34.889+0800 [clientcursormon]  connections:6
+2014-11-09T22:49:35.626+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T22:49:35.626+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T22:49:35.626+0800 [clientcursormon]  connections:6
+2014-11-09T22:54:36.480+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T22:54:36.480+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T22:54:36.480+0800 [clientcursormon]  connections:6
+2014-11-09T22:59:37.078+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T22:59:37.078+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T22:59:37.078+0800 [clientcursormon]  connections:6
+2014-11-09T23:04:37.598+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T23:04:37.598+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T23:04:37.598+0800 [clientcursormon]  connections:6
+2014-11-09T23:09:38.140+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T23:09:38.140+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T23:09:38.140+0800 [clientcursormon]  connections:6
+2014-11-09T23:14:38.625+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T23:14:38.625+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T23:14:38.625+0800 [clientcursormon]  connections:6
+2014-11-09T23:19:39.211+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T23:19:39.211+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T23:19:39.211+0800 [clientcursormon]  connections:6
+2014-11-09T23:24:39.770+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T23:24:39.770+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T23:24:39.770+0800 [clientcursormon]  connections:6
+2014-11-09T23:29:40.379+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T23:29:40.379+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T23:29:40.379+0800 [clientcursormon]  connections:6
+2014-11-09T23:34:40.928+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-09T23:34:40.928+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-09T23:34:40.928+0800 [clientcursormon]  connections:6
+2014-11-10T06:17:45.312+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-10T06:17:45.312+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-10T06:17:45.312+0800 [clientcursormon]  connections:6
+2014-11-10T06:22:45.868+0800 [clientcursormon] mem (MB) res:53 virt:271
+2014-11-10T06:22:45.868+0800 [clientcursormon]  mapped (incl journal view):128
+2014-11-10T06:22:45.868+0800 [clientcursormon]  connections:6
+2014-11-10T06:23:42.886+0800 CTRL_CLOSE_EVENT signal
+2014-11-10T06:23:42.886+0800 [consoleTerminate] got CTRL_CLOSE_EVENT, will terminate after current cmd ends
+2014-11-10T06:23:42.886+0800 [consoleTerminate] now exiting
+2014-11-10T06:23:42.886+0800 [consoleTerminate] dbexit: 
+2014-11-10T06:23:42.886+0800 [consoleTerminate] shutdown: going to close listening sockets...
+2014-11-10T06:23:42.886+0800 [consoleTerminate] closing listening socket: 484
+2014-11-10T06:23:42.886+0800 [consoleTerminate] shutdown: going to flush diaglog...
+2014-11-10T06:23:42.886+0800 [consoleTerminate] shutdown: going to close sockets...
+2014-11-10T06:23:42.886+0800 [consoleTerminate] shutdown: waiting for fs preallocator...
+2014-11-10T06:23:42.886+0800 [consoleTerminate] shutdown: lock for final commit...
+2014-11-10T06:23:42.886+0800 [consoleTerminate] shutdown: final commit...
+2014-11-10T06:23:42.886+0800 [conn5] end connection 127.0.0.1:51399 (5 connections now open)
+2014-11-10T06:23:42.886+0800 [conn6] end connection 127.0.0.1:51400 (5 connections now open)
+2014-11-10T06:23:42.886+0800 [conn1] end connection 127.0.0.1:51395 (5 connections now open)
+2014-11-10T06:23:42.886+0800 [conn2] end connection 127.0.0.1:51396 (5 connections now open)
+2014-11-10T06:23:42.886+0800 [conn3] end connection 127.0.0.1:51397 (5 connections now open)
+2014-11-10T06:23:42.886+0800 [conn4] end connection 127.0.0.1:51398 (0 connections now open)
+2014-11-10T06:23:42.901+0800 [consoleTerminate] shutdown: closing all files...
+2014-11-10T06:23:42.917+0800 [consoleTerminate] closeAllFiles() finished
+2014-11-10T06:23:42.917+0800 [consoleTerminate] journalCleanup...
+2014-11-10T06:23:42.948+0800 [consoleTerminate] removeJournalFiles
+2014-11-10T06:23:42.979+0800 [consoleTerminate] shutdown: removing fs lock...

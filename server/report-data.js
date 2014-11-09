@@ -29,9 +29,11 @@ database.createDatabase( "Report", "reportdb", host, databasePort,
 					"longitude": Number,
 					"zoom": Number
 				},
+				"reportMapImageURL": String,
 				"reportTitle": String,
 				"reportDescription": String,
 				"reportCaseType": String,
+				"reportAddress": String,
 				"reportMediaList": Array
 			} );
 

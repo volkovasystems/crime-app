@@ -60,6 +60,25 @@ angular
 									callback( );
 								} );
 						} );
+
+					this.scope.on( "get-report-data",
+						function onGetReportData( callback ){
+							var reportData = {
+								"title": self.state.title,
+								"description": self.state.description,
+								"timestamp": Date.now( ),
+								"category": "no-category",
+								"position": {
+									"latitude": self.state.position.lat( ),
+									"longitude": self.state.position.lng( )
+								},
+								"zoom": self.state.zoom,
+								"address": self.state.address,
+								"staticMapURL": self.state.staticMapURL
+							};
+							
+							callback( null, reportData );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -109,25 +128,31 @@ angular
 
 								<div
 									className={ [
-										"report-form"
+										"report-body"
 									].join( " " ) }>
 
-									<MapPreview
-										title="crime location"
-										parent={ this }
-										position={ position }
-										zoom={ zoom } 
-										address={ address } />
+									<div
+										className={ [
+											"report-form"
+										].join( " " ) }>
+										
+										<MapPreview
+											title="crime location"
+											parent={ this }
+											position={ position }
+											zoom={ zoom } 
+											address={ address } />
 
-									<TitleInput 
-										parent={ this }
-										title="crime title"
-										titleName="title" />
+										<TitleInput 
+											parent={ this }
+											title="crime title"
+											titleName="title" />
 
-									<DescriptionInput 
-										parent={ this }
-										title="crime description"
-										titleName="description" />
+										<DescriptionInput 
+											parent={ this }
+											title="crime description"
+											titleName="description" />
+									</div>
 								</div>
 								
 							</div>

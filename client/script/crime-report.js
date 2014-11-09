@@ -2,7 +2,14 @@ Crime
 	.directive( "reportController", [
 		"Event",
 		"ProgressBar",
-		function directive( Event, ProgressBar ){
+		"$http",
+		"getReportServerData",
+		function directive( 
+			Event, 
+			ProgressBar, 
+			$http,
+			getReportServerData
+		){
 			return {
 				"restrict": "A",
 				"scope": true,
@@ -61,6 +68,68 @@ Crime
 							],
 								function lastly( error ){
 									scope.finishLoading( );
+								} );
+						} );
+
+					scope.on( "control-click:crime-report-send",
+						function onReportSend( ){
+							async.waterfall( [
+								function getUserData( callback ){
+									scope.publish( "get-user-account-data", callback );
+								},
+
+								function getReportData( userAccountData, callback ){
+									scope.publish( "get-report-data",
+										function delegateCallback( error, reportData ){
+											callback( error, userAccountData, reportData );
+										} );
+								},
+
+								function applyServerFormat( userAccountData, reportData, callback ){
+									var hashedValue = btoa( JSON.stringify( reportData ) );
+
+									var formattedReportData = {
+										"reportID": hashedValue,
+										"reportState": "pending",
+										"reporterID": userAccountData.userID,
+										"reporterState": "anonymous",
+										"reportTimestamp": reportData.timestamp,
+										"reportLocation": {
+											"latitude": reportData.position.latitude,
+											"longitude": reportData.position.longitude,
+											"zoom": reportData.zoom
+										},
+										"reportMapImageURL": reportData.staticMapURL,
+										"reportTitle": reportData.title,
+										"reportDescription": reportData.description,
+										"reportCaseType": reportData.category,
+										"reportAddress": reportData.address
+									};
+
+									callback( null, formattedReportData, userAccountData );
+								},
+
+								function sendReportData( reportData, userAccountData, callback ){
+									var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/add" );
+
+									var hashedAccessID = btoa( userAccountData.accessToken ).replace( /[^A-Za-z0-9]/g, "" );
+
+									requestEndpoint = requestEndpoint.replace( ":accessID", hashedAccessID );
+
+									$http.post( requestEndpoint, reportData )
+										.success( function onSuccess( data, status ){
+											callback( null, status );
+										} )
+										.error( function onError( data, status ){
+											//: @todo: Do something on error.
+											callback( new Error( "error sending report data" ), status );
+										} );
+								}
+							],
+								function lastly( error ){
+									if( error ){
+										console.error( error );	
+									}
 								} );
 						} );
 

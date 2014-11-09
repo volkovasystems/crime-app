@@ -97,7 +97,9 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 				"onEachDashItem": function onEachDashItem( dashItem, index ){
 					var componentState = this.state.componentState;
 
-					var key = [ dashItem, index ].join( ":" );
+					var hashedValue = btoa( JSON.stringify( dashItem ) );
+
+					var key = [ hashedValue, index ].join( ":" );
 
 					var dashItemIcon = this.getDashItemIconSet( )[ dashItem ]; 
 

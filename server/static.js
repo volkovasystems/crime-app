@@ -17,18 +17,23 @@ app.use( function onRequest( request, response, next ){
 	next( );
 } );
 
-app.use( express[ "static" ]( "deploy" ) );
+var staticDirectory = "build";
+if( argv.production ){
+	staticDirectory = "deploy";
+}
+
+app.get( "/get/all/api/endpoint",
+	function onRequest( request, response ){
+		response.status( 200 ).json( serverSet );
+	} );
+
+app.use( express[ "static" ]( staticDirectory ) );
 
 app.use( function onRequest( request, response, next ){
 	//: @todo: Serve 404 page properly.
 	response.status( 404 )
 			.send( "404: Welcome to the dark side." );
 } );
-
-app.get( "/get/all/api/endpoint",
-	function onRequest( request, response ){
-		response.status( 200 ).json( serverSet );
-	} );
 
 if( argv.production ){
 	app.listen( port );
