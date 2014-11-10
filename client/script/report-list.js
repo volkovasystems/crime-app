@@ -65,7 +65,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 									className={ [
 										"report-title"
 									].join( " " ) }>
-									{ reporTitle.toUpperCase( ) }
+									{ reportTitle.toUpperCase( ) }
 								</div>
 
 								<div
