@@ -1,12 +1,16 @@
-var serverData = require( "./package.js" ).packageData.serverSet.report;
+var serverSet = require( "./package.js" ).packageData.serverSet;
+var serverData = serverSet.report;
 var host = serverData.host;
 var port = serverData.port;
 
 var util = require( "util" );
 
+var _ = require( "lodash" );
 var argv = require( "yargs" ).argv;
 var express = require( "express" );
+var unirest = require( "unirest" );
 var bodyParser = require( "body-parser" );
+var session = require( "express-session" );
 var app = express( );
 
 var mongoose = require( "mongoose" );
@@ -15,6 +19,11 @@ require( "./report-data.js" );
 var async = require( "async" );
 
 app.use( bodyParser.json( ) );
+app.use( session( { 
+	"secret": "#3vtl+6gw)eew8vdonh(z86mvi)#cn4__isxqoy#(_svy2g2hy",
+	"resave": true,
+	"saveUninitialized": true
+} ) );
 
 /*:
 	Solution taken from this:
@@ -22,11 +31,12 @@ app.use( bodyParser.json( ) );
 */
 if( !argv.production ){
 	app.use( function allowCrossDomain( request, response, next ){
-		response.header( "Access-Control-Allow-Origin", "*" );
-		response.header( "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE" );
-		response.header( "Access-Control-Allow-Headers", "Content-Type, Authorization" );
+		response.header( "Access-Control-Allow-Origin", request.headers.origin || "*" );
+		response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
+		response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
+		response.header( "Access-Control-Max-Age", 10 );
 		  
-		if( "OPTIONS" == request.method ){
+		if( "OPTIONS" == request.method.toUpperCase( ) ){
 			response.sendStatus( 200 );
 
 		}else{
@@ -35,9 +45,38 @@ if( !argv.production ){
 	} );	
 }
 
+var resolveURL = require( "./resolve-url.js" ).resolveURL;
+resolveURL( serverSet.user );
+var userServer = serverSet.user;
+
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-		next( );
+		var accessID = request.param( "accessID" );
+
+		var requestEndpoint = userServer.joinPath( "api/:accessID/verify" );
+
+		requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
+		console.log( requestEndpoint );
+
+		if( !_.isEmpty( request.session.userData )
+			&& request.session.userData.accessID === accessID )
+		{
+			next( );
+
+		}else{
+			unirest
+				.get( requestEndpoint )
+				.end( function onResponse( response ){
+					var userData = response.body;
+
+					request.session.userData = userData;
+
+					request.session.userData.accessID = accessID;
+
+					next( );
+				} );	
+		}
 	} );
 
 app.get( "/api/:accessID/report/get/all",
@@ -67,7 +106,7 @@ app.get( "/api/:accessID/report/get/all",
 			} );
 	} );
 
-app.get( "/api/:accessID/report/:reportID/get",
+app.get( "/api/:accessID/report/get/:reportID",
 	function onReportGet( request, response ){
 
 	} );

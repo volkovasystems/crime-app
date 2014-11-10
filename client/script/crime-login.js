@@ -15,8 +15,12 @@ Crime
 	] )
 	
 	.run( [
+		"Event",
+		"$rootScope",
 		"getFacebookAppID",
-		function onRun( getFacebookAppID ){
+		function onRun( Event, $rootScope, getFacebookAppID ){
+			Event( $rootScope );
+
 			window.fbAsyncInit = function( ){
 				FB.init( {
 					"appId": getFacebookAppID( ),
@@ -24,6 +28,8 @@ Crime
 					"cookie": true,
 					"version": "v2.1"
 				} );
+
+				$rootScope.publish( "facebook-sdk-loaded" );
 			};
 
 			( function( d, s, id ){
@@ -42,17 +48,96 @@ Crime
 	] )
 
 	.directive( "loginController", [
+		"ProgressBar",
 		"Event",
 		"CRIME_LOGO_IMAGE_SOURCE",
-		function directive( Event, CRIME_LOGO_IMAGE_SOURCE ){
+		"$http",
+		"getUserServerData",
+		function directive( 
+			ProgressBar,
+			Event, 
+			CRIME_LOGO_IMAGE_SOURCE,
+			$http,
+			getUserServerData
+		){
 			return {
 				"restrict": "A",
 				"scope": true,
 				"priority": 1,
 				"link": function onLink( scope, element, attributeSet ){
+					ProgressBar( scope );
+
 					Event( scope );
 
 					scope.publish( "change-logo-image", CRIME_LOGO_IMAGE_SOURCE );
+
+					//: Login user in the server. This is a second verification.
+					scope.on( "logged-in",
+						function onLoggedIn( loginType ){
+							async.waterfall( [
+								function initiateLoading( callback ){
+									scope.startLoading( );
+
+									callback( );
+								},
+
+								function getUserAccountData( callback ){
+									scope.publish( "get-user-account-data",
+										function onGetUserAccountData( error, userAccountData ){
+											callback( error, userAccountData );
+										} );
+								},
+
+								function getBasicProfileData( userAccountData, callback ){
+									scope.publish( "get-basic-profile-data",
+										function onGetBasicProfileData( error, profileData ){
+											callback( error, userAccountData, profileData );
+										} );
+								},
+
+								function applyServerFormat( userAccountData, profileData, callback ){
+									var userData = {
+										"userID": userAccountData.userID
+									};
+
+									_.extend( userData, profileData );
+
+									var hashedValue = btoa( JSON.stringify( userData ) );
+
+									var formattedUserData = {
+										"userID": hashedValue,
+										"userAccountID": userAccountData.userID,
+										"userAccountType": loginType,
+										"userDisplayName": profileData.profileName,
+										"userProfileLink": profileData.profileURL,
+										"userProfileImageURL": profileData.profileImage
+									};
+
+									callback( null, formattedUserData );
+								},
+
+								function loginToTheServer( userData, callback ){
+									var requestEndpoint = getUserServerData( ).joinPath( "user/login" );
+
+									$http.post( requestEndpoint, userData )
+										.success( function onSuccess( data, status ){
+											callback( null, status );
+										} )
+										.error( function onError( data, status ){
+											//: @todo: Do something on error.
+											callback( new Error( "error sending user data" ), status );
+										} );
+								}
+							],
+								function lastly( error ){
+									if( error ){
+										console.error( error );
+									}
+
+									scope.finishLoading( );
+								} );
+
+						} );
 
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){

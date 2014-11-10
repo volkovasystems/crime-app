@@ -9,11 +9,11 @@ Crime
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
-					scope.on( "proceed-default-app-flow",
-						function onProceedDefaultAppFlow( loginData ){
+					scope.on( "logged-in",
+						function onLoggedIn( loginType ){
 							scope.publish( "show-minified-profile" );
 
-							scope.broadcast( "initiate-basic-profile-data-retrieval", loginData.loginType );
+							scope.broadcast( "initiate-basic-profile-data-retrieval", loginType );
 						} );
 				}
 			}

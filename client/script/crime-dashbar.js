@@ -63,8 +63,8 @@ Crime
 				"link": function onLink( scope, element, attribute ){
 					Event( scope );
 
-					scope.on( "proceed-default-app-flow",
-						function onProceedDefaultAppFlow( ){
+					scope.on( "logged-in",
+						function onLoggedIn( ){
 							scope.broadcast( "set-hidden-dash-item-list", [ ] );
 						} );
 				}

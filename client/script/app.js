@@ -89,14 +89,20 @@ angular
 						} );
 				},
 				function checkRender( callback ){
-					$rootScope.on( "search-rendered", 
+					$rootScope.on( "report-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "report-list-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				}
 			],
 				function lastly( ){
-					$rootScope.broadcast( "show-default-page" );
+					$rootScope.broadcast( "all-app-component-rendered" );
 
 					$rootScope.finishLoading( );
 				} );

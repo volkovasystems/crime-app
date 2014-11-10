@@ -4,6 +4,7 @@ var port = serverData.port;
 
 var util = require( "util" );
 
+var argv = require( "yargs" ).argv;
 var express = require( "express" );
 var bodyParser = require( "body-parser" );
 var app = express( );
@@ -15,9 +16,67 @@ var async = require( "async" );
 
 app.use( bodyParser.json( ) );
 
+/*:
+	Solution taken from this:
+	https://gist.github.com/cuppster/2344435
+*/
+if( !argv.production ){
+	app.use( function allowCrossDomain( request, response, next ){
+		response.header( "Access-Control-Allow-Origin", request.headers.origin || "*" );
+		response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
+		response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
+		response.header( "Access-Control-Max-Age", 10 );
+		  
+		if( "OPTIONS" == request.method.toUpperCase( ) ){
+			response.sendStatus( 200 );
+
+		}else{
+			next( );
+		}
+	} );	
+}
+
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
 		next( );		
+	} );
+
+app.get( "/api/:accessID/verify",
+	function onUserVerify( request, response ){
+		//: Bypass this first.
+		//: @todo: Implement this by checking the access token based on the account type.
+		mongoose.model( "User" )
+			.where( { 
+				"userAccountID": request.param( "userAccountID" ) 
+			} )
+			.or( {
+				"userAccessID": request.param( "userAccessID" )
+			} )
+			.findOne( function callback( error, userData ){
+				if( error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": error.message
+						} );
+
+				}else if( userData ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "success",
+							"data": userData
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed"
+						} );
+				}
+			} );
 	} );
 
 app.get( "/api/:accessID/user/get/all",
@@ -36,7 +95,7 @@ app.post( "/user/register",
 			function checkIfUserExists( callback ){
 				mongoose.model( "User" )
 					.findOne( { 
-						"userID": request.param( "userID" ) 
+						"userAccountID": request.param( "userAccountID" ) 
 					}, callback );
 			},
 
@@ -51,10 +110,21 @@ app.post( "/user/register",
 				}
 			},
 
-			function registerUser( callback ){
+			function processAccessID( callback ){
+				var accessToken = request.param( "userAccountToken" );
+				
+				var hashedAccessID = new Buffer( accessToken ).toString( "base64" ).replace( /[^A-Za-z0-9]/g, "" );
+
+				callback( null, hashedAccessID );
+			},
+
+			function registerUser( accessID, callback ){
 				var newUser = new mongoose.model( "User" )( {
 					"userID": request.param( "userID" ),
 					"userState": "logged-in",
+					"accessState": "pending",
+					"accessID": accessID,
+					"userAccountID": request.param( "userAccountID" ),
 					"userAccountType": request.param( "userAccountType" ),
 					"userAccountToken": request.param( "userAccountToken" ),
 					"userDisplayName": request.param( "userDisplayName" ),
@@ -62,23 +132,38 @@ app.post( "/user/register",
 					"userProfileImageURL": request.param( "userProfileImageURL" ),
 				} );
 
-				userData.save( callback );
+				userData.save( function onSave( error ){
+					callback( error, accessID );
+				} );
 			}
 		],
-			function lastly( error ){
-				if( error instanceof Error ){
+			function lastly( state, accessID ){
+				if( typeof state == "boolean" ){
+					//: Do something?
+
+				}else if( state ){
 					response
 						.status( 500 )
 						.json( {
 							"status": "error",
-							"data": error.message
+							"data": state.message
 						} );
 
-				}else if( !error ){
-					response
-						.status( 200 )
-						.json( {
-							"status": "success"
+				}else{
+					var requestEndpoint = [ "api", accessID, "verify" ].join( "/" );
+
+					response.redirect( requestEndpoint );
+
+					unirest
+						.get( requestEndpoint )
+						.end( function onResponse( response ){
+							var userData = response.body;
+
+							request.session.userData = userData;
+
+							request.session.userData.accessID = accessID;
+
+							next( );
 						} );
 				}
 			} );
@@ -90,7 +175,7 @@ app.post( "/user/login",
 			function checkIfUserExists( callback ){
 				mongoose.model( "User" )
 					.findOne( { 
-						"userID": request.param( "userID" ) 
+						"userAccountID": request.param( "userAccountID" ) 
 					}, callback );
 			},
 
@@ -99,8 +184,6 @@ app.post( "/user/login",
 					callback( null, userData );
 
 				}else{
-					response.redirect( "/user/register" );
-
 					callback( true );
 				}
 			},
@@ -119,8 +202,10 @@ app.post( "/user/login",
 				userData.save( callback );
 			}
 		],
-			function lastly( error ){
-				if( error instanceof Error ){
+			function lastly( state ){
+				if( typeof state == "boolean" ){
+
+				}if( state ){
 					response
 						.status( 500 )
 						.json( {
@@ -129,11 +214,13 @@ app.post( "/user/login",
 						} );
 
 				}else if( !error ){
-					response
-						.status( 200 )
-						.json( {
-							"status": "success"
-						} );
+					var accessToken = request.param( "userAccountType" );
+				
+					var hashedAccessID = new Buffer( accessToken ).toString( "base64" ).replace( /[^A-Za-z0-9]/g, "" );
+
+					var requestEndpoint = [ "api", hashedAccessID, "verify" ].join( "/" );
+
+					response.redirect( requestEndpoint );
 				}
 			} );
 	} );

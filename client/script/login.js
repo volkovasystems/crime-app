@@ -231,6 +231,10 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 						} );
 				},
 
+				"notifyLoginState": function notifyLoginState( ){
+					this.scope.broadcast( this.state.loginState, this.state.loginType );
+				},
+
 				"componentWillMount": function componentWillMount( ){
 					this.scope = this.props.scope;
 
@@ -384,7 +388,7 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
 					if( this.state.loginState != prevState.loginState ){
-						this.scope.broadcast( this.state.loginState, this.state.loginType );
+						this.notifyLoginState( );
 					}
 				},
 

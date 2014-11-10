@@ -142,6 +142,22 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 						function onInitiateBasicProfileDataRetrieval( profileType ){
 							self.initiateBasicProfileDataRetrieval( profileType );
 						} );
+
+					this.scope.on( "get-basic-profile-data",
+						function onGetBasicProfileData( callback ){
+							if( self.state.profileState == "profile-ready" ){
+								var profileData = {
+									"profileName": self.state.profileName,
+									"profileURL": self.state.profileURL,
+									"profileImage": self.state.profileImage
+								};
+
+								callback( null, profileData );
+
+							}else{
+								Profile.getBasicProfileData( self.state.profileType, callback );
+							}
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){

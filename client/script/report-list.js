@@ -3,6 +3,14 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 		"Icon",
 		function factory( Icon ){
 			var ReportList = React.createClass( {
+				"statics": {
+					"attach": function attach( scope, container ){
+						React.render( <ReportList scope={ scope } />, container[ 0 ] );
+
+						return this;
+					}
+				},
+
 				"getInitialState": function getInitialState( ){
 					return {
 						"reportList": [ ],
@@ -37,7 +45,9 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 							key={ key }
 							className={ [
 								"report-item",
-								( isExpanded )? "expanded" : "collapsed"
+								( isExpanded )? "expanded" : "collapsed",
+								"shown",
+								"inline-block"
 							].join( " " ) }>
 
 							<div
@@ -45,7 +55,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 									"report-item-icon",
 									( isExpanded )? "expanded" : "collapsed"
 								].join( " " ) }>
-								<Icon name={ ( isExpanded )? "ic_expand_less_24px" : "ic_expoand_more_24px" }>
+								<Icon name={ ( isExpanded )? "ic_expand_less_24px" : "ic_expoand_more_24px" } />
 							</div>
 
 							<div
@@ -80,7 +90,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 										"report-time"
 									].join( " " ) }>
 									{ descriptiveTime.toUpperCase( ) }
-								<div>
+								</div>
 							</div>
 						</li>
 					);

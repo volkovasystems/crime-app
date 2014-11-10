@@ -7,6 +7,51 @@ var Crime = angular.module( "Crime", [
 
 Crime
 	.run( [
+		"$rootScope",
+		"ProgressBar",
+		"Event",
+		function onRun( $rootScope, ProgressBar, Event ){
+			ProgressBar( $rootScope );
+
+			Event( $rootScope );
+		
+			async.parallel( [
+				function initiateLoading( callback ){
+					$rootScope.startLoading( );
+
+					callback( );
+				},
+
+				function checkAllRequestedIconSet( callback ){
+					$rootScope.on( "all-icon-set-requested", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+
+				function checkAllRequestedIconSet( callback ){
+					$rootScope.on( "all-app-component-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+
+				function checkAllRequestedIconSet( callback ){
+					$rootScope.on( "facebook-sdk-loaded", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				}				
+			],
+				function lastly( ){
+					$rootScope.broadcast( "show-default-page" );
+
+					$rootScope.finishLoading( );
+				} );
+		}
+	] )
+
+	.run( [
 		"Login",
 		function onRun( Login ){
 			//: @todo: Initiate checking if the user already logs in.
@@ -37,19 +82,12 @@ Crime
 			var resolveURL = function resolveURL( serverData ){
 				if( window.production ){
 					serverData.joinPath = function joinPath( pathString ){
-						return [ "http://", serverData.remote, pathString ].join( "/" );
+						return [ "http:/", serverData.remote, pathString ].join( "/" );
 					};
 
 				}else if( window.development ){
 					serverData.joinPath = function joinPath( pathString ){
-						return [ 
-							"http://",
-							[
-								serverData.host,
-								serverData.port
-							].join( ":" ), 
-							pathString
-						].join( "/" );
+						return [ "http:/", [ serverData.host, serverData.port ].join( ":" ), pathString ].join( "/" );
 					};
 				}
 

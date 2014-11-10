@@ -75,23 +75,49 @@ Crime
 						function onReportSend( ){
 							async.waterfall( [
 								function getUserData( callback ){
-									scope.publish( "get-user-account-data", callback );
-								},
-
-								function getReportData( userAccountData, callback ){
-									scope.publish( "get-report-data",
-										function delegateCallback( error, reportData ){
-											callback( error, userAccountData, reportData );
+									scope.publish( "get-user-account-data",
+										function onGetUserAccountData( error, userAccountData){
+											callback( error, userAccountData );
 										} );
 								},
 
-								function applyServerFormat( userAccountData, reportData, callback ){
+								function getUserProfileData( userAccountData, callback ){
+									scope.publish( "get-basic-profile-data",
+										function onGetBasicProfileData( error, userProfileData ){
+											callback( error, userAccountData, userProfileData );
+										} );
+								},
+
+								function processUserData( userAccountData, userProfileData, callback ){
+									var userData = {
+										"userID": userAccountData.userID
+									};
+
+									_.extend( userData, userProfileData );
+
+									var hashedValue = btoa( JSON.stringify( userData ) );
+									userData.userID = hashedValue;
+
+									var accessID = btoa( userAccountData.accessToken ).replace( /[^A-Za-z0-9]/g, "" );
+									userData.accessID = accessID;
+
+									callback( null, userData );
+								},
+
+								function getReportData( userData, callback ){
+									scope.publish( "get-report-data",
+										function delegateCallback( error, reportData ){
+											callback( error, userData, reportData );
+										} );
+								},
+
+								function applyServerFormat( userData, reportData, callback ){
 									var hashedValue = btoa( JSON.stringify( reportData ) );
 
 									var formattedReportData = {
 										"reportID": hashedValue,
 										"reportState": "pending",
-										"reporterID": userAccountData.userID,
+										"reporterID": userData.userID,
 										"reporterState": "anonymous",
 										"reportTimestamp": reportData.timestamp,
 										"reportLocation": {
@@ -106,15 +132,13 @@ Crime
 										"reportAddress": reportData.address
 									};
 
-									callback( null, formattedReportData, userAccountData );
+									callback( null, formattedReportData, userData );
 								},
 
-								function sendReportData( reportData, userAccountData, callback ){
+								function sendReportData( reportData, userData, callback ){
 									var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/add" );
 
-									var hashedAccessID = btoa( userAccountData.accessToken ).replace( /[^A-Za-z0-9]/g, "" );
-
-									requestEndpoint = requestEndpoint.replace( ":accessID", hashedAccessID );
+									requestEndpoint = requestEndpoint.replace( ":accessID", userData.accessID );
 
 									$http.post( requestEndpoint, reportData )
 										.success( function onSuccess( data, status ){
