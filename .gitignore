@@ -10,3 +10,5 @@ temp
 local.json
 client/fonts/
 key-*
+userdb
+reportdb

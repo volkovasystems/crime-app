@@ -72,6 +72,7 @@ Crime
 					scope.publish( "change-logo-image", CRIME_LOGO_IMAGE_SOURCE );
 
 					//: Login user in the server. This is a second verification.
+					//: If the user is not yet register, it will do a registration based on his third party account.
 					scope.on( "logged-in",
 						function onLoggedIn( loginType ){
 							async.waterfall( [
@@ -120,7 +121,24 @@ Crime
 									var requestEndpoint = getUserServerData( ).joinPath( "user/login" );
 
 									$http.post( requestEndpoint, userData )
-										.success( function onSuccess( data, status ){
+										.success( function onSuccess( response, status ){
+											if( response.data == "redirect-register" ){
+												callback( null, userData );
+											}else{
+												callback( "login-success" );
+											}
+										} )
+										.error( function onError( data, status ){
+											//: @todo: Do something on error.
+											callback( new Error( "error sending user data" ), status );
+										} );
+								},
+
+								function registerToTheServer( userData, callback ){
+									var requestEndpoint = getUserServerData( ).joinPath( "user/register" );
+
+									$http.post( requestEndpoint, userData )
+										.success( function onSuccess( response, status ){
 											callback( null, status );
 										} )
 										.error( function onError( data, status ){
@@ -129,9 +147,16 @@ Crime
 										} );
 								}
 							],
-								function lastly( error ){
-									if( error ){
+								function lastly( state ){
+									if( state === "login-success" ){
+										scope.publish( "login-success" );
+
+									}else if( state ){
 										console.error( error );
+										scope.publish( "login-error" );
+
+									}else{
+										scope.publish( "login-success" );
 									}
 
 									scope.finishLoading( );
@@ -142,8 +167,6 @@ Crime
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){
 							scope.publish( "hide-login" );
-							
-							//: @todo: Send the data to the server.
 						} );
 				}
 			}

@@ -1,14 +1,22 @@
 Crime
 	.directive( "reportListController", [
+		"ProgressBar",
 		"Event",
 		"$http",
 		"getReportServerData",
-		function directive( Event, $http, getReportServerData ){
+		function directive(
+			ProgressBar,
+			Event,
+			$http,
+			getReportServerData
+		){
 			return {
 				"restrict": "A",
 				"scope": true,
 				"priority": 1,
 				"link": function onLink( scope, element, attributeSet ){
+					ProgressBar( scope );
+
 					Event( scope );
 
 					/*:
@@ -23,6 +31,12 @@ Crime
 					scope.on( "logged-in",
 						function onLoggedIn( loginType ){
 							async.waterfall( [
+								function initiateLoading( callback ){
+									scope.startLoading( );
+
+									callback( );
+								},
+
 								function getUserAccountData( callback ){
 									scope.publish( "get-user-account-data",
 										function onGetUserAccountData( error, userAccountData ){
@@ -30,28 +44,47 @@ Crime
 										} );
 								},
 
-								function getReportListFromServer( userAccountData, callback ){
+								function processAccessID( userAccountData, callback ){
+									var accessID = btoa( userAccountData.accessToken ).replace( /[^A-Za-z0-9]/g, "" );
+
+									callback( null, accessID );
+								},
+
+								function processRequestEndpoint( accessID, callback ){
 									var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/get/all" );
 
-									var hashedAccessID = btoa( userAccountData.accessToken ).replace( /[^A-Za-z0-9]/g, "" );
+									requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
-									requestEndpoint = requestEndpoint.replace( ":accessID", hashedAccessID );
+									callback( null, requestEndpoint );
+								},
 
+								function getReportListFromServer( requestEndpoint, callback ){
 									$http.get( requestEndpoint )
-										.success( function onSuccess( data, status ){
-											callback( null, data );
+										.success( function onSuccess( result, status ){
+											callback( null, result.data );
 										} )
-										.error( function onError( data, status ){
+										.error( function onError( result, status ){
 											//: @todo: Do something on error.
 											callback( new Error( "error sending report data" ), data );
 										} );
+								},
+
+								function renderReportList( reportList, callback ){
+									callback( );
 								}
-							] );
+							],
+								function lastly( state ){
+									if( state ){
+										console.error( error );
+									}
+
+									scope.finishLoading( );
+								} );
 						} );
 
 					scope.on( "proceed-default-app-flow",
-						function onProceedDefaultAppFlow( userAccountData ){
-
+						function onProceedDefaultAppFlow( ){
+							scope.publish( "hide-report-list" );
 						} );
 				}
 			}

@@ -74,6 +74,12 @@ Crime
 					scope.on( "control-click:crime-report-send",
 						function onReportSend( ){
 							async.waterfall( [
+								function initiateLoading( callback ){
+									scope.startLoading( );
+
+									callback( );
+								},
+
 								function getUserData( callback ){
 									scope.publish( "get-user-account-data",
 										function onGetUserAccountData( error, userAccountData){
@@ -132,10 +138,10 @@ Crime
 										"reportAddress": reportData.address
 									};
 
-									callback( null, formattedReportData, userData );
+									callback( null, userData, formattedReportData );
 								},
 
-								function sendReportData( reportData, userData, callback ){
+								function sendReportData( userData, reportData, callback ){
 									var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/add" );
 
 									requestEndpoint = requestEndpoint.replace( ":accessID", userData.accessID );
@@ -154,6 +160,8 @@ Crime
 									if( error ){
 										console.error( error );	
 									}
+
+									scope.finishLoading( );
 								} );
 						} );
 
