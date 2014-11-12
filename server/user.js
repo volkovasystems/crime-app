@@ -167,6 +167,7 @@ app.post( "/user/register",
 				unirest
 					.get( requestEndpoint )
 					.end( function onResponse( response ){
+						console.log( util.inspect( response ) );
 						var status = response.body.status;
 
 						if( status == "error" ){
