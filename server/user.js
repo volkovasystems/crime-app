@@ -147,7 +147,9 @@ app.post( "/user/register",
 				} );
 
 				newUser.save( function onSave( error ){
-					callback( error, accessID );
+					process.nextTick( function onNextTick( ){
+						callback( error, accessID );
+					} );
 				} );
 			},
 

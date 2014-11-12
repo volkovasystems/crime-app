@@ -188,7 +188,9 @@ app.post( "/api/:accessID/report/add",
 				} );
 
 				newReport.save( function onSave( error ){
-					callback( error );
+					process.nextTick( function onNextTick( ){
+						callback( error );
+					} );
 				} );
 			}
 		],
