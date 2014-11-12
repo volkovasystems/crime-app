@@ -30,21 +30,19 @@ app.use( session( {
 	Solution taken from this:
 	https://gist.github.com/cuppster/2344435
 */
-if( !argv.production ){
-	app.use( function allowCrossDomain( request, response, next ){
-		response.header( "Access-Control-Allow-Origin", request.headers.origin || "*" );
-		response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
-		response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
-		response.header( "Access-Control-Max-Age", 10 );
-		  
-		if( "OPTIONS" == request.method.toUpperCase( ) ){
-			response.sendStatus( 200 );
+app.use( function allowCrossDomain( request, response, next ){
+	response.header( "Access-Control-Allow-Origin", request.headers.origin || "*" );
+	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
+	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
+	response.header( "Access-Control-Max-Age", 10 );
+	  
+	if( "OPTIONS" == request.method.toUpperCase( ) ){
+		response.sendStatus( 200 );
 
-		}else{
-			next( );
-		}
-	} );	
-}
+	}else{
+		next( );
+	}
+} );
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
