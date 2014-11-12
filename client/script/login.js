@@ -222,12 +222,16 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 
 					this.scope.on( "get-user-account-data",
 						function onGetUserAccountData( callback ){
-							var userAccountData = {
-								"userID": self.state.userID,
-								"accessToken": self.state.accessToken
-							};
+							var timeout = setTimeout( function onTimeout( ){
+								var userAccountData = {
+									"userID": self.state.userID,
+									"accessToken": self.state.accessToken
+								};
 
-							callback( null, userAccountData );
+								callback( null, userAccountData );
+
+								clearTimeout( timeout );
+							}, 1000 );
 						} );
 				},
 

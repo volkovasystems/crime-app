@@ -112,6 +112,11 @@ Crime
 								} );
 						} );
 
+					scope.on( "show-report-list",
+						function onReportAdded( ){
+							getReportList( scope );
+						} );
+
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){
 							scope.publish( "hide-report-list" );
