@@ -84,7 +84,7 @@ Crime
 
 								function getUserData( callback ){
 									scope.publish( "get-user-account-data",
-										function onGetUserAccountData( error, userAccountData){
+										function onGetUserAccountData( error, userAccountData ){
 											callback( error, userAccountData );
 										} );
 								},

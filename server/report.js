@@ -98,20 +98,15 @@ app.get( "/api/:accessID/report/get/all",
 					callback( new Error( "user cannot be identified" ) );
 
 				}else{
-					console.log( JSON.stringify( userData ) );
 					callback( null, userData );
 				}			
 			},
 
 			function getAllReport( userData, callback ){
-				console.log( userData.userID );
 				Report
 					.find( { 
 						"reporterID": userData.userID 
 					}, function onResult( error, reportList ){
-						
-						console.log( JSON.stringify( reportList ) );
-
 						if( error ){
 							callback( error );
 

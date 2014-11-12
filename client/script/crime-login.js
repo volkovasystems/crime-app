@@ -47,18 +47,139 @@ Crime
 		}
 	] )
 
+	.factory( "sendUserDataToServer", [
+		"ProgressBar",
+		"Event",
+		"$http",
+		"getUserServerData",
+		function factory(
+			ProgressBar,
+			Event,
+			$http,
+			getUserServerData
+		){
+			var sendUserDataToServer = function sendUserDataToServer( scope, loginType ){
+				ProgressBar( scope );
+
+				Event( scope );
+
+				async.waterfall( [
+					function initiateLoading( callback ){
+						scope.startLoading( );
+
+						callback( );
+					},
+
+					function getUserAccountData( callback ){
+						scope.publish( "get-user-account-data",
+							function onGetUserAccountData( error, userAccountData ){
+								callback( error, userAccountData );
+							} );
+					},
+
+					function checkUserAccountData( userAccountData, callback ){
+						if( _.isEmpty( userAccountData ) ){
+							sendUserDataToServer( scope, loginType );
+
+							callback( "recurse" );
+
+						}else{
+							callback( null, userAccountData );
+						}
+					},
+
+					function getBasicProfileData( userAccountData, callback ){
+						scope.publish( "get-basic-profile-data",
+							function onGetBasicProfileData( error, profileData ){
+								callback( error, userAccountData, profileData );
+							} );
+					},
+
+					function applyServerFormat( userAccountData, profileData, callback ){
+						var userData = {
+							"userID": userAccountData.userID
+						};
+
+						_.extend( userData, profileData );
+
+						var hashedValue = btoa( JSON.stringify( userData ) );
+
+						var formattedUserData = {
+							"userID": 				hashedValue,
+							"userAccountID": 		userAccountData.userID,
+							"userAccountType": 		loginType,
+							"userAccountToken": 	userAccountData.accessToken,
+							"userDisplayName": 		profileData.profileName,
+							"userProfileLink": 		profileData.profileURL,
+							"userProfileImageURL": 	profileData.profileImage
+						};
+
+						callback( null, formattedUserData );
+					},
+
+					function loginToTheServer( userData, callback ){
+						var requestEndpoint = getUserServerData( ).joinPath( "user/login" );
+
+						$http.post( requestEndpoint, userData )
+							.success( function onSuccess( response, status ){
+								if( response.data == "redirect-register" ){
+									callback( null, userData );
+
+								}else{
+									callback( "login-success" );
+								}
+							} )
+							.error( function onError( response, status ){
+								//: @todo: Do something on error.
+								callback( new Error( "error sending user data" ), status );
+							} );
+					},
+
+					function registerToTheServer( userData, callback ){
+						var requestEndpoint = getUserServerData( ).joinPath( "user/register" );
+
+						$http.post( requestEndpoint, userData )
+							.success( function onSuccess( response, status ){
+								callback( null, status );
+							} )
+							.error( function onError( response, status ){
+								//: @todo: Do something on error.
+								callback( new Error( "error sending user data" ), status );
+							} );
+					}
+				],
+					function lastly( state ){
+						if( state === "recurse" ){
+							//: Do nothing?
+
+						}else if( state === "login-success" ){
+							scope.publish( "login-success" );
+
+						}else if( state ){
+							scope.publish( "login-error" );
+
+						}else{
+							scope.publish( "login-success" );
+						}
+
+						scope.finishLoading( );
+					} );
+			};
+
+			return sendUserDataToServer;
+		}
+	] )
+
 	.directive( "loginController", [
 		"ProgressBar",
 		"Event",
 		"CRIME_LOGO_IMAGE_SOURCE",
-		"$http",
-		"getUserServerData",
+		"sendUserDataToServer",
 		function directive( 
 			ProgressBar,
 			Event, 
 			CRIME_LOGO_IMAGE_SOURCE,
-			$http,
-			getUserServerData
+			sendUserDataToServer
 		){
 			return {
 				"restrict": "A",
@@ -75,94 +196,7 @@ Crime
 					//: If the user is not yet register, it will do a registration based on his third party account.
 					scope.on( "logged-in",
 						function onLoggedIn( loginType ){
-							async.waterfall( [
-								function initiateLoading( callback ){
-									scope.startLoading( );
-
-									callback( );
-								},
-
-								function getUserAccountData( callback ){
-									scope.publish( "get-user-account-data",
-										function onGetUserAccountData( error, userAccountData ){
-											callback( error, userAccountData );
-										} );
-								},
-
-								function getBasicProfileData( userAccountData, callback ){
-									scope.publish( "get-basic-profile-data",
-										function onGetBasicProfileData( error, profileData ){
-											callback( error, userAccountData, profileData );
-										} );
-								},
-
-								function applyServerFormat( userAccountData, profileData, callback ){
-									var userData = {
-										"userID": userAccountData.userID
-									};
-
-									_.extend( userData, profileData );
-
-									var hashedValue = btoa( JSON.stringify( userData ) );
-
-									var formattedUserData = {
-										"userID": 				hashedValue,
-										"userAccountID": 		userAccountData.userID,
-										"userAccountType": 		loginType,
-										"userAccountToken": 	userAccountData.accessToken,
-										"userDisplayName": 		profileData.profileName,
-										"userProfileLink": 		profileData.profileURL,
-										"userProfileImageURL": 	profileData.profileImage
-									};
-
-									callback( null, formattedUserData );
-								},
-
-								function loginToTheServer( userData, callback ){
-									var requestEndpoint = getUserServerData( ).joinPath( "user/login" );
-
-									$http.post( requestEndpoint, userData )
-										.success( function onSuccess( response, status ){
-											if( response.data == "redirect-register" ){
-												callback( null, userData );
-
-											}else{
-												callback( "login-success" );
-											}
-										} )
-										.error( function onError( response, status ){
-											//: @todo: Do something on error.
-											callback( new Error( "error sending user data" ), status );
-										} );
-								},
-
-								function registerToTheServer( userData, callback ){
-									var requestEndpoint = getUserServerData( ).joinPath( "user/register" );
-
-									$http.post( requestEndpoint, userData )
-										.success( function onSuccess( response, status ){
-											callback( null, status );
-										} )
-										.error( function onError( response, status ){
-											//: @todo: Do something on error.
-											callback( new Error( "error sending user data" ), status );
-										} );
-								}
-							],
-								function lastly( state ){
-									if( state === "login-success" ){
-										scope.publish( "login-success" );
-
-									}else if( state ){
-										scope.publish( "login-error" );
-
-									}else{
-										scope.publish( "login-success" );
-									}
-
-									scope.finishLoading( );
-								} );
-
+							sendUserDataToServer( scope, loginType );
 						} );
 
 					scope.on( "proceed-default-app-flow",

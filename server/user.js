@@ -63,17 +63,12 @@ app.get( "/api/:accessID/user/get/all",
 
 app.get( "/api/:accessID/user/get",
 	function onUserGet( request, response ){
-		console.log( "USER GET", request.param( "accessID" ) );
-
 		var User = mongoose.model( "User" );
 
 		User
 			.findOne( { 
 				"accessID": request.param( "accessID" ) 
-			}, function onFound( error, userData ){
-
-				console.log( JSON.stringify( userData ) );
-				
+			}, function onFound( error, userData ){				
 				if( error ){
 					response
 						.status( 500 )
@@ -167,7 +162,6 @@ app.post( "/user/register",
 				unirest
 					.get( requestEndpoint )
 					.end( function onResponse( response ){
-						console.log( util.inspect( response ) );
 						var status = response.body.status;
 
 						if( status == "error" ){
@@ -264,7 +258,10 @@ app.post( "/user/login",
 				userData.userProfileImageURL = request.param( "userProfileImageURL" );
 
 				userData.save( function onSave( error ){
-					callback( error, accessID );
+					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
+					setTimeout( function onTimeout( ){
+						callback( error, accessID );
+					}, 1000 );
 				} );
 			},
 
@@ -277,8 +274,6 @@ app.post( "/user/login",
 				var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
 
 				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
-
-				console.log( requestEndpoint );
 
 				unirest
 					.get( requestEndpoint )

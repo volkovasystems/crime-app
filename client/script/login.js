@@ -222,7 +222,7 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 
 					this.scope.on( "get-user-account-data",
 						function onGetUserAccountData( callback ){
-							var timeout = setTimeout( function onTimeout( ){
+							if( self.state.userID && self.state.accessToken ){
 								var userAccountData = {
 									"userID": self.state.userID,
 									"accessToken": self.state.accessToken
@@ -230,8 +230,20 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 
 								callback( null, userAccountData );
 
-								clearTimeout( timeout );
-							}, 1000 );
+							}else{
+								Login.checkIfLoggedIn( self.state.loginType,
+									function onCheckIfLoggedIn( error, isLoggedIn, loginData, response ){
+										if( isLoggedIn ){
+											callback( null, {
+												"userID": loginData.userID,
+												"accessToken": loginData.accessToken
+											} );
+
+										}else{
+											callback( null, { } );
+										}
+									} );
+							}
 						} );
 				},
 

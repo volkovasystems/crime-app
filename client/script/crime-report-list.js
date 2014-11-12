@@ -8,6 +8,8 @@ Crime
 			var getReportList = function getReportList( scope, callback ){
 				var callback = callback || function callback( ){ };
 
+				var rootCallback = callback;
+
 				ProgressBar( scope );
 				
 				Event( scope );
@@ -24,6 +26,17 @@ Crime
 							function onGetUserAccountData( error, userAccountData ){
 								callback( error, userAccountData );
 							} );
+					},
+
+					function checkUserAccountData( userAccountData, callback ){
+						if( _.isEmpty( userAccountData ) ){
+							getReportList( scope, rootCallback );
+
+							callback( "recurse" );
+
+						}else{
+							callback( null, userAccountData );
+						}
 					},
 
 					function processAccessID( userAccountData, callback ){
@@ -58,7 +71,9 @@ Crime
 					}
 				],
 					function lastly( state, response ){
-						if( state instanceof Error ){
+						if( state === "recurse" ){
+							//: Do nothing?
+						}else if( state instanceof Error ){
 							scope.publish( "error", "report-list-error", state, response );
 						
 						}else{
