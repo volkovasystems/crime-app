@@ -338,4 +338,9 @@ app[ "delete" ]( "/user/:accessID/delete",
 
 	} );
 
-app.listen( port, host );
+if( argv.production ){
+	app.listen( port );
+	
+}else{
+	app.listen( port, host );	
+}
