@@ -1,22 +1,25 @@
+var _ = require( "lodash" );
+var argv = require( "yargs" ).argv;
+var async = require( "async" );
+var bodyParser = require( "body-parser" );
+var express = require( "express" );
+var mongoose = require( "mongoose" );
+var session = require( "express-session" );
+var unirest = require( "unirest" );
+var util = require( "util" );
+
+require( "./report-data.js" );
+
 var serverSet = require( "./package.js" ).packageData.serverSet;
 var serverData = serverSet.report;
 var host = serverData.host;
 var port = serverData.port;
 
-var util = require( "util" );
+var resolveURL = require( "./resolve-url.js" ).resolveURL;
+resolveURL( serverSet.user );
+var userServer = serverSet.user;
 
-var _ = require( "lodash" );
-var argv = require( "yargs" ).argv;
-var express = require( "express" );
-var unirest = require( "unirest" );
-var bodyParser = require( "body-parser" );
-var session = require( "express-session" );
 var app = express( );
-
-var mongoose = require( "mongoose" );
-require( "./report-data.js" );
-
-var async = require( "async" );
 
 app.use( bodyParser.json( ) );
 app.use( session( { 
@@ -45,22 +48,16 @@ if( !argv.production ){
 	} );	
 }
 
-var resolveURL = require( "./resolve-url.js" ).resolveURL;
-resolveURL( serverSet.user );
-var userServer = serverSet.user;
-
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
 		var accessID = request.param( "accessID" );
 
-		var requestEndpoint = userServer.joinPath( "api/:accessID/verify" );
+		var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
 
 		requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
-		console.log( requestEndpoint );
-
 		if( !_.isEmpty( request.session.userData )
-			&& request.session.userData.accessID === accessID )
+			&& request.session.accessID === accessID )
 		{
 			next( );
 
@@ -68,13 +65,25 @@ app.all( "/api/:accessID/*",
 			unirest
 				.get( requestEndpoint )
 				.end( function onResponse( response ){
-					var userData = response.body;
+					var status = response.body.status;
 
-					request.session.userData = userData;
+					if( status == "error" ){
+						response
+							.status( 500 )
+							.json( {
+								"status": "error",
+								"data": response.body.data
+							} );
 
-					request.session.userData.accessID = accessID;
+					}else{
+						var userData = response.body.data;
+						
+						request.session.userData = userData;
 
-					next( );
+						request.session.accessID = accessID;
+						
+						next( );
+					}
 				} );	
 		}
 	} );
@@ -82,17 +91,48 @@ app.all( "/api/:accessID/*",
 app.get( "/api/:accessID/report/get/all",
 	function onReportGetAll( request, response ){
 		var Report = mongoose.model( "Report" );
-		
-		Report
-			.find( { 
-				"reporterID": request.param( "reporterID" ) 
-			}, function onResult( error, reportList ){
-				if( error ){
+
+		async.waterfall( [
+			function getUserData( callback ){
+				var userData = request.session.userData;
+
+				if( _.isEmpty( userData ) ){
+					callback( new Error( "user cannot be identified" ) );
+
+				}else{
+					console.log( JSON.stringify( userData ) );
+					callback( null, userData );
+				}			
+			},
+
+			function getAllReport( userData, callback ){
+				console.log( userData.userID );
+				Report
+					.find( { 
+						"reporterID": userData.userID 
+					}, function onResult( error, reportList ){
+						
+						console.log( JSON.stringify( reportList ) );
+
+						if( error ){
+							callback( error );
+
+						}else if( _.isEmpty( reportList ) ){
+							callback( null, [ ] );
+
+						}else{
+							callback( null, reportList );
+						}
+					} );
+			}
+		],
+			function lastly( state, reportList ){
+				if( state instanceof Error ){
 					response
 						.status( 500 )
 						.json( {
 							"status": "error",
-							"data": error.message
+							"data": state.message
 						} );
 
 				}else{
@@ -117,24 +157,27 @@ app.post( "/api/:accessID/report/add",
 
 		async.waterfall( [
 			function checkIfReportIsExisting( callback ){
-				Report.findOne( { 
-					"reportID": request.param( "reportID" ) 
-				}, callback );
+				Report
+					.findOne( { 
+						"reportID": request.param( "reportID" ) 
+					}, function onFound( error, reportData ){
+						callback( error, reportData );
+					} );
 			},
 
 			function trySavingReport( reportData, callback ){
-				if( reportData ){
-					callback( true );
+				if( _.isEmpty( reportData ) ){
+					callback( );
 
 				}else{
-					callback( );
+					callback( "report-existing" );
 				}
 			},
 
 			function saveReport( callback ){
 				var newReport = new Report( {
 					"reportID": 			request.param( "reportID" ),
-					"reportState": 			request.param( "reportState" ),
+					"reportState": 			"pending",
 					"reporterID": 			request.param( "reporterID" ),
 					"reporterState": 		request.param( "reporterState" ),
 					"reportTimestamp": 		request.param( "reportTimestamp" ),
@@ -146,24 +189,26 @@ app.post( "/api/:accessID/report/add",
 					"reportAddress": 		request.param( "reportAddress" )
 				} );
 
-				newReport.save( callback );
+				newReport.save( function onSave( error ){
+					callback( error );
+				} );
 			}
 		],
 			function lastly( state ){
-				if( typeof state == "boolean" ){
+				if( state === "report-existing" ){
 					response
 						.status( 200 )
 						.json( {
 							"status": "failed",
-							"data": "report already exists"
+							"data": state
 						} );
 
-				}else if( state ){
+				}else if( state instanceof Error ){
 					response
 						.status( 500 )
 						.json( {
 							"status": "error",
-							"data": error.message
+							"data": state.message
 						} );
 
 				}else{

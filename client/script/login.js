@@ -115,7 +115,7 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 						loginState instanceof Error )
 					{
 						var error = loginState;
-						this.scope.broadcast( "error", "login-error", error, responseList );
+						this.scope.publish( "error", "login-error", error, responseList );
 						
 						this.setState( {
 							"loginState": "login-error",
@@ -130,7 +130,7 @@ angular.module( "Login", [ "Event", "PageFlow", "ProgressBar", "Home" ] )
 
 					}else{
 						var error = new Error( "unable to log in" );
-						this.scope.broadcast( "error", "login-error", error, responseList );
+						this.scope.publish( "error", "login-error", error, responseList );
 						
 						this.setState( {
 							"loginState": "login-error",

@@ -10,10 +10,141 @@ section.report-list {
 		background-color: #121212;
 
 		.report-list-component {
-			.list-container {
-				.report-item {
+			width: inherit;
+			height: inherit;
+
+			.report-list-header {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+
+				width: inherit;
+				height: 70px;
+
+				.header-icon {
 					position: relative;
+					width: 70px;
+					height: 70px;
+
+					svg {
+						fill: #ffffff;
+					}
 				}
+
+				.header-title {
+					position: relative;
+					height: 70px;
+					width: 300px;
+
+					font-size: 25px;
+					color: #ffffff;
+
+					span {
+						position: absolute;
+						top: 50%;
+						transform: translateY( -50% );
+					}
+				}
+			}
+
+			.report-list-body {
+				position: absolute;
+				top: 70px;
+				bottom: 70px;
+
+				width: inherit;
+				height: auto;
+
+				overflow-y: auto;
+
+				.list-container {
+					width: inherit;
+					height: auto;
+
+					padding: 0px;
+					
+					.report-item {
+						position: relative;
+						
+						width: inherit;
+						height: 70px;
+
+						overflow: hidden;
+
+						.report-item-icon {
+							position: absolute;
+							top: 0px;
+							left: 0px;
+							width: 70px;
+							height: 70px;
+
+							svg {
+								fill: #ffffff;
+								display: none;
+							}
+						}
+
+						.report-item-icon:hover {
+							svg {
+								display: block
+							}
+						}
+
+						.report-item-header {
+							position: absolute;
+							
+							left: 70px;
+							right: 0px;
+
+							width: auto;
+							height: auto;
+
+							color: #ffffff;
+
+							padding-left: 5px;
+							padding-top: 5px;
+
+							.report-time-from-now {
+								position: absolute;
+								top: 0px;
+								right: 0px;
+								
+								padding-top: 5px;
+								padding-right: 10px;
+								
+								font-size: 12px;
+								letter-spacing: 1px;
+							}
+
+							.report-title {
+								overflow: hidden;
+								white-space: nowrap;
+
+								font-size: 20px;
+								text-overflow: ellipsis;
+								
+								padding-top: 17px;
+								padding-right: 5px;
+							}
+
+							.report-date {
+								font-size: 13px;
+								letter-spacing: 1px;
+							}
+
+							.report-time {
+								position: absolute;
+								top: 0px;
+								padding-top: 5px;
+								font-size: 12px;
+							}
+						}
+					}
+
+					.report-item:nth-child(odd){
+						background-color: #171717;	
+					}
+				}	
 			}
 		}
 	}

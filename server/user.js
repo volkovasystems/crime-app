@@ -1,20 +1,30 @@
+var _ = require( "lodash" );
+var async = require( "async" );
+var argv = require( "yargs" ).argv;
+var bodyParser = require( "body-parser" );
+var express = require( "express" );
+var mongoose = require( "mongoose" );
+var session = require( "express-session" );
+var unirest = require( "unirest" );
+var util = require( "util" );
+
+require( "./user-data.js" );
+
 var serverData = require( "./package.js" ).packageData.serverSet.user;
 var host = serverData.host;
 var port = serverData.port;
 
-var util = require( "util" );
+var resolveURL = require( "./resolve-url.js" ).resolveURL;
+resolveURL( serverData );
+var userServer = serverData;
 
-var argv = require( "yargs" ).argv;
-var express = require( "express" );
-var bodyParser = require( "body-parser" );
 var app = express( );
-
-var mongoose = require( "mongoose" );
-require( "./user-data.js" );
-
-var async = require( "async" );
-
 app.use( bodyParser.json( ) );
+app.use( session( { 
+	"secret": "#3vtl+6gw)eew8vdonh(z86mvi)#cn4__isxqoy#(_svy2g2hy",
+	"resave": true,
+	"saveUninitialized": true
+} ) );
 
 /*:
 	Solution taken from this:
@@ -45,38 +55,7 @@ app.get( "/api/:accessID/verify",
 	function onUserVerify( request, response ){
 		//: Bypass this first.
 		//: @todo: Implement this by checking the access token based on the account type.
-		mongoose.model( "User" )
-			.where( { 
-				"userAccountID": request.param( "userAccountID" ) 
-			} )
-			.or( {
-				"userAccessID": request.param( "userAccessID" )
-			} )
-			.findOne( function callback( error, userData ){
-				if( error ){
-					response
-						.status( 500 )
-						.json( {
-							"status": "error",
-							"data": error.message
-						} );
-
-				}else if( userData ){
-					response
-						.status( 200 )
-						.json( {
-							"status": "success",
-							"data": userData
-						} );
-
-				}else{
-					response
-						.status( 200 )
-						.json( {
-							"status": "failed"
-						} );
-				}
-			} );
+		
 	} );
 
 app.get( "/api/:accessID/user/get/all",
@@ -86,27 +65,64 @@ app.get( "/api/:accessID/user/get/all",
 
 app.get( "/api/:accessID/user/get",
 	function onUserGet( request, response ){
+		console.log( "USER GET", request.param( "accessID" ) );
 
+		var User = mongoose.model( "User" );
+
+		User
+			.findOne( { 
+				"accessID": request.param( "accessID" ) 
+			}, function onFound( error, userData ){
+
+				console.log( JSON.stringify( userData ) );
+				
+				if( error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": error.message
+						} );
+
+				}else if( _.isEmpty( userData ) ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": { }
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "success",
+							"data": userData
+						} );
+				}
+			} );
 	} );
 
 app.post( "/user/register",
 	function onUserRegister( request, response ){
+		var User = mongoose.model( "User" );
+
 		async.waterfall( [
 			function checkIfUserExists( callback ){
-				mongoose.model( "User" )
+				User
 					.findOne( { 
 						"userAccountID": request.param( "userAccountID" ) 
-					}, callback );
+					}, function onFound( error, userData ){
+						callback( error, userData );
+					} );
 			},
 
 			function tryLoggingIn( userData, callback ){
-				if( userData ){
-					response.redirect( "/user/login" );
-
-					callback( true );
+				if( _.isEmpty( userData ) ){
+					callback( );
 
 				}else{
-					callback( );
+					callback( "redirect-login" );
 				}
 			},
 
@@ -119,29 +135,68 @@ app.post( "/user/register",
 			},
 
 			function registerUser( accessID, callback ){
-				var newUser = new mongoose.model( "User" )( {
-					"userID": request.param( "userID" ),
-					"userState": "logged-in",
-					"accessState": "pending",
-					"accessID": accessID,
-					"userAccountID": request.param( "userAccountID" ),
-					"userAccountType": request.param( "userAccountType" ),
-					"userAccountToken": request.param( "userAccountToken" ),
-					"userDisplayName": request.param( "userDisplayName" ),
-					"userProfileLink": request.param( "userProfileLink" ),
-					"userProfileImageURL": request.param( "userProfileImageURL" ),
+				var newUser = new User( {
+					"userID": 				request.param( "userID" ),
+					"userState": 			"logged-in",
+					"accessState": 			"pending",
+					"accessID": 			accessID,
+					"userAccountID": 		request.param( "userAccountID" ),
+					"userAccountType": 		request.param( "userAccountType" ),
+					"userAccountToken": 	request.param( "userAccountToken" ),
+					"userDisplayName": 		request.param( "userDisplayName" ),
+					"userProfileLink": 		request.param( "userProfileLink" ),
+					"userProfileImageURL": 	request.param( "userProfileImageURL" ),
 				} );
 
-				userData.save( function onSave( error ){
+				newUser.save( function onSave( error ){
 					callback( error, accessID );
 				} );
+			},
+
+			function verifyAccessID( accessID, callback ){
+				//: @todo: Do this for security.
+				callback( null, accessID );
+			},
+
+			function getUserData( accessID, callback ){
+				var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
+
+				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
+				unirest
+					.get( requestEndpoint )
+					.end( function onResponse( response ){
+						var status = response.body.status;
+
+						if( status == "error" ){
+							callback( new Error( response.body.data ) );
+
+						}else{
+							var userData = response.body.data;
+
+							callback( null, accessID, userData );
+						}
+					} );
+			},
+
+			function saveToSession( accessID, userData, callback ){
+				request.session.userData = userData;
+
+				request.session.accessID = accessID;
+
+				callback( null, userData );
 			}
 		],
-			function lastly( state, accessID ){
-				if( typeof state == "boolean" ){
-					//: Do something?
+			function lastly( state, userData ){
+				if( state === "redirect-login" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "pending",
+							"data": state
+						} );
 
-				}else if( state ){
+				}else if( state instanceof Error ){
 					response
 						.status( 500 )
 						.json( {
@@ -149,21 +204,12 @@ app.post( "/user/register",
 							"data": state.message
 						} );
 
-				}else{
-					var requestEndpoint = [ "api", accessID, "verify" ].join( "/" );
-
-					response.redirect( requestEndpoint );
-
-					unirest
-						.get( requestEndpoint )
-						.end( function onResponse( response ){
-							var userData = response.body;
-
-							request.session.userData = userData;
-
-							request.session.userData.accessID = accessID;
-
-							next( );
+				}else if( !_.isEmpty( userData ) ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "success",
+							"data": userData
 						} );
 				}
 			} );
@@ -171,25 +217,41 @@ app.post( "/user/register",
 
 app.post( "/user/login",
 	function onUserLogin( request, response ){
+		var User = mongoose.model( "User" );
+
 		async.waterfall( [
 			function checkIfUserExists( callback ){
-				mongoose.model( "User" )
+				User
 					.findOne( { 
 						"userAccountID": request.param( "userAccountID" ) 
-					}, callback );
+					}, function onFound( error, userData ){
+						callback( error, userData );
+					} );
 			},
 
 			function tryRegisterUser( userData, callback ){
-				if( userData ){
-					callback( null, userData );
+				if( _.isEmpty( userData ) ){
+					callback( "redirect-register" );
 
 				}else{
-					callback( true );
+					callback( null, userData );
 				}
 			},
 
-			function loggedIn( userData, callback ){
+			function processAccessID( userData, callback ){
+				var accessToken = request.param( "userAccountToken" );
+				
+				var hashedAccessID = new Buffer( accessToken ).toString( "base64" ).replace( /[^A-Za-z0-9]/g, "" );
+
+				callback( null, userData, hashedAccessID );
+			},
+
+			function loggedIn( userData, accessID, callback ){
 				userData.userState = "logged-in";
+
+				userData.accessState = "pending";
+
+				userData.accessID = accessID;
 
 				userData.userAccountType = request.param( "userAccountType" );
 				
@@ -199,28 +261,71 @@ app.post( "/user/login",
 
 				userData.userProfileImageURL = request.param( "userProfileImageURL" );
 
-				userData.save( callback );
+				userData.save( function onSave( error ){
+					callback( error, accessID );
+				} );
+			},
+
+			function verifyAccessID( accessID, callback ){
+				//: @todo: Do this for security.
+				callback( null, accessID );
+			},
+
+			function getUserData( accessID, callback ){
+				var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
+
+				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
+				console.log( requestEndpoint );
+
+				unirest
+					.get( requestEndpoint )
+					.end( function onResponse( response ){
+						var status = response.body.status;
+
+						if( status == "error" ){
+							callback( new Error( response.body.data ) );
+
+						}else{
+							var userData = response.body.data;
+
+							callback( null, accessID, userData );
+						}
+					} );
+			},
+
+			function saveToSession( accessID, userData, callback ){
+				request.session.userData = userData;
+
+				request.session.accessID = accessID;
+
+				callback( null, userData );
 			}
 		],
-			function lastly( state ){
-				if( typeof state == "boolean" ){
+			function lastly( state, userData ){
+				if( state === "redirect-register" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "pending",
+							"data": state
+						} );
 
-				}if( state ){
+				}else if( state instanceof Error ){
 					response
 						.status( 500 )
 						.json( {
 							"status": "error",
-							"data": error.message
+							"data": state.message
 						} );
 
-				}else if( !error ){
-					var accessToken = request.param( "userAccountType" );
-				
-					var hashedAccessID = new Buffer( accessToken ).toString( "base64" ).replace( /[^A-Za-z0-9]/g, "" );
-
-					var requestEndpoint = [ "api", hashedAccessID, "verify" ].join( "/" );
-
-					response.redirect( requestEndpoint );
+				}else if( !_.isEmpty( userData ) ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "success",
+							"data": userData
+						} );
 				}
 			} );
 	} );

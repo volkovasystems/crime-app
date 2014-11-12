@@ -79,9 +79,9 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 				},
 
 				"onDashbarItemClick": function onDashbarItemClick( event ){
-					var clickedDashItem = event.currentTarget.props.value;
+					var clickedDashItem = $( event.currentTarget ).attr( "value" );
 
-					var eventNamespace = [ "clicked", clickedDashItem ].join( ":" );
+					var eventNamespace = [ "dash-clicked", clickedDashItem ].join( ":" );
 
 					this.scope.publish( eventNamespace );
 				},

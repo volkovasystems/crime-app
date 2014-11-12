@@ -18,7 +18,8 @@ angular.module( "TitleInput", [ ] )
 					return {
 						"titleName": "title",
 						"title": "title",
-						"parent": null
+						"parent": null,
+						"titleInput": ""
 					};
 				},
 
@@ -114,7 +115,11 @@ angular.module( "TitleInput", [ ] )
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-
+					if( prevProps.titleInput != this.props.titleInput ){
+						this.setState( {
+							"titleInput": this.props.titleInput
+						} );
+					}
 				},
 
 				"componentDidMount": function componentDidMount( ){

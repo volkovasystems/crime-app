@@ -79,6 +79,20 @@ angular
 							
 							callback( null, reportData );
 						} );
+
+					this.scope.on( "clear-report-data",
+						function onClearReportData( ){
+							self.setState( {
+								"title": "",
+								"description": "",
+								"timestamp": 0,
+								"category": "",
+								"position": null,
+								"zoom": 0,
+								"address": "",
+								"staticMapURL": ""
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -93,6 +107,10 @@ angular
 					var address = this.state.address;
 					
 					var zoom = this.state.zoom;
+
+					var title = this.state.title;
+
+					var description = this.state.description;
 
 					return ( 
 						<div className="report-container">
@@ -146,12 +164,14 @@ angular
 										<TitleInput 
 											parent={ this }
 											title="crime title"
-											titleName="title" />
+											titleName="title"
+											titleInput={ title } />
 
 										<DescriptionInput 
 											parent={ this }
 											title="crime description"
-											titleName="description" />
+											titleName="description"
+											descriptionInput={ description } />
 									</div>
 								</div>
 								

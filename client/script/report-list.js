@@ -1,7 +1,11 @@
 angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
+
+	.value( "REPORT_LIST_HEADER_LABEL", "crime report list" )
+
 	.factory( "ReportList", [
 		"Icon",
-		function factory( Icon ){
+		"REPORT_LIST_HEADER_LABEL",
+		function factory( Icon, REPORT_LIST_HEADER_LABEL ){
 			var ReportList = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -55,7 +59,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 									"report-item-icon",
 									( isExpanded )? "expanded" : "collapsed"
 								].join( " " ) }>
-								<Icon name={ ( isExpanded )? "ic_expand_less_24px" : "ic_expoand_more_24px" } />
+								<Icon name={ ( isExpanded )? "ic_expand_less_24px" : "ic_expand_more_24px" } />
 							</div>
 
 							<div
@@ -96,8 +100,21 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 					);
 				},
 
+				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+					var self = this;
+
+					this.scope.on( "set-report-list",
+						function onSetReportList( reportList ){
+							self.setState( {
+								"reportList": reportList
+							} );
+						} );
+				},
+
 				"componentWillMount": function componentWillMount( ){
 					this.scope = this.props.scope;
+
+					this.attachAllComponentEventListener( );
 				},
 
 				"render": function onRender( ){
@@ -117,12 +134,44 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 									"report-list-component",
 									componentState
 								].join( " " ) }>
-								<ul 
+
+								<div 
 									className={ [
-										"list-container" 
+										"report-list-header"
 									].join( " " ) }>
-									{ reportList.map( this.onEachReportItem ) }
-								</ul>
+									<div
+										className={ [
+											"header-icon",
+											"shown",
+											"inline-block"
+										].join( " " ) }>
+										<Icon name="ic_report_problem_24px" />
+									</div>
+
+									<div
+										className={ [
+											"header-title",
+											"shown",
+											"inline-block"
+										].join( " " ) }>
+										<span>
+											{ REPORT_LIST_HEADER_LABEL.toUpperCase( ) }
+										</span>
+									</div>
+								</div>
+
+								<div
+									className={ [
+										"report-list-body"
+									].join( " " ) }>
+
+									<ul 
+										className={ [
+											"list-container" 
+										].join( " " ) }>
+										{ reportList.map( this.onEachReportItem ) }
+									</ul>
+								</div>
 							</div>
 						</div>
 					);

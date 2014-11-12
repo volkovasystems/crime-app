@@ -180,7 +180,7 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 					var isDisabled = _.contains( disabledControlList, name );
 
 					var style = { };
-					if( isDescriptive ){
+					if( isDescriptive && percentageWidth ){
 						style.width = [ percentageWidth, "%" ].join( "" );
 					}
 
@@ -263,7 +263,7 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 						return this.onEachControlGroup( controlData, index );
 					}
 					
-					return this.onEachControlItem( controlData, index );
+					return this.onEachControlItem( controlData, 0, index );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){

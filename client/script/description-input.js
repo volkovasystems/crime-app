@@ -116,7 +116,11 @@ angular.module( "DescriptionInput", [ ] )
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-
+					if( prevProps.descriptionInput != this.props.descriptionInput ){
+						this.setState( {
+							"descriptionInput": this.props.descriptionInput
+						} );
+					}
 				},
 
 				"componentDidMount": function componentDidMount( ){

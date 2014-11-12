@@ -106,12 +106,13 @@ Crime
 									var hashedValue = btoa( JSON.stringify( userData ) );
 
 									var formattedUserData = {
-										"userID": hashedValue,
-										"userAccountID": userAccountData.userID,
-										"userAccountType": loginType,
-										"userDisplayName": profileData.profileName,
-										"userProfileLink": profileData.profileURL,
-										"userProfileImageURL": profileData.profileImage
+										"userID": 				hashedValue,
+										"userAccountID": 		userAccountData.userID,
+										"userAccountType": 		loginType,
+										"userAccountToken": 	userAccountData.accessToken,
+										"userDisplayName": 		profileData.profileName,
+										"userProfileLink": 		profileData.profileURL,
+										"userProfileImageURL": 	profileData.profileImage
 									};
 
 									callback( null, formattedUserData );
@@ -124,11 +125,12 @@ Crime
 										.success( function onSuccess( response, status ){
 											if( response.data == "redirect-register" ){
 												callback( null, userData );
+
 											}else{
 												callback( "login-success" );
 											}
 										} )
-										.error( function onError( data, status ){
+										.error( function onError( response, status ){
 											//: @todo: Do something on error.
 											callback( new Error( "error sending user data" ), status );
 										} );
@@ -141,7 +143,7 @@ Crime
 										.success( function onSuccess( response, status ){
 											callback( null, status );
 										} )
-										.error( function onError( data, status ){
+										.error( function onError( response, status ){
 											//: @todo: Do something on error.
 											callback( new Error( "error sending user data" ), status );
 										} );
@@ -152,7 +154,6 @@ Crime
 										scope.publish( "login-success" );
 
 									}else if( state ){
-										console.error( error );
 										scope.publish( "login-error" );
 
 									}else{

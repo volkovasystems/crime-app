@@ -21,6 +21,8 @@ Crime
 
 					scope.on( "control-click:crime-report-cancel",
 						function onReportCancel( ){
+							scope.publish( "clear-report-data" );
+
 							scope.publish( "hide-report" );
 						} );
 
@@ -121,21 +123,20 @@ Crime
 									var hashedValue = btoa( JSON.stringify( reportData ) );
 
 									var formattedReportData = {
-										"reportID": hashedValue,
-										"reportState": "pending",
-										"reporterID": userData.userID,
-										"reporterState": "anonymous",
-										"reportTimestamp": reportData.timestamp,
+										"reportID": 			hashedValue,
+										"reporterID": 			userData.userID,
+										"reporterState": 		"anonymous",
+										"reportTimestamp": 		reportData.timestamp,
 										"reportLocation": {
-											"latitude": reportData.position.latitude,
-											"longitude": reportData.position.longitude,
-											"zoom": reportData.zoom
+											"latitude": 		reportData.position.latitude,
+											"longitude": 		reportData.position.longitude,
+											"zoom": 			reportData.zoom
 										},
-										"reportMapImageURL": reportData.staticMapURL,
-										"reportTitle": reportData.title,
-										"reportDescription": reportData.description,
-										"reportCaseType": reportData.category,
-										"reportAddress": reportData.address
+										"reportMapImageURL": 	reportData.staticMapURL,
+										"reportTitle": 			reportData.title,
+										"reportDescription": 	reportData.description,
+										"reportCaseType": 		reportData.category,
+										"reportAddress": 		reportData.address
 									};
 
 									callback( null, userData, formattedReportData );
@@ -147,22 +148,32 @@ Crime
 									requestEndpoint = requestEndpoint.replace( ":accessID", userData.accessID );
 
 									$http.post( requestEndpoint, reportData )
-										.success( function onSuccess( data, status ){
-											callback( null, status );
+										.success( function onSuccess( response, status ){
+											callback( response.status );
 										} )
-										.error( function onError( data, status ){
+										.error( function onError( response, status ){
 											//: @todo: Do something on error.
-											callback( new Error( "error sending report data" ), status );
+											callback( new Error( "error sending report data" ), response );
 										} );
 								}
 							],
-								function lastly( error ){
-									if( error ){
-										console.error( error );	
+								function lastly( state, response ){
+									if( state === "success" ){
+										scope.publish( "report-added" );
+
+									}else if( state instanceof Error ){
+										scope.publish( "error", "report-error", state, response );
 									}
 
 									scope.finishLoading( );
 								} );
+						} );
+
+					scope.on( "report-added",
+						function onReportAdded( ){
+							scope.publish( "clear-report-data" );
+
+							scope.publish( "hide-report" );
 						} );
 
 					scope.on( "show-report",
