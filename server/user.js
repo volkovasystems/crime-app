@@ -155,7 +155,7 @@ app.post( "/user/register",
 			},
 
 			function getUserData( accessID, callback ){
-				var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
+				var requestEndpoint = userServer.joinPath( "api/:accessID/user/get", true );
 
 				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
