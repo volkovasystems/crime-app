@@ -59,7 +59,13 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 							}
 						],
 							function lastly( error, responseList ){
-								callback( error, profileData, responseList );
+								var formattedProfileData = {
+									"profileName": profileData.profileName,
+									"profileURL": profileData.profileURL,
+									"profileImage": profileData.profileImage
+								};
+
+								callback( error, formattedProfileData, responseList );
 							} );
 					},
 
