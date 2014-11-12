@@ -147,9 +147,10 @@ app.post( "/user/register",
 				} );
 
 				newUser.save( function onSave( error ){
-					process.nextTick( function onNextTick( ){
+					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
+					setTimeout( function onTimeout( ){
 						callback( error, accessID );
-					} );
+					}, 1000 );
 				} );
 			},
 

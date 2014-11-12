@@ -188,9 +188,10 @@ app.post( "/api/:accessID/report/add",
 				} );
 
 				newReport.save( function onSave( error ){
-					process.nextTick( function onNextTick( ){
+					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
+					setTimeout( function onTimeout( ){
 						callback( error );
-					} );
+					}, 1000 );
 				} );
 			}
 		],
