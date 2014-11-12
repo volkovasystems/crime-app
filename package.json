@@ -64,7 +64,7 @@
       "port": 8000
     },
     "user": {
-      "remote": "",
+      "remote": "ec2-46-51-205-79.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 9000
     },
