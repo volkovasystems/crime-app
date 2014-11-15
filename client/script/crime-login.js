@@ -1,7 +1,11 @@
 Crime
 	.factory( "getFacebookAppID", [
-		function factory( ){
-			return function getFacebookAppID( ){
+		"Event",
+		"$rootScope",
+		function factory( Event, $rootScope ){
+			Event( $rootScope );
+
+			var getFacebookAppID =  function getFacebookAppID( ){
 				if( window.production ){
 					//: This is the production app in Facebook.
 					return "1536844313229530";
@@ -11,6 +15,13 @@ Crime
 					return "725798337493212";
 				}
 			};
+
+			$rootScope.subscribe( "get-facebook-app-id",
+				function onGetFacebookAppID( callback ){
+					callback( null, getFacebookAppID( ) );
+				} );
+
+			return getFacebookAppID;
 		}
 	] )
 	
@@ -90,17 +101,18 @@ Crime
 
 					function getBasicProfileData( userAccountData, callback ){
 						scope.publish( "get-basic-profile-data",
-							function onGetBasicProfileData( error, profileData ){
-								callback( error, userAccountData, profileData );
+							function onGetBasicProfileData( error, userProfileData ){
+								callback( error, userAccountData, userProfileData );
 							} );
 					},
 
-					function applyServerFormat( userAccountData, profileData, callback ){
+					function applyServerFormat( userAccountData, userProfileData, callback ){
 						var userData = {
-							"userID": userAccountData.userID
+							"userID": userAccountData.userID,
+							"profileName": userProfileData.profileName,
+							"profileURL": userProfileData.profileURL,
+							"profileImage": userProfileData.profileImage
 						};
-
-						_.extend( userData, profileData );
 
 						var hashedValue = btoa( JSON.stringify( userData ) );
 
@@ -109,9 +121,9 @@ Crime
 							"userAccountID": 		userAccountData.userID,
 							"userAccountType": 		loginType,
 							"userAccountToken": 	userAccountData.accessToken,
-							"userDisplayName": 		profileData.profileName,
-							"userProfileLink": 		profileData.profileURL,
-							"userProfileImageURL": 	profileData.profileImage
+							"userDisplayName": 		userProfileData.profileName,
+							"userProfileLink": 		userProfileData.profileURL,
+							"userProfileImageURL": 	userProfileData.profileImage
 						};
 
 						callback( null, formattedUserData );

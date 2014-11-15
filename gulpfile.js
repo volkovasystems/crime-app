@@ -109,6 +109,8 @@ gulp.task( "copy-library",
 				"bower_components/*/lib/**/*.js",
 				"bower_components/*/build/**/*.js",
 				"bower_components/*/build/**/*.css",
+				"bower_components/URIjs/src/*.js",
+				"bower_components/history.js/scripts/compressed/*.js",
 				"!bower_components/mathjs/lib/**/*.js",
 				"!**/Gruntfile.js",
 				"!**/index.js"

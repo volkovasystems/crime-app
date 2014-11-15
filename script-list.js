@@ -4,6 +4,7 @@ var fs = require( "fs" );
 var scriptList = [
 	"event.js",
 	"page-flow.js",
+	"store.js",
 	
 	"icon.js",
 	"title-input.js",

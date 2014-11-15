@@ -6,6 +6,76 @@ var Crime = angular.module( "Crime", [
 ] );
 
 Crime
+	.factory( "resolveURL", [
+		function factory( ){
+			var resolveURL = function resolveURL( serverData ){
+				if( window.production ){
+					serverData.joinPath = function joinPath( pathString ){
+						return [ "http:/", serverData.remote, pathString ].join( "/" );
+					};
+
+				}else if( window.development ){
+					serverData.joinPath = function joinPath( pathString ){
+						return [ "http:/", [ serverData.host, serverData.port ].join( ":" ), pathString ].join( "/" );
+					};
+				}
+
+				return serverData;
+			};
+
+			return resolveURL;
+		} 
+	] )
+
+	.factory( "getStaticServerData", [
+		"Event",
+		"$rootScope",
+		"resolveURL",
+		function factory( Event, $rootScope, resolveURL ){
+			Event( $rootScope );
+
+			var getStaticServerData = function getStaticServerData( ){
+				return resolveURL( $rootScope.serverSet.static );
+			};
+
+			$rootScope.subscribe( "get-static-server-data",
+				function onGetStaticServerData( callback ){
+					callback( null, getStaticServerData( ) );
+				} );
+
+			$rootScope.subscribe( "get-host-address",
+				function onGetHostAddress( callback ){
+					callback( null, getStaticServerData( ).joinPath( "" ) );
+				} );
+
+			return getStaticServerData;
+		}
+	] )
+
+	.factory( "getUserServerData", [
+		"$rootScope",
+		"resolveURL",
+		function factory( $rootScope, resolveURL ){
+			var getUserServerData = function getUserServerData( ){
+				return resolveURL( $rootScope.serverSet.user );
+			};
+
+			return getUserServerData;
+		}
+	] )
+
+	.factory( "getReportServerData", [
+		"$rootScope",
+		"resolveURL",
+		function factory( $rootScope, resolveURL ){
+			var getReportServerData = function getReportServerData( ){
+				return resolveURL( $rootScope.serverSet.report );
+			};
+
+			return getReportServerData;
+		}
+	] )
+
 	.run( [
 		"$rootScope",
 		"ProgressBar",
@@ -44,6 +114,8 @@ Crime
 				}				
 			],
 				function lastly( ){
+					$rootScope.publish( "all-component-loaded" );
+
 					$rootScope.broadcast( "show-default-page" );
 
 					$rootScope.finishLoading( );
@@ -52,10 +124,78 @@ Crime
 	] )
 
 	.run( [
-		"Login",
-		function onRun( Login ){
-			//: @todo: Initiate checking if the user already logs in.
-			//Login.
+		"Store",
+		"Event",
+		"ProgressBar",
+		"$rootScope",
+		"getStaticServerData",
+		function onRun( 
+			Store,
+			Event,
+			ProgressBar,
+			$rootScope,
+			getStaticServerData 
+		){
+			Store( $rootScope );
+
+			ProgressBar( $rootScope );
+
+			Event( $rootScope );
+
+			$rootScope.subscribe( "all-component-loaded",
+				function onAllComponentLoaded( ){
+					async.waterfall( [
+						function initiateLoading( callback ){
+							$rootScope.startLoading( );
+
+							callback( );
+						},
+
+						function verifyState( callback ){
+							var uri = new URI( );
+
+							if( uri.hasQuery( "has-logged-in" ) ){
+								queryData = URI.parseQuery( uri.search( ) );
+
+								if( queryData.state === $rootScope.getStoredValue( "footprint" ) ){
+									$rootScope.publish( "set-logging-in-state" );
+
+									callback( );
+
+								}else{
+									callback( "invalid-state" );
+								}
+
+							}else{
+								callback( "has-not-logged-in" );
+							}
+						},
+
+						function cleanBrowserState( callback ){
+							$rootScope.dropStoredValue( "footprint" );
+
+							History.Adapter.bind( window, "statechange",
+								function onStateChange( ){ 
+									var State = History.getState();
+								} );
+
+							History.pushState( null, null, "/" );
+
+							callback( );
+						},
+
+						function initiateLoginCheck( callback ){
+							$rootScope.publish( "initiate-login-check",
+								function onInitiateLoginCheck( error, hasLoggedIn ){
+									callback( error );
+								} );
+						}
+					],
+						function lastly( state ){
+
+							$rootScope.finishLoading( );
+						} );
+				} );
 		}
 	] )
 
@@ -74,50 +214,5 @@ Crime
 				.error( function onError( data, status ){
 					//: @todo: Do something on error.
 				} );
-		}
-	] )
-
-	.factory( "resolveURL", [
-		function factory( ){
-			var resolveURL = function resolveURL( serverData ){
-				if( window.production ){
-					serverData.joinPath = function joinPath( pathString ){
-						return [ "http:/", serverData.remote, pathString ].join( "/" );
-					};
-
-				}else if( window.development ){
-					serverData.joinPath = function joinPath( pathString ){
-						return [ "http:/", [ serverData.host, serverData.port ].join( ":" ), pathString ].join( "/" );
-					};
-				}
-
-				return serverData;
-			};
-
-			return resolveURL;
-		} 
-	] )
-
-	.factory( "getUserServerData", [
-		"$rootScope",
-		"resolveURL",
-		function factory( $rootScope, resolveURL ){
-			var getUserServerData = function getUserServerData( ){
-				return resolveURL( $rootScope.serverSet.user );
-			};
-
-			return getUserServerData;
-		}
-	] )
-
-	.factory( "getReportServerData", [
-		"$rootScope",
-		"resolveURL",
-		function factory( $rootScope, resolveURL ){
-			var getReportServerData = function getReportServerData( ){
-				return resolveURL( $rootScope.serverSet.report );
-			};
-
-			return getReportServerData;
 		}
 	] );

@@ -98,10 +98,11 @@ Crime
 
 								function processUserData( userAccountData, userProfileData, callback ){
 									var userData = {
-										"userID": userAccountData.userID
+										"userID": userAccountData.userID,
+										"profileName": userProfileData.profileName,
+										"profileURL": userProfileData.profileURL,
+										"profileImage": userProfileData.profileImage
 									};
-
-									_.extend( userData, userProfileData );
 
 									var hashedValue = btoa( JSON.stringify( userData ) );
 									userData.userID = hashedValue;
