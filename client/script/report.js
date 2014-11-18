@@ -50,6 +50,10 @@ angular
 					};
 				},
 
+				"onClickCloseReportButton": function onClickCloseReportButton( event ){
+					this.scope.publish( "hide-report" );
+				},
+
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 
@@ -67,7 +71,7 @@ angular
 								"title": self.state.title,
 								"description": self.state.description,
 								"timestamp": Date.now( ),
-								"category": "no-category",
+								"category": self.state.category || "no-category",
 								"position": {
 									"latitude": self.state.position.lat( ),
 									"longitude": self.state.position.lng( )
@@ -141,6 +145,35 @@ angular
 										<span>
 											{ REPORT_HEADER_LABEL.toUpperCase( ) }
 										</span>
+									</div>
+
+									<div 
+										className={ [
+											"close-report-button",
+											"shown",
+											"inline-block"
+										].join( " " ) }
+										onClick={ this.onClickCloseReportButton }>
+										<a 
+											className={ [
+												"action-element"
+											].join( " " ) }
+											href={ [
+												"#",
+												"close-report"
+											].join( "/" ) }
+											style={
+												{
+													"display": "block"
+												}
+											}>
+											
+											<Icon
+												className={ [
+													"close-report-icon"
+												].join( " " ) }
+												name="ic_close_24px" />
+										</a>
 									</div>
 								</div>
 

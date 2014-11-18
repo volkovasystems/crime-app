@@ -94,23 +94,11 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 				},
 				
 				"onProfileCloseButtonClick": function onProfileCloseButtonClick( event ){
-					if( this.state.componentState != "profile-minified" ){
-						this.scope.broadcast( "show-minified-profile" );
-
-						this.setState( {
-							"componentState": "profile-minified"
-						} );	
-					}
+					this.scope.publish( "show-minified-profile" );
 				},
 
 				"onProfileImageClick": function onProfileImageClick( event ){
-					if( this.state.componentState != "profile-expanded" ){
-						this.scope.broadcast( "show-expanded-profile" );
-
-						this.setState( {
-							"componentState": "profile-expanded"
-						} );	
-					}
+					this.scope.publish( "show-expanded-profile" );
 				},
 
 				"initiateBasicProfileDataRetrieval": function initiateBasicProfileDataRetrieval( profileType ){
@@ -143,6 +131,20 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
+
+					this.scope.on( "show-minified-profile",
+						function onShowMinifiedProfile( ){
+							self.setState( {
+								"componentState": "profile-minified"
+							} );
+						} );
+
+					this.scope.on( "show-expanded-profile",
+						function onShowMinifiedProfile( ){
+							self.setState( {
+								"componentState": "profile-expanded"
+							} );
+						} );
 					
 					this.scope.on( "initiate-basic-profile-data-retrieval",
 						function onInitiateBasicProfileDataRetrieval( profileType ){
@@ -207,7 +209,12 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 									href={ [
 										"#",
 										"close-profile"
-									].join( "/" ) }>
+									].join( "/" ) }
+									style={
+										{
+											"display": "block"
+										}
+									}>
 									
 									<Icon
 										className={ [
@@ -238,7 +245,12 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 										href={ [ 
 											"#", 
 											profileState 
-										].join( "/" ) }>
+										].join( "/" ) }
+										style={
+											{
+												"display": "block"
+											}
+										}>
 										<img 
 											className={ [
 												"img-circle",

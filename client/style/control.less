@@ -18,57 +18,63 @@ section.control {
 			width: auto;
 			height: 70px;
 
-			.control-item {
+			.control-group {
 				position: relative;
+			}
+		}
 
-				display: inline-block;
+		.control-group.separated {
+			position: absolute;
+			bottom: 0px;
+			height: 70px;
+		}
+
+		.control-item {
+			position: relative;
+
+			display: inline-block;
+
+			height: 70px;
+			width: auto;
+
+			font-size: 25px;
+
+			.control-icon {
+				position: relative;
+				
+				width: 70px;
+				height: 70px;
+
+				svg {
+					fill: #ffffff;
+				}
+			}
+
+			.control-title {
+				position: relative;
 
 				height: 70px;
 				width: auto;
 
-				font-size: 25px;
-
-				.control-icon {
-					position: relative;
-					
-					width: 70px;
-					height: 70px;
-
-					svg {
-						fill: #ffffff;
-					}
-				}
-
-				.control-title {
-					position: relative;
-
-					height: 70px;
-					width: auto;
-
-					span {
-						position: absolute;
-						top: 50%;
-						transform: translateY( -50% );
-					}
+				span {
+					position: absolute;
+					top: 50%;
+					transform: translateY( -50% );
 				}
 			}
+		}
 
-			.control-item.descriptive {
-				width: 230px;
-			}
+		.control-item.descriptive {
+			width: 230px;
+		}
 
-			.control-item:hover {
-				background-color: #000000;
-				
-				.control-icon {
-					svg {
-						fill: #801515;
-					}
+		.control-item:hover {
+			background-color: #000000;
+			
+			.control-icon {
+				svg {
+					fill: #801515;
 				}
-			}
-
-			.control-group {
-				position: relative;
 			}
 		}
 	}	

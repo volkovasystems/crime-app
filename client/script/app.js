@@ -15,7 +15,10 @@ angular
 		"MapLocate",
 		"MapPointer",
 		"Report",
-		"ReportList"
+		"ReportList",
+		"CaseCategoryList",
+		"Notify",
+		"ImageUpload"
 	] )
 	.run( [
 		"$rootScope",
@@ -99,6 +102,24 @@ angular
 						function onRendered( ){ 
 							callback( ); 
 						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "case-category-list-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "notify-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "image-upload-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
 				}
 			],
 				function lastly( ){
@@ -106,5 +127,18 @@ angular
 
 					$rootScope.finishLoading( );
 				} );
+		}
+	] )
+
+	.run( [
+		"Event",
+		"$rootScope",
+		function onRun( Event, $rootScope ){
+			//: Enable access to the root scope globally so that we can invoke it.
+			if( window.development ){
+				Event( $rootScope );
+
+				window.rootScope = $rootScope;
+			}
 		}
 	] );

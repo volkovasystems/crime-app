@@ -1,7 +1,7 @@
-angular.module( "DescriptionInput", [ ] )
-	.factory( "DescriptionInput", [
+angular.module( "PathInput", [ ] )
+	.factory( "PathInput", [
 		function factory( ){
-			var DescriptionInput = React.createClass( {
+			var PathInput = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
 
@@ -10,43 +10,44 @@ angular.module( "DescriptionInput", [ ] )
 
 				"getInitialState": function getInitialState( ){
 					return {
-						"descriptionInput": ""
+						"pathInput": ""
 					};
 				},
 
 				"getDefaultProps": function getDefaultProps( ){
 					return {
-						"descriptionName": "description",
-						"title": "description",
-						"parent": null
+						"titleName": "path",
+						"title": "path",
+						"parent": null,
+						"pathInput": ""
 					};
 				},
 
-				"onChangeDescriptionInput": function onChangeDescriptionInput( event ){
+				"onChangeNameInput": function onChangePathInput( event ){
 					if( this.timeout ){
 						clearTimeout( this.timeout );
 
 						this.timeout = null;
 					}
 
-					var descriptionInput = event.target.value;
+					var pathInput = event.target.value;
 
 					this.setState( {
-						"descriptionInput": descriptionInput
+						"pathInput": pathInput
 					} );
 
-					if( _.isEmpty( descriptionInput ) ){
+					if( _.isEmpty( pathInput ) ){
 						return this;
 					}
 
-					var descriptionName = this.props.descriptionName;
+					var titleName = this.props.titleName;
 
 					var self = this;
 
 					this.timeout = setTimeout( function onTimeout( ){
 						var stateData = { };
 
-						stateData[ descriptionName ] = descriptionInput;
+						stateData[ titleName ] = pathInput;
 
 						self.parent.setState( stateData );
 
@@ -67,14 +68,14 @@ angular.module( "DescriptionInput", [ ] )
 				"render": function onRender( ){
 					var title = this.props.title;
 
-					var descriptionInput = this.state.descriptionInput;
+					var pathInput = this.state.pathInput;
 
-					var descriptionName = this.props.descriptionName;
+					var titleName = this.props.titleName;
 
 					return (
 						<div
 							className={ [
-								"description-input-component"
+								"path-input-component"
 							].join( " " ) }
 							style={
 								{
@@ -89,7 +90,7 @@ angular.module( "DescriptionInput", [ ] )
 								}
 							}>
 							<label 
-								htmlFor={ descriptionName }
+								htmlFor={ titleName }
 								style={
 									{
 										"display": "block",
@@ -98,27 +99,25 @@ angular.module( "DescriptionInput", [ ] )
 								}>
 								{ title.toUpperCase( ) }
 							</label>
-							<textarea
-								id={ descriptionName }
-								value={ descriptionInput }
-								onChange={ this.onChangeDescriptionInput }
-								rows="5"
+							<input
+								id={ titleName }
+								type="text"
+								value={ pathInput }
+								onChange={ this.onChangePathInput }
 								style={
 									{
-										"resize": "none",
 										"width": "inherit",
 										"fontSize": "25px"
 									}
-								}>
-							</textarea>
+								} />
 						</div>
 					);
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-					if( prevProps.descriptionInput != this.props.descriptionInput ){
+					if( prevProps.pathInput != this.props.pathInput ){
 						this.setState( {
-							"descriptionInput": this.props.descriptionInput
+							"pathInput": this.props.pathInput
 						} );
 					}
 				},
@@ -128,6 +127,6 @@ angular.module( "DescriptionInput", [ ] )
 				}
 			} );
 
-			return DescriptionInput;
+			return PathInput;
 		}
 	] );

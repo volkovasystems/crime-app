@@ -8,6 +8,7 @@ section.report {
 
 	.report-container {
 		background-color: #121212;
+		color: #ffffff;
 
 		.report-component {
 			width: inherit;
@@ -22,7 +23,10 @@ section.report {
 				height: 70px;
 
 				.header-icon {
-					position: relative;
+					position: absolute;
+					top: 0px;
+					left: 0px;
+
 					width: 70px;
 					height: 70px;
 
@@ -32,17 +36,39 @@ section.report {
 				}
 
 				.header-title {
-					position: relative;
+					position: absolute;
+					top: 0px;
+					left: 70px;
+					right: 70px;
+
 					height: 70px;
-					width: 300px;
+					width: auto;
 
 					font-size: 25px;
-					color: #ffffff;
 
 					span {
 						position: absolute;
 						top: 50%;
 						transform: translateY( -50% );
+					}
+				}
+
+				.close-report-button {
+					position: absolute;
+					top: 0px;
+					right: 0px;
+
+					height: 70px;
+					width: 70px;
+
+					svg {
+						fill: #ffffff;
+					}
+				}
+
+				.close-report-button:hover {
+					svg {
+						fill: #801515;
 					}
 				}
 			}
@@ -62,6 +88,11 @@ section.report {
 					height: auto;
 
 					padding: 20px;
+
+					input,
+					textarea {
+						color: #000000;
+					}
 				}
 
 				.report-form > * {
@@ -70,11 +101,6 @@ section.report {
 
 				.report-form label {
 					font-size: 20px;
-					color: #ffffff;
-				}
-
-				.report-form .information {
-					color: #ffffff;
 				}
 
 				.report-form .main-heading {
@@ -91,8 +117,7 @@ section.report {
 
 section.control {
 	.control-group.report-control-group {
-		position: absolute !important;
-		width: 400px;
-		transform: translateX( 100% );
+		right: 0px;
+		width: 500px;
 	}
 }

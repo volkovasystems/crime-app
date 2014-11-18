@@ -1,152 +1,249 @@
-Crime.directive( "crimeNotify", [
-	"PageFlow",
-	function directive( PageFlow ){
-		var crimeNotify = React.createClass( {
-			"getInitialState": function getInitialState( ){
-				return {
-					"notifyTitle": "",
-					"notifyMessage": "",
-					"notifyType": "default"
-				};
-			},
+angular.module( "Notify", [ "Icon", "Event", "PageFlow" ] )
 
-			"componentWillMount": function componentWillMount( ){
-				var self = this;
+	.constant( "INFO_TYPE", "info-type" )
 
-				this.props.scope.$on( "notify-header",
-					function onNotifyHeader( event, notifyTitle, notifyMessage, notifyType ){
-						self.setState( {
-							"notifyTitle": notifyTitle,
-							"notifyMessage": notifyMessage,
-							"notifyType": notifyType
+	.constant( "WARN_TYPE", "warn-type" )
+
+	.constant( "ERROR_TYPE", "error-type" )
+
+	.constant( "SUCCESS_TYPE", "success-type" )
+
+	.factory( "Notify", [
+		"Icon",
+		"INFO_TYPE",
+		"WARN_TYPE",
+		"ERROR_TYPE",
+		"SUCCESS_TYPE",
+		function factory(
+			Icon,
+			INFO_TYPE,
+			WARN_TYPE,
+			ERROR_TYPE,
+			SUCCESS_TYPE
+		){
+			var Notify = React.createClass( {
+				"statics": {
+					"attach": function attach( scope, container ){
+						React.render( <Notify scope={ scope } />, container[ 0 ] );
+
+						return this;
+					},
+
+					"parseType": function parseType( type ){
+						if( ( /info/i ).test( type ) ){
+							return INFO_TYPE;
+						}
+
+						if( ( /warn/i ).test( type ) ){
+							return WARN_TYPE;
+						}
+
+						if( ( /error/i ).test( type ) ){
+							return ERROR_TYPE;
+						}
+
+						if( ( /success/i ).test( type ) ){
+							return SUCCESS_TYPE;
+						}
+					}
+				},
+
+				"getInitialState": function getInitialState( ){
+					return {
+						"notifyTitle": "",
+						"notifyMessage": "",
+						"notifyType": INFO_TYPE,
+						"notifyState": "notify-passive",
+						"componentState": "notify-footer"
+					};
+				},
+
+				"onClickCloseNotifyButton": function onClickCloseNotifyButton( ){
+					this.scope.publish( "hide-notify" );
+				},
+
+				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+					var self = this;
+
+					this.scope.on( "set-notify-header",
+						function onSetNotifyHeader( ){
+							self.setState( {
+								"componentState": "notify-header"
+							} );
 						} );
-					} );
 
-				this.props.scope.$on( "notify-footer",
-					function onNotifyFooter( event, notifyTitle, notifyMessage, notifyType ){
-						self.setState( {
-							"notifyTitle": notifyTitle,
-							"notifyMessage": notifyMessage,
-							"notifyType": notifyType
+					this.scope.on( "set-notify-footer",
+						function onSetNotifyFooter( ){
+							self.setState( {
+								"componentState": "notify-footer"
+							} );
 						} );
-					} );
 
-				this.props.scope.$on( "notify-center",
-					function onNotifyCenter( event, notifyTitle, notifyMessage, notifyType ){
-						self.setState( {
-							"notifyTitle": notifyTitle,
-							"notifyMessage": notifyMessage,
-							"notifyType": notifyType
+					this.scope.on( "notify",
+						function onNotify( title, message, type, controlSet ){
+							self.setState( {
+								"notifyTitle": title,
+								"notifyMessage": message,
+								"notifyType": Notify.parseType( type )
+							} );
+
+							self.scope.broadcast( "show-notify" );
 						} );
-					} );
+				},
 
-				this.props.scope.$on( "notify-whole",
-					function onNotifyWhole( event, notifyTitle, notifyMessage, notifyType  ){
-						self.setState( {
-							"notifyTitle": notifyTitle,
-							"notifyMessage": notifyMessage,
-							"notifyType": notifyType
-						} );
-					} );
+				"componentWillMount": function componentWillMount( ){
+					this.scope = this.props.scope;
 
-				this.props.scope.$on( "notify-off",
-					function onNotifyOff( event, notifyTitle, notifyMessage, notifyType ){
-						self.setState( {
-							"notifyTitle": notifyTitle,
-							"notifyMessage": notifyMessage,
-							"notifyType": notifyType
-						} );
-					} );
-			},
+					this.attachAllComponentEventListener( );
+				},
 
-			"render": function onRender( ){
-				return ( 
-					<div className="crime-notify-container">
+				"render": function onRender( ){
+					var notifyState = this.state.notifyState;
+
+					var componentState = this.state.componentState;
+
+					var notifyTitle = this.state.notifyTitle;
+
+					var notifyMessage = this.state.notifyMessage;
+
+					var notifyType = this.state.notifyType;
+
+					return ( 
 						<div 
 							className={ [
-								"container",
-								"row",
-								"col-xs-10",
-								"col-xs-offset-1",
-								"col-sm-10",
-								"col-sm-offset-1",
-								"col-md-8",
-								"col-md-offset-2",
-								"col-lg-8",
-								"col-lg-offset-2",
-								"alert",
-								( this.state.notifyType == "success" )? "alert-success": "",
-								( this.state.notifyType == "default" )? "alert-info": "",
-								( this.state.notifyType == "warn" )? "alert-warning": "",
-								( this.state.notifyType == "error" )? "alert-danger": "",
-								_.isEmpty( this.state.notifyType )? "alert-info": "",
-								"alert-dismissible"
-							].join( " " ) } 
-							role="alert">
+								"notify-container",
+								notifyState,
+								componentState
+							].join( " " ) }>
+							
+							<div
+								className={ [
+									"notify-component",
+									notifyState,
+									componentState
+								].join( " " ) }>
 
-							<button 
-								type="button" 
-								className="close"
-								data-dismiss="alert"
-								onClick={ this.onClick }>
-								
-								<span aria-hidden="true">{ '\u00d7' }</span>
-								<span className="sr-only">Close</span>
-							</button>
+								<div
+									className={ [
+										"notify-header",
+										"shown"
+									].join( " " ) }>
 
-							<div className="container row">
-								<strong className="col-md-2">{ this.state.notifyTitle.toUpperCase( ) }</strong>
-								
-								<p className="text-center col-md-9">{ this.state.notifyMessage.toUpperCase( ) }</p>
+									<div
+										className={ [
+											"notify-icon-container"
+										].join( " " ) }>
+										<Icon
+											className={ [
+												"notify-icon",
+												notifyType
+											].join( " " ) }
+											name="ic_info_24px" />
+									</div>
+									
+									<div
+										className={ [
+											"notify-title"
+										].join( " " ) }>
+										<span>
+											{ notifyTitle.toUpperCase( ) }
+										</span>
+									</div>
+
+									<div
+										className={ [
+											"close-notify-button"
+										].join( " " ) }
+										onClick={ this.onClickCloseNotifyButton }>
+										<Icon
+											className={ [
+												"close-notify-icon"
+											].join( " " ) }
+											name="ic_close_24px" />
+									</div>
+								</div>
+
+								<div
+									className={ [
+										"notify-body",
+										"shown"
+									].join( " " ) }>
+
+									<div
+										className={ [
+											"notify-message"
+										].join( " " ) }>
+										<p>
+											{ notifyMessage.toUpperCase( ) }
+										</p>
+									</div>
+
+								</div>
+
+								<div
+									className={ [
+										"notify-footer"
+									].join( " " ) }>
+								</div>
+
 							</div>
 						</div>
-					</div>
-				);
-			},
+					);
+				},
 
-			"componentDidMount": function componentDidMount( ){
-				this.props.scope.$root.$broadcast( "crime-notify-rendered" );	
-			}
-		} );
+				"componentDidMount": function componentDidMount( ){
+					this.scope.broadcast( "notify-rendered" );	
+				}
+			} );
 
-		return {
-			"restrict": "EA",
-			"scope": true,
-			"link": function onLink( scope, element, attributeSet ){
-				PageFlow( scope, element );
+			return Notify;
+		}
+	] )
 
-				scope.wholePageUp( );
+	.directive( "notify", [
+		"Event",
+		"PageFlow",
+		"Notify",
+		function directive( Event, PageFlow, Notify ){
+			return {
+				"restrict": "EA",
+				"scope": true,
+				"priority": 2,
+				"link": function onLink( scope, element, attributeSet ){
+					Event( scope );
 
-				scope.$on( "notify-header",
-					function onNotifyHeader( ){
-						scope.clearFlow( );
-						scope.applyFlow( "notify-header", "notify-compact" );
-					} );
+					PageFlow( scope, element, "notify" );
 
-				scope.$on( "notify-footer",
-					function onNotifyFooter( ){
-						scope.clearFlow( );
-						scope.applyFlow( "notify-footer", "notify-compact" );
-					} );
+					scope.on( "reset-notify",
+						function onResetNotify( ){
+							scope.toggleFlow( "!notify-footer", "!notify-header" );
+						} );
 
-				scope.$on( "notify-center",
-					function onNotifyCenter( ){
-						sscope.clearFlow( );
-						scope.applyFlow( "notify-center", "notify-compact" );
-					} );
+					scope.on( "set-notify-header",
+						function onSetNotifyHeader( ){
+							scope.toggleFlow( "!notify-footer", "notify-header" );
+						} );
 
-				scope.$on( "notify-whole",
-					function onNotifyWhole( ){
-						scope.wholePageCenter( );
-					} );
+					scope.on( "set-notify-footer",
+						function onSetNotifyHeader( ){
+							scope.toggleFlow( "!notify-header", "notify-footer" );
+						} );
 
-				scope.$on( "notify-off",
-					function onNotifyOff( ){
-						scope.wholePageUp( );
-					} );
+					scope.on( "show-notify",
+						function onShowNotify( ){
+							scope.showPage( );
+						} );
 
-				React.renderComponent( <crimeNotify scope={ scope } />, element[ 0 ] );
-			}
-		};
-	}
-] );
+					scope.on( "hide-notify",
+						function onHideNotify( ){
+							scope.hidePage( );
+						} );
+
+					scope.publish( "hide-notify" );
+
+					Notify
+						.attach( scope, element );
+				}
+			};
+		}
+	] );

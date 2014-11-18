@@ -1,4 +1,15 @@
-
+<img 
+								src={ imageSource }
+								style={
+									{
+										"width": "inherit",
+										"height": "inherit",
+										"display": (
+											sourceState == "svg-source" &&
+											svgSourceState == "svg-ready"
+										)? "none" : "block"
+									}
+								} />
 var localData = { };
 var sshConfigureOptionSet = { };
 if( fs.existsSync( "./local.json" ) ){

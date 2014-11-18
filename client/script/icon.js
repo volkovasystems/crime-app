@@ -1,16 +1,33 @@
 angular.module( "Icon", [ ] )
+
+	.constant( "SVG_SOURCE_PATTERN", /\.svg$/ )
+
+	.constant( "PREFIX_DASH_PATTERN", /^-/ )
+
+	.value( "DEFAULT_ICON_SYMBOL_WIDTH", "34" )
+
+	.value( "DEFAULT_ICON_SYMBOL_HEIGHT", "34" )
+
+	.value( "DEFAULT_ICON_IMAGE", "../image/empty.png" )
+
 	.factory( "Icon", [
-		function factory( ){
+		"SVG_SOURCE_PATTERN",
+		"PREFIX_DASH_PATTERN",
+		"DEFAULT_ICON_SYMBOL_WIDTH",
+		"DEFAULT_ICON_SYMBOL_HEIGHT",
+		"DEFAULT_ICON_IMAGE",
+		function factory(
+			SVG_SOURCE_PATTERN,
+			PREFIX_DASH_PATTERN,
+			DEFAULT_ICON_SYMBOL_WIDTH,
+			DEFAULT_ICON_SYMBOL_HEIGHT,
+			DEFAULT_ICON_IMAGE 
+		){
 			var Icon = React.createClass( {
 				"statics": {
-					"SVG_SOURCE_PATTERN": /\.svg$/,
-					"PREFIX_DASH_PATTERN": /^-/,
-					
-					"defaultIconSymbolWidth": "34",
-					"defaultIconSymbolHeight": "34",
-					"defaultIconImage": "../image/empty.png",
-
 					"svgElementSourceSet": { },
+
+					"sourceList": [ ],
 
 					/*:
 						This will act as a preloader for all the icon sets that will be used.
@@ -27,6 +44,8 @@ angular.module( "Icon", [ ] )
 						This will fetch the icon sets based from the source list.
 					*/
 					"requestAllSVGElementFromSourceList": function requestAllSVGElementFromSourceList( callback ){
+						callback = callback || function callback( ){ };
+
 						var svgElementSourceSet = Icon.svgElementSourceSet;
 						var sourceList = Icon.sourceList;
 
@@ -38,9 +57,7 @@ angular.module( "Icon", [ ] )
 									svgElementSourceSet[ sourceURL ] = svgElementFromSource;
 
 									if( _.values( svgElementSourceSet ).length == sourceList.length ){
-										if( typeof callback == "function" ){
-											callback( );
-										}
+										callback( );
 									}
 								} );
 						} );
@@ -85,9 +102,9 @@ angular.module( "Icon", [ ] )
 					return {
 						"style": { },
 						"className": "",
-						"width": this.defaultIconSymbolWidth,
-						"height": this.defaultIconSymbolHeight,
-						"src": this.defaultIconImage,
+						"width": DEFAULT_ICON_SYMBOL_WIDTH,
+						"height": DEFAULT_ICON_SYMBOL_HEIGHT,
+						"src": DEFAULT_ICON_IMAGE
 					};
 				},
 
@@ -119,7 +136,7 @@ angular.module( "Icon", [ ] )
 
 					var name = this.getName( );
 
-					return [ prefix, name ].join( "-" ).replace( Icon.PREFIX_DASH_PATTERN, "" );
+					return [ prefix, name ].join( "-" ).replace( PREFIX_DASH_PATTERN, "" );
 				},
 
 				"determineSource": function determineSource( sourceURL ){
@@ -136,7 +153,7 @@ angular.module( "Icon", [ ] )
 				},
 
 				"checkIfSVGSource": function checkIfSVGSource( sourceURL ){
-					return Icon.SVG_SOURCE_PATTERN.test( sourceURL );
+					return SVG_SOURCE_PATTERN.test( sourceURL );
 				},
 
 				"getSVGFromSource": function getSVGFromSource( sourceURL ){
@@ -248,6 +265,13 @@ angular.module( "Icon", [ ] )
 
 					var rawSVGElement = this.state.rawSVGElement;
 
+					var imageSource = this.props.src || DEFAULT_ICON_IMAGE;
+					if( sourceState == "svg-source" ){
+						imageSource = DEFAULT_ICON_IMAGE;
+					}
+
+					var style = this.props.style;
+
 					return ( 
 						<div
 							className={ 
@@ -257,12 +281,12 @@ angular.module( "Icon", [ ] )
 								{
 									"overflow": "hidden",
 									"width": "inherit",
-									"height": "inherit"
+									"height": "inherit",
+									"display": style.display
 								}
 							}>
 
-							<img 
-								src={ this.props.src }
+							<div 
 								style={
 									{
 										"width": "inherit",
@@ -270,9 +294,14 @@ angular.module( "Icon", [ ] )
 										"display": (
 											sourceState == "svg-source" &&
 											svgSourceState == "svg-ready"
-										)? "none" : "block"
+										)? "none" : "block",
+										"backgroundImage": "url( \"@imageSource\" )".replace( "@imageSource", imageSource ),
+										"backgroundPosition": "center center",
+										"backgroundSize": "100%",
+										"backgroundRepeat": "no-repeat"
 									}
-								} />
+								}>
+							</div>
 
 							<div
 								style={
@@ -350,21 +379,38 @@ angular.module( "Icon", [ ] )
 
 					var self = this;
 
+					self.timeoutCount = self.timeoutCount || 10;
+
 					this.timeout = setTimeout( function onTimeout( ){
-						if( self.props.src != Icon.defaultIconImage ){
-							self.determineSource( this.props.src );
+						if( self.props.src != DEFAULT_ICON_IMAGE &&
+							!_.isEmpty( self.props.src ) )
+						{
+							self.determineSource( self.props.src );
 
 							clearTimeout( self.timeout );
 							
 							self.timeout = null;
 
-						}else if( "name" in self.props ){
+						}else if( "name" in self.props &&
+							!_.isEmpty( self.props.name ) 
+						){
 							var sourceURL = Icon.searchSourceBasedFromSVGElementName( self.props.name );
 
 							if( _.isEmpty( sourceURL ) ){
 								console.warn( "source url for the specified icon name was not found", self.props.name );
 
-								self.initiateSourceURLWatch( );
+								self.timeoutCount--;
+
+								if( self.timeoutCount ){
+									self.initiateSourceURLWatch( );
+
+								}else{
+									console.warn( "number of tries run out we're giving up" );
+
+									clearTimeout( self.timeout );
+									
+									self.timeout = null;
+								}
 
 							}else{
 								self.setState( { 
@@ -375,6 +421,11 @@ angular.module( "Icon", [ ] )
 									self.timeout = null;
 								} );
 							}
+							
+						}else{
+							clearTimeout( self.timeout );
+
+							self.timeout = null;
 						}
 					}, 1 );
 				},

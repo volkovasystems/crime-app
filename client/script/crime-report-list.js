@@ -136,6 +136,16 @@ Crime
 						function onProceedDefaultAppFlow( ){
 							scope.publish( "hide-report-list" );
 						} );
+
+					scope.on( "dash-clicked:report-list",
+						function onNavigateReport( ){
+							scope.publish( "show-report-list" );
+						} );
+
+					scope.on( "show-report",
+						function onShowReport( ){
+							scope.publish( "hide-report-list" );
+						} );
 				}
 			}
 		}

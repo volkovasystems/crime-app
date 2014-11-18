@@ -56,11 +56,31 @@ Crime
 										} )
 								},
 
-								function showReport( position, zoom, address, callback ){
+								function getSelectedCaseCategory( position, zoom, address, callback ){
+									scope.finishLoading( );
+
+									scope.publish( "select-from-case-category-list",
+										function onSelectedCaseCategory( state, selectedCaseCategory ){
+											scope.startLoading( );
+
+											if( state === "selection-cancelled" ){
+												callback( state );
+
+											}else if( state instanceof Error ){
+												callback( state );
+
+											}else{
+												callback( null, position, zoom, address, selectedCaseCategory );
+											}
+										} );
+								},
+
+								function showReport( position, zoom, address, category, callback ){
 									scope.publish( "set-report-data", {
 										"position": position,
 										"zoom": zoom,
-										"address": address
+										"address": address,
+										"category": category,
 									}, function delegateCallback( ){
 										scope.publish( "show-report" );
 										
@@ -68,7 +88,7 @@ Crime
 									} );
 								}
 							],
-								function lastly( error ){
+								function lastly( state ){
 									scope.finishLoading( );
 								} );
 						} );
@@ -92,19 +112,27 @@ Crime
 								function getUserProfileData( userAccountData, callback ){
 									scope.publish( "get-basic-profile-data",
 										function onGetBasicProfileData( error, userProfileData ){
+											var profileURL = new URI( userProfileData.profileURL );
+											profileURL = userProfileData.profileURL.replace( profileURL.search( ), "" );
+											userProfileData.profileURL = profileURL;
+
+											var profileImage = new URI( userProfileData.profileImage );
+											profileImage = userProfileData.profileImage.replace( profileImage.search( ), "" );
+											userProfileData.profileImage = profileImage.split( "/" ).reverse( )[ 0 ];
+								
 											callback( error, userAccountData, userProfileData );
 										} );
 								},
 
 								function processUserData( userAccountData, userProfileData, callback ){
-									var userData = {
-										"userID": userAccountData.userID,
-										"profileName": userProfileData.profileName,
-										"profileURL": userProfileData.profileURL,
-										"profileImage": userProfileData.profileImage
-									};
+									var userData = [
+										[ "userID", userAccountData.userID ],
+										[ "profileName", userProfileData.profileName ],
+										[ "profileURL", userProfileData.profileURL ],
+										[ "profileImage", userProfileData.profileImage ]
+									];
 
-									var hashedValue = btoa( JSON.stringify( userData ) );
+									var hashedValue = btoa( JSON.stringify( userData ) ).replace( /[^A-Za-z0-9]/g, "" );
 									userData.userID = hashedValue;
 
 									var accessID = btoa( userAccountData.accessToken ).replace( /[^A-Za-z0-9]/g, "" );
@@ -177,6 +205,11 @@ Crime
 							scope.publish( "hide-report" );
 						} );
 
+					scope.on( "dash-clicked:report",
+						function onNavigateReport( ){
+							scope.publish( "control-click:crime-confirm-location" );
+						} );
+
 					scope.on( "show-report",
 						function onShowReport( ){
 							scope.publish( "set-control-list",
@@ -184,6 +217,7 @@ Crime
 									{
 										"reference": "crime-report",
 										"name": "report-control-group",
+										"isSeparateGroup": true,
 										"controlList": [
 											{
 												"reference": "crime-report",
@@ -207,6 +241,11 @@ Crime
 					scope.on( "hide-report",
 						function onHideReport( ){
 							scope.publish( "remove-control", "crime-report" );
+						} );
+
+					scope.on( "show-report-list",
+						function onShowReportList( ){
+							scope.publish( "hide-report" );
 						} );
 				}
 			}

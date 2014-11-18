@@ -72,6 +72,16 @@
       "remote": "ec2-54-77-242-9.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 9001
+    },
+    "app": {
+      "remote": "",
+      "host": "localhost",
+      "port": 10000
+    },
+    "media": {
+      "remote": "",
+      "host": "localhost",
+      "port": 10001
     }
   }
 }

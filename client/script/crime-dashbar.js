@@ -9,6 +9,7 @@ Crime
 					scope.dashList = [
 						"home",
 						"report",
+						"report-list",
 						"locate",
 						"profile",
 					];
@@ -27,6 +28,7 @@ Crime
 					scope.dashItemIconSet = {
 						"home": "ic_home_24px",
 						"report": "ic_report_problem_24px",
+						"report-list": "ic_view_list_24px",
 						"locate": "ic_my_location_24px",
 						"profile": "ic_account_circle_24px",
 					};
@@ -45,6 +47,7 @@ Crime
 				"link": function onLink( scope, element, attribute ){
 					scope.hiddenDashItemList = [
 						"report",
+						"report-list",
 						"locate",
 						"profile"
 					];

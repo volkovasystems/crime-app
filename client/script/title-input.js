@@ -54,7 +54,7 @@ angular.module( "TitleInput", [ ] )
 						clearTimeout( self.timeout );
 
 						self.timeout = null;
-					}, 500 );
+					}, 100 );
 				},
 
 				"componentWillMount": function componentWillMount( ){

@@ -1,11 +1,12 @@
-angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
+angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 
 	.value( "REPORT_LIST_HEADER_LABEL", "crime report list" )
 
 	.factory( "ReportList", [
 		"Icon",
+		"MapPreview",
 		"REPORT_LIST_HEADER_LABEL",
-		function factory( Icon, REPORT_LIST_HEADER_LABEL ){
+		function factory( Icon, MapPreview, REPORT_LIST_HEADER_LABEL ){
 			var ReportList = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -18,9 +19,31 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 				"getInitialState": function getInitialState( ){
 					return {
 						"reportList": [ ],
-						"expandedItemList": [ ],
+						"expandedReportItemList": [ ],
 						"componentState": "report-list-normal"
 					};
+				},
+
+				"onClickCloseReportListButton": function onClickCloseReportListButton( event ){
+					this.scope.publish( "hide-report-list" );
+				},
+
+				"onClickReportItem": function onClickReportItem( event ){
+					var reportID = $( event.currentTarget ).attr( "value" );
+
+					var expandedReportItemList = this.state.expandedReportItemList.slice( 0 );
+
+					if( _.contains( expandedReportItemList, reportID ) ){
+
+						this.setState( {
+							"expandedReportItemList": _.without( expandedReportItemList, reportID )
+						} );
+						
+					}else{
+						this.setState( {
+							"expandedReportItemList": expandedReportItemList.concat( [ reportID ] )
+						} );
+					}
 				},
 
 				"onEachReportItem": function onEachReportList( reportItem, index ){
@@ -28,7 +51,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 
 					var key = [ hashedValue, index ].join( ":" )
 					
-					var expandedItemList = this.state.expandedItemList;
+					var expandedReportItemList = this.state.expandedReportItemList;
 
 					var reportID = reportItem.reportID;
 
@@ -36,13 +59,23 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 
 					var reportTimestamp = reportItem.reportTimestamp;
 
-					var isExpanded = _.contains( expandedItemList, reportID );
+					var isExpanded = _.contains( expandedReportItemList, reportID );
 
 					var timeFromNow = moment( reportTimestamp ).fromNow( ).toUpperCase( );
 
 					var descriptiveDate = moment( reportTimestamp ).format( "dddd, MMMM Do YYYY" ).toUpperCase( );
 
 					var descriptiveTime = moment( reportTimestamp ).format( "h:mm:ss a" ).toUpperCase( );
+
+					var latitude = reportItem.reportLocation.latitude;
+					var longitude = reportItem.reportLocation.longitude;
+					var mapPosition = new google.maps.LatLng( latitude, longitude );
+
+					var mapZoom = reportItem.reportLocation.zoom;
+
+					var reportAddress = reportItem.reportAddress;
+
+					var reportDescription = reportItem.reportDescription;
 
 					return (
 						<li
@@ -52,14 +85,29 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 								( isExpanded )? "expanded" : "collapsed",
 								"shown",
 								"inline-block"
-							].join( " " ) }>
+							].join( " " ) }
+							onClick={ this.onClickReportItem }
+							value={ reportID }>
 
 							<div
 								className={ [
 									"report-item-icon",
 									( isExpanded )? "expanded" : "collapsed"
 								].join( " " ) }>
-								<Icon name={ ( isExpanded )? "ic_expand_less_24px" : "ic_expand_more_24px" } />
+								<Icon 
+									name="ic_expand_less_24px"
+									style={
+										{
+											"display": ( isExpanded )? "block" : "none"
+										}
+									} />
+								<Icon 
+									name="ic_expand_more_24px"
+									style={
+										{
+											"display": ( isExpanded )? "none" : "block"
+										}
+									} />
 							</div>
 
 							<div
@@ -95,6 +143,29 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 									].join( " " ) }>
 									{ descriptiveTime.toUpperCase( ) }
 								</div>
+							</div>
+
+							<div
+								className={ [
+									"report-item-body",
+									( isExpanded )? "expanded" : "collapsed"
+								].join( " " ) }>
+
+								<MapPreview
+									parent={ this }
+									position={ mapPosition }
+									zoom={ mapZoom } 
+									address={ reportAddress } />
+							</div>
+
+							<div
+								className={ [
+									"report-item-footer",
+									( isExpanded )? "expanded" : "collapsed"
+								].join( " " ) }>
+								<p>
+									{ reportDescription.toUpperCase( ) }
+								</p>
 							</div>
 						</li>
 					);
@@ -157,6 +228,35 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon" ] )
 										<span>
 											{ REPORT_LIST_HEADER_LABEL.toUpperCase( ) }
 										</span>
+									</div>
+
+									<div 
+										className={ [
+											"close-report-list-button",
+											"shown",
+											"inline-block"
+										].join( " " ) }
+										onClick={ this.onClickCloseReportListButton }>
+										<a 
+											className={ [
+												"action-element"
+											].join( " " ) }
+											href={ [
+												"#",
+												"close-report-list"
+											].join( "/" ) }
+											style={
+												{
+													"display": "block"
+												}
+											}>
+											
+											<Icon
+												className={ [
+													"close-report-list-icon"
+												].join( " " ) }
+												name="ic_close_24px" />
+										</a>
 									</div>
 								</div>
 

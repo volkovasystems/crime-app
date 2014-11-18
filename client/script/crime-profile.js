@@ -15,6 +15,11 @@ Crime
 
 							scope.broadcast( "initiate-basic-profile-data-retrieval", loginType );
 						} );
+
+					scope.on( "dash-clicked:profile",
+						function onNavigateProfile( ){
+							scope.publish( "show-expanded-profile" );
+						} );
 				}
 			}
 		}

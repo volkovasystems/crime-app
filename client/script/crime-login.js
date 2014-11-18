@@ -102,19 +102,27 @@ Crime
 					function getBasicProfileData( userAccountData, callback ){
 						scope.publish( "get-basic-profile-data",
 							function onGetBasicProfileData( error, userProfileData ){
+								var profileURL = new URI( userProfileData.profileURL );
+								profileURL = userProfileData.profileURL.replace( profileURL.search( ), "" );
+								userProfileData.profileURL = profileURL;
+
+								var profileImage = new URI( userProfileData.profileImage );
+								profileImage = userProfileData.profileImage.replace( profileImage.search( ), "" );
+								userProfileData.profileImage = profileImage.split( "/" ).reverse( )[ 0 ];
+
 								callback( error, userAccountData, userProfileData );
 							} );
 					},
 
 					function applyServerFormat( userAccountData, userProfileData, callback ){
-						var userData = {
-							"userID": userAccountData.userID,
-							"profileName": userProfileData.profileName,
-							"profileURL": userProfileData.profileURL,
-							"profileImage": userProfileData.profileImage
-						};
+						var userData = [
+							[ "userID", userAccountData.userID ],
+							[ "profileName", userProfileData.profileName ],
+							[ "profileURL", userProfileData.profileURL ],
+							[ "profileImage", userProfileData.profileImage ]
+						];
 
-						var hashedValue = btoa( JSON.stringify( userData ) );
+						var hashedValue = btoa( JSON.stringify( userData ) ).replace( /[^A-Za-z0-9]/g, "" );
 
 						var formattedUserData = {
 							"userID": 				hashedValue,

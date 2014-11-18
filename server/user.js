@@ -19,6 +19,7 @@ resolveURL( serverData );
 var userServer = serverData;
 
 var app = express( );
+
 app.use( bodyParser.json( ) );
 app.use( session( { 
 	"secret": "#3vtl+6gw)eew8vdonh(z86mvi)#cn4__isxqoy#(_svy2g2hy",
@@ -333,7 +334,7 @@ app.post( "/user/:accessID/logout",
 	} );
 
 app[ "delete" ]( "/user/:accessID/delete",
-	function onUserLogout( request, response ){
+	function onUserDelete( request, response ){
 
 	} );
 

@@ -1,30 +1,150 @@
-.crime-notify-container {
-	padding: 1.5%;
+section.notify {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
 
-	p {
-		margin-left: -10px;
-		margin-bottom: 0px;
+	width: auto;
+	height: 120px;
+	
+	.notify-container {
+		background-color: #121212;
+		color: #dedede;
+
+		.notify-component {
+			position: absolute;
+
+			top: 0px;
+			bottom: 0px;
+			left: 30%;
+			transform: translateX(-20%);
+
+			width: auto;
+			height: auto;
+			min-width: 500px;
+
+			.notify-header {
+				position: relative;
+				width: 100%;
+				height: 45px;
+
+				.notify-icon-container {
+					position: absolute;
+					top: 0px;
+					left: 0px;
+
+					width: 45px;
+					height: 45px;
+
+					.notify-icon {
+						svg {
+							fill: #ffffff;
+						}
+					}
+
+					.notify-icon.info-type {
+						svg {
+							fill: #5bc0de;
+						}
+					}
+
+					.notify-icon.warn-type {
+						svg {
+							fill: #f0ad4e;
+						}
+					}
+
+					.notify-icon.success-type {
+						svg {
+							fill: #5cb85c;
+						}
+					}
+
+					.notify-icon.error-type {
+						svg {
+							fill: #d9534f;
+						}
+					}
+				} 
+
+				.notify-title {
+					position: absolute;
+					top: 0px;
+					left: 45px;
+					right: 45px;
+
+					width: auto;
+					height: 45px;
+
+					font-size: 20px;
+
+					span {
+						position: absolute;
+
+						top: 50%;
+						transform: translateY( -50% );
+
+						padding-left: 5px;
+					}
+				}
+
+				.close-notify-button {
+					position: absolute;
+					top: 0px;
+					right: 0px;
+
+					width: 45px;
+					height: 45px;
+
+					.close-notify-icon {
+						svg {
+							fill: #ffffff;
+						}
+					}
+				}
+
+				.close-notify-button:hover {
+					.close-notify-icon {
+						svg {
+							fill: #801515;
+						}
+					}
+				}
+			}
+
+			.notify-body {
+				position: relative;
+				width: 100%;
+				height: auto;
+
+				.notify-message {
+					padding-left: 50px;
+
+					padding-right: 50px;
+
+					font-size: 16px;
+				}
+			}
+		}
+	}
+}
+
+section.notify-header {
+	top: 70px;
+
+	.notify-container {
+		.notify-component {
+			top: 0px;
+		}
 	}
 }
 
 section.notify-footer {
-	bottom: 0px;
-}
+	bottom: 70px;
 
-section.notify-header {
-	top: 0px;
-}
-
-section.notify-compact {
-	width: 100%;
-	height: 12.5%;
-	overflow: visible;
-}
-
-section.notify-whole {
-	
-}
-
-section.notify-center {
-	top: 50%;
+	.notify-container {
+		.notify-component {
+			bottom: 0px;
+		}
+	}
 }

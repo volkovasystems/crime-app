@@ -53,7 +53,7 @@ angular.module( "MapPreview", [ "MapView" ] )
 
 				"getDefaultProps": function getDefaultProps( ){
 					return {
-						"title": "map preview",
+						"title": "",
 						"position": DEFAULT_POSITION,
 						"zoom": DEFAULT_MAP_ZOOM,
 						"address": "",
@@ -103,7 +103,7 @@ angular.module( "MapPreview", [ "MapView" ] )
 							<label 
 								style={
 									{
-										"display": "block",
+										"display": ( _.isEmpty( title )? "none" : "block" ),
 										"width": "inherit"
 									}
 								}>

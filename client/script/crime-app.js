@@ -124,6 +124,16 @@ Crime
 	] )
 
 	.run( [
+		function onRun( ){
+			History.Adapter
+				.bind( window, "statechange",
+					function onStateChange( ){ 
+						var State = History.getState( );
+					} );
+		}
+	] )
+
+	.run( [
 		"Store",
 		"Event",
 		"ProgressBar",
@@ -173,11 +183,6 @@ Crime
 
 						function cleanBrowserState( callback ){
 							$rootScope.dropStoredValue( "footprint" );
-
-							History.Adapter.bind( window, "statechange",
-								function onStateChange( ){ 
-									var State = History.getState();
-								} );
 
 							History.pushState( null, null, "/" );
 

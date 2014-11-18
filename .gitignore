@@ -13,3 +13,4 @@ key-*
 userdb
 reportdb
 *.log
+*.db

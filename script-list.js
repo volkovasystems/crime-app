@@ -7,8 +7,11 @@ var scriptList = [
 	"store.js",
 	
 	"icon.js",
+	"name-input.js",
 	"title-input.js",
 	"description-input.js",
+	"path-input.js",
+	"thumbnail-list.js",
 	"map-preview.js",
 	"progress-bar.js",
 	"map-pointer.js",
@@ -19,11 +22,14 @@ var scriptList = [
 	"forehead.js",
 	"dashbar.js",
 	"control.js",
+	"notify.js",
 	"login.js",
 	"profile.js",
 	"search.js",
 	"report.js",
 	"report-list.js",
+	"case-category-list.js",
+	"image-upload.js",
 	"app.js",
 
 	"crime-app.js",
@@ -37,7 +43,9 @@ var scriptList = [
 	"crime-map-locate.js",
 	"crime-map-pointer.js",
 	"crime-report.js",
-	"crime-report-list.js"
+	"crime-report-list.js",
+	"crime-case-category-list.js",
+	"crime-image-upload.js"
 ]
 .map( function onEachScriptFile( scriptFile ){
 	return path.resolve( ".", "client", "script", scriptFile );

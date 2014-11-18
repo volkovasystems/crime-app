@@ -1,4 +1,4 @@
-section.case-category-list {
+section.image-upload {
 	position: absolute;
 	top: 0px;
 	right: 0px;
@@ -6,15 +6,14 @@ section.case-category-list {
 	height: 100%;
 	width: 500px;
 
-	.case-category-list-container {
+	.image-upload-container {
 		background-color: #121212;
-		color: #ffffff;
 
-		.case-category-list-component {
+		.image-upload-component {
 			width: inherit;
 			height: auto;
 
-			.case-category-list-header {
+			.image-upload-header {
 				position: absolute;
 				top: 0px;
 				left: 0px;
@@ -45,6 +44,7 @@ section.case-category-list {
 					width: auto;
 
 					font-size: 25px;
+					color: #ffffff;
 
 					span {
 						position: absolute;
@@ -53,7 +53,7 @@ section.case-category-list {
 					}
 				}
 
-				.close-case-category-list-button {
+				.close-image-upload-button {
 					position: absolute;
 					top: 0px;
 					right: 0px;
@@ -66,14 +66,14 @@ section.case-category-list {
 					}
 				}
 
-				.close-case-category-list-button:hover {
+				.close-image-upload-button:hover {
 					svg {
 						fill: #801515;
 					}
 				}
 			}
 
-			.case-category-list-body {
+			.image-upload-body {
 				position: absolute;
 				top: 70px;
 				bottom: 70px;
@@ -82,37 +82,29 @@ section.case-category-list {
 				height: auto;
 
 				overflow-y: auto;
-				overflow-x: hidden;
 
-				.list-selection {
-					position: relative;
-
+				.image-upload-form {
 					width: inherit;
-					height: 100%;
+					height: auto;
 
-					.thumbnail-item {
-						cursor: pointer;
-						border-width: 1px;
-						border-style: solid;
-						border-color: #ffffff;
-					}
-
-					.thumbnail-item.selected {
-						border-color: #d9534f;
-					}
-
-					.thumbnail-item:hover {
-						border-color: #801515;
-					}
+					padding: 20px;
 				}
-				
+
+				.image-upload-form > * {
+					margin-bottom: 20px;
+				}
+
+				.image-upload-form label {
+					font-size: 20px;
+					color: #ffffff;
+				}
 			}
 		}
 	}
 }
 
 section.control {
-	.control-group.case-category-list-control-group {
+	.control-group.image-upload-control-group {
 		right: 0px;
 		width: 500px;
 	}

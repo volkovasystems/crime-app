@@ -12,7 +12,8 @@ Crime
 					"../library/svg-sprite-content.svg",
 					"../library/svg-sprite-editor.svg",
 					"../library/svg-sprite-action.svg",
-					"../library/svg-sprite-maps.svg"
+					"../library/svg-sprite-maps.svg",
+					"../library/svg-sprite-image.svg"
 				] )
 				
 				.requestAllSVGElementFromSourceList( function onFinished( ){

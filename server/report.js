@@ -223,7 +223,7 @@ app.post( "/api/:accessID/report/:reportID/update",
 	} );
 
 app[ "delete" ]( "/api/:accessID/report/:reportID/delete",
-	function onReportAdd( request, response ){
+	function onReportDelete( request, response ){
 
 	} );
 

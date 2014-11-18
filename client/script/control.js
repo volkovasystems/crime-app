@@ -136,6 +136,26 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 					return this.state.controlList || this.props.controlList;
 				},
 
+				"setHiddenControlList": function setHiddenControlList( hiddenControlList ){
+					var self = this;
+
+					_.each( hiddenControlList,
+						function onEachHiddenControl( hiddenControlName ){
+							if( ( /^\!/ ).test( hiddenControlName ) ){
+								hiddenControlName = hiddenControlName.replace( /^\!/, "" );
+								
+								self.setState( {
+									"hiddenControlList": _.without( self.getHiddenControlList( ), hiddenControlName )
+								} );
+								
+							}else{
+								self.setState( {
+									"hiddenControlList": self.getHiddenControlList( ).concat( [ hiddenControlName ] )
+								} );
+							}
+						} );
+				},
+
 				"getHiddenControlList": function getHiddenControlList( ){
 					return this.state.hiddenControlList || this.props.hiddenControlList;
 				},
@@ -163,6 +183,8 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 
 					var disabledControlList = this.getDisabledControlList( );
 
+					var reference = controlData.reference;
+
 					var name = controlData.name;
 
 					var title = controlData.title || "";
@@ -175,9 +197,9 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 
 					var isIconic = !isDescriptive || !_.isEmpty( icon ); 
 
-					var isHidden = _.contains( hiddenControlList, name );
+					var isHidden = _.contains( hiddenControlList, name ) || _.contains( hiddenControlList, reference );
 
-					var isDisabled = _.contains( disabledControlList, name );
+					var isDisabled = _.contains( disabledControlList, name ) || _.contains( disabledControlList, reference );
 
 					var style = { };
 					if( isDescriptive && percentageWidth ){
@@ -246,6 +268,7 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 								"control-group",
 								"shown",
 								"inline-block",
+								( controlData.isSeparateGroup )? "separated" : "",
 								controlData.name,
 								componentState
 							].join( " " ) }>
@@ -259,7 +282,9 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 				},
 
 				"onEachControl": function onEachControl( controlData, index ){
-					if( "controlList" in controlData ){
+					if( "controlList" in controlData &&
+						!controlData.isSeparateGroup
+					){
 						return this.onEachControlGroup( controlData, index );
 					}
 					
@@ -281,6 +306,11 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 					this.scope.on( "remove-control",
 						function onRemoveControl( reference ){
 							self.removeControl( reference );
+						} );
+
+					this.scope.on( "set-hidden-control-list",
+						function onSetHiddenControlList( hiddenControlList ){
+							self.setHiddenControlList( hiddenControlList );
 						} );
 				},
 
@@ -306,6 +336,21 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 								].join( " " ) }>
 								{ controlList.map( this.onEachControl ) }
 							</div>
+
+							{
+								_( controlList )
+									.map( function onEachControlItem( controlData ){
+										if( "controlList" in controlData &&
+											"isSeparateGroup" in controlData &&
+											controlData.isSeparateGroup )
+										{
+											return controlData;
+										}
+									} )
+									.compact( )
+									.value( )
+									.map( this.onEachControlGroup ) 
+							}
 						</div>
 					);
 				},

@@ -30,9 +30,7 @@ app.get( "/get/all/api/endpoint",
 app.use( express[ "static" ]( staticDirectory ) );
 
 app.use( function onRequest( request, response, next ){
-	//: @todo: Serve 404 page properly.
-	response.status( 404 )
-			.send( "404: Welcome to the dark side." );
+	response.redirect( "/" );
 } );
 
 if( argv.production ){
