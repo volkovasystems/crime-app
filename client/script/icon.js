@@ -379,7 +379,7 @@ angular.module( "Icon", [ ] )
 
 					var self = this;
 
-					self.timeoutCount = self.timeoutCount || 10;
+					self.timeoutCount = self.timeoutCount || 100;
 
 					this.timeout = setTimeout( function onTimeout( ){
 						if( self.props.src != DEFAULT_ICON_IMAGE &&
@@ -405,7 +405,7 @@ angular.module( "Icon", [ ] )
 									self.initiateSourceURLWatch( );
 
 								}else{
-									console.warn( "number of tries run out we're giving up" );
+									console.warn( "number of tries run out we're giving up", self.props.name );
 
 									clearTimeout( self.timeout );
 									
@@ -427,7 +427,7 @@ angular.module( "Icon", [ ] )
 
 							self.timeout = null;
 						}
-					}, 1 );
+					}, 100 );
 				},
 
 				"componentDidMount": function componentDidMount( ){
