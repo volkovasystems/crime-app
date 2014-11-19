@@ -219,7 +219,83 @@ app.post( "/api/:accessID/report/add",
 
 app.post( "/api/:accessID/report/:reportID/update",
 	function onReportUpdate( request, response ){
+		var Report = mongoose.model( "Report" );
 
+		async.waterfall( [
+			function checkIfReportIsExisting( callback ){
+				Report
+					.findOne( { 
+						"reportID": request.param( "reportID" ) 
+					}, function onFound( error, reportData ){
+						callback( error, reportData );
+					} );
+			},
+
+			function trySavingReport( reportData, callback ){
+				if( _.isEmpty( reportData ) ){
+					callback( "redirect-report-add" );
+
+				}else{
+					callback( null, reportData );
+				}
+			},
+
+			function saveReport( reportData, callback ){
+				reportData.reportID = request.param( "reportID" );
+
+				reportData.reportState = request.param( "reportState" );
+
+				reportData.reporterID = request.param( "reporterID" );
+				
+				reportData.reporterState = request.param( "reporterState" );
+
+				reportData.reportTimestamp = request.param( "reportTimestamp" );
+
+				reportData.reportLocation = request.param( "reportLocation" );
+
+				reportData.reportMapImageURL = request.param( "reportMapImageURL" );
+				
+				reportData.reportTitle = request.param( "reportTitle" );
+
+				reportData.reportDescription = request.param( "reportDescription" );
+				
+				reportData.reportCaseType = request.param( "reportCaseType" );
+			
+				reportData.reportAddress = request.param( "reportAddress" );
+
+				reportData.save( function onSave( error ){
+					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
+					setTimeout( function onTimeout( ){
+						callback( error );
+					}, 1000 );
+				} );
+			}
+		],
+			function lastly( state ){
+				if( state === "redirect-report-add" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "pending",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "success"
+						} );
+				}
+			} );
 	} );
 
 app[ "delete" ]( "/api/:accessID/report/:reportID/delete",
