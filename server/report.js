@@ -37,6 +37,7 @@ app.use( function allowCrossDomain( request, response, next ){
 	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
 	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
 	response.header( "Access-Control-Max-Age", 10 );
+	response.header( "Cache-Control", "no-cache, no-store, must-revalidate" );
 	  
 	if( "OPTIONS" == request.method.toUpperCase( ) ){
 		response.sendStatus( 200 );
@@ -48,29 +49,72 @@ app.use( function allowCrossDomain( request, response, next ){
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-		var accessID = request.param( "accessID" );
+		var accessID = request.param( "adminAccessID" ) || request.param( "accessID" );
 
-		var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
-
-		requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+		//: @todo: Transform this to use waterfall.
+		var rootResponse = response;
 
 		if( !_.isEmpty( request.session.userData )
 			&& request.session.accessID === accessID )
 		{
-			next( );
+			var requestEndpoint = userServer.joinPath( "verify/access/:accessID" );
 
-		}else{
+			requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
 			unirest
 				.get( requestEndpoint )
 				.end( function onResponse( response ){
 					var status = response.body.status;
 
-					if( status == "error" ){
-						response
+					if( status == "failed" ){
+						rootResponse
+							.status( 200 )
+							.json( {
+								"status": "failed",
+								"data": response.body.data
+							} );
+
+					}else if( status == "error" ){
+						var error = new Error( response.body.data );
+
+						rootResponse
 							.status( 500 )
 							.json( {
 								"status": "error",
+								"data":error.message
+							} );
+
+					}else{
+						next( );
+					}
+				} );
+
+		}else{
+			var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
+
+			requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
+			unirest
+				.get( requestEndpoint )
+				.end( function onResponse( response ){
+					var status = response.body.status;
+
+					if( status == "failed" ){
+						rootResponse
+							.status( 200 )
+							.json( {
+								"status": "failed",
 								"data": response.body.data
+							} );
+
+					}else if( status == "error" ){
+						var error = new Error( response.body.data );
+
+						rootResponse
+							.status( 500 )
+							.json( {
+								"status": "error",
+								"data": error.message
 							} );
 
 					}else{
@@ -82,7 +126,7 @@ app.all( "/api/:accessID/*",
 						
 						next( );
 					}
-				} );	
+				} );
 		}
 	} );
 
@@ -142,6 +186,19 @@ app.get( "/api/:accessID/report/get/all",
 app.get( "/api/:accessID/report/get/:reportID",
 	function onReportGet( request, response ){
 
+	} );
+
+app.get( "/api/:accessID/report/get/near",
+	function onReportGetNear( request, response ){
+		var Report = mongoose.model( "Report" );
+
+		var latitude = request.param( "latitude" );
+
+		var longitude = request.param( "longitude" );
+
+		if( latitude && longitude ){
+
+		}
 	} );
 
 app.post( "/api/:accessID/report/add",
