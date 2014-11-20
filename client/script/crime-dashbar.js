@@ -10,6 +10,7 @@ Crime
 						"home",
 						"report",
 						"report-list",
+						"report-table",
 						"locate",
 						"profile",
 					];
@@ -31,6 +32,7 @@ Crime
 						"report-list": "ic_view_list_24px",
 						"locate": "ic_my_location_24px",
 						"profile": "ic_account_circle_24px",
+						"report-table": "ic_account_circle_24px"
 					};
 				}
 			};
@@ -48,6 +50,7 @@ Crime
 					scope.hiddenDashItemList = [
 						"report",
 						"report-list",
+						"report-table",
 						"locate",
 						"profile"
 					];

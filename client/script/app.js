@@ -18,7 +18,8 @@ angular
 		"ReportList",
 		"CaseCategoryList",
 		"Notify",
-		"ImageUpload"
+		"ImageUpload",
+		"ReportTable"
 	] )
 	.run( [
 		"$rootScope",
@@ -117,6 +118,12 @@ angular
 				},
 				function checkRender( callback ){
 					$rootScope.on( "image-upload-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "report-table-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
