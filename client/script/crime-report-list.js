@@ -56,7 +56,12 @@ Crime
 					function getReportListFromServer( requestEndpoint, callback ){
 						$http.get( requestEndpoint )
 							.success( function onSuccess( response, status ){
-								callback( null, response.data );
+								if( response.status == "failed" ){
+									callback( response.data );
+
+								}else{
+									callback( null, response.data );
+								}
 							} )
 							.error( function onError( response, status ){
 								//: @todo: Do something on error.
@@ -71,7 +76,9 @@ Crime
 					}
 				],
 					function lastly( state, response ){
-						if( state === "recurse" ){
+						if( state === "no-user-data" ){
+							//: Do nothing?
+						}else if( state === "recurse" ){
 							//: Do nothing?
 						}else if( state instanceof Error ){
 							scope.publish( "error", "report-list-error", state, response );

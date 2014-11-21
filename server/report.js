@@ -37,6 +37,7 @@ app.use( function allowCrossDomain( request, response, next ){
 	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
 	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
 	response.header( "Access-Control-Max-Age", 10 );
+	response.header( "Cache-Control", "no-cache, no-store, must-revalidate" );
 	  
 	if( "OPTIONS" == request.method.toUpperCase( ) ){
 		response.sendStatus( 200 );
@@ -48,29 +49,72 @@ app.use( function allowCrossDomain( request, response, next ){
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-		var accessID = request.param( "accessID" );
+		var accessID = request.param( "adminAccessID" ) || request.param( "accessID" );
 
-		var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
-
-		requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+		//: @todo: Transform this to use waterfall.
+		var rootResponse = response;
 
 		if( !_.isEmpty( request.session.userData )
 			&& request.session.accessID === accessID )
 		{
-			next( );
+			var requestEndpoint = userServer.joinPath( "verify/access/:accessID" );
 
-		}else{
+			requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
 			unirest
 				.get( requestEndpoint )
 				.end( function onResponse( response ){
 					var status = response.body.status;
 
-					if( status == "error" ){
-						response
+					if( status == "failed" ){
+						rootResponse
+							.status( 200 )
+							.json( {
+								"status": "failed",
+								"data": response.body.data
+							} );
+
+					}else if( status == "error" ){
+						var error = new Error( response.body.data );
+
+						rootResponse
 							.status( 500 )
 							.json( {
 								"status": "error",
+								"data":error.message
+							} );
+
+					}else{
+						next( );
+					}
+				} );
+
+		}else{
+			var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
+
+			requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
+			unirest
+				.get( requestEndpoint )
+				.end( function onResponse( response ){
+					var status = response.body.status;
+
+					if( status == "failed" ){
+						rootResponse
+							.status( 200 )
+							.json( {
+								"status": "failed",
 								"data": response.body.data
+							} );
+
+					}else if( status == "error" ){
+						var error = new Error( response.body.data );
+
+						rootResponse
+							.status( 500 )
+							.json( {
+								"status": "error",
+								"data": error.message
 							} );
 
 					}else{
@@ -82,7 +126,7 @@ app.all( "/api/:accessID/*",
 						
 						next( );
 					}
-				} );	
+				} );
 		}
 	} );
 
@@ -142,6 +186,19 @@ app.get( "/api/:accessID/report/get/all",
 app.get( "/api/:accessID/report/get/:reportID",
 	function onReportGet( request, response ){
 
+	} );
+
+app.get( "/api/:accessID/report/get/near",
+	function onReportGetNear( request, response ){
+		var Report = mongoose.model( "Report" );
+
+		var latitude = request.param( "latitude" );
+
+		var longitude = request.param( "longitude" );
+
+		if( latitude && longitude ){
+
+		}
 	} );
 
 app.post( "/api/:accessID/report/add",
@@ -219,7 +276,83 @@ app.post( "/api/:accessID/report/add",
 
 app.post( "/api/:accessID/report/:reportID/update",
 	function onReportUpdate( request, response ){
+		var Report = mongoose.model( "Report" );
 
+		async.waterfall( [
+			function checkIfReportIsExisting( callback ){
+				Report
+					.findOne( { 
+						"reportID": request.param( "reportID" ) 
+					}, function onFound( error, reportData ){
+						callback( error, reportData );
+					} );
+			},
+
+			function trySavingReport( reportData, callback ){
+				if( _.isEmpty( reportData ) ){
+					callback( "redirect-report-add" );
+
+				}else{
+					callback( null, reportData );
+				}
+			},
+
+			function saveReport( reportData, callback ){
+				reportData.reportID = request.param( "reportID" );
+
+				reportData.reportState = request.param( "reportState" );
+
+				reportData.reporterID = request.param( "reporterID" );
+				
+				reportData.reporterState = request.param( "reporterState" );
+
+				reportData.reportTimestamp = request.param( "reportTimestamp" );
+
+				reportData.reportLocation = request.param( "reportLocation" );
+
+				reportData.reportMapImageURL = request.param( "reportMapImageURL" );
+				
+				reportData.reportTitle = request.param( "reportTitle" );
+
+				reportData.reportDescription = request.param( "reportDescription" );
+				
+				reportData.reportCaseType = request.param( "reportCaseType" );
+			
+				reportData.reportAddress = request.param( "reportAddress" );
+
+				reportData.save( function onSave( error ){
+					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
+					setTimeout( function onTimeout( ){
+						callback( error );
+					}, 1000 );
+				} );
+			}
+		],
+			function lastly( state ){
+				if( state === "redirect-report-add" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "pending",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "success"
+						} );
+				}
+			} );
 	} );
 
 app[ "delete" ]( "/api/:accessID/report/:reportID/delete",

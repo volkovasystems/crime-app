@@ -36,6 +36,7 @@ app.use( function allowCrossDomain( request, response, next ){
 	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
 	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
 	response.header( "Access-Control-Max-Age", 10 );
+	response.header( "Cache-Control", "no-cache, no-store, must-revalidate" );
 	  
 	if( "OPTIONS" == request.method.toUpperCase( ) ){
 		response.sendStatus( 200 );
@@ -47,19 +48,212 @@ app.use( function allowCrossDomain( request, response, next ){
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-		next( );		
+
+		async.waterfall( [
+			function verifyAccessID( callback ){
+				var accessID = request.param( "accessID" );
+
+				var requestEndpoint = userServer.joinPath( "verify/access/:accessID", true );
+
+				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
+				unirest
+					.get( requestEndpoint )
+					.end( function onResponse( response ){
+						var status = response.body.status;
+
+						if( status == "error" ){
+							var error = new Error( response.body.data );
+
+							callback( error );
+
+						}else if( status == "failed" ){
+							callback( "verify-failed", response.body.data )
+							
+						}else{
+							callback( );
+						}
+					} );
+			}
+		],
+			function lastly( state, message ){
+				if( state === "verify-failed" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": message
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					next( );
+				}
+			} );
 	} );
 
-app.get( "/api/:accessID/verify",
+app.get( "/verify/access/:accessID",
 	function onUserVerify( request, response ){
-		//: Bypass this first.
-		//: @todo: Implement this by checking the access token based on the account type.
-		
+		var User = mongoose.model( "User" );
+
+		async.waterfall( [
+			function getUserData( callback ){
+				User
+					.findOne( { 
+						"accessID": request.param( "accessID" ) 
+					}, function onFound( error, userData ){
+						if( error ){
+							callback( error );
+						
+						}else if( _.isEmpty( userData ) ){
+							callback( "no-user-data" );
+
+						}else{
+							callback( null, userData );
+						}
+					} );
+			},
+
+			function verifyAccessIDFromThirdPartyService( userData, callback ){
+				if( userData.userAccountType == "facebook" ){
+					var requestEndpoint = [ 
+						"https://graph.facebook.com/me",
+						[ "access_token", userData.userAccountToken ].join( "=" )
+					].join( "?" );
+
+					console.log( requestEndpoint );
+
+					unirest
+						.get( requestEndpoint )
+						.end( function onResponse( response ){
+							var responseData = JSON.parse( response.body );
+
+							if( "error" in responseData ){
+								var error = responseData.error;
+
+								if( error.type == "OAuthException" ){
+									callback( null, "access-token-invalid", userData );
+
+								}else{
+									callback( null, new Error( error.message ), userData );
+								}
+
+							}else{
+								callback( null, null, userData );
+							}
+						} );
+				
+				}else{
+					callback( "account-type-not-supported" );
+				}
+			},
+
+			function trySavingVerification( verificationError, userData, callback ){
+				if( verificationError ){
+					userData.accessState = "rejected";
+
+					userData.save( function onSave( error ){
+						if( error ){
+							error = new Error( JSON.stringify( [ error, verificationError ] ) );
+						
+						}else{
+							error = verificationError;
+						}
+
+						callback( error );
+					} );
+
+				}else{
+					userData.accessState = "verified";
+
+					userData.save( function onSave( error ){
+						callback( error );
+					} );
+				}
+			}
+		],
+			function lastly( state ){
+				if( state === "account-type-not-supported" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state === "access-token-invalid" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state === "no-user-data" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "success"
+						} );
+				}
+			} );
 	} );
 
 app.get( "/api/:accessID/user/get/all",
 	function onUserGetAll( request, response ){
+		var User = mongoose.model( "User" );
 
+		User
+			.find( { }, 
+				function onFindAll( error, userDataList ){				
+					if( error ){
+						response
+							.status( 500 )
+							.json( {
+								"status": "error",
+								"data": error.message
+							} );
+
+					}else if( _.isEmpty( userDataList ) ){
+						response
+							.status( 200 )
+							.json( {
+								"status": "failed",
+								"data": [ ]
+							} );
+
+					}else{
+						response
+							.status( 200 )
+							.json( {
+								"status": "success",
+								"data": userDataList
+							} );
+					}
+				} );
 	} );
 
 app.get( "/api/:accessID/user/get",

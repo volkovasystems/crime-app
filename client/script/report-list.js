@@ -191,7 +191,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 				"render": function onRender( ){
 					var componentState = this.state.componentState;
 
-					var reportList = this.state.reportList;
+					var reportList = this.state.reportList || [ ];
 
 					return ( 
 						<div 
