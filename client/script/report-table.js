@@ -72,6 +72,24 @@ angular
 							<td>
 								{ reportData.reportDescription }
 							</td>
+							<td>
+								<input type="button" 
+									   disabled={ reportData.state == "accept" } 
+									   name="reportStatusAccept" 
+									   value="Accept" 
+									   className={ [
+									   		"btn",
+											( reportData.state == "accept" ) ? "disabled" : 'enabled'
+										].join( " " ) }/>
+								<input type="button" 
+									   disabled={ reportData.state == "reject" } 
+									   name="reportStatusReject" 
+									   value="Reject" 
+									   className={ [
+									   		"btn",
+											( reportData.state == "reject" ) ? "disabled" : 'enabled'
+										].join( " " ) } />
+							</td>
 						</tr>
 					);
 				},
@@ -142,6 +160,7 @@ angular
 								<tr>
 									<th>Title</th>
 									<th>Description</th>
+									<th>Report Status</th>
 								</tr>
 									{ reportList.map( this.onEachReportItem ) } 
 								</table>

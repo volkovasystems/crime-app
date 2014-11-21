@@ -12,11 +12,13 @@ Crime
 					var reports = [
 						{
 							"reportTitle": "Sunog",
-							"reportDescription": "Sa Macabalan"
+							"reportDescription": "Sa Macabalan",
+							"state": "reject"
 						},
 						{
 							"reportTitle": "Rape",
-							"reportDescription": "Sa Macabalan"
+							"reportDescription": "Sa Macabalan",
+							"state": "accept"
 						}
 					];										
 
