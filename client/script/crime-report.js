@@ -151,15 +151,25 @@ Crime
 								function applyServerFormat( userData, reportData, callback ){
 									var hashedValue = btoa( JSON.stringify( reportData ) );
 
+									var latitude = reportData.position.latitude;
+									var radianLatitude = math.unit( latitude, "deg" ).to( "rad" );
+
+									var longitude = reportData.position.longitude;
+									var radianLongitude = math.unit( longitude, "deg" ).to( "rad" );
+
 									var formattedReportData = {
 										"reportID": 			hashedValue,
 										"reporterID": 			userData.userID,
 										"reporterState": 		"anonymous",
 										"reportTimestamp": 		reportData.timestamp,
 										"reportLocation": {
-											"latitude": 		reportData.position.latitude,
-											"longitude": 		reportData.position.longitude,
-											"zoom": 			reportData.zoom
+											"latitude": 		latitude,
+											"longitude": 		longitude,
+											"zoom": 			reportData.zoom,
+											"coordinate": 		[
+																	radianLatitude,
+																	radianLongitude
+																]
 										},
 										"reportMapImageURL": 	reportData.staticMapURL,
 										"reportTitle": 			reportData.title,

@@ -27,7 +27,8 @@ database.createDatabase( "Report", "reportdb", host, databasePort,
 				"reportLocation": {
 					"latitude": Number,
 					"longitude": Number,
-					"zoom": Number
+					"zoom": Number,
+					"coordinate": Array
 				},
 				"reportMapImageURL": String,
 				"reportTitle": String,

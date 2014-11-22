@@ -49,7 +49,9 @@ app.use( function allowCrossDomain( request, response, next ){
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-		var accessID = request.param( "adminAccessID" ) || request.param( "accessID" );
+		var accessID = request.get( "Administrator-Access-ID" ) || 
+			request.param( "adminAccessID" ) || 
+			request.param( "accessID" );
 
 		//: @todo: Transform this to use waterfall.
 		var rootResponse = response;
@@ -188,7 +190,7 @@ app.get( "/api/:accessID/report/get/:reportID",
 
 	} );
 
-app.get( "/api/:accessID/report/get/near",
+app.get( "/api/:accessID/report/get/all/near",
 	function onReportGetNear( request, response ){
 		var Report = mongoose.model( "Report" );
 
@@ -196,8 +198,92 @@ app.get( "/api/:accessID/report/get/near",
 
 		var longitude = request.param( "longitude" );
 
-		if( latitude && longitude ){
+		var distance = parseInt( request.param( "distance" ) || 0 ) || 20000;
 
+		if( latitude && longitude ){
+			Report
+				.where( "reportLocation.coordinate" )
+				.near( {
+					"center": [ latitude, longitude ],
+					"maxDistance": distance,
+					"spherical": true
+				} )
+				.exec( function onResult( error, reportList ){
+					if( error ){
+						response
+							.status( 500 )
+							.json( {
+								"status": "error",
+								"data": error.message
+							} );
+
+					}else if( _.isEmpty( reportList ) ){
+						response
+							.status( 200 )
+							.json( {
+								"status": "failed",
+								"data": [ ]
+							} );
+
+					}else{
+						response
+							.status( 200 )
+							.json( {
+								"status": "success",
+								"data": reportList
+							} );
+					}
+				} );
+		}
+	} );
+
+app.get( "/api/:accessID/report/get/all/near/:reporterID",
+	function onReportGetNear( request, response ){
+		var Report = mongoose.model( "Report" );
+
+		var latitude = request.param( "latitude" );
+
+		var longitude = request.param( "longitude" );
+
+		var distance = parseInt( request.param( "distance" ) || 0 ) || 20000;
+
+		if( latitude && longitude ){
+			Report
+				.find( {
+					"reporterID": request.param( "reporterID" )
+				} )
+				.where( "reportLocation.coordinate" )
+				.near( {
+					"center": [ latitude, longitude ],
+					"maxDistance": distance,
+					"spherical": true
+				} )
+				.exec( function onResult( error, reportList ){
+					if( error ){
+						response
+							.status( 500 )
+							.json( {
+								"status": "error",
+								"data": error.message
+							} );
+
+					}else if( _.isEmpty( reportList ) ){
+						response
+							.status( 200 )
+							.json( {
+								"status": "failed",
+								"data": [ ]
+							} );
+
+					}else{
+						response
+							.status( 200 )
+							.json( {
+								"status": "success",
+								"data": reportList
+							} );
+					}
+				} );
 		}
 	} );
 
@@ -298,27 +384,27 @@ app.post( "/api/:accessID/report/:reportID/update",
 			},
 
 			function saveReport( reportData, callback ){
-				reportData.reportID = request.param( "reportID" );
+				reportData.reportID = request.param( "reportID" ) || reportData.reportID;
 
-				reportData.reportState = request.param( "reportState" );
+				reportData.reportState = request.param( "reportState" ) || reportData.reportState;
 
-				reportData.reporterID = request.param( "reporterID" );
+				reportData.reporterID = request.param( "reporterID" ) || reportData.reporterID;
 				
-				reportData.reporterState = request.param( "reporterState" );
+				reportData.reporterState = request.param( "reporterState" ) || reportData.reporterState;
 
-				reportData.reportTimestamp = request.param( "reportTimestamp" );
+				reportData.reportTimestamp = request.param( "reportTimestamp" ) || reportData.reportTimestamp;
 
-				reportData.reportLocation = request.param( "reportLocation" );
+				reportData.reportLocation = request.param( "reportLocation" ) || reportData.reportLocation;
 
-				reportData.reportMapImageURL = request.param( "reportMapImageURL" );
+				reportData.reportMapImageURL = request.param( "reportMapImageURL" ) || reportData.reportMapImageURL;
 				
-				reportData.reportTitle = request.param( "reportTitle" );
+				reportData.reportTitle = request.param( "reportTitle" ) || reportData.reportTitle;
 
-				reportData.reportDescription = request.param( "reportDescription" );
+				reportData.reportDescription = request.param( "reportDescription" ) || reportData.reportDescription;
 				
-				reportData.reportCaseType = request.param( "reportCaseType" );
+				reportData.reportCaseType = request.param( "reportCaseType" ) || reportData.reportCaseType;
 			
-				reportData.reportAddress = request.param( "reportAddress" );
+				reportData.reportAddress = request.param( "reportAddress" ) || reportData.reportAddress;
 
 				reportData.save( function onSave( error ){
 					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
