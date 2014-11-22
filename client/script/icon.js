@@ -245,7 +245,7 @@ angular.module( "Icon", [ ] )
 
 				"attachSVGElement": function attachSVGElement( svgElement ){
 					this.setState( {
-						"rawSVGElement": $( "<div>" ).append( svgElement ).html( ),
+						"rawSVGElement": $( "<div>" ).append( svgElement.clone( ) ).html( ),
 						"svgSourceState": "svg-ready"
 					} );
 				},
