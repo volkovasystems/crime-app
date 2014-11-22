@@ -49,7 +49,9 @@ app.use( function allowCrossDomain( request, response, next ){
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-		var accessID = request.param( "adminAccessID" ) || request.param( "accessID" );
+		var accessID = request.get( "Administrator-Access-ID" ) || 
+			request.param( "adminAccessID" ) || 
+			request.param( "accessID" );
 
 		//: @todo: Transform this to use waterfall.
 		var rootResponse = response;
