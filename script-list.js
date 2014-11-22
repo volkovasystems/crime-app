@@ -5,6 +5,7 @@ var scriptList = [
 	"event.js",
 	"page-flow.js",
 	"store.js",
+	"transvg.js",
 	
 	"icon.js",
 	"name-input.js",
@@ -17,6 +18,7 @@ var scriptList = [
 	"map-pointer.js",
 	"map-locate.js",
 	"map-view.js",
+	"map-marker.js",
 
 	"home.js",
 	"forehead.js",
