@@ -28,7 +28,8 @@ database.createDatabase( "User", "userdb", host, databasePort,
 				"userAccountToken": String,
 				"userDisplayName": String,
 				"userProfileLink": String,
-				"userProfileImageURL": String
+				"userProfileImageURL": String,
+				"userAccountCreationTime": Date
 			} );
 
 			mongoose.model( "User", user );

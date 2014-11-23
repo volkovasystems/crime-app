@@ -38,6 +38,8 @@ database.createDatabase( "Report", "reportdb", host, databasePort,
 				"reportMediaList": Array
 			} );
 
+			report.index( { "reportLocation.coordinate": "2d" } );
+
 			mongoose.model( "Report", report );
 		}
 	} );

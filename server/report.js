@@ -198,7 +198,9 @@ app.get( "/api/:accessID/report/get/all/near",
 
 		var longitude = request.param( "longitude" );
 
-		var distance = parseInt( request.param( "distance" ) || 0 ) || 20000;
+		var distance = parseInt( request.param( "distance" ) || 0 ) || 500;
+
+		console.log( "GET ALL NEAR: ", latitude, longitude );
 
 		if( latitude && longitude ){
 			Report
@@ -245,7 +247,9 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 
 		var longitude = request.param( "longitude" );
 
-		var distance = parseInt( request.param( "distance" ) || 0 ) || 20000;
+		var distance = parseInt( request.param( "distance" ) || 0 ) || 100;
+
+		distance = ( distance / 1000 ) / 6371;
 
 		if( latitude && longitude ){
 			Report
@@ -253,8 +257,9 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 					"reporterID": request.param( "reporterID" )
 				} )
 				.where( "reportLocation.coordinate" )
+				//: @todo: This is buggy, if can change this to use GeoJSON, instead of legacy coordinates.
 				.near( {
-					"center": [ latitude, longitude ],
+					"center": [ longitude, latitude ],
 					"maxDistance": distance,
 					"spherical": true
 				} )

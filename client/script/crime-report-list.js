@@ -118,8 +118,8 @@ Crime
 
 							The report list will not be shown.
 					*/
-					scope.on( "logged-in",
-						function onLoggedIn( loginType ){
+					scope.on( "login-success",
+						function onLoginSuccess( loginType ){
 							getReportList( scope,
 								function onGetReportList( ){
 									scope.publish( "show-report-list" );		

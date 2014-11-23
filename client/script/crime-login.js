@@ -125,13 +125,14 @@ Crime
 						var hashedValue = btoa( JSON.stringify( userData ) ).replace( /[^A-Za-z0-9]/g, "" );
 
 						var formattedUserData = {
-							"userID": 				hashedValue,
-							"userAccountID": 		userAccountData.userID,
-							"userAccountType": 		loginType,
-							"userAccountToken": 	userAccountData.accessToken,
-							"userDisplayName": 		userProfileData.profileName,
-							"userProfileLink": 		userProfileData.profileURL,
-							"userProfileImageURL": 	userProfileData.profileImage
+							"userID": 					hashedValue,
+							"userAccountID": 			userAccountData.userID,
+							"userAccountType": 			loginType,
+							"userAccountToken": 		userAccountData.accessToken,
+							"userAccountCreationTime": 	Date.now( ),
+							"userDisplayName": 			userProfileData.profileName,
+							"userProfileLink": 			userProfileData.profileURL,
+							"userProfileImageURL": 		userProfileData.profileImage
 						};
 
 						callback( null, formattedUserData );
