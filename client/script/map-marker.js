@@ -6,7 +6,7 @@ angular.module( "MapMarker", [ "Event", "Transvg" ] )
 		"Transvg",
 		"MAP_MARKER_LIST",
 		function factory( Transvg, MAP_MARKER_LIST ){
-			var createMapMarker = function createMapMarker( position, iconData, mapComponent ){
+			var createMapMarker = function createMapMarker( position, iconData, mapComponent, scope ){
 				$.get( iconData.sourceURL,
 					function onResult( svgData ){
 						var svgSourceElement = $( svgData );
@@ -25,6 +25,11 @@ angular.module( "MapMarker", [ "Event", "Transvg" ] )
 									"icon": pathData,
 									"map": mapComponent
 								} );
+
+								google.maps.event.addListener( marker, "click",
+									function onClick( ){
+										scope.publish( "pin-clicked", position.latitude, position.longitude );
+									} );
 
 								MAP_MARKER_LIST.push( marker );
 							} );
@@ -50,13 +55,16 @@ angular.module( "MapMarker", [ "Event", "Transvg" ] )
 					scope.on( "create-map-marker",
 						function onCreateMapMarker( position, iconData, mapComponent ){
 							if( MAP_MARKER_LIST.length ){
+								var mapMarker = null;
 								while(
-									MAP_MARKER_LIST.pop( ).setMap( null ), 
+									mapMarker = MAP_MARKER_LIST.pop( ),
+									google.maps.event.clearInstanceListeners( mapMarker ),
+									mapMarker.setMap( null ), 
 									MAP_MARKER_LIST.length
 								);	
 							}
 
-							createMapMarker( position, iconData, mapComponent );
+							createMapMarker( position, iconData, mapComponent, scope );
 						} );
 				}
 			};

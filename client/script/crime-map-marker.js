@@ -69,6 +69,8 @@ Crime
 					},
 
 					function createAllMapMarker( reportList, callback ){
+						scope.currentReportList = reportList;
+
 						_.each( reportList,
 							function onEachReportItem( reportData ){
 								var iconData = {
@@ -82,7 +84,7 @@ Crime
 						callback( );
 					}
 				],
-					function lastly( error ){
+					function lastly( error, reportList ){
 						scope.finishLoading( );
 					} );
 			};
@@ -94,7 +96,8 @@ Crime
 	.directive( "mapMarkerController", [
 		"Event",
 		"getAllCrimeNearReporter",
-		function directive( Event, getAllCrimeNearReporter ){
+		"getAddressAtPosition",
+		function directive( Event, getAllCrimeNearReporter, getAddressAtPosition ){
 			return {
 				"restrict": "A",
 				"scope": true,
@@ -128,6 +131,22 @@ Crime
 
 								self.timeout = null;
 							}, 3000 );
+						} );
+
+					scope.on( "pin-clicked",
+						function onPinClicked( latitude, longitude ){
+							scope.publish( "set-current-position", latitude, longitude );
+
+							var selectedReportList = _.filter( scope.currentReportList,
+								function onEachReportItem( reportData ){
+									return reportData.reportLocation.latitude == latitude &&
+										reportData.reportLocation.longitude == longitude;
+								} );
+
+							scope.publish( "set-notify-header" );
+
+							var reportData = selectedReportList[ 0 ];
+							scope.publish( "notify", reportData.reportTitle, reportData.reportDescription, "info" );
 						} );
 				}
 			}
