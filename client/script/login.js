@@ -74,8 +74,21 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 								function getHostAddress( callback ){
 									$rootScope.publish( "get-host-address",
 										function onGetHostAddress( error, hostAddress ){
-											callback( error, hostAddress );
-										} )
+											if( error ){
+												callback( error );
+
+											}else{
+												var uri = new URI( );
+												var currentHostAddress = [ "http:/", uri.domain( ) ].join( "/" );
+
+												if( hostAddress != currentHostAddress ){
+													callback( error, currentHostAddress );
+
+												}else{
+													callback( error, hostAddress );
+												}
+											}
+										} );
 								},
 
 								function getFacebookAppID( hostAddress, callback ){
