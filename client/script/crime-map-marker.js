@@ -105,32 +105,32 @@ Crime
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
+					var self = this;
 					scope.on( "login-success",
 						function onLoginSuccess( ){
 							getAllCrimeNearReporter( scope );
+
+							scope.on( "map-position-changed",
+								function onMapPositionChanged( position ){
+									if( self.timeout ){
+										clearTimeout( self.timeout );
+
+										self.timeout = null;
+									}
+
+									self.timeout = setTimeout( function onTimeout( ){
+										getAllCrimeNearReporter( scope );
+
+										clearTimeout( self.timeout );
+
+										self.timeout = null;
+									}, 3000 );
+								} );
 						} );
 
 					scope.on( "report-added",
 						function onLoginSuccess( ){
 							getAllCrimeNearReporter( scope );
-						} );
-
-					var self = this;
-					scope.on( "map-position-changed",
-						function onMapPositionChanged( position ){
-							if( self.timeout ){
-								clearTimeout( self.timeout );
-
-								self.timeout = null;
-							}
-
-							self.timeout = setTimeout( function onTimeout( ){
-								getAllCrimeNearReporter( scope );
-
-								clearTimeout( self.timeout );
-
-								self.timeout = null;
-							}, 3000 );
 						} );
 
 					scope.on( "pin-clicked",
