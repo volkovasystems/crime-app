@@ -152,10 +152,10 @@ Crime
 									var hashedValue = btoa( JSON.stringify( reportData ) );
 
 									var latitude = reportData.position.latitude;
-									var radianLatitude = math.unit( latitude, "deg" ).to( "rad" );
+									var radianLatitude = math.unit( latitude, "deg" ).to( "rad" ).value;
 
 									var longitude = reportData.position.longitude;
-									var radianLongitude = math.unit( longitude, "deg" ).to( "rad" );
+									var radianLongitude = math.unit( longitude, "deg" ).to( "rad" ).value;
 
 									var formattedReportData = {
 										"reportID": 			hashedValue,

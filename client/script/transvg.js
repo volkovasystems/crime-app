@@ -90,14 +90,15 @@ angular.module( "Transvg", [ ] )
 						"path": pathElement.attr( "d" ),
 						"strokeColor": pathElement.attr( "stroke" ),
 						"strokeWeight": pathElement.attr( "stroke-width" ),
-						"fillColor": pathElement.attr( "fill-color" )
+						"fillColor": pathElement.attr( "fill" ) || "#000000",
+						"fillOpacity": parseInt( pathElement.attr( "fill-opacity" ) || "0" ) || 1
 					} );
 				} );
 
 				svgElement.data( "pathList", pathList );
 			};
 
-			Transvg.prototype.getPathData = function getPathData( reference ){
+			Transvg.prototype.getPathDataList = function getPathDataList( reference ){
 				var svgElement = _.find( this.svgElementList,
 					function onEachSVGElement( svgElement ){
 						return svgElement.data( "id" ) == reference;

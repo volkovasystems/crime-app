@@ -138,6 +138,11 @@ angular.module( "MapLocate", [ "Event" ] )
 								} );
 						} );
 
+					scope.on( "set-current-position",
+						function onSetCurrentPosition( latitude, longitude ){
+							scope.mapComponent.setCenter( new google.maps.LatLng( latitude, longitude ) );
+						} );
+
 					scope.on( "get-current-position",
 						function getCurrentPosition( callback ){
 							callback( null, scope.mapComponent.getCenter( ) );

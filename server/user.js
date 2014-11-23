@@ -324,16 +324,17 @@ app.post( "/user/register",
 
 			function registerUser( accessID, callback ){
 				var newUser = new User( {
-					"userID": 				request.param( "userID" ),
-					"userState": 			"logged-in",
-					"accessState": 			"pending",
-					"accessID": 			accessID,
-					"userAccountID": 		request.param( "userAccountID" ),
-					"userAccountType": 		request.param( "userAccountType" ),
-					"userAccountToken": 	request.param( "userAccountToken" ),
-					"userDisplayName": 		request.param( "userDisplayName" ),
-					"userProfileLink": 		request.param( "userProfileLink" ),
-					"userProfileImageURL": 	request.param( "userProfileImageURL" ),
+					"userID": 					request.param( "userID" ),
+					"userState": 				"logged-in",
+					"accessState": 				"pending",
+					"accessID": 				accessID,
+					"userAccountID": 			request.param( "userAccountID" ),
+					"userAccountType": 			request.param( "userAccountType" ),
+					"userAccountToken": 		request.param( "userAccountToken" ),
+					"userAccountCreationTime": 	request.param( "userAccountCreationTime" ),
+					"userDisplayName": 			request.param( "userDisplayName" ),
+					"userProfileLink": 			request.param( "userProfileLink" ),
+					"userProfileImageURL": 		request.param( "userProfileImageURL" )
 				} );
 
 				newUser.save( function onSave( error ){
