@@ -54,6 +54,10 @@ angular
 					this.scope.publish( "hide-report" );
 				},
 
+				"onClickBackReportButton": function onClickBackReportButton( event ){
+					this.scope.publish( "back-report" );
+				},
+
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 
@@ -127,10 +131,41 @@ angular
 									className={ [
 										"report-header"
 									].join( " " ) }>
+
+									<div 
+										className={ [
+											"header-icon",
+											"back-report-button",
+											"shown",
+											"inline-block"
+										].join( " " ) }
+										onClick={ this.onClickBackReportButton }>
+										<a 
+											className={ [
+												"action-element"
+											].join( " " ) }
+											href={ [
+												"#",
+												"back-report"
+											].join( "/" ) }
+											style={
+												{
+													"display": "block"
+												}
+											}>
+											
+											<Icon
+												className={ [
+													"back-report-icon"
+												].join( " " ) }
+												name="ic_arrow_back_24px" />
+										</a>
+									</div>
+
 									<div
 										className={ [
 											"header-icon",
-											"shown",
+											"hidden",
 											"inline-block"
 										].join( " " ) }>
 										<Icon name="ic_report_problem_24px" />
@@ -150,7 +185,7 @@ angular
 									<div 
 										className={ [
 											"close-report-button",
-											"shown",
+											"hidden",
 											"inline-block"
 										].join( " " ) }
 										onClick={ this.onClickCloseReportButton }>

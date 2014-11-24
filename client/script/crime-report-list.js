@@ -118,13 +118,13 @@ Crime
 
 							The report list will not be shown.
 					*/
-					scope.on( "login-success",
+					/*scope.on( "login-success",
 						function onLoginSuccess( loginType ){
 							getReportList( scope,
 								function onGetReportList( ){
 									scope.publish( "show-report-list" );		
 								} );
-						} );
+						} );*/
 
 					scope.on( "report-added",
 						function onReportAdded( ){
