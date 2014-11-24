@@ -313,7 +313,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 
 					PageFlow( scope, element, "dashbar" );
 
-					scope.on( "show-default-page",
+					/*scope.on( "show-default-page",
 						function onShowDefaultPage( ){
 							scope.broadcast( "show-minified-dashbar" );
 						} );
@@ -321,7 +321,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 					scope.on( "hide-default-page",
 						function onHideDefaultPage( ){
 							scope.broadcast( "hide-dashbar" );
-						} );
+						} );*/
 
 					scope.on( "show-minified-dashbar",
 						function onShowMinifiedDashbar( ){

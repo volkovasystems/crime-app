@@ -68,7 +68,9 @@ Crime
 
 					scope.on( "logged-in",
 						function onLoggedIn( ){
-							scope.broadcast( "set-hidden-dash-item-list", [ ] );
+							scope.publish( "set-hidden-dash-item-list", [ ] );
+
+							scope.publish( "show-minified-dashbar" );
 						} );
 				}
 			};
