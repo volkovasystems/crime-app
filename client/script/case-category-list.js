@@ -33,6 +33,10 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 					this.scope.publish( "hide-case-category-list" );
 				},
 
+				"onClickBackCaseCategoryListButton": function onClickBackCaseCategoryListButton( ){
+					this.scope.publish( "back-case-category-list" );
+				},
+
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 
@@ -86,10 +90,41 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 									className={ [
 										"case-category-list-header"
 									].join( " " ) }>
+
+									<div 
+										className={ [
+											"header-icon",
+											"back-case-category-list-button",
+											"shown",
+											"inline-block"
+										].join( " " ) }
+										onClick={ this.onClickBackCaseCategoryListButton }>
+										<a 
+											className={ [
+												"action-element"
+											].join( " " ) }
+											href={ [
+												"#",
+												"back-case-category-list"
+											].join( "/" ) }
+											style={
+												{
+													"display": "block"
+												}
+											}>
+											
+											<Icon
+												className={ [
+													"back-case-category-list-icon"
+												].join( " " ) }
+												name="ic_arrow_back_24px" />
+										</a>
+									</div>
+
 									<div
 										className={ [
 											"header-icon",
-											"shown",
+											"hidden",
 											"inline-block"
 										].join( " " ) }>
 										<Icon name="ic_report_problem_24px" />
@@ -109,7 +144,7 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 									<div 
 										className={ [
 											"close-case-category-list-button",
-											"shown",
+											"hidden",
 											"inline-block"
 										].join( " " ) }
 										onClick={ this.onClickCloseCaseCategoryListButton }>
@@ -134,6 +169,8 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 												name="ic_close_24px" />
 										</a>
 									</div>
+
+									
 								</div>
 
 								<div

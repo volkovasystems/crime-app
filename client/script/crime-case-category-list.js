@@ -197,8 +197,6 @@ Crime
 						function onCaseCategoryListSelect( ){
 							selectedCaseCategoryData.getCallback( )( null, selectedCaseCategoryData.caseCategory );
 
-							scope.publish( "clear-selected-case-category" );
-
 							scope.publish( "hide-case-category-list" );
 						} );
 
@@ -246,6 +244,13 @@ Crime
 							scope.publish( "set-hidden-control-list", [ "!crime-report" ] );
 
 							scope.publish( "remove-control", "crime-case-category-list" );
+						} );
+
+					scope.on( "back-case-category-list",
+						function onBackCaseCategoryList( ){
+							scope.publish( "clear-selected-case-category" );
+
+							scope.publish( "hide-case-category-list" );
 						} );
 				}
 			}

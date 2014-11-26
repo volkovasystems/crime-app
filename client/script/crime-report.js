@@ -23,6 +23,8 @@ Crime
 						function onReportCancel( ){
 							scope.publish( "clear-report-data" );
 
+							scope.publish( "clear-selected-case-category" );
+
 							scope.publish( "hide-report" );
 						} );
 
@@ -212,6 +214,8 @@ Crime
 						function onReportAdded( ){
 							scope.publish( "clear-report-data" );
 
+							scope.publish( "clear-selected-case-category" );
+
 							scope.publish( "hide-report" );
 						} );
 
@@ -256,6 +260,11 @@ Crime
 					scope.on( "show-report-list",
 						function onShowReportList( ){
 							scope.publish( "hide-report" );
+						} );
+
+					scope.on( "back-report",
+						function onBackReport( ){
+							scope.publish( "show-case-category-list" );
 						} );
 				}
 			}
