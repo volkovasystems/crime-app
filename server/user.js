@@ -34,7 +34,7 @@ app.use( session( {
 app.use( function allowCrossDomain( request, response, next ){
 	response.header( "Access-Control-Allow-Origin", request.headers.origin || "*" );
 	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
-	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
+	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept, Administrator-Access-ID" );
 	response.header( "Access-Control-Max-Age", 10 );
 	response.header( "Cache-Control", "no-cache, no-store, must-revalidate" );
 	  
@@ -48,6 +48,9 @@ app.use( function allowCrossDomain( request, response, next ){
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
+		var accessID = request.get( "Administrator-Access-ID" ) || 
+			request.param( "adminAccessID" ) || 
+			request.param( "accessID" );
 
 		async.waterfall( [
 			function verifyAccessID( callback ){
@@ -170,6 +173,9 @@ app.get( "/verify/access/:accessID",
 						callback( error );
 					} );
 
+				}else if( userData.accessState == "verified" ){
+					callback( );
+
 				}else{
 					userData.accessState = "verified";
 
@@ -291,6 +297,92 @@ app.get( "/api/:accessID/user/get",
 			} );
 	} );
 
+app.post( "/api/:accessID/user/update",
+	function onUserUpdate( request, response ){
+		var User = mongoose.model( "User" );
+
+		async.waterfall( [
+			function checkIfUserExists( callback ){
+				User
+					.findOne( { 
+						"userID": request.param( "userID" ) 
+					}, function onFound( error, userData ){
+						callback( error, userData );
+					} );
+			},
+
+			function trySavingUser( userData, callback ){
+				if( _.isEmpty( userData ) ){
+					callback( "no-user-data" );
+
+				}else{
+					callback( null, userData );
+				}
+			},
+
+			function saveUser( userData, callback ){
+				userData.userState = request.param( "userState" ) || userData.userState;
+
+				userData.accessState = request.param( "accessState" ) || userData.accessState;
+
+				userData.accessID = request.param( "accessID" ) || userData.accessID;
+
+				userData.userAccountID = request.param( "userAccountID" ) || userData.userAccountID;
+
+				userData.userAccountType = request.param( "userAccountType" ) || userData.userAccountType;
+				
+				userData.userAccountToken = request.param( "userAccountToken" ) || userData.userAccountToken;
+
+				userData.userDisplayName = request.param( "userDisplayName" ) || userData.userDisplayName;
+
+				userData.userProfileName = request.param( "userProfileName" ) || userData.userProfileName;
+
+				userData.userProfileLink = request.param( "userProfileLink" ) || userData.userProfileLink;
+
+				userData.userProfileImageURL = request.param( "userProfileImageURL" ) || userData.userProfileImageURL;
+
+				userData.userUpdateTimestamp = request.param( "userUpdateTimestamp" ) || Date.now( );
+
+				userData.save( function onSave( error ){
+					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
+					setTimeout( function onTimeout( ){
+						callback( error );
+					}, 1000 );
+				} );
+			}
+		],
+			function lastly( state ){
+				if( state === "no-user-data" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					report
+						.status( 200 )
+						.json( {
+							"status": "success"
+						} );
+				}
+			} );
+	} );
+
+app.post( "/api/:accessID/user/delete",
+	function onUserDelete( request, response ){
+
+	} );
+
 app.post( "/user/register",
 	function onUserRegister( request, response ){
 		var User = mongoose.model( "User" );
@@ -332,7 +424,7 @@ app.post( "/user/register",
 					"userAccountType": 			request.param( "userAccountType" ),
 					"userAccountToken": 		request.param( "userAccountToken" ),
 					"userAccountCreationTime": 	request.param( "userAccountCreationTime" ),
-					"userDisplayName": 			request.param( "userDisplayName" ),
+					"userProfileName": 			request.param( "userProfileName" ),
 					"userProfileLink": 			request.param( "userProfileLink" ),
 					"userProfileImageURL": 		request.param( "userProfileImageURL" )
 				} );
@@ -449,7 +541,7 @@ app.post( "/user/login",
 				
 				userData.userAccountToken = request.param( "userAccountToken" );
 
-				userData.userDisplayName = request.param( "userDisplayName" );
+				userData.userProfileName = request.param( "userProfileName" );
 
 				userData.userProfileImageURL = request.param( "userProfileImageURL" );
 
@@ -525,11 +617,6 @@ app.post( "/user/login",
 
 app.post( "/user/:accessID/logout",
 	function onUserLogout( request, response ){
-
-	} );
-
-app[ "delete" ]( "/user/:accessID/delete",
-	function onUserDelete( request, response ){
 
 	} );
 
