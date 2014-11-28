@@ -1,24 +1,34 @@
 <section 
-        className={ [
-          "main-menu card",
-          componentState
-        ].join( " " ) }>
+	className={ [
+		"main-menu card",
+		componentState
+	].join( " " ) }>
 
-  <section className="icon-container">
-    <a className="icon md-3x main-menu-icon md-menu" onClick={ this.onMinifiedButtonClick }></a>
-  </section>
-  <section className="card main-menu-expanded">
-    <section className="card-container">
+	<section 
+		className="icon-container">
+		<a 
+			className="icon md-3x main-menu-icon md-menu" 
+			onClick={ this.onMinifiedButtonClick }>
+		</a>
+	</section>
 
-      <section className="profile dashbar-profile">
-      </section>
+	<section 
+		className="card main-menu-expanded">
+		<section 
+			className="card-container">
 
-      <section className="menu-dashboard">
-        <ul className="menu">
-          { dashList.map( this.onEachDashItem ) }
-        </ul>
-      </section>
-    </section>
+			<section 
+				className="profile dashbar-profile">
+			</section>
 
-  </section>
+			<section 
+				className="menu-dashboard">
+				<ul 
+					className="menu">
+					{ dashList.map( this.onEachDashItem ) }
+				</ul>
+			</section>
+
+		</section>
+	</section>
 </section>

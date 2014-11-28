@@ -240,13 +240,29 @@ app.post( "/api/:accessID/report/approve",
 				} );
 			},
 
-			function getUserData( callback ){
+			function checkIfAdministrator( callback ){
+				var userData = request.session.userData;
+
+				var adminAccessID = request.param( "adminAccessID" );
+
+				if( request.session.accessID == adminAccessID ){
+					callback( null, adminAccessID );
+
+				}else{
+					callback( "invalid-administrator-privilege" );
+				}
+			},
+
+			function getUserData( adminAccessID, callback ){
 				var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
 
 				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
 				unirest
 					.get( requestEndpoint )
+					.headers( { 
+						"Administrator-Access-ID": adminAccessID 
+					} )
 					.end( function onResponse( response ){
 						var status = response.body.status;
 
@@ -261,12 +277,12 @@ app.post( "/api/:accessID/report/approve",
 						}else{
 							var userData = response.body.data;
 							
-							callback( null, userData );
+							callback( null, adminAccessID, userData );
 						}
 					} );
 			},
 
-			function getReportData( userData, callback ){
+			function getReportData( adminAccessID, userData, callback ){
 				var requestEndpoint = reportServer.joinPath( "api/:accessID/report/get/:reportID" );
 
 				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
@@ -275,6 +291,9 @@ app.post( "/api/:accessID/report/approve",
 
 				unirest
 					.get( requestEndpoint )
+					.headers( { 
+						"Administrator-Access-ID": adminAccessID 
+					} )
 					.end( function onResponse( response ){
 						var status = response.body.status;
 
@@ -382,13 +401,29 @@ app.post( "/api/:accessID/report/reject",
 				} );
 			},
 
-			function getUserData( callback ){
+			function checkIfAdministrator( callback ){
+				var userData = request.session.userData;
+
+				var adminAccessID = request.param( "adminAccessID" );
+
+				if( request.session.accessID == adminAccessID ){
+					callback( null, adminAccessID );
+
+				}else{
+					callback( "invalid-administrator-privilege" );
+				}
+			},
+
+			function getUserData( adminAccessID, callback ){
 				var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
 
 				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
 				unirest
 					.get( requestEndpoint )
+					.headers( { 
+						"Administrator-Access-ID": adminAccessID 
+					} )
 					.end( function onResponse( response ){
 						var status = response.body.status;
 
@@ -403,12 +438,12 @@ app.post( "/api/:accessID/report/reject",
 						}else{
 							var userData = response.body.data;
 							
-							callback( null, userData );
+							callback( null, adminAccessID, userData );
 						}
 					} );
 			},
 
-			function getReportData( userData, callback ){
+			function getReportData( adminAccessID, userData, callback ){
 				var requestEndpoint = reportServer.joinPath( "api/:accessID/report/get/:reportID" );
 
 				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
@@ -417,6 +452,9 @@ app.post( "/api/:accessID/report/reject",
 
 				unirest
 					.get( requestEndpoint )
+					.headers( { 
+						"Administrator-Access-ID": adminAccessID 
+					} )
 					.end( function onResponse( response ){
 						var status = response.body.status;
 

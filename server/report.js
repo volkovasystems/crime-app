@@ -417,6 +417,11 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 		}
 	} );
 
+app.get( "/api/:accessID/report/filter/by/:propertyName",
+	function onReportFilterBy( request, response ){
+
+	} );
+
 app.post( "/api/:accessID/report/add",
 	function onReportAdd( request, response ){
 		var Report = mongoose.model( "Report" );

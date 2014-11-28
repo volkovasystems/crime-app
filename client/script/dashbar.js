@@ -203,7 +203,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon", "Profile" ] )
 
 				Event( scope );
 
-				PageFlow( scope, element, "dashbar" );
+				PageFlow( scope, element, "dashbar overflow" );
 
 				scope.on( "show-minified-dashbar",
 					function onShowMinifiedDashbar( ){

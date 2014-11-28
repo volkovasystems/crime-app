@@ -130,7 +130,6 @@ Crime
 									var userData = [
 										[ "userID", 		userAccountData.userID ],
 										[ "profileName", 	userProfileData.profileName ],
-										[ "profileEMail", 	userProfileData.profileEMail ],
 										[ "profileURL", 	userProfileData.cleanProfileURL ],
 										[ "profileImage", 	userProfileData.cleanProfileImage ]
 									];
