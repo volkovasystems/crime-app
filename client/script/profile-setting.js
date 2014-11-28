@@ -52,8 +52,7 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 						"userEMail": "",
 						"userAvatar": "../image/profile.png",
 						
-						"profileSettingState": "profile-setting-default",
-						"componentState": "profile-setting-hidden"
+						"profileSettingState": "profile-setting-default"
 					};
 				},
 
@@ -108,20 +107,6 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 								"userAvatar": "../image/profile.png",
 							} );
 						} );
-
-					this.scope.on( "show-profile-setting",
-						function onShowProfileSetting( ){
-							self.setState( {
-								"componentState": "profile-setting-shown"
-							} );
-						} );
-
-					this.scope.on( "hide-profile-setting",
-						function onHideProfileSetting( ){
-							self.setState( {
-								"componentState": "profile-setting-hidden"
-							} );
-						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -138,8 +123,6 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 					var userAvatar = this.state.userAvatar;
 					
 					var profileSettingState = this.state.profileSettingState;
-
-					var componentState = this.state.componentState;
 
 					return; //: @template: template/profile-setting.html
 				},
@@ -164,17 +147,23 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 		"ProfileSetting",
 		function factory( $rootScope, Event, PageFlow, ProfileSetting ){
 			var attachProfileSetting = function attachProfileSetting( optionSet ){
-				var scope = optionSet.scope || $rootScope;
-
 				var element = optionSet.element;
 
 				if( _.isEmpty( element ) || element.length == 0 ){
 					throw new Error( "unable to attach component" );
 				}
 
+				var scope = optionSet.scope || $rootScope;
+
+				scope = scope.$new( true );
+
 				Event( scope );
 
-				PageFlow( scope, element, "profile-setting" );
+				var pageFlow = PageFlow( scope, element, "profile-setting" );
+
+				if( optionSet.embedState != "no-embed" ){
+					pageFlow.namespaceList = _.without( pageFlow.namespaceList, "page" );
+				}
 
 				scope.on( "show-profile-setting",
 					function onShowProfileSetting( ){
@@ -205,7 +194,8 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 					attachProfileSetting( {
 						"scope": scope,
 						"element": element,
-						"attributeSet": attributeSet
+						"attributeSet": attributeSet,
+						"embedState": "no-embed"
 					} );
 				}
 			};

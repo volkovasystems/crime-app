@@ -91,8 +91,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 						
 						"profileType": FACEBOOK_PROFILE_TYPE,
 						
-						"profileState": "profile-empty",
-						"componentState": "profile-hidden"
+						"profileState": "profile-empty"
 					};
 				},
 
@@ -153,20 +152,6 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 								Profile.getBasicProfileData( self.state.profileType, callback );
 							}
 						} );
-
-					this.scope.on( "show-profile",
-						function onShowProfile( ){
-							self.setState( {
-								"componentState": "profile-shown"
-							} );
-						} );
-
-					this.scope.on( "hide-profile",
-						function onHideProfile( ){
-							self.setState( {
-								"componentState": "profile-hidden"
-							} );
-						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -187,8 +172,6 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					var profileType = this.state.profileType;
 					
 					var profileState = this.state.profileState;
-
-					var componentState = this.state.componentState;
 
 					return; //: @template: template/profile.html
 				},
@@ -230,17 +213,23 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 		"Profile",
 		function factory( $rootScope, Event, PageFlow, Profile ){
 			var attachProfile = function attachProfile( optionSet ){
-				var scope = optionSet.scope || $rootScope;
-
 				var element = optionSet.element;
 
 				if( _.isEmpty( element ) || element.length == 0 ){
 					throw new Error( "unable to attach component" );
 				}
 
+				var scope = optionSet.scope || $rootScope;
+
+				scope = scope.$new( true );
+
 				Event( scope );
 
-				PageFlow( scope, element, "profile" );
+				var pageFlow = PageFlow( scope, element, "profile" );
+
+				if( optionSet.embedState != "no-embed" ){
+					pageFlow.namespaceList = _.without( pageFlow.namespaceList, "page" );
+				}
 
 				scope.on( "show-profile",
 					function onShowProfile( ){
@@ -278,7 +267,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					attachProfile( {
 						"scope": scope,
 						"element": element,
-						"attributeSet": attributeSet
+						"attributeSet": attributeSet,
+						"embedState": "no-embed"
 					} );
 				}
 			};
