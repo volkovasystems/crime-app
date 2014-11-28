@@ -87,7 +87,12 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 
 											}else{
 												var uri = new URI( );
-												var currentHostAddress = [ "http:/", uri.domain( ) ].join( "/" );
+												var currentHostAddress = [ 
+													"http:/",
+													( production )?
+														uri.domain( ) :
+														[ uri.domain( ), uri.port( ) ].join( ":" ) 
+												].join( "/" );
 
 												if( hostAddress != currentHostAddress ){
 													callback( error, currentHostAddress );
