@@ -1,12 +1,15 @@
 angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 
-	.value( "REPORT_LIST_HEADER_LABEL", labelData.REPORT_LIST_HEADER_LABEL )
+	.constant( "REPORT_LIST_HEADER_LABEL", labelData.REPORT_LIST_HEADER_LABEL )
+
+	.constant( "REPORT_ITEM_PHRASE", labelData.REPORT_ITEM_PHRASE )
 
 	.factory( "ReportList", [
 		"Icon",
 		"MapPreview",
 		"REPORT_LIST_HEADER_LABEL",
-		function factory( Icon, MapPreview, REPORT_LIST_HEADER_LABEL ){
+		"REPORT_ITEM_PHRASE",
+		function factory( Icon, MapPreview, REPORT_LIST_HEADER_LABEL, REPORT_ITEM_PHRASE ){
 			var ReportList = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -19,7 +22,6 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 				"getInitialState": function getInitialState( ){
 					return {
 						"reportList": [ ],
-						"expandedReportItemList": [ ],
 						"componentState": "report-list-normal"
 					};
 				},
@@ -31,51 +33,43 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 				"onClickReportItem": function onClickReportItem( event ){
 					var reportID = $( event.currentTarget ).attr( "value" );
 
-					var expandedReportItemList = this.state.expandedReportItemList.slice( 0 );
-
-					if( _.contains( expandedReportItemList, reportID ) ){
-
-						this.setState( {
-							"expandedReportItemList": _.without( expandedReportItemList, reportID )
-						} );
-						
-					}else{
-						this.setState( {
-							"expandedReportItemList": expandedReportItemList.concat( [ reportID ] )
-						} );
-					}
+					
 				},
 
 				"onEachReportItem": function onEachReportList( reportItem, index ){
 					var hashedValue = reportItem.hashedValue || btoa( JSON.stringify( reportItem ) );
 
 					var key = [ hashedValue, index ].join( ":" )
-					
-					var expandedReportItemList = this.state.expandedReportItemList;
 
 					var reportID = reportItem.reportID;
 
-					var reportTitle = reportItem.reportTitle.toUpperCase( );
-
 					var reportTimestamp = reportItem.reportTimestamp;
-
-					var isExpanded = _.contains( expandedReportItemList, reportID );
 
 					var timeFromNow = moment( reportTimestamp ).fromNow( ).toUpperCase( );
 
-					var descriptiveDate = moment( reportTimestamp ).format( "dddd, MMMM Do YYYY" ).toUpperCase( );
+					var timeFromNowData = { };
+					_.each( timeFromNow.split( " " ),
+						function onEachTimeFromNow( timeFromNowToken, index ){
+							if( index == 0 &&
+								( /^\D+$/ ).test( timeFromNowToken ) )
+							{
+								timeFromNowData.prefix = timeFromNowToken;
+							}else if( ( /^\d+$/ ).test( timeFromNowToken ) ){
+								timeFromNowData.digit = timeFromNowToken;
+							}
 
-					var descriptiveTime = moment( reportTimestamp ).format( "h:mm:ss a" ).toUpperCase( );
+							if( index == 1 ){
+								timeFromNowData.unit = timeFromNowToken;
+							}
 
-					var latitude = reportItem.reportLocation.latitude;
-					var longitude = reportItem.reportLocation.longitude;
-					var mapPosition = new google.maps.LatLng( latitude, longitude );
+							if( index == 2 ){
+								timeFromNowData.suffix = timeFromNowToken;
+							}
+						} );
 
-					var mapZoom = reportItem.reportLocation.zoom;
+					var reportCaseTitle = reportItem.reportCaseTitle;
 
 					var reportAddress = reportItem.reportAddress;
-
-					var reportDescription = reportItem.reportDescription;
 
 					return; //: @template: template/report-item.html
 				},

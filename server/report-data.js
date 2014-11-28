@@ -34,6 +34,7 @@ database.createDatabase( "Report", "reportdb", host, databasePort,
 				"reportTitle": String,
 				"reportDescription": String,
 				"reportCaseType": String,
+				"reportCaseTitle": String,
 				"reportAddress": String,
 				"reportMediaList": Array
 			} );

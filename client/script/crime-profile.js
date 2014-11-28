@@ -17,6 +17,11 @@ Crime
 					scope.on( "dash-clicked:profile",
 						function onNavigateProfile( ){
 						} );
+
+					scope.on( "close-profile",
+						function onCloseProfile( ){
+							scope.publish( "show-minified-dashbar" );
+						} );
 				}
 			}
 		}
