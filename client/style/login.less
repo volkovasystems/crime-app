@@ -5,26 +5,23 @@
     {
         .login-component
         {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            position: relative;
 
-            width: 400px;
             height: auto;
-
-            transform: translateX( -50% ) translateY( -50% );
+            margin: 300px auto;
             .login-logo-container
             {
                 position: relative;
                 left: 50%;
 
                 width: 300px;
+                height: 361px;
 
                 transform: translateX( -50% );
                 .logo
                 {
-                    width: 100%;
-                    height: 100%;
+                    width: 300px;
+                    height: 361px;
                 }
             }
             .login-prompt
@@ -63,10 +60,12 @@
                 color: #fff;
                 border-radius: 3px;
                 background-color: @facebook-color;
+                top: -60px;
                 .login-icon
                 {
-                    margin-right: 20px;
                     font-size: 2.5em;
+
+                    margin-right: 20px;
                 }
                 &:active,
                 &:hover
