@@ -1,7 +1,6 @@
 angular
 	.module( "App", [
 		"angular-loading-bar",
-		"ui.bootstrap", 
 		"ProgressBar",
 		"Event",
 		"Home",
