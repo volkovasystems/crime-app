@@ -50,39 +50,21 @@ angular.module( "Notify", [ "Icon", "Event", "PageFlow" ] )
 
 				"getInitialState": function getInitialState( ){
 					return {
-						"notifyTitle": "",
 						"notifyMessage": "",
-						"notifyType": INFO_TYPE,
-						"notifyState": "notify-passive",
-						"componentState": "notify-footer"
+						"notifyType": INFO_TYPE
 					};
 				},
 
-				"onClickCloseNotifyButton": function onClickCloseNotifyButton( ){
+				"onClickCloseNotify": function onClickCloseNotify( ){
 					this.scope.publish( "hide-notify" );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 
-					this.scope.on( "set-notify-header",
-						function onSetNotifyHeader( ){
-							self.setState( {
-								"componentState": "notify-header"
-							} );
-						} );
-
-					this.scope.on( "set-notify-footer",
-						function onSetNotifyFooter( ){
-							self.setState( {
-								"componentState": "notify-footer"
-							} );
-						} );
-
 					this.scope.on( "notify",
-						function onNotify( title, message, type, controlSet ){
+						function onNotify( message, type ){
 							self.setState( {
-								"notifyTitle": title,
 								"notifyMessage": message,
 								"notifyType": Notify.parseType( type )
 							} );
@@ -98,97 +80,11 @@ angular.module( "Notify", [ "Icon", "Event", "PageFlow" ] )
 				},
 
 				"render": function onRender( ){
-					var notifyState = this.state.notifyState;
-
-					var componentState = this.state.componentState;
-
-					var notifyTitle = this.state.notifyTitle;
-
 					var notifyMessage = this.state.notifyMessage;
 
 					var notifyType = this.state.notifyType;
 
-					return ( 
-						<div 
-							className={ [
-								"notify-container",
-								notifyState,
-								componentState
-							].join( " " ) }>
-							
-							<div
-								className={ [
-									"notify-component",
-									notifyState,
-									componentState
-								].join( " " ) }>
-
-								<div
-									className={ [
-										"notify-header",
-										"shown"
-									].join( " " ) }>
-
-									<div
-										className={ [
-											"notify-icon-container"
-										].join( " " ) }>
-										<Icon
-											className={ [
-												"notify-icon",
-												notifyType
-											].join( " " ) }
-											name="ic_info_24px" />
-									</div>
-									
-									<div
-										className={ [
-											"notify-title"
-										].join( " " ) }>
-										<span>
-											{ notifyTitle.toUpperCase( ) }
-										</span>
-									</div>
-
-									<div
-										className={ [
-											"close-notify-button"
-										].join( " " ) }
-										onClick={ this.onClickCloseNotifyButton }>
-										<Icon
-											className={ [
-												"close-notify-icon"
-											].join( " " ) }
-											name="ic_close_24px" />
-									</div>
-								</div>
-
-								<div
-									className={ [
-										"notify-body",
-										"shown"
-									].join( " " ) }>
-
-									<div
-										className={ [
-											"notify-message"
-										].join( " " ) }>
-										<p>
-											{ notifyMessage.toUpperCase( ) }
-										</p>
-									</div>
-
-								</div>
-
-								<div
-									className={ [
-										"notify-footer"
-									].join( " " ) }>
-								</div>
-
-							</div>
-						</div>
-					);
+					return; //: @template: template/notify.html
 				},
 
 				"componentDidMount": function componentDidMount( ){
@@ -214,20 +110,6 @@ angular.module( "Notify", [ "Icon", "Event", "PageFlow" ] )
 
 					PageFlow( scope, element, "notify" );
 
-					scope.on( "reset-notify",
-						function onResetNotify( ){
-							scope.toggleFlow( "!notify-footer", "!notify-header" );
-						} );
-
-					scope.on( "set-notify-header",
-						function onSetNotifyHeader( ){
-							scope.toggleFlow( "!notify-footer", "notify-header" );
-						} );
-
-					scope.on( "set-notify-footer",
-						function onSetNotifyHeader( ){
-							scope.toggleFlow( "!notify-header", "notify-footer" );
-						} );
 
 					scope.on( "show-notify",
 						function onShowNotify( ){
