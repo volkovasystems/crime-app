@@ -419,7 +419,44 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 
 app.get( "/api/:accessID/report/filter/by/:propertyName",
 	function onReportFilterBy( request, response ){
+		var Report = mongoose.model( "Report" );
 
+		var propertyName = request.param( "propertyName" );
+
+		var propertyValue = request.param( "propertyValue" );
+
+		var queryData = { };
+
+		queryData[ propertyName ] = { "$in": _.compact( [ propertyValue ] ) };
+
+		Report
+			.find( queryData, 
+				function onResult( error, reportList ){
+					if( error ){
+						response
+							.status( 500 )
+							.json( {
+								"status": "error",
+								"data": error.message
+							} );
+
+					}else if( _.isEmpty( reportList ) ){
+						response
+							.status( 200 )
+							.json( {
+								"status": "failed",
+								"data": [ ]
+							} );
+
+					}else{
+						response
+							.status( 200 )
+							.json( {
+								"status": "success",
+								"data": reportList
+							} );
+					}
+				} );
 	} );
 
 app.post( "/api/:accessID/report/add",

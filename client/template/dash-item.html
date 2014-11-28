@@ -1,13 +1,20 @@
-<li key={ key } 
-		className="menu-item-list"
-		onClick={ this.onDashbarItemClick } 
-		value={ dashItemName }>
-  <a className="menu-item">
-  	<i className={ [
+<li 
+	key={ key } 
+	className="menu-item-list"
+	onClick={ this.onDashbarItemClick } 
+	value={ dashItemName }>
+	<a 
+		className="menu-item">
+		<i 
+			className={ [
 				"md-2x",
 				dashItemIcon,
 				"icon"
-			].join( " " ) }></i> 
-  	<span> { dashItemTitle.toUpperCase( ) } </span>
-  </a>
+			].join( " " ) }>
+		</i>
+
+		<span> 
+			{ dashItemTitle.toUpperCase( ) }
+		</span>
+	</a>
 </li>
