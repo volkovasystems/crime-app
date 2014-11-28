@@ -6,11 +6,131 @@ angular
 	] )
 
 	.value( "REPORT_HEADER_LABEL", "report a crime" )
+
+	.factory (  "ReportTableList" , [
+		"Event",
+		function factory ( Event ) {
+			var ReportTableList = React.createClass( {
+				"statics": {
+					"attach": function attach( scope, container ){
+
+						React.render( <ReportTableList scope={ scope }/>, container[ 0 ] );
+
+						return this;
+					}					
+				},
+
+				"getInitialState": function getInitialState( ){
+					return {
+						
+					};
+				},
+
+				"getDefaultProps": function getDefaultProps( ){
+					return {
+					
+					};
+				},
+
+				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+					
+				},
+
+				"componentWillMount": function componentWillMount( ){										
+					this.scope = this.props.scope;
+
+					this.attachAllComponentEventListener( );
+				},
+
+				"onReportStateAccept": function onReportStateSet ( ) {
+					this.onReportStateSet( "accept" );
+				},
+
+				"onReportStateReject": function onReportStateSet ( ) {
+					this.onReportStateSet( "reject" );
+				},
+
+				"onReportStateSet": function onReportStateSet ( state ) {					
+					this.scope.reportState = state;
+					this.setState( {
+						report: this.scope
+					} );
+				},
+
+				"onChangeHandler": function onChangeHandler ( evt ) {
+					this.scope[ evt.target.name ] = evt.target.value;
+					this.setState( {
+						report: this.scope
+					} );
+				},
+
+				"updateReport": function updateReport ( ) {
+					alert("Send");
+					console.log(this.state.report);
+					this.setState( {
+						report: null
+					} );					
+				},
+
+				"render": function onRender( ){
+					var reportData = this.state.report || this.scope;
+
+					return (
+						<tr>
+							<td>								
+								<input type="text"
+									   name="reportTitle"
+									   value={reportData.reportTitle} 
+									   onChange={this.onChangeHandler} />
+							</td>
+							<td>								
+								<input type="text"
+									   name="reportDescription"
+									   value={reportData.reportDescription}
+									   onChange={this.onChangeHandler} />
+							</td>
+							<td>
+								<input type="button" 
+									   disabled={ reportData.reportState == "accept" } 
+									   name="reportStatusAccept" 
+									   value="Accept"
+									   onClick={ this.onReportStateAccept }
+									   className={ [
+									   		"btn",
+											( reportData.state == "accept" ) ? "disabled" : 'enabled'
+										].join( " " ) }/>
+								<input type="button" 
+									   disabled={ reportData.reportState == "reject" } 
+									   name="reportStatusReject" 
+									   value="Reject" 
+									   onClick={ this.onReportStateReject }
+									   className={ [
+									   		"btn",
+											( reportData.state == "reject" ) ? "disabled" : 'enabled'
+										].join( " " ) } />
+
+								<input type="button" 
+									   disabled={!this.state.report} 
+									   value="Update"
+									   className={[
+									   		"btn"
+									   	].join( " " )}
+									   onClick={this.updateReport} />
+							</td>
+						</tr>
+					);
+				}
+			} );
+
+			return ReportTableList;
+		}
+	])
 	
 	.factory( "ReportTable", [
 		"REPORT_HEADER_LABEL",
 		"Icon",
-		function factory( REPORT_HEADER_LABEL , Icon ){
+		"ReportTableList",
+		function factory( REPORT_HEADER_LABEL , Icon , ReportTableList ){
 			var ReportTable = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -36,61 +156,30 @@ angular
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;					
 
-					this.scope.on( "set-report-list",
-						function onSetReportData( reportList ){
+					this.scope.on( "set-report-table-list",
+						function onSetReportData( reportList ){							
+
 							self.setState( {
 								"reportList": reportList
 							} );
 						} );
-
-					this.scope.on( "report-data",
-						function onSetReportData ( reports ) {							
-							console.log(reports);							
-
-							self.setState( {
-								"reportList": reports
-							} );
-						} );					
+								
 				},
 
 				"onClickCloseReportButton": function onClickCloseReportButton( event ){
 					this.scope.publish( "hide-report-table" );
+					this.scope.publish( "show-control" );
 				},
 
 				"componentWillMount": function componentWillMount( ){
-					this.scope = this.props.scope;
+					this.scope = this.props.scope;					
 
 					this.attachAllComponentEventListener( );
 				},
 
 				"onEachReportItem": function onEachReportItem( reportData ){
 					return (
-						<tr>
-							<td>
-								{ reportData.reportTitle }
-							</td>
-							<td>
-								{ reportData.reportDescription }
-							</td>
-							<td>
-								<input type="button" 
-									   disabled={ reportData.state == "accept" } 
-									   name="reportStatusAccept" 
-									   value="Accept" 
-									   className={ [
-									   		"btn",
-											( reportData.state == "accept" ) ? "disabled" : 'enabled'
-										].join( " " ) }/>
-								<input type="button" 
-									   disabled={ reportData.state == "reject" } 
-									   name="reportStatusReject" 
-									   value="Reject" 
-									   className={ [
-									   		"btn",
-											( reportData.state == "reject" ) ? "disabled" : 'enabled'
-										].join( " " ) } />
-							</td>
-						</tr>
+						<ReportTableList scope={reportData} />
 					);
 				},
 
@@ -162,7 +251,7 @@ angular
 									<th>Description</th>
 									<th>Report Status</th>
 								</tr>
-									{ reportList.map( this.onEachReportItem ) } 
+									{ reportList.map( this.onEachReportItem ) } 								
 								</table>
 							</div>
 						</div>

@@ -47,14 +47,13 @@ app.use( function allowCrossDomain( request, response, next ){
 } );
 
 app.all( "/api/:accessID/*",
-	function verifyAccessID( request, response, next ){
-		var accessID = request.get( "Administrator-Access-ID" ) || 
-			request.param( "adminAccessID" ) || 
-			request.param( "accessID" );
+	function verifyAccessID( request, response, next ){		
 
 		async.waterfall( [
 			function verifyAccessID( callback ){
-				var accessID = request.param( "accessID" );
+				var accessID = request.get( "Administrator-Access-ID" ) || 
+					request.param( "adminAccessID" ) || 
+					request.param( "accessID" );
 
 				var requestEndpoint = userServer.joinPath( "verify/access/:accessID", true );
 

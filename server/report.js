@@ -48,17 +48,17 @@ app.use( function allowCrossDomain( request, response, next ){
 } );
 
 app.all( "/api/:accessID/*",
-	function verifyAccessID( request, response, next ){
+	function verifyAccessID( request, response, next ){		
 		var accessID = request.get( "Administrator-Access-ID" ) || 
 			request.param( "adminAccessID" ) || 
 			request.param( "accessID" );
 
 		//: @todo: Transform this to use async.series.
-		var rootResponse = response;
+		var rootResponse = response;		
 
 		if( !_.isEmpty( request.session.userData )
 			&& request.session.accessID === accessID )
-		{
+		{			
 			var requestEndpoint = userServer.joinPath( "verify/access/:accessID" );
 
 			requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
@@ -91,15 +91,14 @@ app.all( "/api/:accessID/*",
 					}
 				} );
 
-		}else{
+		}else {
 			var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
 
-			requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
-
+			requestEndpoint = requestEndpoint.replace( ":accessID", accessID );		
 			unirest
 				.get( requestEndpoint )
 				.end( function onResponse( response ){
-					var status = response.body.status;
+					var status = response.body.status;					
 
 					if( status == "failed" ){
 						rootResponse
@@ -151,11 +150,11 @@ app.get( "/api/:accessID/report/get/all",
 
 					requestEndpoint = requestEndpoint.replace( ":accessID", request.param( "accessID" ) );
 
-					unirest
+					unirest						
+						.get( requestEndpoint )
 						.headers( { 
 							"Administrator-Access-ID": adminAccessID 
 						} )
-						.get( requestEndpoint )
 						.end( function onResponse( response ){
 							var status = response.body.status;
 
@@ -236,9 +235,7 @@ app.get( "/api/:accessID/report/get/all/near",
 
 		var longitude = request.param( "longitude" );
 
-		var distance = parseInt( request.param( "distance" ) || 0 ) || 500;
-
-		console.log( "GET ALL NEAR: ", latitude, longitude );
+		var distance = parseInt( request.param( "distance" ) || 0 ) || 20000;
 
 		if( latitude && longitude ){
 			Report
@@ -285,9 +282,7 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 
 		var longitude = request.param( "longitude" );
 
-		var distance = parseInt( request.param( "distance" ) || 0 ) || 100;
-
-		distance = ( distance / 1000 ) / 6371;
+		var distance = parseInt( request.param( "distance" ) || 0 ) || 20000;
 
 		if( latitude && longitude ){
 			Report
@@ -295,9 +290,8 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 					"reporterID": request.param( "reporterID" )
 				} )
 				.where( "reportLocation.coordinate" )
-				//: @todo: This is buggy, if can change this to use GeoJSON, instead of legacy coordinates.
 				.near( {
-					"center": [ longitude, latitude ],
+					"center": [ latitude, longitude ],
 					"maxDistance": distance,
 					"spherical": true
 				} )

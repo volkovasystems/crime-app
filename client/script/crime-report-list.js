@@ -50,10 +50,10 @@ Crime
 
 						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
-						callback( null, requestEndpoint );
+						callback( null, requestEndpoint , accessID );
 					},
 
-					function getReportListFromServer( requestEndpoint, callback ){
+					function getReportListFromServer( requestEndpoint, accessID, callback ){						
 						$http.get( requestEndpoint )
 							.success( function onSuccess( response, status ){
 								if( response.status == "failed" ){
