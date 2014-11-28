@@ -1,17 +1,17 @@
-<div 
+<section 
 	className={ [
 		"login-container",
 		loginState,
 		componentState
 	].join( " " ) }>
-	<div 
+	<section 
 		className={ [
 			"login-component",
 			loginState,
 			componentState,
 		].join( " " ) }>
 
-		<div
+		<section
 			className={ [
 				"login-logo-container",
 				"shown",
@@ -26,15 +26,15 @@
 					componentState
 				].join( " " ) }
 				src={ appLogoImageSource } />
-		</div>
+		</section>
 
-		<div
+		<section
 			className={ [
 				"login-spinner",
 				loginState,
 				componentState
 			].join( " " ) }>
-		</div>
+		</section>
 
 		{ /* Facebook login button. */ }
 		<button 
@@ -71,8 +71,8 @@
 						"entypo-social facebook"
 					].join( " " ) }>
 				</span>
-				{ LOGIN_LABEL.toUpperCase( ) }
+				{ LOGIN_LABEL }
 			</a>
 		</button>
-	</div>
-</div>
+	</section>
+</section>

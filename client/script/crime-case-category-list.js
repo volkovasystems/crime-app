@@ -21,142 +21,142 @@ Crime
 								[
 									{
 										"name": "abuse-of-women",
-										"title": "abuse of women",
+										"title": "Abuse Of Women",
 										"source": ""
 									},
 									{
 										"name": "child-abuse",
-										"title": "child abuse",
+										"title": "Child Abuse",
 										"source": "../image/child-abuse.svg"
 									},
 									{
 										"name": "arson",
-										"title": "arson",
+										"title": "Arson",
 										"source": "../image/arson.svg"
 									},
 									{
 										"name": "bribery",
-										"title": "bribery",
+										"title": "Bribery",
 										"source": "../image/bribery.svg"
 									},
 									{
 										"name": "burglary",
-										"title": "burglary",
+										"title": "Burglary",
 										"source": "../image/burglary.svg"
 									},
 									{
 										"name": "carnapping",
-										"title": "carnapping",
+										"title": "Carnapping",
 										"source": "../image/carnapping.svg"
 									},
 									{
 										"name": "child-labor",
-										"title": "child labor",
+										"title": "Child Labor",
 										"source": "../image/child-labor.svg"
 									},
 									{
 										"name": "domestic-violence",
-										"title": "domestic violence",
+										"title": "Domestic Violence",
 										"source": "../image/domestic-violence.svg"
 									},
 									{
 										"name": "extortion",
-										"title": "extortion",
+										"title": "Extortion",
 										"source": "../image/extortion.svg"
 									},
 									{
 										"name": "holdup",
-										"title": "holdup",
+										"title": "Holdup",
 										"source": "../image/holdup-robbery.svg"
 									},
 									{
 										"name": "robbery",
-										"title": "robbery",
+										"title": "Robbery",
 										"source": "../image/holdup-robbery.svg"
 									},
 									{
 										"name": "homicide",
-										"title": "homicide",
+										"title": "Homicide",
 										"source": "../image/homicide.svg"
 									},
 									{
 										"name": "illegal-drug",
-										"title": "illegal drug",
+										"title": "Illegal Drug",
 										"source": "../image/illegal-drug.svg"
 									},
 									{
 										"name": "illegal-logging",
-										"title": "illegal logging",
+										"title": "Illegal Logging",
 										"source": "../image/illegal-logging.svg"
 									},
 									{
 										"name": "illegal-fishing",
-										"title": "illegal fishing",
+										"title": "Illegal Fishing",
 										"source": ""
 									},
 									{
 										"name": "kidnapping",
-										"title": "kidnapping",
+										"title": "Kidnapping",
 										"source": "../image/kidnapping.svg"
 									},
 									{
 										"name": "murder",
-										"title": "murder",
+										"title": "Murder",
 										"source": "../image/murder.svg"
 									},
 									{
 										"name": "physical-injury",
-										"title": "physical injury",
+										"title": "Physical Injury",
 										"source": "../image/physical-injury.svg"
 									},
 									{
 										"name": "pickpocketing",
-										"title": "pickpocketing",
+										"title": "Pickpocketing",
 										"source": "../image/pickpocketing.svg"
 									},
 									{
 										"name": "piracy",
-										"title": "piracy",
+										"title": "Piracy",
 										"source": "../image/piracy.svg"
 									},
 									{
 										"name": "prostitution",
-										"title": "prostitution",
+										"title": "Prostitution",
 										"source": "../image/prostitution.svg"
 									},
 									{
 										"name": "human-trafficking",
-										"title": "human trafficking",
+										"title": "Human Trafficking",
 										"source": ""
 									},
 									{
 										"name": "rape",
-										"title": "rape",
+										"title": "Rape",
 										"source": "../image/rape.svg"
 									},
 									{
 										"name": "smoke-belching",
-										"title": "smoke belching",
+										"title": "Smoke Belching",
 										"source": "../image/smoke-belching.svg"
 									},
 									{
 										"name": "theft",
-										"title": "theft",
+										"title": "Theft",
 										"source": "../image/theft.svg"
 									},
 									{
 										"name": "traffic-violation",
-										"title": "traffic violation",
+										"title": "Traffic Violation",
 										"source": "../image/traffic-violation.svg"
 									},	
 									{
 										"name": "vandalism",
-										"title": "vandalism",
+										"title": "Vandalism",
 										"source": "../image/vandalism.svg"
 									},
 									{
 										"name": "others",
-										"title": "others",
+										"title": "Others",
 										"source": ""
 									}
 								] );

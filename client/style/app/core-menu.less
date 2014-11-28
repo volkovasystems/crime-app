@@ -2,22 +2,31 @@
 {
     position: relative;
 
-    max-width: 40px;
-    max-height: 40px;
+    display: block;
+    overflow: visible;
+
+    max-width: 60px;
+    max-height: 60px;
     margin: 0 auto;
     padding: 10px;
+    .icon-container
+    {
+        padding: 10px 8px 3px;
+
+        text-align: center;
+    }
     .card
     {
-        .box-shadow-mixin(2);
-
         position: relative;
         top: -50px;
-        left: -2px;
+        left: 10px;
 
         display: none;
 
         width: 350px;
         margin: 0 !important;
+
+        .box-shadow-mixin(2);
     }
     .icon
     {
