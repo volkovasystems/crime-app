@@ -51,6 +51,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon", "Profile", "ProfileSet
 						"dashItemIconSet": null,
 						"hiddenDashItemList": null,
 						"disabledDashItemList": null,
+						"dashbarState": "dashbar-main-view",
 						"componentState": "dashbar-minified"
 					};
 				},
@@ -144,6 +145,20 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon", "Profile", "ProfileSet
 							self.setComponentState( "dashbar-listed" );
 						} );
 
+					this.scope.on( "show-dashbar-sub-view",
+						function onShowDashbarSubView( ){
+							self.setState( {
+								"dashbarState": "dashbar-sub-view"
+							} );
+						} );
+
+					this.scope.on( "show-dashbar-main-view",
+						function onShowDashbarMainView( ){
+							self.setState( {
+								"dashbarState": "dashbar-main-view"
+							} );
+						} );
+
 					this.scope.on( "set-hidden-dash-item-list",
 						function onSetHiddenDashItemList( hiddenDashItemList ){
 							self.setState( {
@@ -166,6 +181,8 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon", "Profile", "ProfileSet
 				},
 
 				"render": function onRender( ){
+					var dashbarState = this.state.dashbarState; 
+
 					var componentState = this.state.componentState;
 
 					var dashList = this.getDashList( );

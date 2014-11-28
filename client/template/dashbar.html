@@ -16,7 +16,10 @@
 			( componentState == "dashbar-listed" )? "show": ""
 		].join( " " ) }>
 		<section 
-			className="card-container">
+			className={ [
+				"card-container",
+				dashbarState
+			].join( " " ) }>
 
 			<section 
 				className="profile dashbar-profile">

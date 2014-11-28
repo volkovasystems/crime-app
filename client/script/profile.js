@@ -86,12 +86,13 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					return {
 						"profileName": "",
 						"profileURL": "",
-						"profileImage": "./image/profile.png",
+						"profileImage": "../image/profile.png",
 						"profileEMail": "",
 						
 						"profileType": FACEBOOK_PROFILE_TYPE,
 						
-						"profileState": "profile-empty"
+						"profileState": "profile-empty",
+						"componentState": "profile-hidden"
 					};
 				},
 
@@ -152,6 +153,20 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 								Profile.getBasicProfileData( self.state.profileType, callback );
 							}
 						} );
+
+					this.scope.on( "show-profile",
+						function onShowProfile( ){
+							self.setState( {
+								"componentState": "profile-shown"
+							} );
+						} );
+
+					this.scope.on( "hide-profile",
+						function onHideProfile( ){
+							self.setState( {
+								"componentState": "profile-hidden"
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -172,6 +187,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					var profileType = this.state.profileType;
 					
 					var profileState = this.state.profileState;
+
+					var componentState = this.state.componentState;
 
 					return; //: @template: template/profile.html
 				},

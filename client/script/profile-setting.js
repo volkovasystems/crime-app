@@ -50,9 +50,10 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 					return {
 						"displayName": "",
 						"userEMail": "",
-						"userAvatar": "./image/profile.png",
+						"userAvatar": "../image/profile.png",
 						
-						"profileSettingState": "profile-setting-default"
+						"profileSettingState": "profile-setting-default",
+						"componentState": "profile-setting-hidden"
 					};
 				},
 
@@ -60,10 +61,67 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 					this.scope.publish( "close-profile-setting" );
 				},
 
+				"onClickUpdate": function onClickUpdate( event ){
+					this.scope.publish( "update-profile-data", {
+						"displayName": this.state.displayName,
+						"userEMail": this.state.userEMail
+					} );
+				},
+
+				"onClickCancel": function onClickCancel( event ){
+					this.scope.publish( "close-profile-setting" );
+				},
+
+				"onChangeDisplayName": function onChangeDisplayName( event ){
+					var displayName = event.target.value;
+
+					this.setState( {
+						"displayName": displayName
+					} );
+				},
+
+				"onChangeEMail": function onChangeEMail( event ){
+					var userEMail = event.target.value;
+
+					this.setState( {
+						"userEMail": userEMail
+					} );
+				},
+
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 					
-					
+					this.scope.on( "set-profile-setting",
+						function onSetProfileSetting( profileData ){
+							self.setState( {
+								"displayName": profileData.userDisplayName || profileData.userProfileName,
+								"userEMail": profileData.userEMail || profileData.userAccountEMail,
+								"userAvatar": profileData.userAvatar || profileData.userProfileImageURL
+							} );
+						} );
+
+					this.scope.on( "clear-profile-setting",
+						function onSetProfileSetting( profileData ){
+							self.setState( {
+								"displayName": "",
+								"userEMail": "",
+								"userAvatar": "../image/profile.png",
+							} );
+						} );
+
+					this.scope.on( "show-profile-setting",
+						function onShowProfileSetting( ){
+							self.setState( {
+								"componentState": "profile-setting-shown"
+							} );
+						} );
+
+					this.scope.on( "hide-profile-setting",
+						function onHideProfileSetting( ){
+							self.setState( {
+								"componentState": "profile-setting-hidden"
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -80,6 +138,8 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 					var userAvatar = this.state.userAvatar;
 					
 					var profileSettingState = this.state.profileSettingState;
+
+					var componentState = this.state.componentState;
 
 					return; //: @template: template/profile-setting.html
 				},
