@@ -1,90 +1,53 @@
-<li
+<section 
 	key={ key }
-	className={ [
-		"report-item",
-		( isExpanded )? "expanded" : "collapsed",
-		"shown",
-		"inline-block"
-	].join( " " ) }
+	className="crime-stream"
 	onClick={ this.onClickReportItem }
 	value={ reportID }>
+	<section 
+		className="crime-time-relative">
+		<section 
+			className="time">
+			<span 
+				className="prefix">
+				{ timeFromNowData.prefix }
+			</span>
+			<span 
+				className="digit">
+				{ timeFromNowData.digit }
+			</span>
+			<span 
+				className="unit">
+				{ timeFromNowData.unit }
+			</span>
+			<span 
+				className="suffix">
+				{ timeFromNowData.suffix }
+			</span>
+		</section>
+	</section>
 
-	<div
-		className={ [
-			"report-item-icon",
-			( isExpanded )? "expanded" : "collapsed"
-		].join( " " ) }>
-		<Icon 
-			name="ic_expand_less_24px"
-			style={
-				{
-					"display": ( isExpanded )? "block" : "none"
-				}
-			} />
-		<Icon 
-			name="ic_expand_more_24px"
-			style={
-				{
-					"display": ( isExpanded )? "none" : "block"
-				}
-			} />
-	</div>
+	<p>
+		<span 
+			className="crime-category">
+			{ reportCaseTitle }
+		</span>
+		<span
+			className="report-item-phrase">
+			{ REPORT_ITEM_PHRASE }
+		</span>
+		<span 
+			className="street-location">
+			{ reportAddress }
+		</span>
+	</p>
 
-	<div
-		className={ [
-			"report-item-header",
-			( isExpanded )? "expanded" : "collapsed"
-		].join( " " ) }>
+	<section 
+		className="btn-action">
+		<button 
+			className="btn btn-primary" 
+			type="submit">
+			Locate to map
+		</button>
+	</section>
 
-		<div
-			className={ [
-				"report-time-from-now"
-			].join( " " ) }>
-			{ timeFromNow.toUpperCase( ) }
-		</div>
-
-		<div
-			className={ [
-				"report-title"
-			].join( " " ) }>
-			{ reportTitle.toUpperCase( ) }
-		</div>
-
-		<div
-			className={ [
-				"report-date"
-			].join( " " ) }>
-			{ descriptiveDate.toUpperCase( ) }
-		</div>
-
-		<div
-			className={ [
-				"report-time"
-			].join( " " ) }>
-			{ descriptiveTime.toUpperCase( ) }
-		</div>
-	</div>
-
-	<div
-		className={ [
-			"report-item-body",
-			( isExpanded )? "expanded" : "collapsed"
-		].join( " " ) }>
-
-		<MapPreview
-			parent={ this }
-			position={ mapPosition }
-			zoom={ mapZoom } 
-			address={ reportAddress } />
-	</div>
-
-	<div
-		className={ [
-			"report-item-footer",
-			( isExpanded )? "expanded" : "collapsed"
-		].join( " " ) }>
-		<p>
-			{ reportDescription.toUpperCase( ) }
-		</p>
-	</div>
-</li>
+</section>

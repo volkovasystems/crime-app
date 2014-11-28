@@ -95,6 +95,10 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					};
 				},
 
+				"onClickCloseProfile": function onClickCloseProfile( ){
+					this.scope.publish( "close-profile" );
+				},
+
 				"initiateBasicProfileDataRetrieval": function initiateBasicProfileDataRetrieval( profileType ){
 					var self = this;
 					this.setState( {

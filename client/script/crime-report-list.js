@@ -95,6 +95,20 @@ Crime
 		}
 	] )
 
+	.factory( "getAllReportList", [
+		"ProgressBar",
+		"Event",
+		"$http",
+		"getReportServerData",
+		function factory( ProgressBar, Event, $http, getReportServerData ){
+			var getAllReportList = function getAllReportList( scope, callback ){
+
+			};
+
+			return getAllReportList;
+		}
+	] )
+
 	.directive( "reportListController", [
 		"ProgressBar",
 		"Event",
@@ -108,23 +122,6 @@ Crime
 					ProgressBar( scope );
 
 					Event( scope );
-
-					/*:
-						Under normal flow starting from logged in state
-							the user can already see his list of reports.
-
-						If the server returned nothing then it means this is
-							his first time to use the app.
-
-							The report list will not be shown.
-					*/
-					/*scope.on( "login-success",
-						function onLoginSuccess( loginType ){
-							getReportList( scope,
-								function onGetReportList( ){
-									scope.publish( "show-report-list" );		
-								} );
-						} );*/
 
 					scope.on( "report-added",
 						function onReportAdded( ){

@@ -150,7 +150,19 @@ Crime
 										} );
 								},
 
-								function applyServerFormat( userData, reportData, callback ){
+								function getCaseCategoryTitle( userData, reportData, callback ){
+									scope.publish( "get-case-category-list",
+										function onGetCaseCategoryList( caseCategoryList ){
+											var caseCategoryTitle = _.find( caseCategoryList,
+												function onEachCaseCategoryItem( caseCategoryData ){
+													return caseCategoryData.name == reportData.category;
+												} ).title;
+
+											callback( null, userData, reportData, caseCategoryTitle );
+										} );
+								},
+
+								function applyServerFormat( userData, reportData, caseCategoryTitle, callback ){
 									var hashedValue = btoa( JSON.stringify( reportData ) );
 
 									var latitude = reportData.position.latitude;
@@ -177,6 +189,7 @@ Crime
 										"reportTitle": 			reportData.title,
 										"reportDescription": 	reportData.description,
 										"reportCaseType": 		reportData.category,
+										"reportCaseTitle": 		caseCategoryTitle,
 										"reportAddress": 		reportData.address
 									};
 

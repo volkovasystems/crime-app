@@ -1058,3 +1058,25 @@ gulp.task( "upload",
 		}
 	}
 }
+
+var expandedReportItemList = this.state.expandedReportItemList;
+
+					var descriptiveDate = moment( reportTimestamp ).format( "dddd, MMMM Do YYYY" ).toUpperCase( );
+
+					var descriptiveTime = moment( reportTimestamp ).format( "h:mm:ss a" ).toUpperCase( );
+
+					var latitude = reportItem.reportLocation.latitude;
+					var longitude = reportItem.reportLocation.longitude;
+					var mapPosition = new google.maps.LatLng( latitude, longitude );
+
+					var mapZoom = reportItem.reportLocation.zoom;
+
+					
+
+					var reportDescription = reportItem.reportDescription;
+
+					var reportTitle = reportItem.reportTitle.toUpperCase( );
+
+					var reportTimestamp = reportItem.reportTimestamp;
+
+					var isExpanded = _.contains( expandedReportItemList, reportID );

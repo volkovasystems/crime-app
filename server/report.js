@@ -325,8 +325,6 @@ app.get( "/api/:accessID/report/get/all/near",
 
 		var distance = parseInt( request.param( "distance" ) || 0 ) || 500;
 
-		console.log( "GET ALL NEAR: ", latitude, longitude );
-
 		if( latitude && longitude ){
 			Report
 				.where( "reportLocation.coordinate" )
@@ -494,6 +492,7 @@ app.post( "/api/:accessID/report/add",
 					"reportTitle": 			request.param( "reportTitle" ),
 					"reportDescription": 	request.param( "reportDescription" ),
 					"reportCaseType": 		request.param( "reportCaseType" ),
+					"reportCaseTitle": 		request.param( "reportCaseTitle" ),
 					"reportAddress": 		request.param( "reportAddress" )
 				} );
 
@@ -573,6 +572,8 @@ app.post( "/api/:accessID/report/:reportID/update",
 				reportData.reportDescription = request.param( "reportDescription" ) || reportData.reportDescription;
 				
 				reportData.reportCaseType = request.param( "reportCaseType" ) || reportData.reportCaseType;
+
+				reportData.reportCaseTitle = request.param( "reportCaseTitle" ) || reportData.reportCaseTitle;
 			
 				reportData.reportAddress = request.param( "reportAddress" ) || reportData.reportAddress;
 

@@ -1,153 +1,69 @@
 angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 	
-	.value( "GO_TO_PROFILE_PAGE", "go to profile page" )
+	.constant( "NAME_LABEL", labelData.NAME_LABEL )
 
-	.constant( "FACEBOOK_PROFILE_TYPE", "facebook" )
+	.constant( "NAME_PLACEHOLDER", labelData.NAME_PLACEHOLDER )
+
+	.constant( "EMAIL_LABEL", labelData.EMAIL_LABEL )
+
+	.constant( "EMAIL_PLACEHOLDER", labelData.EMAIL_PLACEHOLDER )
+
+	.constant( "UPDATE_LABEL", labelData.UPDATE_LABEL )
+
+	.constant( "CANCEL_LABEL", labelData.CANCEL_LABEL )
+
+	.constant( "USER_AVATAR_ALTERNATIVE", labelData.USER_AVATAR_ALTERNATIVE )
+
+	.constant( "CHANGE_AVATAR_LABEL", labelData.CHANGE_AVATAR_LABEL )
 	
 	.factory( "ProfileSetting", [
 		"Icon",
-		"FACEBOOK_PROFILE_TYPE",
-		"GO_TO_PROFILE_PAGE",
-		function factory( Icon, FACEBOOK_PROFILE_TYPE, GO_TO_PROFILE_PAGE ){
+		"NAME_LABEL",
+		"NAME_PLACEHOLDER",
+		"EMAIL_LABEL",
+		"EMAIL_PLACEHOLDER",
+		"UPDATE_LABEL",
+		"CANCEL_LABEL",
+		"USER_AVATAR_ALTERNATIVE",
+		"CHANGE_AVATAR_LABEL",
+		function factory( 
+			Icon,
+			NAME_LABEL,
+			NAME_PLACEHOLDER,
+			EMAIL_LABEL,
+			EMAIL_PLACEHOLDER,
+			UPDATE_LABEL,
+			CANCEL_LABEL,
+			USER_AVATAR_ALTERNATIVE,
+			CHANGE_AVATAR_LABEL
+		){
 			var ProfileSetting = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
 						React.render( <ProfileSetting scope={ scope } />, container[ 0 ] );
 
 						return this;
-					},
-
-					"getBasicProfileDataFromFacebook": function getBasicProfileDataFromFacebook( callback ){
-						callback = callback || function callback( ){ };
-
-						var profileData = { };
-
-						async.parallel( [
-							function requestProfileData( callback ){
-								FB.api( "/me",
-									function onResponse( response ){
-										if( response.error ){
-											callback( response.error, response );
-
-										}else{
-											profileData.profileName = response.name;
-											profileData.profileURL = response.link;
-											profileData.profileEMail = response.email;
-
-											callback( null, response );
-										}
-									} );
-							},
-
-							function requestProfilePhoto( callback ){
-								FB.api( "/me/picture",
-									{
-										"redirect": false,
-										"height": 128,
-										"type": "square",
-										"width": 128
-									},
-									function onResponse( response ){
-										if( response.error ){
-											callback( response.error, response );
-
-										}else{
-											profileData.profileImage = response.data.url;
-
-											callback( null, response );
-										}
-									} );
-							}
-						],
-							function lastly( error, responseList ){
-								var formattedProfileData = {
-									"profileName": profileData.profileName,
-									"profileURL": profileData.profileURL,
-									"profileImage": profileData.profileImage,
-									"profileEMail": profileData.profileEMail
-								};
-
-								callback( error, formattedProfileData, responseList );
-							} );
-					},
-
-					"getBasicProfileData": function getBasicProfileData( profileType, callback ){
-						callback = callback || function callback( ){ };
-
-						switch( profileType ){
-							case FACEBOOK_PROFILE_TYPE:
-								this.getBasicProfileDataFromFacebook( callback );
-								break;
-						}
 					}
 				},
 
 				"getInitialState": function getInitialState( ){
 					return {
-						"profileName": "",
-						"profileURL": "",
-						"profileImage": "./image/profile.png",
-						"profileEMail": "",
+						"displayName": "",
+						"userEMail": "",
+						"userAvatar": "./image/profile.png",
 						
-						"profileType": FACEBOOK_PROFILE_TYPE,
-						
-						"profileState": "profile-empty"
+						"profileSettingState": "profile-setting-default"
 					};
 				},
 
-				"initiateBasicProfileDataRetrieval": function initiateBasicProfileDataRetrieval( profileType ){
-					var self = this;
-					this.setState( {
-							"profileType": profileType,
-							"profileState": "profile-processing"
-						},
-						function onStateChanged( ){
-							Profile.getBasicProfileData( self.state.profileType,
-								function onResult( error, profileData, responseList ){
-									if( error ){
-										self.scope.broadcast( "error", "login-error", error, responseList );
-
-										self.setState( {
-											"profileState": "profile-error",
-										} );
-
-									}else{
-										self.setState( {
-											"profileName": profileData.profileName,
-											"profileURL": profileData.profileURL,
-											"profileImage": profileData.profileImage,
-											"profileEMail": profileData.profileEMail,
-											"profileState": "profile-ready"
-										} );
-									}
-								} );
-						} );
+				"onClickCloseProfileSetting": function onClickCloseProfileSetting( ){
+					this.scope.publish( "close-profile-setting" );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 					
-					this.scope.on( "initiate-basic-profile-data-retrieval",
-						function onInitiateBasicProfileDataRetrieval( profileType ){
-							self.initiateBasicProfileDataRetrieval( profileType );
-						} );
-
-					this.scope.on( "get-basic-profile-data",
-						function onGetBasicProfileData( callback ){
-							if( self.state.profileState == "profile-ready" ){
-								var profileData = {
-									"profileName": self.state.profileName,
-									"profileURL": self.state.profileURL,
-									"profileImage": self.state.profileImage,
-									"profileEMail": self.state.profileEMail
-								};
-
-								callback( null, profileData );
-
-							}else{
-								Profile.getBasicProfileData( self.state.profileType, callback );
-							}
-						} );
+					
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -157,58 +73,37 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 				},
 
 				"render": function onRender( ){
-					var profileName = this.state.profileName;
+					var displayName = this.state.displayName;
 
-					var profileEMail = this.state.profileEMail;
+					var userEMail = this.state.userEMail;
 
-					var profileURL = this.state.profileURL;
-
-					var profileImage = this.state.profileImage;
-
-					var profileType = this.state.profileType;
+					var userAvatar = this.state.userAvatar;
 					
-					var profileState = this.state.profileState;
+					var profileSettingState = this.state.profileSettingState;
 
-					return; //: @template: template/profile.html
+					return; //: @template: template/profile-setting.html
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-					if( this.state.profileState != prevState.profileState ){
-						if( this.state.profileState == "profile-ready" ){
-							var profileData = {
-								"profileName": this.state.profileName,
-								"profileURL": this.state.profileURL,
-								"profileImage": this.state.profileImage,
-								"profileEMail": this.state.profileEMail,
-								"profileState": this.state.profileState
-							};
-
-							this.scope.broadcast( this.state.profileState, profileData );
-						
-						}else{
-							this.scope.broadcast( this.state.profileState );
-						}
-
-						this.scope.broadcast( "profile-state-changed", this.state.profileState );
-					}
+					
 				},
 
 				"componentDidMount": function componentDidMount( ){
-					this.scope.broadcast( "profile-rendered" );	
+					this.scope.broadcast( "profile-setting-rendered" );	
 				}
 			} );
 
-			return Profile;
+			return ProfileSetting;
 		}
 	] )
 
-	.factory( "attachProfile", [
+	.factory( "attachProfileSetting", [
 		"$rootScope",
 		"Event",
 		"PageFlow",
-		"Profile",
-		function factory( $rootScope, Event, PageFlow, Profile ){
-			var attachProfile = function attachProfile( optionSet ){
+		"ProfileSetting",
+		function factory( $rootScope, Event, PageFlow, ProfileSetting ){
+			var attachProfileSetting = function attachProfileSetting( optionSet ){
 				var scope = optionSet.scope || $rootScope;
 
 				var element = optionSet.element;
@@ -219,42 +114,35 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 
 				Event( scope );
 
-				PageFlow( scope, element, "profile" );
+				PageFlow( scope, element, "profile-setting" );
 
-				scope.on( "show-profile",
-					function onShowProfile( ){
+				scope.on( "show-profile-setting",
+					function onShowProfileSetting( ){
 						scope.showPage( );
 					} );
 
-				scope.on( "hide-profile",
-					function onHideProfile( ){
+				scope.on( "hide-profile-setting",
+					function onHideProfileSetting( ){
 						scope.hidePage( );
 					} );
 
-				scope.on( "profile-state-changed",
-					function onProfileStateChanged( profileState ){
-						scope.toggleFlow( "profile-*", profileState );
+				scope.publish( "hide-profile-setting" );
 
-						scope.publish( profileState );
-					} );
-
-				scope.publish( "hide-profile" );
-
-				Profile.attach( scope, element );
+				ProfileSetting.attach( scope, element );
 			};
 
-			return attachProfile;
+			return attachProfileSetting;
 		}
 	] )
 
-	.directive( "profile", [
-		"attachProfile",
-		function directive( attachProfile ){
+	.directive( "profileSetting", [
+		"attachProfileSetting",
+		function directive( attachProfileSetting ){
 			return {
 				"restrict": "EA",
 				"scope": true,
 				"link": function onLink( scope, element, attributeSet ){
-					attachProfile( {
+					attachProfileSetting( {
 						"scope": scope,
 						"element": element,
 						"attributeSet": attributeSet
