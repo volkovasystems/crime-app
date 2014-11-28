@@ -42,6 +42,7 @@ var scriptList = [
 	"crime-dashbar.js",
 	"crime-login.js",
 	"crime-profile.js",
+	"crime-profile-setting.js",
 	"crime-search.js",
 	"crime-map-view.js",
 	"crime-map-locate.js",

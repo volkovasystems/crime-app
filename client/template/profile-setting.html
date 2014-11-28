@@ -1,22 +1,25 @@
 <section 
-	classname="profile-container">
+	className={ [
+		"profile-container",
+		componentState
+	].join( " " ) }>
 	<section 
-		classname="profile">
+		className="profile">
 
 		<section 
-			classname="close-action pull-right">
+			className="close-action pull-right">
 			<a 
-				classname="md-2x md-close icon" 
+				className="md-2x md-close icon" 
 				href="#"
 				onClick={ this.onClickCloseProfileSetting }>
 			</a>
 		</section>
 
 		<section 
-			classname="avatar edit-avatar">
+			className="avatar edit-avatar">
 			<img 
 				alt={ USER_AVATAR_ALTERNATIVE }
-				classname="img" 
+				className="img" 
 				src={ userAvatar } /> 
 			<button
 				style={
@@ -24,7 +27,7 @@
 						"display": "none"
 					}
 				} 
-				classname="edit-avatar-action btn btn-xs btn-gray" 
+				className="edit-avatar-action btn btn-xs btn-gray" 
 				type="submit">
 				{ CHANGE_AVATAR_LABEL }
 			</button>
@@ -32,30 +35,30 @@
 	</section>
 
 	<form 
-		classname="form">
+		className="form">
 		<section 
-			classname="form-group">
+			className="form-group">
 			<section 
-				classname="form-controls">
+				className="form-controls">
 				<label 
-					classname="label label-name">
+					className="label label-name">
 					{ NAME_LABEL }
 				</label>
 				<input 
-					classname="input input-type form-input"
+					className="input input-type form-input"
 					placeholder={ NAME_PLACEHOLDER }
 					type="text" 
 					value={ displayName }
 					onChange={ this.onChangeDisplayName } />
 			</section>
 			<section 
-				classname="form-controls">
+				className="form-controls">
 				<label 
-					classname="label label-name">
+					className="label label-name">
 					{ EMAIL_LABEL }
 				</label>
 				<input 
-					classname="input input-type form-input"
+					className="input input-type form-input"
 					placeholder={ EMAIL_PLACEHOLDER } 
 					type="text" 
 					value={ userEMail } 
@@ -64,15 +67,17 @@
 		</section>
 
 		<section 
-			classname="form-actions">
+			className="form-actions">
 			<button 
-				classname="update-form-action btn btn-large btn-primary" 
-				type="submit">
+				className="update-form-action btn btn-large btn-primary" 
+				type="submit"
+				onClick={ this.onClickUpdate }>
 				{ UPDATE_LABEL }
 			</button>
 			<button 
-				classname="cancel-form-action btn btn-large btn-gray" 
-				type="submit">
+				className="cancel-form-action btn btn-large btn-gray" 
+				type="submit"
+				onClick={ this.onClickCancel }>
 				{ CANCEL_LABEL }
 			</button>
 		</section>
