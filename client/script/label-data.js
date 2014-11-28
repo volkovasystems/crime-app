@@ -1,20 +1,20 @@
 var labelData = {
-	"LOGIN_LABEL": "login",
+	"LOGIN_LABEL": "Login with Facebook",
 
-	"REPORT_LIST_HEADER_LABEL": "report feeds",
+	"REPORT_LIST_HEADER_LABEL": "Report Feeds",
 	"REPORT_ITEM_PHRASE": "incident reported happened on",
 
-	"PROFILE_DASHBAR_LABEL": "profile",
-	"REPORT_DASHBAR_LABEL": "reports",
-	"MY_REPORT_DASHBAR_LABEL": "my reports",
-	"LOGOUT_DASHBAR_LABEL": "logout",
+	"PROFILE_DASHBAR_LABEL": "Profile",
+	"REPORT_DASHBAR_LABEL": "Reports",
+	"MY_REPORT_DASHBAR_LABEL": "My Reports",
+	"LOGOUT_DASHBAR_LABEL": "Logout",
 
-	"NAME_LABEL": "name",
-	"NAME_PLACEHOLDER": "your name here",
-	"EMAIL_LABEL": "email",
-	"EMAIL_PLACEHOLDER": "your email here",
+	"NAME_LABEL": "Name",
+	"NAME_PLACEHOLDER": "Your Name here",
+	"EMAIL_LABEL": "Email",
+	"EMAIL_PLACEHOLDER": "Your Email here",
 	"UPDATE_LABEL": "update",
 	"CANCEL_LABEL": "cancel",
-	"USER_AVATAR_ALTERNATIVE": "my avatar",
-	"CHANGE_AVATAR_LABEL": "change avatar"
+	"USER_AVATAR_ALTERNATIVE": "My Avatar",
+	"CHANGE_AVATAR_LABEL": "Change Avatar"
 };
