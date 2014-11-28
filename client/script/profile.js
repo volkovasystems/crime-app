@@ -88,6 +88,10 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 						"profileURL": "",
 						"profileImage": "../image/profile.png",
 						"profileEMail": "",
+
+						"displayName": "",
+						"userEMail": "",
+						"userAvatar": "",
 						
 						"profileType": FACEBOOK_PROFILE_TYPE,
 						
@@ -152,6 +156,15 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 								Profile.getBasicProfileData( self.state.profileType, callback );
 							}
 						} );
+
+					this.scope.on( "set-profile-data",
+						function onSetProfileData( userData ){
+							self.setState( {
+								"displayName": userData.userDisplayName,
+								"userEMail": userData.userEMail,
+								"userAvatar": userData.userAvatar
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -161,13 +174,13 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 				},
 
 				"render": function onRender( ){
-					var profileName = this.state.profileName;
+					var profileName = this.state.displayName || this.state.profileName;
 
-					var profileEMail = this.state.profileEMail;
+					var profileEMail = this.state.userEMail || this.state.profileEMail;
 
 					var profileURL = this.state.profileURL;
 
-					var profileImage = this.state.profileImage;
+					var profileImage = this.state.userAvatar || this.state.profileImage;
 
 					var profileType = this.state.profileType;
 					
