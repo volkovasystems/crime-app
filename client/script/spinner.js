@@ -64,13 +64,17 @@ angular.module( "Spinner", [ "Event", "PageFlow" ] )
 				PageFlow( scope, element, "spinner" );
 
 				scope.on( "show-spinner",
-					function onShowSpinner( ){
-						scope.showPage( );
+					function onShowSpinner( thisNamespace ){
+						if( namespace == thisNamespace ){
+							scope.showPage( );
+						}
 					} );
 
 				scope.on( "hide-spinner",
-					function onHideSpinner( ){
-						scope.hidePage( );
+					function onHideSpinner( thisNamespace ){
+						if( namespace == thisNamespace ){
+							scope.hidePage( );	
+						}
 					} );
 
 				Spinner.attach( scope, element, namespace );

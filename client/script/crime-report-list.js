@@ -144,7 +144,7 @@ Crime
 							scope.publish( "hide-report-list" );
 						} );
 
-					scope.on( "dash-clicked:report-list",
+					scope.on( "dash-clicked:my-report",
 						function onNavigateReport( ){
 							scope.publish( "show-report-list" );
 						} );
