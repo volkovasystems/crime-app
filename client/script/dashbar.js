@@ -1,8 +1,9 @@
-angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
+angular.module( "Dashbar", [ "PageFlow", "Event", "Icon", "Profile" ] )
 
 	.factory( "Dashbar", [
 		"Icon",
-		function factory( Icon ){
+		"attachProfile",
+		function factory( Icon, attachProfile ){
 			var Dashbar = React.createClass( {
 				"statics": {
 					"dashList": [ ],
@@ -172,6 +173,11 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 				},
 
 				"componentDidMount": function componentDidMount( ){
+					attachProfile( {
+						"scope": this.scope,
+						"element": $( ".dashbar-profile", this.getDOMNode( ) )
+					} );
+
 					this.scope.broadcast( "dashbar-rendered" );	
 				}
 			} );

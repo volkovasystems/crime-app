@@ -91,17 +91,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 						
 						"profileType": FACEBOOK_PROFILE_TYPE,
 						
-						"profileState": "profile-empty",
-						"componentState": "profile-minified"
+						"profileState": "profile-empty"
 					};
-				},
-				
-				"onProfileCloseButtonClick": function onProfileCloseButtonClick( event ){
-					this.scope.publish( "show-minified-profile" );
-				},
-
-				"onProfileImageClick": function onProfileImageClick( event ){
-					this.scope.publish( "show-expanded-profile" );
 				},
 
 				"initiateBasicProfileDataRetrieval": function initiateBasicProfileDataRetrieval( profileType ){
@@ -135,20 +126,6 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
-
-					this.scope.on( "show-minified-profile",
-						function onShowMinifiedProfile( ){
-							self.setState( {
-								"componentState": "profile-minified"
-							} );
-						} );
-
-					this.scope.on( "show-expanded-profile",
-						function onShowMinifiedProfile( ){
-							self.setState( {
-								"componentState": "profile-expanded"
-							} );
-						} );
 					
 					this.scope.on( "initiate-basic-profile-data-retrieval",
 						function onInitiateBasicProfileDataRetrieval( profileType ){
@@ -180,8 +157,6 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 				},
 
 				"render": function onRender( ){
-					var componentState = this.state.componentState;
-
 					var profileName = this.state.profileName;
 
 					var profileEMail = this.state.profileEMail;
@@ -214,7 +189,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 							this.scope.broadcast( this.state.profileState );
 						}
 
-						this.scope.broadcast( "profile-state-changed", this.state.profileState, this.state.componentState );
+						this.scope.broadcast( "profile-state-changed", this.state.profileState );
 					}
 				},
 
@@ -245,20 +220,6 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 				Event( scope );
 
 				PageFlow( scope, element, "profile" );
-				
-				scope.on( "show-minified-profile",
-					function onShowMinifiedProfile( ){
-						scope.broadcast( "show-profile" );
-
-						scope.toggleFlow( "!profile-expanded", "profile-minified" );
-					} );
-
-				scope.on( "show-expanded-profile",
-					function onShowExpandedProfile( ){
-						scope.broadcast( "show-profile" );
-
-						scope.toggleFlow( "!profile-minified", "profile-expanded" );
-					} );
 
 				scope.on( "show-profile",
 					function onShowProfile( ){
@@ -271,8 +232,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					} );
 
 				scope.on( "profile-state-changed",
-					function onProfileStateChanged( profileState, componentState ){
-						scope.toggleFlow( "profile-*", profileState, componentState );
+					function onProfileStateChanged( profileState ){
+						scope.toggleFlow( "profile-*", profileState );
 
 						scope.publish( profileState );
 					} );

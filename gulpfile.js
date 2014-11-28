@@ -359,6 +359,7 @@ gulp.task( "watch",
 		gulp.watch( [ 
 			"client/script/**", 
 			"client/style/**", 
+			"client/template/**",
 			"client/index.html" 
 		], 
 		[ "reload" ] );
@@ -379,6 +380,7 @@ gulp.task( "serverless-watch",
 		gulp.watch( [ 
 			"client/script/**", 
 			"client/style/**", 
+			"client/template/**",
 			"client/index.html" 
 		], 
 		[ "reload" ] );

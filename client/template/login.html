@@ -30,16 +30,10 @@
 
 		<div
 			className={ [
-				"login-prompt",
-				"text-center",
-				( loginState != "logged-out" )? "shown inline-block": "hidden",
-				( loginState == "login-error" )? "bg-danger": "",
-				( loginState == "logged-in" )? "bg-success": "",
-				( loginState == "logging-in" )? "bg-info": "",
+				"login-spinner",
 				loginState,
 				componentState
 			].join( " " ) }>
-			{ loginPrompt.toUpperCase( ) }
 		</div>
 
 		{ /* Facebook login button. */ }
@@ -74,57 +68,10 @@
 				<span
 					className={ [
 						"login-icon",
-						( loginState == "logged-out" )? "entypo-social facebook": "",
-						( loginState == "logged-in" )? "entypo thumbs-up": ""
+						"entypo-social facebook"
 					].join( " " ) }>
 				</span>
-				{ 
-					( loginState == "logged-out" )? LOGIN_LABEL.toUpperCase( ) :
-					( loginState == "logged-in" )? PROCEED_LABEL.toUpperCase( ) : ""
-				}
-			</a>
-		</button>
-
-		{ /* Twitter login button. */ }
-		<button 
-			className={ [
-				"twitter-login-button",
-				"btn",
-				"btn-lg",
-				"btn-primary",
-				"login-button",
-				( 
-					loginType == "twitter" &&
-					( 
-						loginState == "logged-out" || 
-						loginState == "logged-in" 
-					)
-				)? "shown inline-block": "hidden",
-				loginState,
-				componentState
-			].join( " " ) }
-			value="twitter"
-			type="button"
-			onClick={ this.onClickLogin }>
-			<a
-				className={ [
-					"action-element"
-				].join( " " ) }
-				href={ [ 
-					"#",
-					loginState
-				].join( "/" ) }>
-				<span
-					className={ [
-						"login-icon",
-						( loginState == "logged-out" )? "entypo-social twitter": "",
-						( loginState == "logged-in" )? "entypo thumbs-up": ""
-					].join( " " ) }>
-				</span>
-				{ 
-					( loginState == "logged-out" )? "LOGIN" :
-					( loginState == "logged-in" )? "PROCEED" : ""
-				}
+				{ LOGIN_LABEL.toUpperCase( ) }
 			</a>
 		</button>
 	</div>

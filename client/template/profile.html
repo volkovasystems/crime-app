@@ -1,79 +1,31 @@
 <div 
 	className={ [
 		"profile-container",
-		profileState,
-		componentState
+		profileState
 	].join( " " ) }>
-	
-	<div 
-		className={ [
-			"profile-close-button",
-			profileState,
-			componentState
-		].join( " " ) }
-		onClick={ this.onProfileCloseButtonClick }>
-		<a 
-			className={ [
-				"action-element"
-			].join( " " ) }
-			href={ [
-				"#",
-				"close-profile"
-			].join( "/" ) }
-			style={
-				{
-					"display": "block"
-				}
-			}>
-			
-			<Icon
-				className={ [
-					"profile-close-icon"
-				].join( " " ) }
-				name="ic_close_24px" />
-		</a>
-	</div>
 
 	<div
 		className={ [
 			"profile-data-container",
-			profileState,
-			componentState
+			profileState
 		].join( " " ) }>
 
 		<div
 			className={ [
 				"profile-image",
-				profileState,
-				componentState
-			].join( " " ) }
-			onClick={ this.onProfileImageClick }>
-			<a 
+				profileState
+			].join( " " ) }>
+			<img 
 				className={ [
-					"action-element"
+					"img-circle",
+					profileState
 				].join( " " ) } 
-				href={ [ 
-					"#", 
-					profileState 
-				].join( "/" ) }
-				style={
-					{
-						"display": "block"
-					}
-				}>
-				<img 
-					className={ [
-						"img-circle",
-						profileState
-					].join( " " ) } 
-					src={ profileImage } />
-			</a>
+				src={ profileImage } />
 		</div>
 
 		<div 
 			className={ [ 
 				"profile-data",
-				componentState,
 				profileState
 			].join( " " ) }>
 
@@ -81,8 +33,7 @@
 				className={ [
 					"profile-name",
 					"text-center",
-					profileState,
-					componentState
+					profileState
 				].join( " " ) }>
 				{ profileName.toUpperCase( ) }
 			</h2>
@@ -91,8 +42,7 @@
 				className={ [
 					"profile-link",
 					"text-center",
-					profileState,
-					componentState
+					profileState
 				].join( " " ) }>
 				<a 
 					className={ [
