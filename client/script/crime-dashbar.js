@@ -7,11 +7,22 @@ Crime
 				"priority": 1,
 				"link": function onLink( scope, element, attribute ){
 					scope.dashList = [
-						"home",
-						"report",
-						"report-list",
-						"locate",
-						"profile",
+						{
+							"name": "profile",
+							"title": labelData.PROFILE_DASHBAR_LABEL
+						},
+						{
+							"name": "report",
+							"title": labelData.REPORT_DASHBAR_LABEL
+						},
+						{
+							"name": "my-report",
+							"title": labelData.MY_REPORT_DASHBAR_LABEL
+						},
+						{
+							"name": "logout",
+							"title": labelData.LOGOUT_DASHBAR_LABEL
+						}
 					];
 				}
 			};
@@ -26,31 +37,11 @@ Crime
 				"priority": 1,
 				"link": function onLink( scope, element, attribute ){
 					scope.dashItemIconSet = {
-						"home": "ic_home_24px",
-						"report": "ic_report_problem_24px",
-						"report-list": "ic_view_list_24px",
-						"locate": "ic_my_location_24px",
 						"profile": "ic_account_circle_24px",
+						"report": "ic_report_problem_24px",
+						"my-report": "ic_view_list_24px",
+						"logout": "ic_home_24px"
 					};
-				}
-			};
-		}
-	] )
-
-	.directive( "hiddenDashItemList", [
-		function directive( ){
-			return {
-				"restrict": "A",
-				"scope": true,
-				"priority": 1,
-
-				"link": function onLink( scope, element, attribute ){
-					scope.hiddenDashItemList = [
-						"report",
-						"report-list",
-						"locate",
-						"profile"
-					];
 				}
 			};
 		}

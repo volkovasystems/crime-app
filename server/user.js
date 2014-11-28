@@ -48,13 +48,11 @@ app.use( function allowCrossDomain( request, response, next ){
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
-		var accessID = request.get( "Administrator-Access-ID" ) || 
-			request.param( "adminAccessID" ) || 
-			request.param( "accessID" );
-
 		async.waterfall( [
 			function verifyAccessID( callback ){
-				var accessID = request.param( "accessID" );
+				var accessID = request.get( "Administrator-Access-ID" ) || 
+					request.param( "adminAccessID" ) || 
+					request.param( "accessID" );
 
 				var requestEndpoint = userServer.joinPath( "verify/access/:accessID", true );
 
@@ -323,6 +321,8 @@ app.post( "/api/:accessID/user/update",
 			function saveUser( userData, callback ){
 				userData.userState = request.param( "userState" ) || userData.userState;
 
+				userData.userEMail = request.param( "userEMail" ) || userData.userEMail;
+
 				userData.accessState = request.param( "accessState" ) || userData.accessState;
 
 				userData.accessID = request.param( "accessID" ) || userData.accessID;
@@ -332,6 +332,8 @@ app.post( "/api/:accessID/user/update",
 				userData.userAccountType = request.param( "userAccountType" ) || userData.userAccountType;
 				
 				userData.userAccountToken = request.param( "userAccountToken" ) || userData.userAccountToken;
+
+				userData.userAccountEMail = request.param( "userAccountEMail" ) || userData.userAccountEMail;
 
 				userData.userDisplayName = request.param( "userDisplayName" ) || userData.userDisplayName;
 
@@ -423,6 +425,7 @@ app.post( "/user/register",
 					"userAccountID": 			request.param( "userAccountID" ),
 					"userAccountType": 			request.param( "userAccountType" ),
 					"userAccountToken": 		request.param( "userAccountToken" ),
+					"userAccountEMail": 		request.param( "userAccountEMail" ),
 					"userAccountCreationTime": 	request.param( "userAccountCreationTime" ),
 					"userProfileName": 			request.param( "userProfileName" ),
 					"userProfileLink": 			request.param( "userProfileLink" ),
@@ -507,7 +510,7 @@ app.post( "/user/login",
 			function checkIfUserExists( callback ){
 				User
 					.findOne( { 
-						"userAccountID": request.param( "userAccountID" ) 
+						"userAccountID": request.param( "userAccountID" )
 					}, function onFound( error, userData ){
 						callback( error, userData );
 					} );
@@ -540,6 +543,8 @@ app.post( "/user/login",
 				userData.userAccountType = request.param( "userAccountType" );
 				
 				userData.userAccountToken = request.param( "userAccountToken" );
+
+				userData.userAccountEMail = request.param( "userAccountEMail" );
 
 				userData.userProfileName = request.param( "userProfileName" );
 
@@ -617,7 +622,64 @@ app.post( "/user/login",
 
 app.post( "/user/:accessID/logout",
 	function onUserLogout( request, response ){
+		var User = mongoose.model( "User" );
 
+		async.waterfall( [
+			function checkIfUserExists( callback ){
+				User
+					.findOne( { 
+						"accessID": request.param( "accessID" ) 
+					}, function onFound( error, userData ){
+						if( error ){
+							callback( error );
+						
+						}else if( _.isEmpty( userData ) ){
+							callback( "no-user-data" );
+
+						}else{
+							callback( null, userData );
+						}
+					} );
+			},
+
+			function logoutUser( userData, callback ){
+				userData.userState = "logged-out";
+
+				userData.accessState = "dropped";
+
+				userData.save( function onSave( error ){
+					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
+					setTimeout( function onTimeout( ){
+						callback( error );
+					}, 1000 );
+				} );
+			}
+		],
+			function lastly( state ){
+				if( typeof state == "string" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else if( !_.isEmpty( userData ) ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "success"
+						} );
+				}
+			} );
 	} );
 
 if( argv.production ){

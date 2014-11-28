@@ -1,10 +1,14 @@
 angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ] )
 
-	.value( "LOGGED_IN_PROMPT", "welcome" )
+	.value( "LOGGED_IN_PROMPT", labelData.LOGGED_IN_PROMPT )
 
-	.value( "LOGGING_IN_PROMPT", "please wait" )
+	.value( "LOGGING_IN_PROMPT", labelData.LOGGING_IN_PROMPT )
 
-	.value( "LOGIN_ERROR_PROMPT", "oops! please try again" )
+	.value( "LOGIN_ERROR_PROMPT", labelData.LOGIN_ERROR_PROMPT )
+
+	.value( "LOGIN_LABEL", labelData.LOGIN_LABEL )
+
+	.value( "PROCEED_LABEL", labelData.PROCEED_LABEL )
 
 	.constant( "FACEBOOK_LOGIN_TYPE", "facebook" )
 
@@ -21,6 +25,8 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 		"LOGGING_IN_PROMPT",
 		"LOGGED_IN_PROMPT",
 		"LOGIN_ERROR_PROMPT",
+		"LOGIN_LABEL",
+		"PROCEED_LABEL",
 		"POPUP_LOGIN_FLOW",
 		"REDIRECT_LOGIN_FLOW",
 		function factory(
@@ -32,6 +38,8 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 			LOGGING_IN_PROMPT,
 			LOGGED_IN_PROMPT,
 			LOGIN_ERROR_PROMPT,
+			LOGIN_LABEL,
+			PROCEED_LABEL,
 			POPUP_LOGIN_FLOW,
 			REDIRECT_LOGIN_FLOW
 		){
@@ -142,10 +150,10 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 								var loginData = {
 									"loginType": FACEBOOK_LOGIN_TYPE,
 									"userID": response.authResponse.userID,
-									"accessToken": response.authResponse.accessToken
+									"accessToken": response.authResponse.accessToken,
 								};
 
-								callback( null, true, loginData, response );		
+								callback( null, true, loginData, response );
 
 							}else{
 								callback( null, false, null, response );
@@ -359,138 +367,7 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 					
 					var componentState = this.state.componentState;
 
-					return ( 
-						<div className={ [
-								"login-container",
-								loginState,
-								componentState
-							].join( " " ) }>
-							<div 
-								className={ [
-									"login-component",
-									loginState,
-									componentState,
-								].join( " " ) }>
-
-								<div
-									className={ [
-										"login-logo-container",
-										"shown",
-										"inline-block",
-										loginState,
-										componentState 
-									].join( " " ) }>
-
-									<img
-										className={ [
-											"logo",
-											componentState
-										].join( " " ) }
-										src={ appLogoImageSource } />
-								</div>
-
-								<div
-									className={ [
-										"login-prompt",
-										"text-center",
-										( loginState != "logged-out" )? "shown inline-block": "hidden",
-										( loginState == "login-error" )? "bg-danger": "",
-										( loginState == "logged-in" )? "bg-success": "",
-										( loginState == "logging-in" )? "bg-info": "",
-										loginState,
-										componentState
-									].join( " " ) }>
-									{ loginPrompt.toUpperCase( ) }
-								</div>
-
-								{ /* Facebook login button. */ }
-								<button 
-									className={ [
-										"facebook-login-button",
-										"btn",
-										"btn-lg",
-										"btn-primary",
-										"login-button",
-										( 
-											loginType == "facebook" &&
-											( 
-												loginState == "logged-out" || 
-												loginState == "logged-in" 
-											)
-										)? "shown inline-block": "hidden",
-										loginState,
-										componentState
-									].join( " " ) }
-									value="facebook"
-									type="button"
-									onClick={ this.onClickLogin }>
-									<a
-										className={ [
-											"action-element"
-										].join( " " ) }
-										href={ [ 
-											"#",
-											loginState
-										].join( "/" ) }>
-										<span
-											className={ [
-												"login-icon",
-												( loginState == "logged-out" )? "entypo-social facebook": "",
-												( loginState == "logged-in" )? "entypo thumbs-up": ""
-											].join( " " ) }>
-										</span>
-										{ 
-											( loginState == "logged-out" )? "LOGIN" :
-											( loginState == "logged-in" )? "PROCEED" : ""
-										}
-									</a>
-								</button>
-
-								{ /* Twitter login button. */ }
-								<button 
-									className={ [
-										"twitter-login-button",
-										"btn",
-										"btn-lg",
-										"btn-primary",
-										"login-button",
-										( 
-											loginType == "twitter" &&
-											( 
-												loginState == "logged-out" || 
-												loginState == "logged-in" 
-											)
-										)? "shown inline-block": "hidden",
-										loginState,
-										componentState
-									].join( " " ) }
-									value="twitter"
-									type="button"
-									onClick={ this.onClickLogin }>
-									<a
-										className={ [
-											"action-element"
-										].join( " " ) }
-										href={ [ 
-											"#",
-											loginState
-										].join( "/" ) }>
-										<span
-											className={ [
-												"login-icon",
-												( loginState == "logged-out" )? "entypo-social twitter": "",
-												( loginState == "logged-in" )? "entypo thumbs-up": ""
-											].join( " " ) }>
-										</span>
-										{ 
-											( loginState == "logged-out" )? "LOGIN" :
-											( loginState == "logged-in" )? "PROCEED" : ""
-										}
-									</a>
-								</button>
-							</div>
-						</div>
-					);
+					return; //: @template: template/login.html
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){

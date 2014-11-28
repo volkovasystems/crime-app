@@ -32,6 +32,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 										}else{
 											profileData.profileName = response.name;
 											profileData.profileURL = response.link;
+											profileData.profileEMail = response.email;
 
 											callback( null, response );
 										}
@@ -62,7 +63,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 								var formattedProfileData = {
 									"profileName": profileData.profileName,
 									"profileURL": profileData.profileURL,
-									"profileImage": profileData.profileImage
+									"profileImage": profileData.profileImage,
+									"profileEMail": profileData.profileEMail
 								};
 
 								callback( error, formattedProfileData, responseList );
@@ -85,6 +87,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 						"profileName": "",
 						"profileURL": "",
 						"profileImage": "./image/profile.png",
+						"profileEMail": "",
 						
 						"profileType": FACEBOOK_PROFILE_TYPE,
 						
@@ -122,6 +125,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 											"profileName": profileData.profileName,
 											"profileURL": profileData.profileURL,
 											"profileImage": profileData.profileImage,
+											"profileEMail": profileData.profileEMail,
 											"profileState": "profile-ready"
 										} );
 									}
@@ -157,7 +161,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 								var profileData = {
 									"profileName": self.state.profileName,
 									"profileURL": self.state.profileURL,
-									"profileImage": self.state.profileImage
+									"profileImage": self.state.profileImage,
+									"profileEMail": self.state.profileEMail
 								};
 
 								callback( null, profileData );
@@ -179,6 +184,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 
 					var profileName = this.state.profileName;
 
+					var profileEMail = this.state.profileEMail;
+
 					var profileURL = this.state.profileURL;
 
 					var profileImage = this.state.profileImage;
@@ -187,122 +194,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					
 					var profileState = this.state.profileState;
 
-					return ( 
-						<div 
-							className={ [
-								"profile-container",
-								profileState,
-								componentState
-							].join( " " ) }>
-							
-							<div 
-								className={ [
-									"profile-close-button",
-									profileState,
-									componentState
-								].join( " " ) }
-								onClick={ this.onProfileCloseButtonClick }>
-								<a 
-									className={ [
-										"action-element"
-									].join( " " ) }
-									href={ [
-										"#",
-										"close-profile"
-									].join( "/" ) }
-									style={
-										{
-											"display": "block"
-										}
-									}>
-									
-									<Icon
-										className={ [
-											"profile-close-icon"
-										].join( " " ) }
-										name="ic_close_24px" />
-								</a>
-							</div>
-
-							<div
-								className={ [
-									"profile-data-container",
-									profileState,
-									componentState
-								].join( " " ) }>
-
-								<div
-									className={ [
-										"profile-image",
-										profileState,
-										componentState
-									].join( " " ) }
-									onClick={ this.onProfileImageClick }>
-									<a 
-										className={ [
-											"action-element"
-										].join( " " ) } 
-										href={ [ 
-											"#", 
-											profileState 
-										].join( "/" ) }
-										style={
-											{
-												"display": "block"
-											}
-										}>
-										<img 
-											className={ [
-												"img-circle",
-												profileState
-											].join( " " ) } 
-											src={ profileImage } />
-									</a>
-								</div>
-
-								<div 
-									className={ [ 
-										"profile-data",
-										componentState,
-										profileState
-									].join( " " ) }>
-
-									<h2 
-										className={ [
-											"profile-name",
-											"text-center",
-											profileState,
-											componentState
-										].join( " " ) }>
-										{ profileName.toUpperCase( ) }
-									</h2>
-
-									<div
-										className={ [
-											"profile-link",
-											"text-center",
-											profileState,
-											componentState
-										].join( " " ) }>
-										<a 
-											className={ [
-												"action-element"
-											].join( " " ) }
-											href={ profileURL }>
-											<span
-												className={ [
-													"entypo-social",
-													profileType
-												].join( " " ) }>
-											</span>
-											
-											{ GO_TO_PROFILE_PAGE.toUpperCase( ) }
-										</a>
-									</div>								
-								</div>
-							</div>
-						</div>
-					);
+					return; //: @template: template/profile.html
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
@@ -312,6 +204,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 								"profileName": this.state.profileName,
 								"profileURL": this.state.profileURL,
 								"profileImage": this.state.profileImage,
+								"profileEMail": this.state.profileEMail,
 								"profileState": this.state.profileState
 							};
 
@@ -334,53 +227,77 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 		}
 	] )
 
-	.directive( "profile", [
+	.factory( "attachProfile", [
+		"$rootScope",
 		"Event",
 		"PageFlow",
 		"Profile",
-		function directive( Event, PageFlow, Profile ){
+		function factory( $rootScope, Event, PageFlow, Profile ){
+			var attachProfile = function attachProfile( optionSet ){
+				var scope = optionSet.scope || $rootScope;
+
+				var element = optionSet.element;
+
+				if( _.isEmpty( element ) || element.length == 0 ){
+					throw new Error( "unable to attach component" );
+				}
+
+				Event( scope );
+
+				PageFlow( scope, element, "profile" );
+				
+				scope.on( "show-minified-profile",
+					function onShowMinifiedProfile( ){
+						scope.broadcast( "show-profile" );
+
+						scope.toggleFlow( "!profile-expanded", "profile-minified" );
+					} );
+
+				scope.on( "show-expanded-profile",
+					function onShowExpandedProfile( ){
+						scope.broadcast( "show-profile" );
+
+						scope.toggleFlow( "!profile-minified", "profile-expanded" );
+					} );
+
+				scope.on( "show-profile",
+					function onShowProfile( ){
+						scope.showPage( );
+					} );
+
+				scope.on( "hide-profile",
+					function onHideProfile( ){
+						scope.hidePage( );
+					} );
+
+				scope.on( "profile-state-changed",
+					function onProfileStateChanged( profileState, componentState ){
+						scope.toggleFlow( "profile-*", profileState, componentState );
+
+						scope.publish( profileState );
+					} );
+
+				scope.publish( "hide-profile" );
+
+				Profile.attach( scope, element );
+			};
+
+			return attachProfile;
+		}
+	] )
+
+	.directive( "profile", [
+		"attachProfile",
+		function directive( attachProfile ){
 			return {
 				"restrict": "EA",
 				"scope": true,
 				"link": function onLink( scope, element, attributeSet ){
-					Event( scope );
-
-					PageFlow( scope, element, "profile" );
-					
-					scope.on( "show-minified-profile",
-						function onShowMinifiedProfile( ){
-							scope.broadcast( "show-profile" );
-
-							scope.toggleFlow( "!profile-expanded", "profile-minified" );
-						} );
-
-					scope.on( "show-expanded-profile",
-						function onShowExpandedProfile( ){
-							scope.broadcast( "show-profile" );
-
-							scope.toggleFlow( "!profile-minified", "profile-expanded" );
-						} );
-
-					scope.on( "show-profile",
-						function onShowProfile( ){
-							scope.showPage( );
-						} );
-
-					scope.on( "hide-profile",
-						function onHideProfile( ){
-							scope.hidePage( );
-						} );
-
-					scope.on( "profile-state-changed",
-						function onProfileStateChanged( profileState, componentState ){
-							scope.toggleFlow( "profile-*", profileState, componentState );
-
-							scope.publish( profileState );
-						} );
-
-					scope.publish( "hide-profile" );
-
-					Profile.attach( scope, element );
+					attachProfile( {
+						"scope": scope,
+						"element": element,
+						"attributeSet": attributeSet
+					} );
 				}
 			};
 		}

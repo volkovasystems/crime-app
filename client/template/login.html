@@ -1,0 +1,131 @@
+<div 
+	className={ [
+		"login-container",
+		loginState,
+		componentState
+	].join( " " ) }>
+	<div 
+		className={ [
+			"login-component",
+			loginState,
+			componentState,
+		].join( " " ) }>
+
+		<div
+			className={ [
+				"login-logo-container",
+				"shown",
+				"inline-block",
+				loginState,
+				componentState 
+			].join( " " ) }>
+
+			<img
+				className={ [
+					"logo",
+					componentState
+				].join( " " ) }
+				src={ appLogoImageSource } />
+		</div>
+
+		<div
+			className={ [
+				"login-prompt",
+				"text-center",
+				( loginState != "logged-out" )? "shown inline-block": "hidden",
+				( loginState == "login-error" )? "bg-danger": "",
+				( loginState == "logged-in" )? "bg-success": "",
+				( loginState == "logging-in" )? "bg-info": "",
+				loginState,
+				componentState
+			].join( " " ) }>
+			{ loginPrompt.toUpperCase( ) }
+		</div>
+
+		{ /* Facebook login button. */ }
+		<button 
+			className={ [
+				"facebook-login-button",
+				"btn",
+				"btn-lg",
+				"btn-primary",
+				"login-button",
+				( 
+					loginType == "facebook" &&
+					( 
+						loginState == "logged-out" || 
+						loginState == "logged-in" 
+					)
+				)? "shown inline-block": "hidden",
+				loginState,
+				componentState
+			].join( " " ) }
+			value="facebook"
+			type="button"
+			onClick={ this.onClickLogin }>
+			<a
+				className={ [
+					"action-element"
+				].join( " " ) }
+				href={ [ 
+					"#",
+					loginState
+				].join( "/" ) }>
+				<span
+					className={ [
+						"login-icon",
+						( loginState == "logged-out" )? "entypo-social facebook": "",
+						( loginState == "logged-in" )? "entypo thumbs-up": ""
+					].join( " " ) }>
+				</span>
+				{ 
+					( loginState == "logged-out" )? LOGIN_LABEL.toUpperCase( ) :
+					( loginState == "logged-in" )? PROCEED_LABEL.toUpperCase( ) : ""
+				}
+			</a>
+		</button>
+
+		{ /* Twitter login button. */ }
+		<button 
+			className={ [
+				"twitter-login-button",
+				"btn",
+				"btn-lg",
+				"btn-primary",
+				"login-button",
+				( 
+					loginType == "twitter" &&
+					( 
+						loginState == "logged-out" || 
+						loginState == "logged-in" 
+					)
+				)? "shown inline-block": "hidden",
+				loginState,
+				componentState
+			].join( " " ) }
+			value="twitter"
+			type="button"
+			onClick={ this.onClickLogin }>
+			<a
+				className={ [
+					"action-element"
+				].join( " " ) }
+				href={ [ 
+					"#",
+					loginState
+				].join( "/" ) }>
+				<span
+					className={ [
+						"login-icon",
+						( loginState == "logged-out" )? "entypo-social twitter": "",
+						( loginState == "logged-in" )? "entypo thumbs-up": ""
+					].join( " " ) }>
+				</span>
+				{ 
+					( loginState == "logged-out" )? "LOGIN" :
+					( loginState == "logged-in" )? "PROCEED" : ""
+				}
+			</a>
+		</button>
+	</div>
+</div>

@@ -1,0 +1,114 @@
+<div 
+	className={ [
+		"profile-container",
+		profileState,
+		componentState
+	].join( " " ) }>
+	
+	<div 
+		className={ [
+			"profile-close-button",
+			profileState,
+			componentState
+		].join( " " ) }
+		onClick={ this.onProfileCloseButtonClick }>
+		<a 
+			className={ [
+				"action-element"
+			].join( " " ) }
+			href={ [
+				"#",
+				"close-profile"
+			].join( "/" ) }
+			style={
+				{
+					"display": "block"
+				}
+			}>
+			
+			<Icon
+				className={ [
+					"profile-close-icon"
+				].join( " " ) }
+				name="ic_close_24px" />
+		</a>
+	</div>
+
+	<div
+		className={ [
+			"profile-data-container",
+			profileState,
+			componentState
+		].join( " " ) }>
+
+		<div
+			className={ [
+				"profile-image",
+				profileState,
+				componentState
+			].join( " " ) }
+			onClick={ this.onProfileImageClick }>
+			<a 
+				className={ [
+					"action-element"
+				].join( " " ) } 
+				href={ [ 
+					"#", 
+					profileState 
+				].join( "/" ) }
+				style={
+					{
+						"display": "block"
+					}
+				}>
+				<img 
+					className={ [
+						"img-circle",
+						profileState
+					].join( " " ) } 
+					src={ profileImage } />
+			</a>
+		</div>
+
+		<div 
+			className={ [ 
+				"profile-data",
+				componentState,
+				profileState
+			].join( " " ) }>
+
+			<h2 
+				className={ [
+					"profile-name",
+					"text-center",
+					profileState,
+					componentState
+				].join( " " ) }>
+				{ profileName.toUpperCase( ) }
+			</h2>
+
+			<div
+				className={ [
+					"profile-link",
+					"text-center",
+					profileState,
+					componentState
+				].join( " " ) }>
+				<a 
+					className={ [
+						"action-element"
+					].join( " " ) }
+					href={ profileURL }
+					target="_blank">
+					<span
+						className={ [
+							"entypo-social",
+							profileType
+						].join( " " ) }>
+					</span>
+					{ GO_TO_PROFILE_PAGE.toUpperCase( ) }
+				</a>
+			</div>								
+		</div>
+	</div>
+</div>

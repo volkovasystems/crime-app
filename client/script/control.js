@@ -1,4 +1,5 @@
 angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
+
 	.factory( "Control", [
 		"Icon",
 		function factory( Icon ){
@@ -369,35 +370,60 @@ angular.module( "Control", [ "Event", "PageFlow", "Icon" ] )
 			return Control;
 		}
 	] )
-	.directive( "control", [
+	
+	.factory( "attachControl", [
+		"$rootScope",
 		"PageFlow",
 		"Event",
 		"Control",
-		function directive( PageFlow, Event, Control ){
+		function factory( $rootScope, PageFlow, Event, Control ){
+			var attachControl = function attachControl( optionSet ){
+				var scope = optionSet.scope || $rootScope;
+
+				var element = optionSet.element;
+
+				if( _.isEmpty( element ) || element.length == 0 ){
+					throw new Error( "unable to attach component" );
+				}
+
+				Event( scope );
+
+				PageFlow( scope, element, "control" );					
+
+				scope.on( "show-control",
+					function onShowControl( ){
+						scope.showPage( );
+					} );
+
+				scope.on( "hide-control",
+					function onHideControl( ){
+						scope.hidePage( );
+					} );
+
+				scope.publish( "hide-control" );
+
+				Control
+					.configure( scope )
+					.attach( scope, element );
+			};
+
+			return attachControl;
+		}
+	] )
+
+	.directive( "control", [
+		"attachControl",
+		function directive( attachControl ){
 			return {
 				"restrict": "EA",
 				"scope": true,
 				"priority": 2,
 				"link": function onLink( scope, element, attributeSet ){
-					Event( scope );
-
-					PageFlow( scope, element, "control" );					
-
-					scope.on( "show-control",
-						function onShowControl( ){
-							scope.showPage( );
-						} );
-
-					scope.on( "hide-control",
-						function onHideControl( ){
-							scope.hidePage( );
-						} );
-
-					scope.publish( "hide-control" );
-
-					Control
-						.configure( scope )
-						.attach( scope, element );
+					attachControl( {
+						"scope": scope,
+						"element": element,
+						"attributeSet": attributeSet
+					} );
 				}
 			};
 		}

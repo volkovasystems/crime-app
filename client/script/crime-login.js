@@ -116,10 +116,11 @@ Crime
 
 					function applyServerFormat( userAccountData, userProfileData, callback ){
 						var userData = [
-							[ "userID", userAccountData.userID ],
-							[ "profileName", userProfileData.profileName ],
-							[ "profileURL", userProfileData.cleanProfileURL ],
-							[ "profileImage", userProfileData.cleanProfileImage ]
+							[ "userID", 		userAccountData.userID ],
+							[ "profileName", 	userProfileData.profileName ],
+							[ "profileEMail", 	userProfileData.profileEMail ],
+							[ "profileURL", 	userProfileData.cleanProfileURL ],
+							[ "profileImage", 	userProfileData.cleanProfileImage ]
 						];
 
 						var hashedValue = btoa( JSON.stringify( userData ) ).replace( /[^A-Za-z0-9]/g, "" );
@@ -129,6 +130,7 @@ Crime
 							"userAccountID": 			userAccountData.userID,
 							"userAccountType": 			loginType,
 							"userAccountToken": 		userAccountData.accessToken,
+							"userAccountEMail": 		userProfileData.profileEMail,
 							"userProfileName": 			userProfileData.profileName,
 							"userProfileLink": 			userProfileData.profileURL,
 							"userProfileImageURL": 		userProfileData.profileImage,
@@ -218,6 +220,20 @@ Crime
 					scope.on( "logged-in",
 						function onLoggedIn( loginType ){
 							sendUserDataToServer( scope, loginType );
+						} );
+
+					scope.on( "logged-in",
+						function onLoggedIn( loginType ){
+							scope.publish( "hide-login" );
+
+							scope.publish( "get-user-account-data",
+								function onGetUserAccountData( error, userAccountData ){
+									scope.publish( "proceed-default-app-flow", {
+										"loginType": loginType,
+										"userID": userAccountData.userID,
+										"accessToken": userAccountData.accessToken
+									} );
+								} );
 						} );
 
 					scope.on( "proceed-default-app-flow",

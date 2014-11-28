@@ -49,25 +49,7 @@ angular.module( "Home", [ "Event", "PageFlow" ] )
 
 					var componentState = this.state.componentState;
 
-					return (
-						<div className={ [
-								"home-container",
-								componentState
-							].join( " " ) }>
-							<div 
-								className={ [
-									"home-logo-component",
-									componentState
-								].join( " " ) }>
-								<img
-									className={ [
-										"logo",
-										componentState
-									].join( " " ) }
-									src={ appLogoImageSource } />
-							</div>
-						</div>
-					);
+					return; //: @template: template/home.html
 				},
 
 				"componentDidMount": function componentDidMount( ){

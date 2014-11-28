@@ -101,56 +101,21 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 
 					var key = [ hashedValue, index ].join( ":" );
 
-					var dashItemIcon = this.getDashItemIconSet( )[ dashItem ]; 
+					var dashItemName = dashItem.name;
+
+					var dashItemTitle = dashItem.title;
+
+					var dashItemIcon = this.getDashItemIconSet( )[ dashItemName ]; 
 
 					var disabledDashItemList = this.getDisabledDashItemList( );
 
 					var hiddenDashItemList = this.getHiddenDashItemList( );
 
-					var isDisabled = _.contains( disabledDashItemList, dashItem );
+					var isDisabled = _.contains( disabledDashItemList, dashItemName );
 
-					var isHidden = _.contains( hiddenDashItemList, dashItem );
+					var isHidden = _.contains( hiddenDashItemList, dashItemName );
 
-					return (
-						<div 
-							key={ key }
-							className={
-								[
-									"dash-item",
-									( isDisabled )? "disabled" : "",
-									( isHidden )? "hidden" : "shown",
-									componentState
-								].join( " " )
-							}
-							onClick={ this.onDashbarItemClick } 
-							value={ dashItem }>
-							<a 
-								className={ [
-									"action-element"
-								].join( " " ) }
-								href={ [
-									"#",
-									dashItem
-								].join( "/" ) }>
-
-								<div
-									className={ [
-										"dash-item-icon"
-									].join( " " ) } >
-									<Icon name={ dashItemIcon } />
-								</div>
-
-								<div
-									className={ [
-										"dash-item-label"
-									].join( " " ) }>
-									<span>
-										{ dashItem.toUpperCase( ) }
-									</span>
-								</div>
-							</a>
-						</div>
-					);
+					return; //: @template: template/dash-item.html
 				},
 
 				"setComponentState": function setComponentState( componentState ){
@@ -203,91 +168,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 
 					var dashList = this.getDashList( );
 
-					return (
-						<div 
-							className={ [
-								"dashbar-container",
-								componentState
-							].join( " " ) }>
-
-							<div 
-								className={ [
-									"dashbar-minified-button",
-									"dash-item",
-									componentState
-								].join( " " ) }
-								onClick={ this.onMinifiedButtonClick }>
-								<a 
-									className={ [
-										"action-element"
-									].join( " " ) }
-									href={ [
-										"#",
-										"open-dashbar"
-									].join( "/" ) }>
-									
-									<div
-										className={ [ 
-											"dash-item-icon" 
-										].join( " " ) }>
-										<Icon 
-											className={ [
-												"dashbar-minified-icon"
-											].join( " " ) } 
-											name="ic_menu_24px" />
-									</div>
-								</a>
-							</div>
-
-							<div 
-								className={ [
-									"dash-header-item",
-									"dash-item",
-									"dashbar-close-button",
-									componentState
-								].join( " " ) }
-								onClick={ this.onDashbarHeaderItemClick }>
-								<a 
-									className={ [
-										"action-element"
-									].join( " " ) }
-									href={ [
-										"#",
-										"close-dashbar"
-									].join( "/" ) }>
-
-									<div
-										className={ [ 
-											"dash-item-icon" 
-										].join( " " ) }>
-										<Icon 
-											className={ [
-												"dashbar-close-icon"
-											].join( " " ) } 
-											name="ic_close_24px" />
-									</div>
-									
-									<div
-										className={ [
-											"dashbar-header-label",
-											"dash-item-label"
-										].join( " " ) }>
-										<span>
-											CLOSE
-										</span>
-									</div>
-								</a>
-							</div>
-
-							<div
-								className={ [
-									"dash-list",
-									componentState
-								].join( " " ) }>
-								{ dashList.map( this.onEachDashItem ) }
-							</div>
-						</div>
-					);
+					return; //: @template: template/dashbar.html
 				},
 
 				"componentDidMount": function componentDidMount( ){
@@ -299,60 +180,74 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 		}
 	] )
 
-	.directive( "dashbar", [
+	.factory( "attachDashbar", [
+		"$rootScope",
 		"PageFlow",
 		"Event",
 		"Dashbar",
-		function directive( PageFlow, Event, Dashbar ){
+		function factory( $rootScope, PageFlow, Event, Dashbar ){
+			var attachDashbar = function attachDashbar( optionSet ){
+				var scope = optionSet.scope || $rootScope;
+
+				var element = optionSet.element;
+
+				if( _.isEmpty( element ) || element.length == 0 ){
+					throw new Error( "unable to attach component" );
+				}
+
+				Event( scope );
+
+				PageFlow( scope, element, "dashbar" );
+
+				scope.on( "show-minified-dashbar",
+					function onShowMinifiedDashbar( ){
+						scope.reflow( "shown", "dashbar-minified" );
+					} );
+
+				scope.on( "show-iconified-dashbar",
+					function onShowIconifiedDashbar( ){
+						scope.reflow( "shown", "dashbar-iconified" );
+					} );
+
+				scope.on( "show-listed-dashbar",
+					function onShowListedDashbar( ){
+						scope.reflow( "shown", "dashbar-listed" );
+					} );
+
+				scope.on( "show-dashbar",
+					function onShowDashbar( ){
+						scope.showPage( );
+					} );
+
+				scope.on( "hide-dashbar",
+					function onHideDashbar( ){
+						scope.hidePage( );
+					} );
+
+				scope.publish( "hide-dashbar" );
+
+				Dashbar
+					.configure( scope )
+					.attach( scope, element );
+			};
+
+			return attachDashbar;
+		}
+	] )
+
+	.directive( "dashbar", [
+		"attachDashbar",
+		function directive( attachDashbar ){
 			return {
 				"restrict": "EA",
 				"scope": true,
 				"priority": 2,
 				"link": function onLink( scope, element, attributeSet ){
-					Event( scope );
-
-					PageFlow( scope, element, "dashbar" );
-
-					/*scope.on( "show-default-page",
-						function onShowDefaultPage( ){
-							scope.broadcast( "show-minified-dashbar" );
-						} );
-
-					scope.on( "hide-default-page",
-						function onHideDefaultPage( ){
-							scope.broadcast( "hide-dashbar" );
-						} );*/
-
-					scope.on( "show-minified-dashbar",
-						function onShowMinifiedDashbar( ){
-							scope.reflow( "shown", "dashbar-minified" );
-						} );
-
-					scope.on( "show-iconified-dashbar",
-						function onShowIconifiedDashbar( ){
-							scope.reflow( "shown", "dashbar-iconified" );
-						} );
-
-					scope.on( "show-listed-dashbar",
-						function onShowListedDashbar( ){
-							scope.reflow( "shown", "dashbar-listed" );
-						} );
-
-					scope.on( "show-dashbar",
-						function onShowDashbar( ){
-							scope.showPage( );
-						} );
-
-					scope.on( "hide-dashbar",
-						function onHideDashbar( ){
-							scope.hidePage( );
-						} );
-
-					scope.publish( "hide-dashbar" );
-
-					Dashbar
-						.configure( scope )
-						.attach( scope, element );
+					attachDashbar( {
+						"scope": scope,
+						"element": element,
+						"attributeSet": attributeSet
+					} );
 				}
 			};
 		}

@@ -18,6 +18,9 @@ var plumber = require( "gulp-plumber" );
 
 var connect = require( "connect" );
 var serveStatic = require( "serve-static" );
+var map = require( "map-stream" );
+var fs = require( "fs" );
+var path = require( "path" );
 
 const INCLUDE_SCRIPT_PATTERN = /(?:\<\!\-\-\:)?(\s*).*?\@include\-script\:(\"[^\"]+?\").*?(\s*)(?:\-\-\>)?/g;
 const INCLUDE_STYLE_PATTERN = /(?:\<\!\-\-\:)?(\s*).*?\@include\-style\:(\"[^\"]+?\").*?(\s*)(?:\-\-\>)?/g;
@@ -37,6 +40,8 @@ const PRODUCTION_MODE_REPLACER = "$1$2$3";
 
 const DEVELOPMENT_MODE_PATTERN = /(?:\<\!\-\-\:)?(\s*).*?\@development\-mode\:\s*([^]+?)\s*\@end\-development\-mode.*?(\s*)(?:\-\-\>)?/gm;
 const DEVELOPMENT_MODE_REPLACER = "$1$2$3";
+
+const TEMPLATE_PATTERN = /\;\s*\/\/\:\s*\@template\:\s*([^\s]+)/;
 
 var scriptList = require( "./script-list.js" ).scriptList;
 
@@ -138,11 +143,30 @@ gulp.task( "build-script",
 		return gulp
 			.src( scriptList )
 			.pipe( plumber( ) )
-			//.pipe( insert.prepend( REACTJS_DOM_FLAG ) )
+			.pipe( map( function attachTemplate( file, callback ){
+				var fileContent = file.contents.toString( "utf8" );
+
+				var templateFilePath = ( fileContent.match( TEMPLATE_PATTERN ) || [ ] )[ 1 ];
+
+				while( templateFilePath ){
+					templateFilePath = path.resolve( ".", "client", templateFilePath );
+
+					fileContent = fileContent.replace( TEMPLATE_PATTERN, [
+						" ( ", 
+						fs.readFileSync( templateFilePath ),
+						" );"
+					].join( "\n" ) );
+
+					templateFilePath = ( fileContent.match( TEMPLATE_PATTERN ) || [ ] )[ 1 ];		
+				}
+
+				file.contents = new Buffer( fileContent );
+				
+				callback( null, file );
+			} ) )
 			.pipe( react( ) )
 			.pipe( sourcemaps.init( ) )
 			.pipe( concat( "crime-app.js" ) )
-			//.pipe( replace( REACTJS_DOM_FLAG, REACTJS_DOM_FLAG_REPLACER ) )
 			.pipe( gulp.dest( "build/script" ) )
 			.pipe( uglify( ) )
 			.pipe( rename( "crime-app.min.js" ) )

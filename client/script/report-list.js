@@ -1,6 +1,6 @@
 angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 
-	.value( "REPORT_LIST_HEADER_LABEL", "crime report list" )
+	.value( "REPORT_LIST_HEADER_LABEL", labelData.REPORT_LIST_HEADER_LABEL )
 
 	.factory( "ReportList", [
 		"Icon",
@@ -77,98 +77,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 
 					var reportDescription = reportItem.reportDescription;
 
-					return (
-						<li
-							key={ key }
-							className={ [
-								"report-item",
-								( isExpanded )? "expanded" : "collapsed",
-								"shown",
-								"inline-block"
-							].join( " " ) }
-							onClick={ this.onClickReportItem }
-							value={ reportID }>
-
-							<div
-								className={ [
-									"report-item-icon",
-									( isExpanded )? "expanded" : "collapsed"
-								].join( " " ) }>
-								<Icon 
-									name="ic_expand_less_24px"
-									style={
-										{
-											"display": ( isExpanded )? "block" : "none"
-										}
-									} />
-								<Icon 
-									name="ic_expand_more_24px"
-									style={
-										{
-											"display": ( isExpanded )? "none" : "block"
-										}
-									} />
-							</div>
-
-							<div
-								className={ [
-									"report-item-header",
-									( isExpanded )? "expanded" : "collapsed"
-								].join( " " ) }>
-
-								<div
-									className={ [
-										"report-time-from-now"
-									].join( " " ) }>
-									{ timeFromNow.toUpperCase( ) }
-								</div>
-
-								<div
-									className={ [
-										"report-title"
-									].join( " " ) }>
-									{ reportTitle.toUpperCase( ) }
-								</div>
-
-								<div
-									className={ [
-										"report-date"
-									].join( " " ) }>
-									{ descriptiveDate.toUpperCase( ) }
-								</div>
-
-								<div
-									className={ [
-										"report-time"
-									].join( " " ) }>
-									{ descriptiveTime.toUpperCase( ) }
-								</div>
-							</div>
-
-							<div
-								className={ [
-									"report-item-body",
-									( isExpanded )? "expanded" : "collapsed"
-								].join( " " ) }>
-
-								<MapPreview
-									parent={ this }
-									position={ mapPosition }
-									zoom={ mapZoom } 
-									address={ reportAddress } />
-							</div>
-
-							<div
-								className={ [
-									"report-item-footer",
-									( isExpanded )? "expanded" : "collapsed"
-								].join( " " ) }>
-								<p>
-									{ reportDescription.toUpperCase( ) }
-								</p>
-							</div>
-						</li>
-					);
+					return; //: @template: template/report-item.html
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
@@ -193,88 +102,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 
 					var reportList = this.state.reportList || [ ];
 
-					return ( 
-						<div 
-							className={ [
-								"report-list-container",
-								componentState
-							].join( " " ) }>
-
-							<div
-								className={ [
-									"report-list-component",
-									componentState
-								].join( " " ) }>
-
-								<div 
-									className={ [
-										"report-list-header"
-									].join( " " ) }>
-									<div
-										className={ [
-											"header-icon",
-											"shown",
-											"inline-block"
-										].join( " " ) }>
-										<Icon name="ic_report_problem_24px" />
-									</div>
-
-									<div
-										className={ [
-											"header-title",
-											"shown",
-											"inline-block"
-										].join( " " ) }>
-										<span>
-											{ REPORT_LIST_HEADER_LABEL.toUpperCase( ) }
-										</span>
-									</div>
-
-									<div 
-										className={ [
-											"close-report-list-button",
-											"shown",
-											"inline-block"
-										].join( " " ) }
-										onClick={ this.onClickCloseReportListButton }>
-										<a 
-											className={ [
-												"action-element"
-											].join( " " ) }
-											href={ [
-												"#",
-												"close-report-list"
-											].join( "/" ) }
-											style={
-												{
-													"display": "block"
-												}
-											}>
-											
-											<Icon
-												className={ [
-													"close-report-list-icon"
-												].join( " " ) }
-												name="ic_close_24px" />
-										</a>
-									</div>
-								</div>
-
-								<div
-									className={ [
-										"report-list-body"
-									].join( " " ) }>
-
-									<ul 
-										className={ [
-											"list-container" 
-										].join( " " ) }>
-										{ reportList.map( this.onEachReportItem ) }
-									</ul>
-								</div>
-							</div>
-						</div>
-					);
+					return; //: @template: template/report-list.html
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){

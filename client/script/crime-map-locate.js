@@ -29,14 +29,18 @@ Crime
 								[
 									{
 										"reference": "crime-map-locate",
-										"name": "crime-confirm-location",
-										"title": "confirm",
-										"icon": "ic_place_24px"
+										"name": "crime-get-location",
+										"icon": "ic_my_location_24px"
 									}
 								], true );
 							
 							scope.publish( "show-control" );
-						} );	
+						} );
+
+					scope.on( "dash-clicked:report",
+						function onNavigateReport( ){
+							scope.publish( "control-click:crime-confirm-location" );
+						} );
 				}
 			};
 		}
