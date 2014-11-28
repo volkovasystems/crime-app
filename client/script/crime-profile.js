@@ -11,7 +11,7 @@ Crime
 
 					scope.on( "logged-in",
 						function onLoggedIn( loginType ){
-							scope.broadcast( "initiate-basic-profile-data-retrieval", loginType );
+							scope.publish( "initiate-basic-profile-data-retrieval", loginType );
 						} );
 
 					scope.on( "profile-ready",
