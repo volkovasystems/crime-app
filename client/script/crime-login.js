@@ -129,10 +129,10 @@ Crime
 							"userAccountID": 			userAccountData.userID,
 							"userAccountType": 			loginType,
 							"userAccountToken": 		userAccountData.accessToken,
-							"userAccountCreationTime": 	Date.now( ),
-							"userDisplayName": 			userProfileData.profileName,
+							"userProfileName": 			userProfileData.profileName,
 							"userProfileLink": 			userProfileData.profileURL,
-							"userProfileImageURL": 		userProfileData.profileImage
+							"userProfileImageURL": 		userProfileData.profileImage,
+							"userCreationTimestamp": 	Date.now( )
 						};
 
 						callback( null, formattedUserData );

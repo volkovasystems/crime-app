@@ -35,7 +35,7 @@ app.use( session( {
 app.use( function allowCrossDomain( request, response, next ){
 	response.header( "Access-Control-Allow-Origin", request.headers.origin || "*" );
 	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
-	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept" );
+	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept, Administrator-Access-ID" );
 	response.header( "Access-Control-Max-Age", 10 );
 	response.header( "Cache-Control", "no-cache, no-store, must-revalidate" );
 	  
@@ -53,7 +53,7 @@ app.all( "/api/:accessID/*",
 			request.param( "adminAccessID" ) || 
 			request.param( "accessID" );
 
-		//: @todo: Transform this to use waterfall.
+		//: @todo: Transform this to use async.series.
 		var rootResponse = response;
 
 		if( !_.isEmpty( request.session.userData )
@@ -137,15 +137,53 @@ app.get( "/api/:accessID/report/get/all",
 		var Report = mongoose.model( "Report" );
 
 		async.waterfall( [
-			function getUserData( callback ){
+			function checkIfAdministrator( callback ){
 				var userData = request.session.userData;
 
-				if( _.isEmpty( userData ) ){
-					callback( new Error( "user cannot be identified" ) );
+				var adminAccessID = request.get( "Administrator-Access-ID" );
+
+				callback( null, userData.accessID == adminAccessID, adminAccessID );
+			},
+
+			function getUserData( isAdministrator, adminAccessID, callback ){
+				if( isAdministrator ){
+					var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
+
+					requestEndpoint = requestEndpoint.replace( ":accessID", request.param( "accessID" ) );
+
+					unirest
+						.headers( { 
+							"Administrator-Access-ID": adminAccessID 
+						} )
+						.get( requestEndpoint )
+						.end( function onResponse( response ){
+							var status = response.body.status;
+
+							if( status == "failed" ){
+								callback( response.body.data );
+
+							}else if( status == "error" ){
+								var error = new Error( response.body.data );
+
+								callback( error );
+
+							}else{
+								var userData = response.body.data;
+
+								callback( null, userData );
+							}
+						} );
 
 				}else{
-					callback( null, userData );
-				}			
+					var userData = request.session.userData;
+
+					if( _.isEmpty( userData ) ){
+						callback( new Error( "user cannot be identified" ) );
+
+					}else{
+						callback( null, userData );
+					}		
+				}		
 			},
 
 			function getAllReport( userData, callback ){
@@ -389,8 +427,6 @@ app.post( "/api/:accessID/report/:reportID/update",
 			},
 
 			function saveReport( reportData, callback ){
-				reportData.reportID = request.param( "reportID" ) || reportData.reportID;
-
 				reportData.reportState = request.param( "reportState" ) || reportData.reportState;
 
 				reportData.reporterID = request.param( "reporterID" ) || reportData.reporterID;
@@ -446,7 +482,7 @@ app.post( "/api/:accessID/report/:reportID/update",
 			} );
 	} );
 
-app[ "delete" ]( "/api/:accessID/report/:reportID/delete",
+app.post( "/api/:accessID/report/:reportID/delete",
 	function onReportDelete( request, response ){
 
 	} );
