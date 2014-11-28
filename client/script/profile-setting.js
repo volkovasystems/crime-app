@@ -61,10 +61,7 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 				},
 
 				"onClickUpdate": function onClickUpdate( event ){
-					this.scope.publish( "update-profile-data", {
-						"displayName": this.state.displayName,
-						"userEMail": this.state.userEMail
-					} );
+					this.scope.publish( "update-profile-data" );
 				},
 
 				"onClickCancel": function onClickCancel( event ){
@@ -105,6 +102,14 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 								"displayName": "",
 								"userEMail": "",
 								"userAvatar": "../image/profile.png",
+							} );
+						} );
+
+					this.scope.on( "get-profile-setting",
+						function onGetProfileSetting( callback ){
+							callback( null, {
+								"displayName": self.state.displayName,
+								"userEMail": self.state.userEMail
 							} );
 						} );
 				},
