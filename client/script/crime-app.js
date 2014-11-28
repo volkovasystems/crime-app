@@ -76,6 +76,18 @@ Crime
 		}
 	] )
 
+	.factory( "getAppServerData", [
+		"$rootScope",
+		"resolveURL",
+		function factory( $rootScope, resolveURL ){
+			var getAppServerData = function getAppServerData( ){
+				return resolveURL( $rootScope.serverSet.user );
+			};
+
+			return getAppServerData;
+		}
+	] )
+
 	.run( [
 		"$rootScope",
 		"ProgressBar",

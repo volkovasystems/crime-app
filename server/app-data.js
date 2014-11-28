@@ -27,5 +27,15 @@ database.createDatabase( "App", "appdb", host, databasePort,
 			} );
 
 			mongoose.model( "Category", category );
+
+			var reportState = mongoose.Schema( {
+				"reportID": String,
+				"reportState": String,
+				"reporterID": String,
+				"reportApprovalDate": Date,
+				"reportRejectionDate": Date
+			} );
+
+			mongoose.model( "ReportState", reportState );
 		}
 	} );

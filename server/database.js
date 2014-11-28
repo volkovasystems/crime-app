@@ -1,19 +1,17 @@
-var childprocess = require( "child_process" );
-
-var fs = require( "fs" );
-
-var path = require( "path" );
-
-var async = require( "async" );
-
-var util = require( "util" );
-
 var _ = require( "lodash" );
+var argv = require( "yargs" ).argv;
+var async = require( "async" );
+var childprocess = require( "child_process" );
+var fs = require( "fs" );
+var path = require( "path" );
+var util = require( "util" );
 
 var createDatabase = function createDatabase( databaseName, directoryPath, host, port, callback ){
 	callback = callback || function callback( ){ };
 
-	directoryPath = path.resolve( ".", directoryPath );
+	var databasePath = argv.dbpath || ".";
+
+	directoryPath = path.resolve( databasePath, directoryPath );
 
 	var databaseLogPath = path.resolve( directoryPath, "database.log" );
 

@@ -1,5 +1,5 @@
 Crime
-	.value( "CRIME_LOGO_IMAGE_SOURCE", "../image/detective.png" )
+	.value( "CRIME_LOGO_IMAGE_SOURCE", "../image/crimewatch.png" )
 
 	.directive( "homeController", [
 		"Event",

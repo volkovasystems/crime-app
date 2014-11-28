@@ -150,7 +150,7 @@ app.get( "/api/:accessID/report/get/all",
 
 					requestEndpoint = requestEndpoint.replace( ":accessID", request.param( "accessID" ) );
 
-					unirest						
+					unirest
 						.get( requestEndpoint )
 						.headers( { 
 							"Administrator-Access-ID": adminAccessID 
@@ -224,7 +224,94 @@ app.get( "/api/:accessID/report/get/all",
 
 app.get( "/api/:accessID/report/get/:reportID",
 	function onReportGet( request, response ){
+		var Report = mongoose.model( "Report" );
 
+		async.waterfall( [
+			function checkIfAdministrator( callback ){
+				var userData = request.session.userData;
+
+				var adminAccessID = request.get( "Administrator-Access-ID" );
+
+				callback( null, userData.accessID == adminAccessID, adminAccessID );
+			},
+
+			function getUserData( isAdministrator, adminAccessID, callback ){
+				if( isAdministrator ){
+					var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
+
+					requestEndpoint = requestEndpoint.replace( ":accessID", request.param( "accessID" ) );
+
+					unirest
+						.headers( { 
+							"Administrator-Access-ID": adminAccessID 
+						} )
+						.get( requestEndpoint )
+						.end( function onResponse( response ){
+							var status = response.body.status;
+
+							if( status == "failed" ){
+								callback( response.body.data );
+
+							}else if( status == "error" ){
+								var error = new Error( response.body.data );
+
+								callback( error );
+
+							}else{
+								var userData = response.body.data;
+
+								callback( null, userData );
+							}
+						} );
+
+				}else{
+					var userData = request.session.userData;
+
+					if( _.isEmpty( userData ) ){
+						callback( new Error( "user cannot be identified" ) );
+
+					}else{
+						callback( null, userData );
+					}		
+				}		
+			},
+
+			function getReport( userData, callback ){
+				Report
+					.findOne( {
+						"reportID": request.param( "reportID" ), 
+						"reporterID": userData.userID 
+					}, function onResult( error, reportData ){
+						if( error ){
+							callback( error );
+
+						}else if( _.isEmpty( reportData ) ){
+							callback( null, [ ] );
+
+						}else{
+							callback( null, reportData );
+						}
+					} );
+			}
+		],
+			function lastly( state, reportData ){
+				if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "success",
+							"data": reportData
+						} );
+				}
+			} );
 	} );
 
 app.get( "/api/:accessID/report/get/all/near",

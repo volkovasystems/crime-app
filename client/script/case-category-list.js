@@ -47,6 +47,11 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 							} );
 						} );
 
+					this.scope.on( "get-case-category-list",
+						function onGetCaseCategoryList( callback ){
+							callback( self.state.caseCategoryList );
+						} );
+
 					this.scope.on( "set-selected-case-category",
 						function onSetSelectedCaseCategory( selectedCaseCategory ){
 							self.setState( {

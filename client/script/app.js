@@ -63,12 +63,12 @@ angular
 							callback( ); 
 					} );
 				},
-				function checkRender( callback ){
+				/*function checkRender( callback ){
 					$rootScope.on( "forehead-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
-				},
+				},*/
 				function checkRender( callback ){
 					$rootScope.on( "login-rendered", 
 						function onRendered( ){ 
