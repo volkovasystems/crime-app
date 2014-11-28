@@ -1,8 +1,5 @@
 <section 
-	className={ [
-		"main-menu card",
-		componentState
-	].join( " " ) }>
+	className="main-menu card">
 
 	<section 
 		className="icon-container">
@@ -13,7 +10,11 @@
 	</section>
 
 	<section 
-		className="card main-menu-expanded">
+		className={ [
+			"card",
+			"main-menu-expanded",
+			( componentState == "dashbar-listed" )? "show": ""
+		].join( " " ) }>
 		<section 
 			className="card-container">
 
