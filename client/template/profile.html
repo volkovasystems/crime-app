@@ -1,64 +1,16 @@
-<div 
-	className={ [
-		"profile-container",
-		profileState
-	].join( " " ) }>
-
-	<div
-		className={ [
-			"profile-data-container",
-			profileState
-		].join( " " ) }>
-
-		<div
-			className={ [
-				"profile-image",
-				profileState
-			].join( " " ) }>
-			<img 
-				className={ [
-					"img-circle",
-					profileState
-				].join( " " ) } 
-				src={ profileImage } />
-		</div>
-
-		<div 
-			className={ [ 
-				"profile-data",
-				profileState
-			].join( " " ) }>
-
-			<h2 
-				className={ [
-					"profile-name",
-					"text-center",
-					profileState
-				].join( " " ) }>
-				{ profileName.toUpperCase( ) }
-			</h2>
-
-			<div
-				className={ [
-					"profile-link",
-					"text-center",
-					profileState
-				].join( " " ) }>
-				<a 
-					className={ [
-						"action-element"
-					].join( " " ) }
-					href={ profileURL }
-					target="_blank">
-					<span
-						className={ [
-							"entypo-social",
-							profileType
-						].join( " " ) }>
-					</span>
-					{ GO_TO_PROFILE_PAGE.toUpperCase( ) }
-				</a>
-			</div>								
-		</div>
-	</div>
-</div>
+<section className="profile-teaser">
+  <section className="close-action pull-right">
+    <a className="md-2x md-close icon" href="#"></a>
+  </section>
+  <section className="avatar">
+    <img alt="I am Username" className="img" src={ profileImage } >
+  </section>
+  <section className="profile-detail-teaser">
+    <p className="name">
+      { profileName.toUpperCase( ) }
+    </p>
+    <p className="email">
+      { profileEMail.toUpperCase( ) }
+    </p>
+  </section>
+</section>

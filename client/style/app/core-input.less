@@ -1,0 +1,18 @@
+/* Core input mixins */
+
+
+.dimension-mixin()
+{
+    height: 35px;
+
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+
+    &:hover {
+      border-bottom: 1px solid rgba(0, 0, 0, .5);
+    }
+
+    &:focus {
+      height: 32px;
+      border-bottom: 3px solid @primary-color;
+    }
+}

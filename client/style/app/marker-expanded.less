@@ -1,0 +1,94 @@
+.marker-expanded
+{
+    position: relative;
+    .submission-status
+    {
+        .status
+        {
+            display: block;
+
+            width: 100%;
+            height: 3px;
+        }
+        .status.owned
+        {
+            background-color: #000;
+        }
+        .status.approved
+        {
+            background-color: #e7ff00;
+        }
+        .status.rejected
+        {
+            background-color: #f00;
+        }
+    }
+    .crime-details
+    {
+        position: relative;
+
+        background-color: #fff;
+        .crime-detail-teaser
+        {
+            .md-close
+            {
+                text-decoration: none;
+            }
+            .teaser
+            {
+                padding: 20px 20px;
+
+                background-color: #f2f2f2;
+                .crime-time-relative
+                {
+                    float: left;
+
+                    color: #aaa;
+                }
+                .crime-icon
+                {
+                    display: table;
+
+                    width: 100%;
+                    padding-top: 20px;
+
+                    text-align: center;
+                }
+                .name
+                {
+                    font-size: 1.2em;
+
+                    padding-bottom: 10px;
+
+                    text-align: center;
+
+                    color: #0f6996;
+                }
+            }
+            .info
+            {
+                padding: 25px 20px;
+            }
+            .expand-details
+            {
+                text-align: center;
+                .icon
+                {
+                    color: #fff;
+                }
+            }
+            .expand-action
+            {
+                display: block;
+
+                padding: 5px;
+
+                background-color: #0f6996;
+                &:hover
+                {
+                    background-color: #3f98c5;
+                }
+            }
+        }
+    }
+}

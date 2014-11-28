@@ -1,56 +1,24 @@
-<div 
-	className={ [
-		"dashbar-container",
-		componentState
-	].join( " " ) }>
+<section 
+        className={ [
+          "main-menu card",
+          componentState
+        ].join( " " ) }>
 
-	<div 
-		className={ [
-			"dashbar-minified-button",
-			"dash-item",
-			componentState
-		].join( " " ) }
-		onClick={ this.onMinifiedButtonClick }>
-		<a 
-			className={ [
-				"action-element"
-			].join( " " ) }
-			href={ [
-				"#",
-				"open-dashbar"
-			].join( "/" ) }>
-			
-			<div
-				className={ [ 
-					"dash-item-icon" 
-				].join( " " ) }>
-				<Icon 
-					className={ [
-						"dashbar-minified-icon"
-					].join( " " ) } 
-					name="ic_menu_24px" />
-			</div>
-		</a>
-	</div>
+  <section className="icon-container">
+    <a className="icon md-3x main-menu-icon md-menu" onClick={ this.onMinifiedButtonClick }></a>
+  </section>
+  <section className="card main-menu-expanded">
+    <section className="card-container">
 
-	<div
-		className={ [
-			"dashbar-body",
-			componentState
-		].join( " " ) }>
+      <section className="profile dashbar-profile">
+      </section>
 
-		<div
-			className={ [
-				"dashbar-profile"
-			].join( " " ) }>
-		</div>
+      <section className="menu-dashboard">
+        <ul className="menu">
+          { dashList.map( this.onEachDashItem ) }
+        </ul>
+      </section>
+    </section>
 
-		<div
-			className={ [
-				"dash-list",
-				componentState
-			].join( " " ) }>
-			{ dashList.map( this.onEachDashItem ) }
-		</div>
-	</div>
-</div>
+  </section>
+</section>

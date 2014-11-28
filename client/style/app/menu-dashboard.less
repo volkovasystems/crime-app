@@ -1,0 +1,54 @@
+.menu-dashboard
+{
+    .menu
+    {
+        padding: 20px 0;
+    }
+    .menu-item-list
+    {
+        &:hover
+        {
+            background-color: #eee;
+            .menu-item .icon
+            {
+                color: @primary-color;
+            }
+        }
+        .menu-item
+        {
+            display: block;
+
+            height: 30px;
+            padding: 10px 20px;
+            &:active
+            {
+                background-color: darken(#eee, 10%);
+            }
+            .icon
+            {
+                position: relative;
+                bottom: 0;
+
+                margin-right: 20px;
+
+                color: #61a7ca;
+            }
+            span
+            {
+                font-size: 1em;
+                font-weight: 600;
+
+                display: inline-block;
+
+                vertical-align: 6px;
+                text-transform: uppercase;
+
+                color: #696969;
+            }
+            .md-exit-to-app
+            {
+                transform: rotate(180deg);
+            }
+        }
+    }
+}

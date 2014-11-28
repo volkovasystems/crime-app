@@ -1,0 +1,63 @@
+.search-bar
+{
+    position: relative;
+
+    width: 850px;
+    height: 60px;
+
+    background-color: #fff;
+    .bar-wrapper
+    {
+        display: table;
+        .input-wrapper
+        {
+            position: relative;
+
+            display: table;
+            float: left;
+
+            width: 700px;
+            .input
+            {
+                font-family: @font-family;
+                font-size: 1.2em;
+
+                box-sizing: border-box;
+                height: 60px;
+                padding: 0 20px;
+
+                border: none;
+            }
+            .search-filter
+            {
+                position: absolute;
+                top: 17px;
+                right: 15px;
+            }
+        }
+        .button-wrapper
+        {
+            display: table;
+            float: left;
+
+            width: 150px;
+            height: 60px;
+
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+            .btn
+            {
+                float: left;
+
+                width: 100%;
+                height: 60px;
+
+                background-color: #0f6996;
+                .icon
+                {
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
