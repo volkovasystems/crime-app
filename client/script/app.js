@@ -5,11 +5,9 @@ angular
 		"ProgressBar",
 		"Event",
 		"Home",
-		"Forehead",
-		"Dashbar",
 		"Control",
 		"Login",
-		"Profile",
+		"Dashbar",
 		"Search",
 		"MapView",
 		"MapLocate",
@@ -62,20 +60,8 @@ angular
 							callback( ); 
 					} );
 				},
-				/*function checkRender( callback ){
-					$rootScope.on( "forehead-rendered", 
-						function onRendered( ){ 
-							callback( ); 
-						} );
-				},*/
 				function checkRender( callback ){
 					$rootScope.on( "login-rendered", 
-						function onRendered( ){ 
-							callback( ); 
-						} );
-				},
-				function checkRender( callback ){
-					$rootScope.on( "profile-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
