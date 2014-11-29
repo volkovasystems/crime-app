@@ -1,0 +1,23 @@
+<section 
+	ref="notifyComponent"
+	className={ [
+		"notification snackbar card",
+		notifyType
+	].join( " " ) }>
+	<section 
+		className="message">
+		<p>
+			{ notifyMessage }
+		</p>
+	</section>
+	<section 
+		className="close-action pull-right">
+		<a 
+			href="#"
+			onClick={ this.onClickCloseNotify }>
+			<i 
+				className="icon md-2x md-close">
+			</i>
+		</a>
+	</section>
+</section>

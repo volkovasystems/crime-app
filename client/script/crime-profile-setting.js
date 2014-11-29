@@ -92,14 +92,19 @@ Crime
 						$http.post( requestEndpoint, userSettingData )
 							.success( function onSuccess( response, status ){
 								if( response.status == "success" ){
+									scope.publish( "notify", labelData.USER_UPDATE_SUCCESS_PROMPT, "success" );
+
 									callback( );
 
 								}else{
+									scope.publish( "notify", labelData.USER_UPDATE_FAILED_PROMPT, "warn" );
+
 									callback( response.status );
 								}
 							} )
 							.error( function onError( response, status ){
-								//: @todo: Do something on error.
+								scope.publish( "notify", labelData.USER_UPDATE_ERROR_PROMPT, "error" );
+
 								callback( new Error( "error getting user data" ) );
 							} );
 					}
@@ -172,10 +177,14 @@ Crime
 									callback( null, response.data );
 
 								}else{
+									scope.publish( "notify", labelData.USER_GET_FAILED_PROMPT, "warn" );
+
 									callback( response.status, response.data );
 								}
 							} )
 							.error( function onError( response, status ){
+								scope.publish( "notify", labelData.USER_GET_ERROR_PROMPT, "error" );
+
 								//: @todo: Do something on error.
 								callback( new Error( "error getting user data" ) );
 							} );

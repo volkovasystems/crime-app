@@ -5,6 +5,7 @@ angular
 		"Event",
 		"Home",
 		"Control",
+		"ZoomControl",
 		"Login",
 		"Dashbar",
 		"Search",
@@ -103,6 +104,12 @@ angular
 				},
 				function checkRender( callback ){
 					$rootScope.on( "image-upload-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "zoom-control-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
