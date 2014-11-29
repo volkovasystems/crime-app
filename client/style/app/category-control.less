@@ -1,0 +1,114 @@
+.category-button
+{
+    position: absolute;
+    bottom: 60%;
+    left: 0;
+
+    display: block;
+    overflow: visible;
+
+    max-width: 60px;
+    max-height: 60px;
+    .icon-container
+    {
+        padding: 10px 8px 3px;
+
+        text-align: center;
+    }
+}
+
+
+.category-component
+{
+    padding: 20px;
+    &.card
+    {
+        top: -80px;
+        left: -10px;
+
+        width: 460px;
+        width: 460px;
+        & .icon,
+         & .name
+        {
+            display: block;
+
+            color: #333;
+        }
+    }
+    .card-category
+    {
+        display: table;
+
+        width: 100%;
+        .list-item
+        {
+            font-size: 1em;
+            font-weight: 400;
+
+            display: inline-block;
+            float: left;
+
+            width: 130px;
+            margin: 5px;
+            padding: 10px;
+            padding: 10px 0;
+
+            text-align: center;
+            text-decoration: none;
+
+            color: @primary-color;
+            border-radius: 3px;
+            .icon
+            {
+                margin-bottom: 10px;
+            }
+            &:hover,
+             &:active
+            {
+                font-weight: 700;
+
+                background-color: @primary-color;
+                .name
+                {
+                    color: #fff;
+                }
+            }
+        }
+        .categories
+        {
+            display: table;
+
+            width: 100%;
+            padding: 0;
+        }
+        .hidden
+        {
+            display: none;
+        }
+        .more-categories
+        {
+            font-weight: 700;
+
+            display: block;
+
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+
+            text-align: center;
+            text-transform: uppercase;
+
+            color: #aaa;
+            border: 1px solid #aaa;
+            border-radius: 2px;
+            &:hover,
+            &:active
+            {
+                color: #fff;
+                border-color: #fff;
+                background-color: @primary-color;
+            }
+        }
+    }
+}
