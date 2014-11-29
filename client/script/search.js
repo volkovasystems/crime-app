@@ -140,7 +140,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
-					PageFlow( scope, element, "search" );
+					PageFlow( scope, element, "search overflow" );
 
 					scope.on( "show-search",
 						function onShowSearch( ){
