@@ -1,24 +1,23 @@
 @facebook-color: #5a72ab;
+
 .login
 {
     .login-container
     {
         .login-component
         {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            position: relative;
 
-            width: 400px;
             height: auto;
+            margin: 50% auto;
 
-            transform: translateX( -50% ) translateY( -50% );
+            transform: translateY( -50% );
             .login-logo-container
             {
                 position: relative;
                 left: 50%;
 
-                width: 300px;
+                width: 200px;
 
                 transform: translateX( -50% );
                 .logo
@@ -55,6 +54,8 @@
                 position: relative;
                 left: 50%;
 
+                height: 60px;
+                margin: 20px 0;
                 padding: 10px 30px;
 
                 transform: translateX(-50%);
@@ -62,11 +63,12 @@
 
                 color: #fff;
                 border-radius: 3px;
-                background-color: @facebook-color;
+                background-color: #5a72ab;
                 .login-icon
                 {
-                    margin-right: 20px;
                     font-size: 2.5em;
+
+                    margin-right: 20px;
                 }
                 &:active,
                 &:hover

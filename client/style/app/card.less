@@ -8,13 +8,19 @@
     border-radius: 2px;
     background-color: #fff;
 
+    .transition-mixin();
     .box-shadow-mixin(1);
+    
     .toolbar
     {
         .headline
         {
             position: relative;
         }
+    }
+
+    &:hover, &:active {
+        .box-shadow-mixin(2)
     }
 }
 

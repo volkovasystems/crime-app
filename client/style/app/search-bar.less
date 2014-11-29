@@ -1,9 +1,17 @@
+.search
+{
+    left: 50%;
+}
 .search-bar
 {
-    position: relative;
+    position: absolute;
+    top: 0;
 
-    width: 850px;
+    width: 700px;
     height: 60px;
+    margin: 20px;
+
+    transform: translateX(-50%);
 
     background-color: #fff;
     .bar-wrapper
@@ -16,15 +24,16 @@
             display: table;
             float: left;
 
-            width: 700px;
+            width: 550px;
             .input
             {
                 font-family: @font-family;
                 font-size: 1.2em;
 
                 box-sizing: border-box;
+                width: 100%;
                 height: 60px;
-                padding: 0 20px;
+                padding: 0 60px 0 30px;
 
                 border: none;
             }
