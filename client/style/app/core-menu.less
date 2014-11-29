@@ -1,9 +1,9 @@
 .main-menu
 {
+
     &.card {
          margin: 20px;
     }
-    
 
     display: block;
     overflow: visible;
@@ -28,7 +28,13 @@
         width: 350px;
         margin: 0 !important;
 
-        .box-shadow-mixin(2);
+        .box-shadow-mixin(3);
+
+        z-index: 5;
+
+        &:hover, &:active {
+            .box-shadow-mixin(3);
+        }
     }
     .icon
     {
