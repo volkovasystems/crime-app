@@ -3,6 +3,15 @@
 .category-component
 {
     padding: 20px;
+    &.card
+    {
+        width: 460px;
+        & .icon,
+         & .name
+        {
+            display: block;
+        }
+    }
     .card-category
     {
         display: table;
@@ -10,30 +19,33 @@
         width: 100%;
         a
         {
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 1em;
+            font-weight: 400;
 
-            display: block;
+            display: inline-block;
             float: left;
 
-            width: 23.9%;
+            width: 130px;
             margin: 5px;
+            padding: 10px;
             padding: 10px 0;
 
             text-align: center;
             text-decoration: none;
 
-            color: #0f6996;
+            color: @primary-color;
             border-radius: 3px;
-            img
+            .icon
             {
-                padding: 10px;
-                &.active,
-                &:hover
-                {
-                    color: #fff;
-                    background-color: #0f6996;
-                }
+                margin-bottom: 10px;
+            }
+            &:hover,
+             &:active
+            {
+                font-weight: 700;
+
+                color: #fff;
+                background-color: @primary-color;
             }
         }
         .categories
@@ -51,17 +63,17 @@
             display: block;
 
             width: 100%;
-            margin: 20px 0;
+            margin: 10px 0;
 
             text-transform: uppercase;
 
-            color: #0f6996;
+            color: #AAA;
             border: 1px solid #aaa;
             &:hover,
             &:active
             {
                 color: #fff;
-                background-color: #0f6996;
+                background-color: @primary-color;
             }
         }
     }
