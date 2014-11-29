@@ -1,0 +1,305 @@
+.crime-report
+{
+    max-width: 480px;
+    .card-heading
+    {
+        position: relative;
+
+        display: table;
+
+        width: 100%;
+        padding: 20px;
+
+        background-color: #f2f2f2;
+    }
+    .card-heading .title
+    {
+        font-size: 2em;
+        font-weight: 700;
+
+        margin-top: 15px;
+        margin-bottom: 20px;
+
+        color: #aaa;
+    }
+    .card-heading .progress .prog1,
+    .card-heading .progress .prog2,
+    .card-heading .progress .prog3
+    {
+        font-size: .9em;
+        font-weight: 500;
+
+        float: left;
+
+        width: 33.33%;
+
+        text-align: center;
+
+        color: #aaa;
+    }
+    .text-active .label
+    {
+        font-weight: 700;
+
+        color: #333;
+    }
+    .text-disabled
+    {
+        color: #aa9d7d;
+    }
+    .card-heading .progress
+    {
+        position: relative;
+    }
+    .card-heading .progress a
+    {
+        line-height: 6px;
+
+        display: inline-block;
+    }
+    .card-heading .progress .circ
+    {
+        width: 15px;
+        height: 15px;
+        margin: 0 auto;
+
+        border: 3px solid #fff;
+        border-radius: 100%;
+        background-color: #f2f2f2;
+    }
+    .card-heading .progress a:hover .circ,
+    .card-heading .progress a:active .circ
+    {
+        background-color: #aaa;
+    }
+    .card-heading > .progress .prog-line
+    {
+        max-width: 68%;
+        height: 3px;
+        margin: 66px auto 0;
+
+        background-color: #fff;
+    }
+    .circ-current
+    {
+        background-color: #51b7cf!important;
+    }
+    .circ-done
+    {
+        background-color: #2d6782!important;
+    }
+    .progress
+    {
+        display: table;
+
+        width: 100%;
+        padding: 20px 0 0;
+    }
+    .location-image
+    {
+        width: 500px;
+        margin: 0 -10px 20px;
+    }
+    /* form starting stylings ------------------------------- */
+    .group
+    {
+        position: relative;
+
+        margin-bottom: 30px;
+    }
+    .input-md
+    {
+        font-size: 1.2em;
+
+        display: block;
+
+        width: 100%;
+        max-height: 150px;
+        padding: 10px 10px 10px 5px;
+
+        border: none;
+        border-bottom: 1px solid #757575;
+        outline: none;
+    }
+    .input-md:focus
+    {
+        outline: none;
+    }
+    /* LABEL ======================================= */
+    .group .label
+    {
+        font-weight: 600;
+
+        position: absolute;
+        top: 10px;
+        left: 5px;
+
+        -webkit-transition: .2s ease all;
+           -moz-transition: .2s ease all;
+                transition: .2s ease all;
+        pointer-events: none;
+
+        color: #999;
+    }
+    /* active state */
+    .input-md:focus ~ label,
+    .input-md:valid ~ label
+    {
+        font-size: 1em;
+
+        top: -20px;
+
+        color: #5264ae;
+    }
+    /* BOTTOM BARS ================================= */
+    .bar
+    {
+        position: relative;
+
+        display: block;
+
+        width: auto;
+    }
+    .bar:before,
+    .bar:after
+    {
+        position: absolute;
+        bottom: 1px;
+
+        width: 0;
+        height: 2px;
+
+        content: '';
+        -webkit-transition: .2s ease all;
+           -moz-transition: .2s ease all;
+                transition: .2s ease all;
+
+        background: #5264ae;
+    }
+    .bar:before
+    {
+        left: 50%;
+    }
+    .bar:after
+    {
+        right: 50%;
+    }
+    /* active state */
+    .input-md:focus ~ .bar:before,
+    .input-md:focus ~ .bar:after
+    {
+        width: 50%;
+    }
+    /* HIGHLIGHTER ================================== */
+    .highlight
+    {
+        position: absolute;
+        top: 25%;
+        left: 0;
+
+        width: 100%;
+        height: 60%;
+
+        pointer-events: none;
+
+        opacity: .5;
+    }
+    /* active state */
+    .input:focus ~ .highlight
+    {
+        -webkit-animation: inputHighlighter .3s ease;
+           -moz-animation: inputHighlighter .3s ease;
+                animation: inputHighlighter .3s ease;
+    }
+    .form-group
+    {
+        padding-top: 20px;
+        &.date-and-time
+        {
+            .group
+            {
+                display: inline-block;
+
+                width: 46%;
+                margin-left: 31px;
+                &:first-child
+                {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    .checkbox-container
+    {
+        padding: 0 0 20px;
+        .checkbox
+        {
+            display: inline;
+
+            width: 20px;
+            height: 20px;
+            margin-top: 4px;
+            margin-right: 10px;
+
+            border: 2px solid #333;
+            border-radius: 0;
+            background: none;
+        }
+    }
+    .thank-you
+    {
+        padding: 10px 0;
+        .thanks-msg
+        {
+            font-size: 1.7em;
+
+            padding: 10px 0 15px;
+        }p
+        {
+            padding: 10px 0;
+        }
+    }
+}
+
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter
+{
+    from
+    {
+        background: #5264ae;
+    }
+    to
+    {
+        width: 0;
+
+        background: transparent;
+    }
+}
+@-moz-keyframes inputHighlighter
+{
+    from
+    {
+        background: #5264ae;
+    }
+    to
+    {
+        width: 0;
+
+        background: transparent;
+    }
+}
+@keyframes inputHighlighter
+{
+    from
+    {
+        background: #5264ae;
+    }
+    to
+    {
+        width: 0;
+
+        background: transparent;
+    }
+}
