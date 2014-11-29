@@ -9,31 +9,12 @@ Crime
 				"link": function onLink( scope, element, attribute ){
 					Event( scope );
 
-					scope.on( "proceed-default-app-flow",
-						function onProceedDefaultAppFlow( ){
-							scope.broadcast( "set-control-list",
-								[
-									{
-										"reference": "crime-map-view",
-										"name": "zoom-in",
-										"icon": "ic_add_circle_outline_24px"
-									},
-									{
-										"reference": "crime-map-view",
-										"name": "zoom-out",
-										"icon": "ic_remove_circle_outline_24px"
-									}
-								], false );
-
-							scope.publish( "show-control" );
-						} );
-
-					scope.on( "control-click:zoom-in",
+					scope.on( "zoom-control-click:zoom-in",
 						function onZoomIn( ){
 							scope.broadcast( "map-zoom-in" );
 						} );
 
-					scope.on( "control-click:zoom-out",
+					scope.on( "zoom-control-click:zoom-out",
 						function onZoomOut( ){
 							scope.broadcast( "map-zoom-out" );
 						} );

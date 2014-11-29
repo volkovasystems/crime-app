@@ -69,7 +69,27 @@ angular.module( "Notify", [ "Icon", "Event", "PageFlow" ] )
 								"notifyType": Notify.parseType( type )
 							} );
 
-							self.scope.broadcast( "show-notify" );
+							self.scope.publish( "show-notify" );
+
+							self.timeout = setTimeout( function onTimeout( ){
+								$( self.refs.notifyComponent.getDOMNode( ) ).fadeOut( "slow", 
+									function onFadeOut( ){
+										self.scope.publish( "hide-notify" );
+
+										clearTimeout( self.timeout );
+
+										self.timeout = null;
+									} );
+							}, 3000 );
+						} );
+
+					this.scope.on( "hide-notify",
+						function onHideNotify( ){
+							if( self.timeout ){
+								clearTimeout( self.timeout );
+
+								self.timeout = null;
+							}
 						} );
 				},
 

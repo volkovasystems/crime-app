@@ -142,10 +142,7 @@ Crime
 										reportData.reportLocation.longitude == longitude;
 								} );
 
-							scope.publish( "set-notify-header" );
-
 							var reportData = selectedReportList[ 0 ];
-							scope.publish( "notify", reportData.reportTitle, reportData.reportDescription, "info" );
 						} );
 				}
 			}

@@ -21,20 +21,6 @@ Crime
 										scope.publish( "set-current-address", address );	
 									}
 								} );
-						} );	
-
-					scope.on( "proceed-default-app-flow",
-						function onProceedDefaultAppFlow( ){
-							scope.broadcast( "set-control-list",
-								[
-									{
-										"reference": "crime-map-locate",
-										"name": "crime-get-location",
-										"icon": "ic_my_location_24px"
-									}
-								], true );
-							
-							scope.publish( "show-control" );
 						} );
 
 					scope.on( "dash-clicked:report",

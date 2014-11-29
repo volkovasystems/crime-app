@@ -1,14 +1,11 @@
 angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
-	
-	.value( "GO_TO_PROFILE_PAGE", "go to profile page" )
 
 	.constant( "FACEBOOK_PROFILE_TYPE", "facebook" )
 	
 	.factory( "Profile", [
 		"Icon",
 		"FACEBOOK_PROFILE_TYPE",
-		"GO_TO_PROFILE_PAGE",
-		function factory( Icon, FACEBOOK_PROFILE_TYPE, GO_TO_PROFILE_PAGE ){
+		function factory( Icon, FACEBOOK_PROFILE_TYPE ){
 			var Profile = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){

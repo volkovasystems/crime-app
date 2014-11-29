@@ -1,11 +1,11 @@
 angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 
-	.value( "SEARCH_PROMPT", "search something" )
+	.constant( "SEARCH_PLACEHOLDER", labelData.SEARCH_PLACEHOLDER )
 
 	.factory( "Search", [
 		"Icon",
-		"SEARCH_PROMPT",
-		function factory( Icon, SEARCH_PROMPT ){
+		"SEARCH_PLACEHOLDER",
+		function factory( Icon, SEARCH_PLACEHOLDER ){
 			var Search = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -18,8 +18,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 				"getInitialState": function getInitialState( ){
 					return {
 						"searchText": "",
-						"searchState": "search-empty",
-						"componentState": "search-normal"
+						"searchState": "search-empty"
 					};
 				},
 
@@ -37,7 +36,17 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 					}
 				},
 
-				"onSearchTextChange": function onSearchTextChange( event ){
+				"onClickSearch": function onClickSearch( ){
+					if( this.timeout ){
+						clearTimeout( this.timeout );
+
+						this.timeout = null;
+					}
+
+					self.scope.publish( "search-text-changed", this.state.searchText );
+				},
+
+				"onChangeSearchText": function onChangeSearchText( event ){
 					var searchText = event.target.value;
 
 					if( this.timeout ){
@@ -62,7 +71,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 						clearTimeout( self.timeout );
 
 						self.timeout = null;
-					}, 1000 );
+					}, 5000 );
 
 					this.setState( {
 						"searchText": searchText,
@@ -70,7 +79,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 					} );
 				},
 
-				"onClearSearchClick": function onClearSearchClick( event ){
+				"onClickClearSearch": function onClearSearchClick( event ){
 					if( this.state.searchState != "search-empty" ){
 						this.setState( {
 							"searchText": "",
@@ -101,53 +110,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 					
 					var searchState = this.state.searchState;
 					
-					return ( 
-						<div 
-							className={ [
-								"search-container"
-							].join( " " ) }>
-							<div 
-								className={ [
-									"search-component"
-								].join( " " ) }>
-
-								<div
-									className={ [
-										"search-icon",
-									].join( " " ) }>
-									<Icon name="ic_search_24px" />
-								</div>
-
-								<div
-									className={ [
-										"search-input-container"
-									].join( " " ) }>
-
-									<input 
-										type="text" 
-										className={ [
-											"search-input"
-										].join( " " ) }
-										placeholder={ SEARCH_PROMPT.toUpperCase( ) }
-										value={ searchText }
-										onChange={ this.onSearchTextChange } />
-								</div>
-
-								<div
-									className={ [
-										"clear-search-button",
-										searchState
-									].join( " " ) }
-									onClick={ this.onClearSearchClick }>
-									<Icon
-										className={ [
-											"clear-search-icon"
-										].join( " " ) }
-										name="ic_clear_24px" />
-								</div>
-							</div>
-						</div>
-					);
+					return; //: @template: template/search.html
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
