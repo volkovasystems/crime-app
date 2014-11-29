@@ -1,0 +1,114 @@
+<section 
+	className="marker-expanded marker-expanded-details card"
+	style={ {
+		"margin": "1px 1px"
+	} }>
+	<section 
+		className="crime-details submission-status">
+		<section 
+			className="crime-detail-teaser">
+			<section 
+				className="status owned">
+			</section>
+
+			<section 
+				className="teaser">
+				<section 
+					className="crime-time-relative">
+					<section 
+						className="time">
+						<span 
+							className="prefix">
+							{ timeFromNowData.prefix }
+						</span>
+						<span 
+							className="digit">
+							{ timeFromNowData.digit }
+						</span>
+						<span 
+							className="unit">
+							{ timeFromNowData.unit }
+						</span>
+						<span 
+							className="suffix">
+							{ timeFromNowData.suffix }
+						</span>
+					</section>
+				</section>
+
+				<section 
+					className="close-action pull-right">
+					<a 
+						className="icon md-close" 
+						href="#">
+					</a>
+				</section>
+
+				<section 
+					className="crime-icon">
+					<img 
+						alt={ reportCaseTitle } 
+						className="img" 
+						src={ categoryIconSource } />
+				</section>
+
+				<h4 
+					className="name">
+					{ reportCaseTitle } { REPORT_CASE_TITLE_PHRASE }
+				</h4>
+			</section>
+
+			<section 
+				className="location">
+
+				<MapPreview
+					position={ position }
+					zoom={ zoom }
+					pinIconURL={ categoryIconPinSource } />
+				
+			</section>
+
+			<section 
+				className="info">
+				<section 
+					className="date-and-time">
+					<h5>
+						{ DATE_AND_TIME_LABEL }						
+					</h5>
+					<p>
+						{ descriptiveDateAndTime }
+					</p>
+				</section>
+
+				<section 
+					className="title">
+					<h5>
+						{ REPORT_TITLE_LABEL }
+					</h5>
+					<p>
+						{ reportTitle }
+					</p>
+				</section>
+
+				<section 
+					className="details">
+					<h5>
+						{ REPORT_DETAIL_LABEL }
+					</h5>
+					<p>
+						{ reportDescription }
+					</p>
+				</section>
+			</section>
+
+			<section 
+				className="action">
+				<button 
+					className="btn btn-large btn-gray"
+					onClick={ this.onClickLessDetail }>
+					{ LESS_DETAIL_LABEL }
+				</button>
+			</section>
+		</section>
+	</section>
+</section>

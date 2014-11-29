@@ -3,7 +3,7 @@ Crime
 		"$http",
 		"getReportServerData",
 		function factory( $http, getReportServerData ){
-			var getAllCrimeNearReporter = function getAllCrimeNearReporter( scope ){
+			var getAllCrimeNearReporter = function getAllCrimeNearReporter( scope, callback ){
 				async.waterfall( [
 					function initiateLoading( callback ){
 						scope.startLoading( );
@@ -63,28 +63,13 @@ Crime
 							} )
 							.error( function onError( response, status ){
 								//: @todo: Do something on error.
-								callback( new Error( "error sending report data" ), response );
+								callback( new Error( "error sending report data" ) );
 							} );
-					},
-
-					function createAllMapMarker( reportList, callback ){
-						scope.currentReportList = reportList;
-
-						_.each( reportList,
-							function onEachReportItem( reportData ){
-								var iconData = {
-									"markerID": reportData.reportID,
-									"sourceURL": "../image/@reportCaseType-marker.png"
-										.replace( "@reportCaseType", reportData.reportCaseType )
-								};
-
-								scope.publish( "create-map-marker", reportData.reportLocation, iconData, scope.mapComponent );
-							} );
-						
-						callback( );
 					}
 				],
 					function lastly( error, reportList ){
+						callback( error, reportList );
+
 						scope.finishLoading( );
 					} );
 			};
@@ -93,11 +78,37 @@ Crime
 		}
 	] )
 
+	.factory( "mapAllCrimeNearReporter", [
+		"getAllCrimeNearReporter",
+		function factory( getAllCrimeNearReporter ){
+			var mapAllCrimeNearReporter = function mapAllCrimeNearReporter( scope ){
+				
+				getAllCrimeNearReporter( scope,
+					function onResult( error, reportList ){
+						_.each( reportList,
+							function onEachReportItem( reportData ){
+								var iconData = {
+									"markerID": reportData.reportID,
+									"sourceURL": "../image/@reportCaseType-marker.png"
+										.replace( "@reportCaseType", reportData.reportCaseType )
+								};
+
+								scope.publish( "create-map-marker", 
+									reportData.reportLocation, 
+									iconData, 
+									scope.mapComponent );
+							} );
+					} );
+			};
+
+			return mapAllCrimeNearReporter;
+		}
+	] )
+
 	.directive( "mapMarkerController", [
 		"Event",
-		"getAllCrimeNearReporter",
-		"getAddressAtPosition",
-		function directive( Event, getAllCrimeNearReporter, getAddressAtPosition ){
+		"mapAllCrimeNearReporter",
+		function directive( Event, mapAllCrimeNearReporter ){
 			return {
 				"restrict": "A",
 				"scope": true,
@@ -108,7 +119,7 @@ Crime
 					var self = this;
 					scope.on( "login-success",
 						function onLoginSuccess( ){
-							getAllCrimeNearReporter( scope );
+							mapAllCrimeNearReporter( scope );
 
 							scope.on( "map-position-changed",
 								function onMapPositionChanged( position ){
@@ -119,7 +130,7 @@ Crime
 									}
 
 									self.timeout = setTimeout( function onTimeout( ){
-										getAllCrimeNearReporter( scope );
+										mapAllCrimeNearReporter( scope );
 
 										clearTimeout( self.timeout );
 
@@ -130,10 +141,10 @@ Crime
 
 					scope.on( "report-added",
 						function onLoginSuccess( ){
-							getAllCrimeNearReporter( scope );
+							mapAllCrimeNearReporter( scope );
 						} );
 
-					scope.on( "pin-clicked",
+					/*scope.on( "pin-clicked",
 						function onPinClicked( latitude, longitude ){
 							scope.publish( "set-current-position", latitude, longitude );
 
@@ -144,7 +155,7 @@ Crime
 								} );
 
 							var reportData = selectedReportList[ 0 ];
-						} );
+						} );*/
 				}
 			}
 		}

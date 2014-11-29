@@ -4,7 +4,7 @@ angular.module( "MapMarker", [ "Event" ] )
 
 	.factory( "createMapMarker", [
 		"MAP_MARKER_LIST",
-		function factory( Transvg, MAP_MARKER_LIST ){
+		function factory( MAP_MARKER_LIST ){
 			var createMapMarker = function createMapMarker( position, iconData, mapComponent, scope ){
 				var timeout = setTimeout( function onTimeout( ){
 					var markerIcon = {
@@ -20,7 +20,9 @@ angular.module( "MapMarker", [ "Event" ] )
 
 					google.maps.event.addListener( marker, "click",
 						function onClick( ){
-							scope.publish( "pin-clicked", iconData.markerID );
+							var cleanMarkerID = iconData.markerID.replace( /[^A-Za-z0-9]/g, "" );
+							
+							scope.publish( "pin-clicked", cleanMarkerID, marker );
 						} );
 
 					MAP_MARKER_LIST.push( marker );

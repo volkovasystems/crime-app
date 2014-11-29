@@ -46,6 +46,18 @@ Crime
 									}
 								} );
 						} );
+
+					scope.on( "show-profile",
+						function onShowProfile( ){
+							getUserData( scope,
+								function onGetUserData( error, userData ){
+									if( error ){
+
+									}else{
+										scope.publish( "set-profile-data", userData );
+									}
+								} );
+						} );
 				}
 			}
 		}

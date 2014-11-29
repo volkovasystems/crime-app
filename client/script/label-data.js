@@ -28,5 +28,11 @@ var labelData = {
 	"USER_GET_ERROR_PROMPT": "We've encountered an error while updating your profile.",
 
 	"REPORT_CONTROL_LABEL": "Report a Crime",
-	"CONFIRM_LOCATION_CONTROL_LABEL": "Confirm location"
+	"CONFIRM_LOCATION_CONTROL_LABEL": "Confirm location",
+
+	"REPORT_CASE_TITLE_PHRASE": "Incident",
+	"DATE_AND_TIME_LABEL": "Date and Time",
+	"REPORT_TITLE_LABEL": "Report",
+	"REPORT_DETAIL_LABEL": "Report Details",
+	"LESS_DETAIL_LABEL": "LESS DETAILS"
 };

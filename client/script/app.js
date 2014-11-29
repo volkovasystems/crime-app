@@ -15,6 +15,7 @@ angular
 		"MapLocate",
 		"MapPointer",
 		"MapMarker",
+		"MapInfoPin",
 		"Report",
 		"ReportList",
 		"CaseCategoryList",
