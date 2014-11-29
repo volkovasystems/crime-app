@@ -6,6 +6,8 @@ angular
 		"Home",
 		"Control",
 		"ZoomControl",
+		"ReportControl",
+		"ConfirmLocationControl",
 		"Login",
 		"Dashbar",
 		"Search",
@@ -110,6 +112,18 @@ angular
 				},
 				function checkRender( callback ){
 					$rootScope.on( "zoom-control-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "report-control-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "confirm-location-control-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );

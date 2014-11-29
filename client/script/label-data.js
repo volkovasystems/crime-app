@@ -25,5 +25,8 @@ var labelData = {
 	"USER_UPDATE_ERROR_PROMPT": "We've encountered an error while updating your profile.",
 
 	"USER_GET_FAILED_PROMPT": "We've failed to get your data from our servers.",
-	"USER_GET_ERROR_PROMPT": "We've encountered an error while updating your profile."
+	"USER_GET_ERROR_PROMPT": "We've encountered an error while updating your profile.",
+
+	"REPORT_CONTROL_LABEL": "Report a Crime",
+	"CONFIRM_LOCATION_CONTROL_LABEL": "Confirm your location"
 };

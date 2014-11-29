@@ -1,7 +1,10 @@
 angular.module( "ReportControl", [ "Event", "PageFlow" ] )
 
+	.constant( "REPORT_CONTROL_LABEL", labelData.REPORT_CONTROL_LABEL )
+
 	.factory( "ReportControl", [
-		function factory( ){
+		"REPORT_CONTROL_LABEL",
+		function factory( REPORT_CONTROL_LABEL ){
 			var ReportControl = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -12,8 +15,8 @@ angular.module( "ReportControl", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickReport": function onClickReport( ){
-					this.scope.publish( "report-control-click:report" );
-				},]
+					this.scope.publish( "report-control-clicked:report" );
+				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 
@@ -50,7 +53,7 @@ angular.module( "ReportControl", [ "Event", "PageFlow" ] )
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
-					PageFlow( scope, element, "report-control" );
+					PageFlow( scope, element, "report-control overflow" );
 
 					scope.on( "show-report-control",
 						function onShowReportControl( ){
