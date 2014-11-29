@@ -72,9 +72,13 @@ Crime
 
 						_.each( reportList,
 							function onEachReportItem( reportData ){
-								var iconData = {
+								/*var iconData = {
 									"sourceURL": "../library/svg-sprite-maps.svg",
 									"iconName": "ic_place_24px"
+								};*/
+
+								var iconData = {
+									"sourceURL": "../image/map-marker.png"
 								};
 
 								scope.publish( "create-map-marker", reportData.reportLocation, iconData, scope.mapComponent );

@@ -19,12 +19,32 @@ angular.module( "MapPointer", [ "Event" ] )
 		}
 	] )
 
+	.factory( "createPointerImage", [
+		function factory( ){
+			var createPointerImage = function createPointerImage( imageSource ){
+				var pointerImage = {
+					"url": imageSource,
+					"scaledSize": new google.maps.Size( 41, 55 )
+				};
+
+				return pointerImage;
+			};
+
+			return createPointerImage;
+		}
+	] )
+
 	.factory( "createMapPointer", [
 		"createPointerIcon",
-		function factory( createPointerIcon ){
-			var createMapPointer = function createMapPointer( map ){
+		"createPointerImage",
+		function factory( createPointerIcon, createPointerImage ){
+			var createMapPointer = function createMapPointer( map, pointerImageSource ){
 				var pointerIcon = createPointerIcon( );
 
+				if( pointerImageSource ){
+					pointerIcon = createPointerImage( pointerImageSource );
+				}
+				
 				var mapPointer = new google.maps.Marker( {
 					"map": map,
 					"draggable": true,
@@ -73,11 +93,44 @@ angular.module( "MapPointer", [ "Event" ] )
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
+					scope.on( "show-map-pointer",
+						function onShowMapPointer( ){
+							if( scope.mapPointer ){
+								scope.mapPointer.setVisible( true );
+							}
+						} );
+
+					scope.on( "hide-map-pointer",
+						function onShowMapPointer( ){
+							if( scope.mapPointer ){
+								scope.mapPointer.setVisible( false );
+							}
+						} );
+
+					scope.on( "create-map-pointer",
+						function onCreateMapPointer( pointerImageSource ){
+							if( scope.mapPointer ){
+								scope.mapPointer.setMap( null );
+
+								scope.mapPointer = null;
+							}
+
+							var mapPointer = createMapPointer( scope.mapComponent, pointerImageSource );
+
+							mapPointer.setVisible( false );
+
+							attachMapPointerEventListener( mapPointer, scope );
+
+							scope.mapPointer = mapPointer;
+
+							scope.publish( "map-pointer-created", mapPointer );
+						} );
+
 					scope.on( "map-view-rendered",
 						function onMapViewRendered( ){
 							var mapPointer = createMapPointer( scope.mapComponent );
 
-							mapPointer.setVisible( true );
+							mapPointer.setVisible( false );
 
 							attachMapPointerEventListener( mapPointer, scope );
 
