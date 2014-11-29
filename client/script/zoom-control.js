@@ -54,7 +54,7 @@ angular.module( "ZoomControl", [ "Event", "PageFlow" ] )
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
-					PageFlow( scope, element, "zoom-control" );
+					PageFlow( scope, element, "zoom-control overflow" );
 
 					scope.on( "show-zoom-control",
 						function onShowZoomControl( ){
