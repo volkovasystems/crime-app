@@ -120,7 +120,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 				},
 
 				"componentDidMount": function componentDidMount( ){
-					this.scope.broadcast( "search-rendered" );	
+					this.scope.publish( "search-rendered" );	
 				}
 			} );	
 
@@ -136,7 +136,7 @@ angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
 			return {
 				"restrict": "EA",
 				"scope": true,
-				"priority": 2,
+				"priority": 3,
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
