@@ -1,64 +1,32 @@
-angular.module( "MapMarker", [ "Event", "Transvg" ] )
+angular.module( "MapMarker", [ "Event" ] )
 
 	.constant( "MAP_MARKER_LIST", [ ] )
 
 	.factory( "createMapMarker", [
-		"Transvg",
 		"MAP_MARKER_LIST",
 		function factory( Transvg, MAP_MARKER_LIST ){
 			var createMapMarker = function createMapMarker( position, iconData, mapComponent, scope ){
-				if( ( /\.svg$/ ).test( iconData.sourceURL ) ){
-					$.get( iconData.sourceURL,
-						function onResult( svgData ){
-							var svgSourceElement = $( svgData );
+				var timeout = setTimeout( function onTimeout( ){
+					var markerIcon = {
+						"url": iconData.sourceURL,
+						"scaledSize": new google.maps.Size( 41, 55 )
+					};
 
-							var pathDataList = Transvg( svgSourceElement )
-								.getPathDataList( iconData.iconName );
+					var marker = new google.maps.Marker( {
+						"map": mapComponent,
+						"icon": markerIcon,
+						"position": new google.maps.LatLng( position.latitude, position.longitude )
+					} );
 
-							_.each( pathDataList,
-								function onEachPathDataList( pathData ){
-									pathData.scale = 2;
-									pathData.origin = new google.maps.Point( 0, 0 );
-									pathData.anchor = new google.maps.Point( 11.5, 23.5 );
-
-									var marker = new google.maps.Marker( {
-										"position": new google.maps.LatLng( position.latitude, position.longitude ),
-										"icon": pathData,
-										"map": mapComponent
-									} );
-
-									google.maps.event.addListener( marker, "click",
-										function onClick( ){
-											scope.publish( "pin-clicked", position.latitude, position.longitude );
-										} );
-
-									MAP_MARKER_LIST.push( marker );
-								} );
+					google.maps.event.addListener( marker, "click",
+						function onClick( ){
+							scope.publish( "pin-clicked", iconData.markerID );
 						} );
 
-				}else{
-					var timeout = setTimeout( function onTimeout( ){
-						var markerIcon = {
-							"url": iconData.sourceURL,
-							"scaledSize": new google.maps.Size( 41, 55 )
-						};
+					MAP_MARKER_LIST.push( marker );
 
-						var marker = new google.maps.Marker( {
-							"map": mapComponent,
-							"icon": markerIcon,
-							"position": new google.maps.LatLng( position.latitude, position.longitude )
-						} );
-
-						google.maps.event.addListener( marker, "click",
-							function onClick( ){
-								scope.publish( "pin-clicked", position.latitude, position.longitude );
-							} );
-
-						MAP_MARKER_LIST.push( marker );
-
-						clearTimeout( timeout );
-					}, 1000 );
-				}
+					clearTimeout( timeout );
+				}, 1000 );
 			};
 
 			return createMapMarker;
