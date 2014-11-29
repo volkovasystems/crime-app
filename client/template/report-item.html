@@ -3,51 +3,16 @@
 	className="crime-stream"
 	onClick={ this.onClickReportItem }
 	value={ reportID }>
-	<section 
-		className="crime-time-relative">
-		<section 
-			className="time">
-			<span 
-				className="prefix">
-				{ timeFromNowData.prefix }
-			</span>
-			<span 
-				className="digit">
-				{ timeFromNowData.digit }
-			</span>
-			<span 
-				className="unit">
-				{ timeFromNowData.unit }
-			</span>
-			<span 
-				className="suffix">
-				{ timeFromNowData.suffix }
-			</span>
-		</section>
-	</section>
+
+<section className="crime-time-relative">
+  <section className="time">
+    <span className="prefix">{ timeFromNowData.prefix }</span> <span className="digit">{ timeFromNowData.digit }</span> <span className="unit">{ timeFromNowData.unit
+    }</span> <span className="suffix">{ timeFromNowData.suffix }</span>
+  </section>
+</section>
 
 	<p>
-		<span 
-			className="crime-category">
-			{ reportCaseTitle }
-		</span>
-		<span
-			className="report-item-phrase">
-			{ REPORT_ITEM_PHRASE }
-		</span>
-		<span 
-			className="street-location">
-			{ reportAddress }
-		</span>
-	</p>
-
-	<section 
-		className="btn-action">
-		<button 
-			className="btn btn-primary" 
-			type="submit">
-			Locate to map
-		</button>
-	</section>
+  <span class="title">{ reportCaseTitle }</span> <span class="report-phrase">{ REPORT_ITEM_PHRASE }</span> <span class="address">{ reportAddress }</span>
+</p>
 
 </section>
