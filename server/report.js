@@ -99,6 +99,19 @@ app.all( "/api/:accessID/*",
 			unirest
 				.get( requestEndpoint )
 				.end( function onResponse( response ){
+					if( !response.body ){
+						var error = new Error( "no response from user server" );
+
+						rootResponse
+							.status( 500 )
+							.json( {
+								"status": "error",
+								"data": error.message
+							} );
+
+						return;
+					}
+
 					var status = response.body.status;
 
 					if( status == "failed" ){

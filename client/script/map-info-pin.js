@@ -6,50 +6,62 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 	.constant( "EXPANDED_MAP_INFO_PIN_SET", { } )
 
+	.factory( "generateMapInfoPinContent", [
+		function factory( ){
+			var generateMapInfoPinContent = function generateMapInfoPinContent( mapInfoID, width, height ){
+				return  [
+					"<div @style>"
+						.replace( "@style", [
+							"style",
+							[
+								"\"",
+								[
+									[ "width", width ].join( ":" ),
+									[ "height", height ].join( ":" )
+								].join( ";" ),
+								"\""
+							].join( "" )
+						].join( "=" ) ),
+						"<div map-info-pin-expand id=\"@mapInfoID\"></div>",
+						"<div map-info-pin id=\"@mapInfoID\"></div>",
+					"</div>"
+				].join( "" ).replace( /\@mapInfoID/g, mapInfoID )
+			};
+
+			return generateMapInfoPinContent;
+		}
+	] )
+
 	.factory( "createMapInfoPin", [
 		"MAP_INFO_PIN_LIST",
 		"OPEN_MAP_INFO_PIN_SET",
 		"EXPANDED_MAP_INFO_PIN_SET",
 		"attachReportDetail",
 		"attachReportPreview",
+		"generateMapInfoPinContent",
 		function factory( 
 			MAP_INFO_PIN_LIST, 
 			OPEN_MAP_INFO_PIN_SET,
 			EXPANDED_MAP_INFO_PIN_SET,
 			attachReportDetail, 
-			attachReportPreview 
+			attachReportPreview,
+			generateMapInfoPinContent
 		){
 			var createMapInfoPin = function createMapInfoPin( position, mapInfoData, mapComponent, scope ){
 				var timeout = setTimeout( function onTimeout( ){
 
 					var cleanMapInfoID = mapInfoData.mapInfoID.replace( /[^A-Za-z0-9]/g, "" );
 
-					width = staticData.MAP_INFO_PIN_WIDTH;
-					height = staticData.MAP_INFO_PIN_HEIGHT;
-					
+					var width = staticData.MAP_INFO_PIN_WIDTH;
+					var height = staticData.MAP_INFO_PIN_HEIGHT;
+
 					if( EXPANDED_MAP_INFO_PIN_SET[ cleanMapInfoID ] ){
 						width = staticData.MAP_INFO_PIN_EXPANDED_WIDTH;
-						height = staticData.MAP_INFO_PIN_EXPANDED_HEIGHT;
+						height = staticData.MAP_INFO_PIN_EXPANDED_HEIGHT;						
 					}
 
 					var mapInfoPin = new google.maps.InfoWindow( {
-						"content": [
-							"<div @style>"
-								.replace( "@style", [
-									"style",
-									[
-										"\"",
-										[
-											[ "width", width ].join( ":" ),
-											[ "height", height ].join( ":" )
-										].join( ";" ),
-										"\""
-									].join( "" )
-								].join( "=" ) ),
-								"<div map-info-pin-expand id=\"@mapInfoID\"></div>",
-								"<div map-info-pin id=\"@mapInfoID\"></div>",
-							"</div>"
-						].join( "" ).replace( /\@mapInfoID/g, cleanMapInfoID )
+						"content": generateMapInfoPinContent( cleanMapInfoID, width, height )
 					} );
 
 					scope.on( "pin-clicked",
@@ -62,7 +74,7 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 								{
 									OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = marker;
 
-									mapInfoPin.open( mapComponent, marker );	
+									mapInfoPin.open( mapComponent, marker );
 								}	
 							}
 						} );
@@ -81,8 +93,70 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 							}
 						} );
 
+					scope.on( "close-report-detail",
+						function onCloseReportDetail( reportDetailID ){
+							if( reportDetailID == cleanMapInfoID &&
+								_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) )
+							{
+								mapInfoPin.close( );
+
+								OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
+
+								EXPANDED_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
+							}
+						} );
+
+					scope.on( "close-report-preview",
+						function onCloseReportPreview( reportPreviewID ){
+							if( reportPreviewID == cleanMapInfoID &&
+								_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) )
+							{
+								mapInfoPin.close( );
+
+								OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
+							}
+						} );
+
+					scope.on( "open-report-detail",
+						function onOpenReportDetail( reportDetailID ){
+							if( reportDetailID == cleanMapInfoID &&
+								_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) )
+							{
+								EXPANDED_MAP_INFO_PIN_SET[ cleanMapInfoID ] = true;
+
+								var width = staticData.MAP_INFO_PIN_EXPANDED_WIDTH;
+								var height = staticData.MAP_INFO_PIN_EXPANDED_HEIGHT;
+
+								var mapInfoPinContent = generateMapInfoPinContent( cleanMapInfoID, width, height );
+
+								mapInfoPin.setContent( mapInfoPinContent );
+							}
+						} );
+
+					scope.on( "open-report-preview",
+						function onOpenReportDetail( reportPreviewID ){
+							if( reportPreviewID == cleanMapInfoID &&
+								_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) )
+							{
+								EXPANDED_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
+
+								var width = staticData.MAP_INFO_PIN_WIDTH;
+								var height = staticData.MAP_INFO_PIN_HEIGHT;
+
+								var mapInfoPinContent = generateMapInfoPinContent( cleanMapInfoID, width, height );
+
+								mapInfoPin.setContent( mapInfoPinContent );	
+							}
+						} );
+
 					google.maps.event.addListener( mapInfoPin, "domready",
 						function onDOMReady( ){
+							if( !_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) ){
+								mapInfoPin.close( );
+
+								return;
+							}
+
 							var containerExpanded = $( "[map-info-pin-expand]#@mapInfoID"
 								.replace( "@mapInfoID", cleanMapInfoID ) );
 
@@ -111,6 +185,13 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 							if( EXPANDED_MAP_INFO_PIN_SET[ cleanMapInfoID ] ){
 								container = containerExpanded;
+
+								scope.publish( "show-report-detail", cleanMapInfoID );
+								scope.publish( "hide-report-preview", cleanMapInfoID );
+
+							}else{
+								scope.publish( "show-report-preview", cleanMapInfoID );
+								scope.publish( "hide-report-detail", cleanMapInfoID );
 							}
 
 							var parentContainer = container.parents( "div.gm-style-iw" );
@@ -190,7 +271,9 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 								} );
 
 							if( mapInfoPin ){
-								OPEN_MAP_INFO_PIN_SET[ $( "div", mapInfoPin.getContent( ) ).attr( "id" ) ] = false;
+								var mapInfoID = $( "div", mapInfoPin.getContent( ) ).attr( "id" );
+
+								OPEN_MAP_INFO_PIN_SET[ mapInfoID ] = false;
 
 								mapInfoPin.close( );
 							}

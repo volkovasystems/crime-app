@@ -42,8 +42,12 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 					}
 				},
 
-				"onClickLessDetail": function onClickLessDetail( ){
+				"onClickCloseReportDetail": function onClickCloseReportDetail( ){
+					this.scope.publish( "close-report-detail", this.props.reportDetailID );
+				},
 
+				"onClickLessDetail": function onClickLessDetail( ){
+					this.scope.publish( "open-report-preview", this.props.reportDetailID );
 				},
 
 				"getDefaultProps": function getDefaultProps( ){
@@ -172,16 +176,20 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 				}
 
 				scope.on( "show-report-detail",
-					function onShowReportDetail( ){
-						scope.showPage( );
+					function onShowReportDetail( reportDetailID ){
+						if( optionSet.reportDetailID == reportDetailID ){
+							scope.showPage( );	
+						}
 					} );
 
 				scope.on( "hide-report-detail",
-					function onHideReportDetail( ){
-						scope.hidePage( );
+					function onHideReportDetail( reportDetailID ){
+						if( optionSet.reportDetailID == reportDetailID ){
+							scope.hidePage( );	
+						}
 					} );
 
-				scope.publish( "hide-report-detail" );
+				scope.publish( "hide-report-detail", optionSet.reportDetailID );
 
 				ReportDetail.attach( scope, element, {
 					"reportDetailID": optionSet.reportDetailID,

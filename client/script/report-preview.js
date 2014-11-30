@@ -36,8 +36,12 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 					}
 				},
 
-				"onClickLessDetail": function onClickLessDetail( ){
+				"onClickCloseReportPreview": function onClickCloseReportPreview( ){
+					this.scope.publish( "close-report-preview", this.props.reportPreviewID );
+				},
 
+				"onClickMoreDetail": function onClickMoreDetail( ){
+					this.scope.publish( "open-report-detail", this.props.reportPreviewID );
 				},
 
 				"getDefaultProps": function getDefaultProps( ){
@@ -162,16 +166,20 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 				}
 
 				scope.on( "show-report-preview",
-					function onShowReportPreview( ){
-						scope.showPage( );
+					function onShowReportPreview( reportPreviewID ){
+						if( optionSet.reportPreviewID == reportPreviewID ){
+							scope.showPage( );	
+						}
 					} );
 
 				scope.on( "hide-report-preview",
-					function onHideReportPreview( ){
-						scope.hidePage( );
+					function onHideReportPreview( reportPreviewID ){
+						if( optionSet.reportPreviewID == reportPreviewID ){
+							scope.hidePage( );	
+						}
 					} );
 
-				scope.publish( "show-report-preview" );
+				scope.publish( "hide-report-preview", optionSet.reportPreviewID );
 
 				ReportPreview.attach( scope, element, {
 					"reportPreviewID": optionSet.reportPreviewID,
