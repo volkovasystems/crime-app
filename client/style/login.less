@@ -1,4 +1,4 @@
-@facebook-color: #5a72ab;
+@facebook-color: #3b5998;
 
 .login
 {
@@ -6,11 +6,11 @@
     {
         .login-component
         {
+            z-index: 5;
             position: relative;
 
             height: auto;
             margin: 300px auto 0;
-
             .login-logo-container
             {
                 position: relative;
@@ -18,7 +18,7 @@
 
                 width: 200px;
 
-                transform: translateX( -50% );
+                transform: translate(-50%, -15%);
                 .logo
                 {
                     width: 100%;
@@ -47,32 +47,33 @@
             }
             .login-button
             {
-                font-size: 1.4em;
-                font-weight: 400;
+                font-size: 1.1em;
+                font-weight: 300;
 
                 position: relative;
                 left: 50%;
 
-                height: 60px;
-                margin: 20px 0;
-                padding: 10px 30px;
+                width: 220px;
+                height: 52px;
+                margin: 20px;
+                padding: 10px 0;
 
-                transform: translateX(-50%);
+                transform: translate(-59%, -90%);
                 text-transform: inherit;
 
                 color: #fff;
-                border-radius: 3px;
-                background-color: #5a72ab;
+                border-radius: 2px;
+                background-color: lighten( @facebook-color, 5%);
                 .login-icon
                 {
-                    font-size: 2.5em;
-
+                    width: 30px;
+                    height: 30px;
                     margin-right: 20px;
                 }
                 &:active,
                 &:hover
                 {
-                    background-color: lighten( @facebook-color, 10%);
+                    background-color: @facebook-color;
                 }
             }
         }
