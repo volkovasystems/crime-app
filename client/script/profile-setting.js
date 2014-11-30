@@ -8,9 +8,9 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 
 	.constant( "EMAIL_PLACEHOLDER", labelData.EMAIL_PLACEHOLDER )
 
-	.constant( "UPDATE_LABEL", labelData.UPDATE_LABEL )
+	.constant( "UPDATE_BUTTON_LABEL", labelData.UPDATE_BUTTON_LABEL )
 
-	.constant( "CANCEL_LABEL", labelData.CANCEL_LABEL )
+	.constant( "CANCEL_BUTTON_LABEL", labelData.CANCEL_BUTTON_LABEL )
 
 	.constant( "USER_AVATAR_ALTERNATIVE", labelData.USER_AVATAR_ALTERNATIVE )
 
@@ -22,8 +22,8 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 		"NAME_PLACEHOLDER",
 		"EMAIL_LABEL",
 		"EMAIL_PLACEHOLDER",
-		"UPDATE_LABEL",
-		"CANCEL_LABEL",
+		"UPDATE_BUTTON_LABEL",
+		"CANCEL_BUTTON_LABEL",
 		"USER_AVATAR_ALTERNATIVE",
 		"CHANGE_AVATAR_LABEL",
 		function factory( 

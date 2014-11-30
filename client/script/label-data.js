@@ -13,8 +13,8 @@ var labelData = {
 	"NAME_PLACEHOLDER": "Your Name here",
 	"EMAIL_LABEL": "Email",
 	"EMAIL_PLACEHOLDER": "Your Email here",
-	"UPDATE_LABEL": "update",
-	"CANCEL_LABEL": "cancel",
+	"UPDATE_BUTTON_LABEL": "update",
+	"CANCEL_BUTTON_LABEL": "cancel",
 	"USER_AVATAR_ALTERNATIVE": "My Avatar",
 	"CHANGE_AVATAR_LABEL": "Change Avatar",
 
@@ -35,5 +35,16 @@ var labelData = {
 	"REPORT_TITLE_LABEL": "Report",
 	"REPORT_DETAIL_LABEL": "Report Details",
 	"LESS_DETAIL_LABEL": "LESS DETAILS",
-	"MORE_DETAIL_LABEL": "MORE DETAILS"
+	"MORE_DETAIL_LABEL": "MORE DETAILS",
+
+	"REPORT_HEADER_TITLE": "Crime Report",
+	"SPECIFY_CATEGORY_PROGRESS_LABEL": "Specify Category",
+	"INCIDENT_DETAIL_PROGRESS_LABEL": "Incident Details",
+	"REPORT_FINAL_PROGRESS_LABEL": "Thank you!",
+
+	"CONFIRM_BUTTON_LABEL": "confirm",
+	"CLOSE_BUTTON_LABEL": "close",
+	"MY_REPORT_BUTTON_LABEL": "My Reports",
+	"TITLE_LABEL": "Title",
+	"DESCRIPTION_PHRASE": "Describe what happened?"
 };

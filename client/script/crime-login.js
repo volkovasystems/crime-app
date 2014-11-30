@@ -239,6 +239,11 @@ Crime
 						function onProceedDefaultAppFlow( ){
 							scope.publish( "hide-login" );
 						} );
+
+					scope.on( "dash-clicked:logout",
+						function onNavigateLogout( ){
+							
+						} );
 				}
 			}
 		}
