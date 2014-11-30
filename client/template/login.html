@@ -4,12 +4,17 @@
 		loginState,
 		componentState
 	].join( " " ) }>
+	
+	<section 
+		className="overlay"></section>
+
 	<section 
 		className={ [
 			"login-component",
 			loginState,
 			componentState,
 		].join( " " ) }>
+
 
 		<section
 			className={ [
@@ -19,6 +24,7 @@
 				loginState,
 				componentState 
 			].join( " " ) }>
+
 
 			<img
 				className={ [
@@ -66,12 +72,11 @@
 					"#",
 					loginState
 				].join( "/" ) }>
-				<span
-					className={ [
-						"login-icon",
-						"entypo-social facebook"
-					].join( " " ) }>
-				</span>
+			<img
+				className={ [
+					"login-icon"
+				].join( " " ) }
+				src="image/fblogo.png" />
 				{ LOGIN_LABEL }
 			</a>
 		</button>
