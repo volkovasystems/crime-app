@@ -75,6 +75,12 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 									OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = marker;
 
 									mapInfoPin.open( mapComponent, marker );
+
+									for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
+										if( cleanMapInfoID != mapInfoID ){
+											scope.publish( "open-report-preview", mapInfoID );	
+										}
+									}
 								}	
 							}
 						} );
@@ -104,6 +110,10 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 								EXPANDED_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
 							}
+
+							for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
+								scope.publish( "open-report-preview", mapInfoID );
+							}
 						} );
 
 					scope.on( "close-report-preview",
@@ -114,6 +124,10 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 								mapInfoPin.close( );
 
 								OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
+							}
+
+							for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
+								scope.publish( "open-report-preview", mapInfoID );
 							}
 						} );
 

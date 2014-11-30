@@ -135,7 +135,7 @@ app.get( "/verify/access/:accessID",
 						.get( requestEndpoint )
 						.end( function onResponse( response ){
 							if( !response.body ){
-								callback( null, new Error( "no response from facebook" ) );
+								callback( null, new Error( "no response from facebook" ), userData );
 
 								return;
 							}
