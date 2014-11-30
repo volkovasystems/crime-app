@@ -62,6 +62,11 @@ angular.module( "MapPointer", [ "Event" ] )
 	.factory( "attachMapPointerEventListener", [
 		function factory( ){
 			var attachMapPointerEventListener = function attachMapPointerEventListener( mapPointer, eventEngine ){
+				google.maps.event.addListener( mapPointer, "dragstart",
+					function onDragStart( event ){
+						eventEngine.publish( "map-pointer-dragging", mapPointer, event );
+					} );
+
 				google.maps.event.addListener( mapPointer, "dragend",
 					function onDragEnd( event ){
 						eventEngine.publish( "map-pointer-dragged", mapPointer, event );

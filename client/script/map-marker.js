@@ -28,7 +28,7 @@ angular.module( "MapMarker", [ "Event" ] )
 					MAP_MARKER_LIST.push( marker );
 
 					clearTimeout( timeout );
-				}, 100 );
+				}, 0 );
 			};
 
 			return createMapMarker;

@@ -255,7 +255,7 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 					MAP_INFO_PIN_LIST.push( mapInfoPin );
 
 					clearTimeout( timeout );
-				}, 100 );
+				}, 0 );
 			};
 
 			return createMapInfoPin;

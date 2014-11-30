@@ -143,19 +143,6 @@ Crime
 						function onLoginSuccess( ){
 							mapAllCrimeNearReporter( scope );
 						} );
-
-					/*scope.on( "pin-clicked",
-						function onPinClicked( latitude, longitude ){
-							scope.publish( "set-current-position", latitude, longitude );
-
-							var selectedReportList = _.filter( scope.currentReportList,
-								function onEachReportItem( reportData ){
-									return reportData.reportLocation.latitude == latitude &&
-										reportData.reportLocation.longitude == longitude;
-								} );
-
-							var reportData = selectedReportList[ 0 ];
-						} );*/
 				}
 			}
 		}

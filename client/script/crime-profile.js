@@ -47,7 +47,7 @@ Crime
 								} );
 						} );
 
-					scope.on( "show-profile",
+					scope.on( "login-success",
 						function onShowProfile( ){
 							getUserData( scope,
 								function onGetUserData( error, userData ){
