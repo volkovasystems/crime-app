@@ -1,0 +1,6 @@
+var staticData = {
+	"MAP_INFO_PIN_EXPANDED_WIDTH": "480px",
+	"MAP_INFO_PIN_EXPANDED_HEIGHT": "720px",
+	"MAP_INFO_PIN_WIDTH": "480px",
+	"MAP_INFO_PIN_HEIGHT": "420px"
+};

@@ -2,6 +2,7 @@ var path = require( "path" );
 var fs = require( "fs" );
 
 var scriptList = [
+	"static-data.js",
 	"label-data.js",
 	"event.js",
 	"page-flow.js",
@@ -16,6 +17,7 @@ var scriptList = [
 	"thumbnail-list.js",
 	"map-preview.js",
 	"report-detail.js",
+	"report-preview.js",
 	"progress-bar.js",
 	"map-pointer.js",
 	"map-locate.js",

@@ -1,4 +1,4 @@
-angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
+angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 	
 	.constant( "REPORT_CASE_TITLE_PHRASE", labelData.REPORT_CASE_TITLE_PHRASE )
 
@@ -6,33 +6,27 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 
 	.constant( "REPORT_TITLE_LABEL", labelData.REPORT_TITLE_LABEL )
 
-	.constant( "REPORT_DETAIL_LABEL", labelData.REPORT_DETAIL_LABEL )
+	.constant( "MORE_DETAIL_LABEL", labelData.MORE_DETAIL_LABEL )
 
-	.constant( "LESS_DETAIL_LABEL", labelData.LESS_DETAIL_LABEL )
-
-	.factory( "ReportDetail", [
-		"MapPreview",
+	.factory( "ReportPreview", [
 		"REPORT_CASE_TITLE_PHRASE",
 		"DATE_AND_TIME_LABEL",
 		"REPORT_TITLE_LABEL",
-		"REPORT_DETAIL_LABEL",
-		"LESS_DETAIL_LABEL",
-		function factory( 
-			MapPreview,
+		"MORE_DETAIL_LABEL",
+		function factory(
 			REPORT_CASE_TITLE_PHRASE,
 			DATE_AND_TIME_LABEL,
 			REPORT_TITLE_LABEL,
-			REPORT_DETAIL_LABEL,
-			LESS_DETAIL_LABEL
+			MORE_DETAIL_LABEL
 		){
-			var ReportDetail = React.createClass( {
+			var ReportPreview = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container, optionSet ){
 						var reportDetailComponent = (
-							<ReportDetail 
+							<ReportPreview 
 								scope={ scope }
 								container={ container }
-								reportDetailID={ optionSet.reportDetailID }
+								reportPreviewID={ optionSet.reportPreviewID }
 								reportData={ optionSet.reportData } />
 						);
 
@@ -48,7 +42,7 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 
 				"getDefaultProps": function getDefaultProps( ){
 					return {
-						"reportDetailID": "",
+						"reportPreviewID": "",
 						"reportData": { }
 					};
 				},
@@ -80,11 +74,7 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 
 					var reportCaseTitle = reportData.reportCaseTitle;
 					var reportTitle = reportData.reportTitle;
-					var reportDescription = reportData.reportDescription;
-
-					var position = new google.maps.LatLng( reportData.reportLocation.latitude, reportData.reportLocation.longitude );
-					var zoom = reportData.reportLocation.zoom;
-
+					
 					var uri = new URI( );
 					var currentHostAddress = [ 
 						"http:/",
@@ -131,28 +121,28 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 							}
 						} );
 					
-					return; //: @template: template/report-detail.html
+					return; //: @template: template/report-preview.html
 				},
 
 				"componentDidMount": function componentDidMount( ){
-					var reportDetailID = this.props.reportDetailID;
+					var reportPreviewID = this.props.reportPreviewID;
 					
 					var container = this.props.container
 
-					this.scope.publish( "report-detail-rendered", reportDetailID, container );
+					this.scope.publish( "report-preview-rendered", reportPreviewID, container );
 				}
 			} );
 
-			return ReportDetail;
+			return ReportPreview;
 		}
 	] )
 
-	.factory( "attachReportDetail", [
+	.factory( "attachReportPreview", [
 		"Event",
 		"PageFlow",
-		"ReportDetail",
-		function factory( Event, PageFlow, ReportDetail ){
-			var attachReportDetail = function attachReportDetail( optionSet ){
+		"ReportPreview",
+		function factory( Event, PageFlow, ReportPreview ){
+			var attachReportPreview = function attachReportPreview( optionSet ){
 				var element = optionSet.element;
 
 				if( _.isEmpty( element ) || element.length == 0 ){
@@ -165,43 +155,43 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 
 				Event( scope );
 
-				var pageFlow = PageFlow( scope, element, "report-detail" );
+				var pageFlow = PageFlow( scope, element, "report-preview" );
 
 				if( optionSet.embedState != "no-embed" ){
 					pageFlow.namespaceList = _.without( pageFlow.namespaceList, "page" );
 				}
 
-				scope.on( "show-report-detail",
-					function onShowReportDetail( ){
+				scope.on( "show-report-preview",
+					function onShowReportPreview( ){
 						scope.showPage( );
 					} );
 
-				scope.on( "hide-report-detail",
-					function onHideReportDetail( ){
+				scope.on( "hide-report-preview",
+					function onHideReportPreview( ){
 						scope.hidePage( );
 					} );
 
-				scope.publish( "hide-report-detail" );
+				scope.publish( "show-report-preview" );
 
-				ReportDetail.attach( scope, element, {
-					"reportDetailID": optionSet.reportDetailID,
+				ReportPreview.attach( scope, element, {
+					"reportPreviewID": optionSet.reportPreviewID,
 					"reportData": optionSet.reportData
 				} );
 			};
 
-			return attachReportDetail;
+			return attachReportPreview;
 		}
 	] )
 
-	.directive( "reportDetail", [
-		"attachReportDetail",
-		function directive( attachReportDetail ){
+	.directive( "reportPreview", [
+		"attachReportPreview",
+		function directive( attachReportPreview ){
 			return {
 				"restrict": "EA",
 				"scope": true,
 				"priority": 3,
 				"link": function onLink( scope, element, attributeSet ){
-					attachReportDetail( {
+					attachReportPreview( {
 						"scope": scope,
 						"element": element,
 						"attributeSet": attributeSet

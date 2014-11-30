@@ -18,7 +18,7 @@ angular.module( "MapPreview", [ "MapView" ] )
 		function factory( getGoogleAPIKey, DEFAULT_POSITION, DEFAULT_MAP_ZOOM ){
 			var MapPreview = React.createClass( {
 				statics: {
-					"constructStaticMapURL": function constructStaticMapURL( position, zoom, pinIconURL ){
+					"constructStaticMapURL": function constructStaticMapURL( position, zoom, pinIconURL, width, height ){
 						var latitude = position.lat( );
 						var longitude = position.lng( );
 
@@ -31,10 +31,10 @@ angular.module( "MapPreview", [ "MapView" ] )
 
 							[ "zoom", zoom ].join( "=" ),
 
-							[ "size", [ 500, 200 ].join( "x" ) ].join( "=" ),
+							[ "size", [ width || 500, height || 400 ].join( "x" ) ].join( "=" ),
 
 							[ "markers", 
-								[ "icon", pinIconURL ].join( ":%20" )
+								[ "icon", pinIconURL ].join( ":" )
 							].join( "=" ),
 
 							[ "key", getGoogleAPIKey( ) ].join( "=" )
@@ -53,7 +53,9 @@ angular.module( "MapPreview", [ "MapView" ] )
 						"position": DEFAULT_POSITION,
 						"zoom": DEFAULT_MAP_ZOOM,
 						"pinIconURL": "#",
-						"staticMapURL": "#"
+						"staticMapURL": "#",
+						"height": 400,
+						"width": 500
 					};
 				},
 
@@ -68,7 +70,11 @@ angular.module( "MapPreview", [ "MapView" ] )
 
 					var pinIconURL = this.props.pinIconURL || "#";
 
-					var staticMapURL = MapPreview.constructStaticMapURL( position, zoom, pinIconURL );
+					var width = this.props.width;
+
+					var height = this.props.height;
+
+					var staticMapURL = MapPreview.constructStaticMapURL( position, zoom, pinIconURL, width, height );
 
 					this.setState( {
 						"staticMapURL": staticMapURL

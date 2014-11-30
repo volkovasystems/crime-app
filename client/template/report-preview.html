@@ -1,5 +1,5 @@
 <section 
-	className="marker-expanded marker-expanded-details card"
+	className="marker-expanded card"
 	style={ {
 		"margin": "1px 1px",
 		"width": "99.3%",
@@ -68,17 +68,6 @@
 			</section>
 
 			<section 
-				className="location">
-
-				<MapPreview
-					position={ position }
-					zoom={ zoom }
-					pinIconURL={ categoryIconPinSource }
-					height={ 250 } />
-				
-			</section>
-
-			<section 
 				className="info">
 				<section 
 					className="date-and-time">
@@ -100,15 +89,6 @@
 					</p>
 				</section>
 
-				<section 
-					className="details">
-					<h5>
-						{ REPORT_DETAIL_LABEL }
-					</h5>
-					<p>
-						{ reportDescription }
-					</p>
-				</section>
 			</section>
 
 			<section 
@@ -120,8 +100,8 @@
 				} }>
 				<button 
 					className="btn btn-large btn-gray"
-					onClick={ this.onClickLessDetail }>
-					{ LESS_DETAIL_LABEL }
+					onClick={ this.onClickMoreDetail }>
+					{ MORE_DETAIL_LABEL }
 				</button>
 			</section>
 		</section>
