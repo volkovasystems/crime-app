@@ -4,13 +4,12 @@
     bottom: 0;
     left: 50%;
 
+    overflow: hidden;
+
     width: 470px;
     margin: 20px;
 
-    overflow: hidden;
-
     transform: translateX(-53%);
-    
     .report-btn
     {
         font-size: 1.3em;
@@ -32,14 +31,41 @@
     }
 }
 
+
 .confirm-location-control
 {
     top: 50%;
     left: 50%;
 
-    transform: translate(-56.5%, 5%);
+    display: table;
+
+    transform: translate(-26.5%, 3%);
+    .card
+    {
+        float: left;
+        overflow: hidden;
+
+        margin: 20px 5px;
+
+        border-right: 10px;
+        background: none;
+    }
     .btn
     {
         color: @body-copy-color;
+    }
+    .cancel-btn
+    {
+        background-color: @btn-bg-color;
+    }
+    .btn-primary.report-btn
+    {
+        color: #fff;
+        background-color: @secondary-color;
+        &:hover,
+        &:active
+        {
+            background-color: lighten(@secondary-color, 10%);
+        }
     }
 }

@@ -18,7 +18,7 @@ var labelData = {
 	"USER_AVATAR_ALTERNATIVE": "My Avatar",
 	"CHANGE_AVATAR_LABEL": "Change Avatar",
 
-	"SEARCH_PLACEHOLDER": "Search Address",
+	"SEARCH_PLACEHOLDER": "Search street address",
 
 	"USER_UPDATE_SUCCESS_PROMPT": "Your profile is updated.",
 	"USER_UPDATE_FAILED_PROMPT": "Sorry, your profile is not updated properly.",
