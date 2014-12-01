@@ -1,19 +1,28 @@
-angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailList" ] )
+angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 	
-	.value( "CASE_CATEGORY_LIST_HEADER_LABEL", "select a category" )
+	.constant( "CHOOSE_CATEGORY_PHRASE", labelData.CHOOSE_CATEGORY_PHRASE )
+
+	.constant( "MORE_CATEGORY_LABEL", labelData.MORE_CATEGORY_LABEL )
+
+	.constant( "LESS_CATEGORY_LABEL", labelData.LESS_CATEGORY_LABEL )
 
 	.factory( "CaseCategoryList", [
-		"Icon",
-		"ThumbnailList",
-		"CASE_CATEGORY_LIST_HEADER_LABEL",
-		function factory( Icon, ThumbnailList, CASE_CATEGORY_LIST_HEADER_LABEL ){
+		"CHOOSE_CATEGORY_PHRASE",
+		"MORE_CATEGORY_LABEL",		
+		"LESS_CATEGORY_LABEL",
+		function factory(
+			CHOOSE_CATEGORY_PHRASE,
+			MORE_CATEGORY_LABEL,
+			LESS_CATEGORY_LABEL
+		){
 			var CaseCategoryList = React.createClass( {
 				"statics": {
-					"attach": function attach( scope, container ){
+					"attach": function attach( scope, container, optionSet ){
 						var caseCategoryListComponent = (
 							<CaseCategoryList 
 								scope={ scope }
-								container={ container } />
+								container={ container }
+								onSelectCaseCategory={ optionSet.onSelectCaseCategory } />
 						);
 
 						React.render( caseCategoryListComponent, container[ 0 ] );
@@ -25,16 +34,52 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 				"getInitialState": function getInitialState( ){
 					return {
 						"selectedCaseCategory": [ ],
-						"caseCategoryList": [ ]
+						"caseCategoryList": [ ],
+						"viewableCategoryList": [ ],
+						"isMoreCategory": false,
+						"isLessCategory": true
 					};
 				},
 
-				"onClickCloseCaseCategoryListButton": function onClickCloseCaseCategoryListButton( ){
-					this.scope.publish( "hide-case-category-list" );
+				"getDefaultProps": function getDefaultProps( ){
+					return {
+						"onSelectCaseCategory": function onSelectCaseCategory( ){ }
+					};
 				},
 
-				"onClickBackCaseCategoryListButton": function onClickBackCaseCategoryListButton( ){
-					this.scope.publish( "back-case-category-list" );
+				"onClickMoreCategory": function onClickMoreCategory( ){
+					this.setState( {
+						"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT ),
+						"isMoreCategory": false,
+						"isLessCategory": true
+					} );
+				},
+
+				"onClickLessCategory": function onClickLessCategory( ){
+					this.setState( {
+						"viewableCategoryList": _.clone( caseCategoryList ),
+						"isMoreCategory": true,
+						"isLessCategory": false
+					} );
+				},
+
+				"onSelectCaseCategory": function onSelectCaseCategory( event ){
+					var selectedCaseCategory = $( event.currentTarget ).attr( "value" );
+
+					var selectedCaseCategoryList = _.clone( this.state.selectedCaseCategory );
+
+					if( _.contains( selectedCaseCategoryList, selectedCaseCategory ) ){
+						this.setState( {
+							"selectedCaseCategory": _.without( selectedCaseCategoryList, selectedCaseCategory )
+						} );
+
+					}else{
+						selectedCaseCategoryList.push( selectedCaseCategory );
+
+						this.setState( {
+							"selectedCaseCategory": selectedCaseCategoryList
+						} );
+					}
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
@@ -43,26 +88,8 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 					this.scope.on( "set-case-category-list",
 						function onSetCaseCategoryList( caseCategoryList ){
 							self.setState( {
-								"caseCategoryList": caseCategoryList
-							} );
-						} );
-
-					this.scope.on( "get-case-category-list",
-						function onGetCaseCategoryList( callback ){
-							callback( self.state.caseCategoryList );
-						} );
-
-					this.scope.on( "set-selected-case-category",
-						function onSetSelectedCaseCategory( selectedCaseCategory ){
-							self.setState( {
-								"selectedCaseCategory": selectedCaseCategory
-							} );
-						} );
-
-					this.scope.on( "clear-selected-case-category",
-						function onClearSelectedCaseCategory( ){
-							self.setState( {
-								"selectedCaseCategory": [ ]
+								"caseCategoryList": caseCategoryList,
+								"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT )
 							} );
 						} );
 				},
@@ -77,138 +104,42 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 
 				},
 
-				"render": function onRender( ){
-					var caseCategoryList = this.state.caseCategoryList;
+				"onEachCaseCategoryItem": function onEachCaseCategoryItem( caseCategoryData ){
+					var hashedValue = btoa( JSON.stringify( caseCategoryData ) ).replace( /[^A-Za-z0-9]/g, "" );
 
 					var selectedCaseCategory = this.state.selectedCaseCategory;
 
-					return (
-						<div
-							className={ [
-								"case-category-list-container"
-							].join( " " ) }>
-							<div
-								className={ [
-									"case-category-list-component"
-								].join( " " ) }>
-								<div 
-									className={ [
-										"case-category-list-header"
-									].join( " " ) }>
+					var caseCategoryName = caseCategoryData.name;
 
-									<div 
-										className={ [
-											"header-icon",
-											"back-case-category-list-button",
-											"shown",
-											"inline-block"
-										].join( " " ) }
-										onClick={ this.onClickBackCaseCategoryListButton }>
-										<a 
-											className={ [
-												"action-element"
-											].join( " " ) }
-											href={ [
-												"#",
-												"back-case-category-list"
-											].join( "/" ) }
-											style={
-												{
-													"display": "block"
-												}
-											}>
-											
-											<Icon
-												className={ [
-													"back-case-category-list-icon"
-												].join( " " ) }
-												name="ic_arrow_back_24px" />
-										</a>
-									</div>
+					var caseCategoryTitle = caseCategoryData.title;
 
-									<div
-										className={ [
-											"header-icon",
-											"hidden",
-											"inline-block"
-										].join( " " ) }>
-										<Icon name="ic_report_problem_24px" />
-									</div>
+					var caseCategoryIconSource = caseCategoryData.source;
 
-									<div
-										className={ [
-											"header-title",
-											"shown",
-											"inline-block"
-										].join( " " ) }>
-										<span>
-											{ CASE_CATEGORY_LIST_HEADER_LABEL.toUpperCase( ) }
-										</span>
-									</div>
+					var isSelected = _.contains( selectedCaseCategory, caseCategoryName );
 
-									<div 
-										className={ [
-											"close-case-category-list-button",
-											"hidden",
-											"inline-block"
-										].join( " " ) }
-										onClick={ this.onClickCloseCaseCategoryListButton }>
-										<a 
-											className={ [
-												"action-element"
-											].join( " " ) }
-											href={ [
-												"#",
-												"close-case-category-list"
-											].join( "/" ) }
-											style={
-												{
-													"display": "block"
-												}
-											}>
-											
-											<Icon
-												className={ [
-													"close-case-category-list-icon"
-												].join( " " ) }
-												name="ic_close_24px" />
-										</a>
-									</div>
+					return; //: @template: template/case-category-item.html
+				},
 
-									
-								</div>
+				"render": function onRender( ){
+					var viewableCategoryList = this.state.viewableCategoryList;
 
-								<div
-									className={ [
-										"case-category-list-body"
-									].join( " " ) }>
+					var selectedCaseCategory = this.state.selectedCaseCategory;
 
-									<div
-										className={ [
-											"list-selection"
-										].join( " " ) }>
+					var isLessCategory = this.state.isLessCategory;
 
-										<ThumbnailList 
-											parent={ this }
-											titleName="selectedCaseCategory"
-											thumbnailList={ caseCategoryList }
-											selectedThumbnailList={ selectedCaseCategory } />
+					var isMoreCategory = this.state.isMoreCategory;
 
-									</div>
-								</div>
-							</div>	
-						</div>
-					)
+					return; //: @template: template/case-category-list.html
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
 					if( !_.isEqual( prevState.selectedCaseCategory, this.state.selectedCaseCategory ) ){
-						this.scope.publish( "selected-case-category-changed", this.state.selectedCaseCategory );
+						this.props.onSelectCaseCategory( this.state.selectedCaseCategory );
 					}
 				},
 
 				"componentDidMount": function componentDidMount( ){
-					this.scope.broadcast( "case-category-list-rendered" );	
+					this.scope.publish( "case-category-list-rendered" );	
 				}
 			} );
 
@@ -216,34 +147,71 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow", "Icon", "ThumbnailLis
 		}
 	] )
 
-	.directive( "caseCategoryList", [
+	.factory( "attachCaseCategoryList", [
+		"$rootScope",
 		"Event",
 		"PageFlow",
 		"CaseCategoryList",
-		function directive( Event, PageFlow, CaseCategoryList ){
+		function factory(
+			$rootScope,
+			Event,
+			PageFlow,
+			CaseCategoryList
+		){
+			var attachCaseCategoryList = function attachCaseCategoryList( optionSet ){
+				var element = optionSet.element;
+
+				if( _.isEmpty( element ) || element.length == 0 ){
+					throw new Error( "unable to attach component" );
+				}
+
+				var scope = optionSet.scope || $rootScope;
+
+				scope = scope.$new( true );
+
+				Event( scope );
+
+				var pageFlow = PageFlow( scope, element, "case-category-list overflow" );
+
+				if( optionSet.embedState != "no-embed" ){
+					pageFlow.namespaceList = _.without( pageFlow.namespaceList, "page" );
+				}
+
+				scope.on( "show-case-category-list",
+					function onShowCaseCategoryList( ){
+						scope.showPage( );
+					} );
+
+				scope.on( "hide-case-category-list",
+					function onHideCaseCategoryList( ){
+						scope.hidePage( );
+					} );
+
+				scope.publish( "hide-case-category-list" );
+
+				CaseCategoryList.attach( scope, element, {
+					"onSelectCaseCategory": optionSet.onSelectCaseCategory
+				} );
+			};
+
+			return attachCaseCategoryList;
+		}
+	] )
+
+	.directive( "caseCategoryList", [
+		"attachCaseCategoryList",
+		function directive( attachCaseCategoryList ){
 			return {
 				"restrict": "EA",
 				"scope": true,
 				"priority": 2,
 				"link": function onLink( scope, element, attributeSet ){
-					Event( scope );
-
-					PageFlow( scope, element, "case-category-list" );
-
-					scope.on( "show-case-category-list",
-						function onShowCaseCategoryList( ){
-							scope.showPage( );
-						} );
-
-					scope.on( "hide-case-category-list",
-						function onHideCaseCategoryList( ){
-							scope.hidePage( );
-						} );
-
-					scope.publish( "hide-case-category-list" );
-
-					CaseCategoryList
-						.attach( scope, element );
+					attachCaseCategoryList( {
+						"scope": scope,
+						"element": element,
+						"attributeSet": attributeSet,
+						"embedState": "no-embed"
+					} );
 				}
 			};
 		}

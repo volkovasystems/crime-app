@@ -6,6 +6,7 @@ angular
 		"Home",
 		"Control",
 		"ZoomControl",
+		"LocateControl",
 		"ReportControl",
 		"ConfirmLocationControl",
 		"Login",
@@ -16,9 +17,10 @@ angular
 		"MapPointer",
 		"MapMarker",
 		"MapInfoPin",
-		"Report",
+		"ReportSpecifyCategory",
+		"ReportIncidentDetail",
+		"ReportFinal",
 		"ReportList",
-		"CaseCategoryList",
 		"Notify",
 		"ImageUpload"
 	] )
@@ -82,19 +84,25 @@ angular
 						} );
 				},
 				function checkRender( callback ){
-					$rootScope.on( "report-rendered", 
+					$rootScope.on( "report-specify-category-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "report-incident-detail-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "report-final-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
 				function checkRender( callback ){
 					$rootScope.on( "report-list-rendered", 
-						function onRendered( ){ 
-							callback( ); 
-						} );
-				},
-				function checkRender( callback ){
-					$rootScope.on( "case-category-list-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
@@ -113,6 +121,12 @@ angular
 				},
 				function checkRender( callback ){
 					$rootScope.on( "zoom-control-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "locate-control-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );

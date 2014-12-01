@@ -46,5 +46,17 @@ var labelData = {
 	"CLOSE_BUTTON_LABEL": "close",
 	"MY_REPORT_BUTTON_LABEL": "My Reports",
 	"TITLE_LABEL": "Title",
-	"DESCRIPTION_PHRASE": "Describe what happened?"
+	"DESCRIPTION_PHRASE": "Describe what happened?",
+	"TIME_HAPPENED_PHRASE": "Time the incident happened?",
+	"DATE_HAPPENED_PHRASE": "Date happened?",
+	"SEND_REPORT_ANONYMOUSLY_PHRASE": "Send this report anonymously",
+	"AGREEMENT_PHRASE": "I hereby agree on CrimeWatch.ph's",
+	"PRIVACY_POLICY_LABEL": "Privacy Policy",
+	"THANK_SUBMISSION_PHRASE": "Thank you for your submission.",
+	"VERIFY_SUBMISSION_PHRASE": "We will review and verify your report within 24 hours.",
+	"WARN_IF_NOT_AGREED_PROMPT": "Please agree to our terms if you want to post this report.",
+
+	"CHOOSE_CATEGORY_PHRASE": "Please choose a crime category below:",
+	"MORE_CATEGORY_LABEL": "More Categories",
+	"LESS_CATEGORY_LABEL": "Less Categories"
 };

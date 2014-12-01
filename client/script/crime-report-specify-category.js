@@ -1,5 +1,5 @@
 Crime
-	.directive( "mapFilterController", [
+	.directive( "reportSpecifyCategoryController", [
 		"Event",
 		"$http",
 		"getReportServerData",
