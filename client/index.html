@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="Crime">
 	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 			
 		<!-- <link rel="icon" type="image/ico" href="https://dl.dropboxusercontent.com/u/10676965/crime.ico"> -->
 
@@ -14,10 +15,9 @@
 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
-		<!--: @include-style:"library/bootstrap.min.css" -->
-		<!--: @include-style:"library/bootstrap-theme.min.css" -->
 		<!--: @include-style:"library/entypo.css" -->
 		<!--: @include-style:"library/loading-bar.min.css" -->
+		<!--: @include-style:"library/material-design-iconic-font.min.css" -->
 		<!--: @include-style:"style/crime-app.min.css" -->
 
 		<!--: @production-mode:
@@ -57,10 +57,12 @@
 			map-pointer
 			map-locate
 			map-marker
+			map-info-pin
 			map-view-controller
 			map-locate-controller
 			map-pointer-controller
 			map-marker-controller
+			map-info-pin-controller
 			map-filter-controller>
 		</section>
 
@@ -80,11 +82,6 @@
 		</section>
 
 		<section 
-			profile
-			profile-controller>
-		</section>
-
-		<section 
 			report-list
 			report-list-controller>
 		</section>
@@ -96,6 +93,21 @@
 
 		<section 
 			report
+			report-controller>
+		</section>
+
+		<section 
+			report-specify-category
+			report-controller>
+		</section>
+
+		<section 
+			report-incident-detail
+			report-controller>
+		</section>
+
+		<section 
+			report-final
 			report-controller>
 		</section>
 
@@ -127,13 +139,30 @@
 			dash-item-icon-set
 			hidden-dash-item-list
 			dashbar
-			dashbar-controller>
+			dashbar-controller
+			profile-controller
+			profile-setting-controller>
 		</section>
 
 		<section notify>
 		</section>
 
 		<section progressbar>
+		</section>
+
+		<section 
+			zoom-control
+			zoom-control-controller>
+		</section>
+
+		<section 
+			report-control
+			report-control-controller>
+		</section>
+
+		<section 
+			confirm-location-control
+			confirm-location-control-controller>
 		</section>
 
 		<section control>
@@ -148,9 +177,7 @@
 		@end-development-mode -->
 		
 		<!--: @include-script:"library/jquery.min.js" -->
-		<!--: @include-script:"library/bootstrap.min.js" -->
 		<!--: @include-script:"library/angular.min.js" -->
-		<!--: @include-script:"library/ui-bootstrap-tpls.min.js" -->
 		<!--: @include-script:"library/react-with-addons.min.js" -->
 		<!--: @include-script:"library/spin.js" -->
 		<!--: @include-script:"library/jquery.spin.js" -->

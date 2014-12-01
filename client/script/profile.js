@@ -1,14 +1,11 @@
 angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
-	
-	.value( "GO_TO_PROFILE_PAGE", "go to profile page" )
 
 	.constant( "FACEBOOK_PROFILE_TYPE", "facebook" )
 	
 	.factory( "Profile", [
 		"Icon",
 		"FACEBOOK_PROFILE_TYPE",
-		"GO_TO_PROFILE_PAGE",
-		function factory( Icon, FACEBOOK_PROFILE_TYPE, GO_TO_PROFILE_PAGE ){
+		function factory( Icon, FACEBOOK_PROFILE_TYPE ){
 			var Profile = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -86,22 +83,21 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					return {
 						"profileName": "",
 						"profileURL": "",
-						"profileImage": "./image/profile.png",
+						"profileImage": "../image/profile.png",
 						"profileEMail": "",
+
+						"displayName": "",
+						"userEMail": "",
+						"userAvatar": "",
 						
 						"profileType": FACEBOOK_PROFILE_TYPE,
 						
-						"profileState": "profile-empty",
-						"componentState": "profile-minified"
+						"profileState": "profile-empty"
 					};
 				},
-				
-				"onProfileCloseButtonClick": function onProfileCloseButtonClick( event ){
-					this.scope.publish( "show-minified-profile" );
-				},
 
-				"onProfileImageClick": function onProfileImageClick( event ){
-					this.scope.publish( "show-expanded-profile" );
+				"onClickCloseProfile": function onClickCloseProfile( ){
+					this.scope.publish( "close-profile" );
 				},
 
 				"initiateBasicProfileDataRetrieval": function initiateBasicProfileDataRetrieval( profileType ){
@@ -135,20 +131,6 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
-
-					this.scope.on( "show-minified-profile",
-						function onShowMinifiedProfile( ){
-							self.setState( {
-								"componentState": "profile-minified"
-							} );
-						} );
-
-					this.scope.on( "show-expanded-profile",
-						function onShowMinifiedProfile( ){
-							self.setState( {
-								"componentState": "profile-expanded"
-							} );
-						} );
 					
 					this.scope.on( "initiate-basic-profile-data-retrieval",
 						function onInitiateBasicProfileDataRetrieval( profileType ){
@@ -171,6 +153,15 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 								Profile.getBasicProfileData( self.state.profileType, callback );
 							}
 						} );
+
+					this.scope.on( "set-profile-data",
+						function onSetProfileData( userData ){
+							self.setState( {
+								"displayName": userData.userDisplayName,
+								"userEMail": userData.userEMail,
+								"userAvatar": userData.userAvatar
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -180,15 +171,13 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 				},
 
 				"render": function onRender( ){
-					var componentState = this.state.componentState;
+					var profileName = this.state.displayName || this.state.profileName;
 
-					var profileName = this.state.profileName;
-
-					var profileEMail = this.state.profileEMail;
+					var profileEMail = this.state.userEMail || this.state.profileEMail;
 
 					var profileURL = this.state.profileURL;
 
-					var profileImage = this.state.profileImage;
+					var profileImage = this.state.userAvatar || this.state.profileImage;
 
 					var profileType = this.state.profileType;
 					
@@ -214,7 +203,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 							this.scope.broadcast( this.state.profileState );
 						}
 
-						this.scope.broadcast( "profile-state-changed", this.state.profileState, this.state.componentState );
+						this.scope.broadcast( "profile-state-changed", this.state.profileState );
 					}
 				},
 
@@ -234,31 +223,23 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 		"Profile",
 		function factory( $rootScope, Event, PageFlow, Profile ){
 			var attachProfile = function attachProfile( optionSet ){
-				var scope = optionSet.scope || $rootScope;
-
 				var element = optionSet.element;
 
 				if( _.isEmpty( element ) || element.length == 0 ){
 					throw new Error( "unable to attach component" );
 				}
 
+				var scope = optionSet.scope || $rootScope;
+
+				scope = scope.$new( true );
+
 				Event( scope );
 
-				PageFlow( scope, element, "profile" );
-				
-				scope.on( "show-minified-profile",
-					function onShowMinifiedProfile( ){
-						scope.broadcast( "show-profile" );
+				var pageFlow = PageFlow( scope, element, "profile" );
 
-						scope.toggleFlow( "!profile-expanded", "profile-minified" );
-					} );
-
-				scope.on( "show-expanded-profile",
-					function onShowExpandedProfile( ){
-						scope.broadcast( "show-profile" );
-
-						scope.toggleFlow( "!profile-minified", "profile-expanded" );
-					} );
+				if( optionSet.embedState != "no-embed" ){
+					pageFlow.namespaceList = _.without( pageFlow.namespaceList, "page" );
+				}
 
 				scope.on( "show-profile",
 					function onShowProfile( ){
@@ -271,8 +252,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					} );
 
 				scope.on( "profile-state-changed",
-					function onProfileStateChanged( profileState, componentState ){
-						scope.toggleFlow( "profile-*", profileState, componentState );
+					function onProfileStateChanged( profileState ){
+						scope.toggleFlow( "profile-*", profileState );
 
 						scope.publish( profileState );
 					} );
@@ -296,7 +277,8 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 					attachProfile( {
 						"scope": scope,
 						"element": element,
-						"attributeSet": attributeSet
+						"attributeSet": attributeSet,
+						"embedState": "no-embed"
 					} );
 				}
 			};

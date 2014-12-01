@@ -1,0 +1,81 @@
+<section 
+	className="crime-report card">
+	<section 
+		className="container">
+		<section 
+			className="card-heading">
+			<h2 
+				className="title">
+				{ REPORT_HEADER_TITLE }
+			</h2>
+			<section 
+				className="progress">
+				<section 
+					className="prog1 text-active">
+					<p 
+						className="label">
+						{ SPECIFY_CATEGORY_PROGRESS_LABEL }
+					</p>
+					<a 
+						href="#">
+						<section 
+							className="circ circ-current">
+						</section>
+					</a>
+				</section>
+				<section 
+					className="prog2">
+					<p 
+						className="label">
+						{ INCIDENT_DETAIL_PROGRESS_LABEL }
+					</p>
+					<a 
+						href="#">
+						<section 
+							className="circ">
+						</section>
+					</a>
+				</section>
+				<section 
+					className="prog3">
+					<p 
+						className="label">
+						{ REPORT_FINAL_PROGRESS_LABEL }
+					</p>
+					<a 
+						href="#">
+						<section 
+							className="circ">		
+						</section>
+					</a>
+				</section>
+				<section 
+					className="prog-line">
+				</section>
+			</section>
+		</section>
+		<section 
+			className="location-image">
+			<MapPreview
+				position={ position }
+				zoom={ zoom }
+				pinIconURL={ categoryIconPinSource }
+				height={ 250 }
+				width={ 600 } />
+		</section>
+		<section 
+			className="card-body form">
+			<section 
+				className="form-actions">
+				<button 
+					className="btn btn-primary btn-xlarge">
+					{ CONFIRM_BUTTON_LABEL }
+				</button>
+				<button 
+					className="btn btn-gray btn-xlarge">
+					{ CANCEL_BUTTON_LABEL }
+				</button>
+			</section>
+		</section>
+	</section>
+</section>

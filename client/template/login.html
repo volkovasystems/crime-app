@@ -1,17 +1,22 @@
-<div 
+<section 
 	className={ [
 		"login-container",
 		loginState,
 		componentState
 	].join( " " ) }>
-	<div 
+	
+	<section 
+		className="overlay"></section>
+
+	<section 
 		className={ [
 			"login-component",
 			loginState,
 			componentState,
 		].join( " " ) }>
 
-		<div
+
+		<section
 			className={ [
 				"login-logo-container",
 				"shown",
@@ -20,31 +25,27 @@
 				componentState 
 			].join( " " ) }>
 
+
 			<img
 				className={ [
 					"logo",
 					componentState
 				].join( " " ) }
 				src={ appLogoImageSource } />
-		</div>
+		</section>
 
-		<div
+		<section
 			className={ [
-				"login-prompt",
-				"text-center",
-				( loginState != "logged-out" )? "shown inline-block": "hidden",
-				( loginState == "login-error" )? "bg-danger": "",
-				( loginState == "logged-in" )? "bg-success": "",
-				( loginState == "logging-in" )? "bg-info": "",
+				"login-spinner",
 				loginState,
 				componentState
 			].join( " " ) }>
-			{ loginPrompt.toUpperCase( ) }
-		</div>
+		</section>
 
 		{ /* Facebook login button. */ }
 		<button 
 			className={ [
+				"card",
 				"facebook-login-button",
 				"btn",
 				"btn-lg",
@@ -71,61 +72,13 @@
 					"#",
 					loginState
 				].join( "/" ) }>
-				<span
-					className={ [
-						"login-icon",
-						( loginState == "logged-out" )? "entypo-social facebook": "",
-						( loginState == "logged-in" )? "entypo thumbs-up": ""
-					].join( " " ) }>
-				</span>
-				{ 
-					( loginState == "logged-out" )? LOGIN_LABEL.toUpperCase( ) :
-					( loginState == "logged-in" )? PROCEED_LABEL.toUpperCase( ) : ""
-				}
-			</a>
-		</button>
-
-		{ /* Twitter login button. */ }
-		<button 
-			className={ [
-				"twitter-login-button",
-				"btn",
-				"btn-lg",
-				"btn-primary",
-				"login-button",
-				( 
-					loginType == "twitter" &&
-					( 
-						loginState == "logged-out" || 
-						loginState == "logged-in" 
-					)
-				)? "shown inline-block": "hidden",
-				loginState,
-				componentState
-			].join( " " ) }
-			value="twitter"
-			type="button"
-			onClick={ this.onClickLogin }>
-			<a
+			<img
 				className={ [
-					"action-element"
+					"login-icon"
 				].join( " " ) }
-				href={ [ 
-					"#",
-					loginState
-				].join( "/" ) }>
-				<span
-					className={ [
-						"login-icon",
-						( loginState == "logged-out" )? "entypo-social twitter": "",
-						( loginState == "logged-in" )? "entypo thumbs-up": ""
-					].join( " " ) }>
-				</span>
-				{ 
-					( loginState == "logged-out" )? "LOGIN" :
-					( loginState == "logged-in" )? "PROCEED" : ""
-				}
+				src="image/fblogo.png" />
+				{ LOGIN_LABEL }
 			</a>
 		</button>
-	</div>
-</div>
+	</section>
+</section>

@@ -131,6 +131,11 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 					google.maps.event.addListener( mapComponent, "zoom_changed",
 						function onZoomChanged( event ){
 							self.scope.publish( "map-zoom-changed", self.state.mapZoom, mapComponent );
+						} );
+
+					google.maps.event.addListener( mapComponent, "dragstart",
+						function onDragEnd( event ){
+							self.scope.publish( "map-dragging", mapComponent );
 						} );	
 
 					google.maps.event.addListener( mapComponent, "dragend",

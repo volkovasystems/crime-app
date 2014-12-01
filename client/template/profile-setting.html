@@ -1,0 +1,80 @@
+<section 
+	className="profile-container">
+	<section 
+		className="profile">
+
+		<section 
+			className="close-action pull-right">
+			<a 
+				className="md-2x md-close icon" 
+				href="#"
+				onClick={ this.onClickCloseProfileSetting }>
+			</a>
+		</section>
+
+		<section 
+			className="avatar edit-avatar">
+			<img 
+				alt={ USER_AVATAR_ALTERNATIVE }
+				className="img" 
+				src={ userAvatar } /> 
+			<button
+				style={
+					{
+						"display": "none"
+					}
+				} 
+				className="edit-avatar-action btn btn-xs btn-gray" 
+				type="submit">
+				{ CHANGE_AVATAR_LABEL }
+			</button>
+		</section>
+	</section>
+
+	<section 
+		className="form">
+		<section 
+			className="form-group">
+			<section 
+				className="form-controls">
+				<label 
+					className="label label-name">
+					{ NAME_LABEL }
+				</label>
+				<input 
+					className="input input-type form-input"
+					placeholder={ NAME_PLACEHOLDER }
+					type="text" 
+					value={ displayName }
+					onChange={ this.onChangeDisplayName } />
+			</section>
+			<section 
+				className="form-controls">
+				<label 
+					className="label label-name">
+					{ EMAIL_LABEL }
+				</label>
+				<input 
+					className="input input-type form-input"
+					placeholder={ EMAIL_PLACEHOLDER } 
+					type="text" 
+					value={ userEMail } 
+					onChange={ this.onChangeEMail }/>
+			</section>
+		</section>
+
+		<section 
+			className="form-actions">
+			<button 
+				className="update-form-action btn btn-large btn-primary" 
+				onClick={ this.onClickUpdate }>
+				{ UPDATE_BUTTON_LABEL }
+			</button>
+			<button 
+				className="cancel-form-action btn btn-large btn-gray" 
+				onClick={ this.onClickCancel }>
+				{ CANCEL_BUTTON_LABEL }
+			</button>
+		</section>
+	</section>
+</section>

@@ -1,0 +1,27 @@
+<section 
+	className="search-bar card">
+	<section 
+		className="bar-wrapper">
+		<section 
+			className="input-wrapper">
+			<input 
+				type="text" 
+				className="form-input input search-input" 
+				placeholder={ SEARCH_PLACEHOLDER }
+				value={ searchText }
+				onChange={ this.onChangeSearchText } />
+		</section>
+
+		<section 
+			className="button-wrapper">
+			<button 
+				type="button" 
+				className="btn btn-primary"
+				onClick={ this.onClickSearch }>
+				<i 
+					className="icon md-3x md-search">
+				</i>
+			</button>
+		</section>
+	</section>
+</section>	

@@ -1,4 +1,5 @@
 angular.module( "Spinner", [ "Event", "PageFlow" ] )
+
 	.factory( "Spinner", [
 		function factory( ){
 			var Spinner = React.createClass( {
@@ -16,8 +17,30 @@ angular.module( "Spinner", [ "Event", "PageFlow" ] )
 					},
 				},
 
+				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+					var self = this;
+
+					var namespace = this.props.namespace;
+
+					this.scope.on( "show-spinner",
+						function onShowSpinner( thisNamespace ){
+							if( thisNamespace == namespace ){
+								$( ".spinner-component", self.getDOMNode( ) ).spin( );
+							}
+						} );
+
+					this.scope.on( "hide-spinner",
+						function onShowSpinner( thisNamespace ){
+							if( thisNamespace == namespace ){
+								$( ".spinner-component", self.getDOMNode( ) ).spin( false );
+							}
+						} );
+				},
+
 				"componentWillMount": function componentWillMount( ){
 					this.scope = this.props.scope;
+
+					this.attachAllComponentEventListener( );
 				},
 
 				"render": function onRender( ){
@@ -27,18 +50,11 @@ angular.module( "Spinner", [ "Event", "PageFlow" ] )
 				},
 
 				"componentDidMount": function componentDidMount( ){
-					var namespace = this.props.namespace;
-
-					var spinnerReference = [ 
-						[ ".", namespace ].join( "" ),
-						".spinner-component" 
-					].join( " " );
-
-					$( spinnerReference ).spin( false );
-
 					this.scope.publish( "spinner-rendered" );	
 				}
 			} );
+
+			return Spinner;
 		}
 	] )
 
@@ -76,6 +92,8 @@ angular.module( "Spinner", [ "Event", "PageFlow" ] )
 							scope.hidePage( );	
 						}
 					} );
+
+				scope.publish( "hide-spinner", namespace );
 
 				Spinner.attach( scope, element, namespace );
 			};

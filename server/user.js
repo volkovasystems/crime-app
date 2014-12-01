@@ -134,6 +134,12 @@ app.get( "/verify/access/:accessID",
 					unirest
 						.get( requestEndpoint )
 						.end( function onResponse( response ){
+							if( !response.body ){
+								callback( null, new Error( "no response from facebook" ), userData );
+
+								return;
+							}
+
 							var responseData = JSON.parse( response.body );
 
 							if( "error" in responseData ){
@@ -371,7 +377,7 @@ app.post( "/api/:accessID/user/update",
 						} );
 
 				}else{
-					report
+					response
 						.status( 200 )
 						.json( {
 							"status": "success"

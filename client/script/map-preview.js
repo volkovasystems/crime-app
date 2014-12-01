@@ -18,7 +18,7 @@ angular.module( "MapPreview", [ "MapView" ] )
 		function factory( getGoogleAPIKey, DEFAULT_POSITION, DEFAULT_MAP_ZOOM ){
 			var MapPreview = React.createClass( {
 				statics: {
-					"constructStaticMapURL": function constructStaticMapURL( position, zoom ){
+					"constructStaticMapURL": function constructStaticMapURL( position, zoom, pinIconURL, width, height ){
 						var latitude = position.lat( );
 						var longitude = position.lng( );
 
@@ -31,13 +31,10 @@ angular.module( "MapPreview", [ "MapView" ] )
 
 							[ "zoom", zoom ].join( "=" ),
 
-							[ "size", [ 500, 400 ].join( "x" ) ].join( "=" ),
+							[ "size", [ width || 500, height || 400 ].join( "x" ) ].join( "=" ),
 
 							[ "markers", 
-								[
-									[ "color", "red" ].join( ":" ),
-									[ latitude, longitude ].join( "," ) 
-								].join( "%7C" )
+								[ "icon", pinIconURL ].join( ":" )
 							].join( "=" ),
 
 							[ "key", getGoogleAPIKey( ) ].join( "=" )
@@ -53,12 +50,12 @@ angular.module( "MapPreview", [ "MapView" ] )
 
 				"getDefaultProps": function getDefaultProps( ){
 					return {
-						"title": "",
 						"position": DEFAULT_POSITION,
 						"zoom": DEFAULT_MAP_ZOOM,
-						"address": "",
-						"parent": null,
-						"staticMapURL": "#"
+						"pinIconURL": "#",
+						"staticMapURL": "#",
+						"height": 400,
+						"width": 500
 					};
 				},
 
@@ -71,7 +68,13 @@ angular.module( "MapPreview", [ "MapView" ] )
 
 					var zoom = this.props.zoom || DEFAULT_MAP_ZOOM;
 
-					var staticMapURL = MapPreview.constructStaticMapURL( position, zoom );
+					var pinIconURL = this.props.pinIconURL || "#";
+
+					var width = this.props.width;
+
+					var height = this.props.height;
+
+					var staticMapURL = MapPreview.constructStaticMapURL( position, zoom, pinIconURL, width, height );
 
 					this.setState( {
 						"staticMapURL": staticMapURL
@@ -79,91 +82,9 @@ angular.module( "MapPreview", [ "MapView" ] )
 				},
 
 				"render": function onRender( ){
-					var title = this.props.title;
-
-					var address = this.props.address;
-
-					var position = this.props.position || DEFAULT_POSITION;
-
 					var staticMapURL = this.getStaticMapURL( );
 
-					var latitude = position.lat( );
-					var longitude = position.lng( );
-
-					var formatOption = { "notation": "fixed", "precision": 4 };
-					latitude = math.format( latitude, formatOption );
-					longitude = math.format( longitude, formatOption );
-
-					return (
-						<div 
-							className={ [
-								"map-preview-component"
-							].join( " " ) } >
-
-							<label 
-								style={
-									{
-										"display": ( _.isEmpty( title )? "none" : "block" ),
-										"width": "inherit"
-									}
-								}>
-								{ title.toUpperCase( ) }
-							</label>
-
-							<div
-								className={ [
-									"map-image"
-								].join( " " ) }
-								style={
-									{
-										"width": "100%",
-										"height": "250px",
-										"backgroundImage": "url( \"@mapURL\" )".replace( "@mapURL", staticMapURL ),
-										"backgroundPosition": "center center",
-										"backgroundSize": "100%",
-										"backgroundRepeat": "no-repeat"
-									}
-								}>
-							</div>
-
-							<p 
-								className={ [ 
-									"map-address",
-									"information",
-									"main-heading"
-								].join( " " ) }
-								style={
-									{
-										"marginTop": "5px"
-									}
-								}>
-								{ address }
-							</p>
-
-							<p
-								className={ [
-									"map-location",
-									"information",
-									"sub-heading"
-								].join( " " ) }>
-								( { latitude + "\u00b0" }, { longitude + "\u00b0" } )
-							</p>
-						</div>
-					);
-				},
-
-				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-					if( prevState.staticMapURL != this.state.staticMapURL ||
-						prevProps.staticMapURL != this.props.staticMapURL )
-					{
-						this.props.parent.setState( {
-							"staticMapURL": this.getStaticMapURL( )
-						} );
-					}
-
-					if( !_.isEqual( prevProps.position, this.props.position ) ){
-						this.updateStaticMapImage( );
-					}
+					return; //: @template: template/map-preview.html
 				},
 
 				"componentDidMount": function componentDidMount( ){

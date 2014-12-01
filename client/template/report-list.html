@@ -1,80 +1,28 @@
-<div 
-	className={ [
-		"report-list-container",
-		componentState
-	].join( " " ) }>
+<section className="feeder-menu card">
+	<section className="icon-container">
+	<a className="icon md-3x feeder-menu-icon md-track-changes"></a>
+	</section>
 
-	<div
-		className={ [
-			"report-list-component",
-			componentState
-		].join( " " ) }>
+	<section 
+	className="feedbar card">
+ 	<section 
+ 		className="toolbar">
+		
+		<h5 
+			className="headline">
+			{ REPORT_LIST_HEADER_LABEL }
+			
+			<section className="close-action pull-right">
+    <a className="md-close icon" href="#">
+  </a></section>
+		</h5>
+	</section>
 
-		<div 
-			className={ [
-				"report-list-header"
-			].join( " " ) }>
-			<div
-				className={ [
-					"header-icon",
-					"shown",
-					"inline-block"
-				].join( " " ) }>
-				<Icon name="ic_report_problem_24px" />
-			</div>
+	<section className="feed-streams">
+		{ reportList.map( this.onEachReportItem ) }
+	</section>
+  
+</section>
 
-			<div
-				className={ [
-					"header-title",
-					"shown",
-					"inline-block"
-				].join( " " ) }>
-				<span>
-					{ REPORT_LIST_HEADER_LABEL.toUpperCase( ) }
-				</span>
-			</div>
+</section>
 
-			<div 
-				className={ [
-					"close-report-list-button",
-					"shown",
-					"inline-block"
-				].join( " " ) }
-				onClick={ this.onClickCloseReportListButton }>
-				<a 
-					className={ [
-						"action-element"
-					].join( " " ) }
-					href={ [
-						"#",
-						"close-report-list"
-					].join( "/" ) }
-					style={
-						{
-							"display": "block"
-						}
-					}>
-					
-					<Icon
-						className={ [
-							"close-report-list-icon"
-						].join( " " ) }
-						name="ic_close_24px" />
-				</a>
-			</div>
-		</div>
-
-		<div
-			className={ [
-				"report-list-body"
-			].join( " " ) }>
-
-			<ul 
-				className={ [
-					"list-container" 
-				].join( " " ) }>
-				{ reportList.map( this.onEachReportItem ) }
-			</ul>
-		</div>
-	</div>
-</div>

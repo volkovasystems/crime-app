@@ -118,7 +118,6 @@ Crime
 						var userData = [
 							[ "userID", 		userAccountData.userID ],
 							[ "profileName", 	userProfileData.profileName ],
-							[ "profileEMail", 	userProfileData.profileEMail ],
 							[ "profileURL", 	userProfileData.cleanProfileURL ],
 							[ "profileImage", 	userProfileData.cleanProfileImage ]
 						];
@@ -239,6 +238,11 @@ Crime
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){
 							scope.publish( "hide-login" );
+						} );
+
+					scope.on( "dash-clicked:logout",
+						function onNavigateLogout( ){
+							
 						} );
 				}
 			}

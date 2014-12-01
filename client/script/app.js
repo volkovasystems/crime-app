@@ -1,26 +1,26 @@
 angular
 	.module( "App", [
 		"angular-loading-bar",
-		"ui.bootstrap", 
 		"ProgressBar",
 		"Event",
 		"Home",
-		"Forehead",
-		"Dashbar",
 		"Control",
+		"ZoomControl",
+		"ReportControl",
+		"ConfirmLocationControl",
 		"Login",
-		"Profile",
+		"Dashbar",
 		"Search",
 		"MapView",
 		"MapLocate",
 		"MapPointer",
 		"MapMarker",
+		"MapInfoPin",
 		"Report",
 		"ReportList",
 		"CaseCategoryList",
 		"Notify",
-		"ImageUpload",
-		"ReportTable"
+		"ImageUpload"
 	] )
 	.run( [
 		"$rootScope",
@@ -63,20 +63,8 @@ angular
 							callback( ); 
 					} );
 				},
-				/*function checkRender( callback ){
-					$rootScope.on( "forehead-rendered", 
-						function onRendered( ){ 
-							callback( ); 
-						} );
-				},*/
 				function checkRender( callback ){
 					$rootScope.on( "login-rendered", 
-						function onRendered( ){ 
-							callback( ); 
-						} );
-				},
-				function checkRender( callback ){
-					$rootScope.on( "profile-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
@@ -124,7 +112,19 @@ angular
 						} );
 				},
 				function checkRender( callback ){
-					$rootScope.on( "report-table-rendered", 
+					$rootScope.on( "zoom-control-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "report-control-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "confirm-location-control-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );

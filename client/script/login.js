@@ -1,14 +1,6 @@
-angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ] )
-
-	.value( "LOGGED_IN_PROMPT", labelData.LOGGED_IN_PROMPT )
-
-	.value( "LOGGING_IN_PROMPT", labelData.LOGGING_IN_PROMPT )
-
-	.value( "LOGIN_ERROR_PROMPT", labelData.LOGIN_ERROR_PROMPT )
+angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", "Spinner" ] )
 
 	.value( "LOGIN_LABEL", labelData.LOGIN_LABEL )
-
-	.value( "PROCEED_LABEL", labelData.PROCEED_LABEL )
 
 	.constant( "FACEBOOK_LOGIN_TYPE", "facebook" )
 
@@ -22,26 +14,20 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 		"$rootScope",
 		"APP_LOGO_IMAGE_SOURCE",
 		"FACEBOOK_LOGIN_TYPE",
-		"LOGGING_IN_PROMPT",
-		"LOGGED_IN_PROMPT",
-		"LOGIN_ERROR_PROMPT",
 		"LOGIN_LABEL",
-		"PROCEED_LABEL",
 		"POPUP_LOGIN_FLOW",
 		"REDIRECT_LOGIN_FLOW",
+		"attachSpinner",
 		function factory(
 			Store,
 			Event,
 			$rootScope,
 			APP_LOGO_IMAGE_SOURCE, 
 			FACEBOOK_LOGIN_TYPE,
-			LOGGING_IN_PROMPT,
-			LOGGED_IN_PROMPT,
-			LOGIN_ERROR_PROMPT,
 			LOGIN_LABEL,
-			PROCEED_LABEL,
 			POPUP_LOGIN_FLOW,
-			REDIRECT_LOGIN_FLOW
+			REDIRECT_LOGIN_FLOW,
+			attachSpinner
 		){
 			Event( $rootScope );
 
@@ -181,8 +167,6 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 					return {
 						"appLogoImageSource": APP_LOGO_IMAGE_SOURCE,
 
-						"loginPrompt": "",
-						
 						"loginType": FACEBOOK_LOGIN_TYPE,
 						"loginFlow": REDIRECT_LOGIN_FLOW,
 
@@ -203,6 +187,8 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 						function initiateLoading( callback ){
 							self.scope.startLoading( );
 
+							self.scope.notify( "show-spinner", "login-spinner" );
+
 							callback( );
 						},
 
@@ -212,8 +198,7 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 
 							}else{
 								self.setState( {
-									"loginState": "logging-in",
-									"loginPrompt": LOGGING_IN_PROMPT
+									"loginState": "logging-in"
 								}, function onSetState( ){
 									callback( );
 								} );	
@@ -265,8 +250,7 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 						function lastly( state, response ){
 							if( state === "has-logged-in" ){
 								self.setState( {
-									"loginState": "logged-in",
-									"loginPrompt": LOGGED_IN_PROMPT
+									"loginState": "logged-in"
 								} );
 
 								callback( null, true );
@@ -275,12 +259,13 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 								self.scope.publish( "error", "login-error", error, response );
 								
 								self.setState( {
-									"loginState": "login-error",
-									"loginPrompt": LOGIN_ERROR_PROMPT
+									"loginState": "login-error"
 								} );
 
 								callback( state, false );
 							}
+
+							self.scope.notify( "hide-spinner", "login-spinner" );
 
 							self.scope.finishLoading( );							
 						} );
@@ -288,14 +273,7 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 
 				"onClickLogin": function onClickLogin( event ){
 					if( this.state.loginState == "logged-out" ){
-						this.initiateLoginProcedure( );
-						
-					}else if( this.state.loginState == "logged-in" ){
-						this.scope.publish( "proceed-default-app-flow", {
-							"loginType": this.state.loginType,
-							"userID": this.state.userID,
-							"accessToken": this.state.accessToken
-						} );
+						this.initiateLoginProcedure( );	
 					}
 				},
 
@@ -345,8 +323,7 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 					this.scope.on( "set-logging-in-state",
 						function onSetLoggingInState( ){
 							self.setState( {
-								"loginState": "logging-in",
-								"loginPrompt": LOGGING_IN_PROMPT
+								"loginState": "logging-in"
 							} );
 						} );
 				},
@@ -366,8 +343,6 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 
 					var loginType = this.state.loginType;
 					
-					var loginPrompt = this.state.loginPrompt;
-					
 					var loginState = this.state.loginState;
 					
 					var componentState = this.state.componentState;
@@ -382,6 +357,12 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home" ]
 				},
 
 				"componentDidMount": function componentDidMount( ){
+					attachSpinner( {
+						"scope": this.scope,
+						"element": $( ".login-spinner", this.getDOMNode( ) ),
+						"namespace": "login-spinner"
+					} );
+
 					this.scope.broadcast( "login-rendered" );	
 				}
 			} );

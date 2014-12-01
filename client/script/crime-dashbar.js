@@ -20,10 +20,6 @@ Crime
 							"title": labelData.MY_REPORT_DASHBAR_LABEL
 						},
 						{
-							"name": "report-table",
-							"title": labelData.REPORT_TABLE_DASHBAR_LABEL
-						},
-						{
 							"name": "logout",
 							"title": labelData.LOGOUT_DASHBAR_LABEL
 						}
@@ -41,16 +37,16 @@ Crime
 				"priority": 1,
 				"link": function onLink( scope, element, attribute ){
 					scope.dashItemIconSet = {
-						"profile": "ic_account_circle_24px",
-						"report-table": "ic_account_circle_24px",
-						"report": "ic_report_problem_24px",
-						"my-report": "ic_view_list_24px",
-						"logout": "ic_home_24px"
+						"profile": "md-person",
+						"report": "md-report",
+						"my-report": "md-list",
+						"logout": "md-exit-to-app"
 					};
 				}
 			};
 		}
 	] )
+
 	.directive( "dashbarController", [
 		"Event",
 		function directive( Event ){

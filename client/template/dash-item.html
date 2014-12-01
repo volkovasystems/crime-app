@@ -1,38 +1,20 @@
-<div 
-	key={ key }
-	className={
-		[
-			"dash-item",
-			( isDisabled )? "disabled" : "",
-			( isHidden )? "hidden" : "shown",
-			componentState
-		].join( " " )
-	}
+<li 
+	key={ key } 
+	className="menu-item-list"
 	onClick={ this.onDashbarItemClick } 
 	value={ dashItemName }>
 	<a 
-		className={ [
-			"action-element"
-		].join( " " ) }
-		href={ [
-			"#",
-			dashItemName
-		].join( "/" ) }>
-
-		<div
+		className="menu-item">
+		<i 
 			className={ [
-				"dash-item-icon"
-			].join( " " ) } >
-			<Icon name={ dashItemIcon } />
-		</div>
-
-		<div
-			className={ [
-				"dash-item-label"
+				"md-2x",
+				dashItemIcon,
+				"icon"
 			].join( " " ) }>
-			<span>
-				{ dashItemTitle.toUpperCase( ) }
-			</span>
-		</div>
+		</i>
+
+		<span> 
+			{ dashItemTitle.toUpperCase( ) }
+		</span>
 	</a>
-</div>
+</li>

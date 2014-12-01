@@ -1,0 +1,74 @@
+.profile
+{
+    position: relative;
+
+    padding: 20px;
+
+    background-color: #eee;
+    .edit-action
+    {
+        position: absolute;
+        right: 15px;
+        bottom: 30px;
+    }
+    .close-action
+    {
+        position: absolute;
+        top: 20px;
+        right: 15px;
+    }
+    .edit-action a,
+    .close-action a
+    {
+        text-decoration: none;
+    }
+    .edit-action .icon,
+    .close-action .icon
+    {
+        color: #c8c8c8;
+    }
+    .edit-avatar
+    {
+        margin: 15px auto;
+        padding: 20px;
+        .edit-avatar-action
+        {
+            width: 100%;
+        }
+    }
+    .avatar
+    {
+        width: 150px;
+        height: 150px;
+        .img
+        {
+            width: 100%;
+            height: 100%;
+
+            border-radius: 50%;
+        }
+    }
+    .profile-teaser
+    {
+        .avatar
+        {
+            width: 100px;
+            height: 100px;
+        }
+        .profile-detail-teaser
+        {
+            padding: 20px 0 10px;
+            p
+            {
+                margin: 0;
+                padding: 0 0 0;
+
+                color: @body-copy-color-light;
+            }
+            .name
+            {
+                font-weight: bold;
+            }
+        }
+    }
+}

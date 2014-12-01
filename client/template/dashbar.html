@@ -1,83 +1,42 @@
-<div 
-	className={ [
-		"dashbar-container",
-		componentState
-	].join( " " ) }>
+<section 
+	className="main-menu card">
 
-	<div 
-		className={ [
-			"dashbar-minified-button",
-			"dash-item",
-			componentState
-		].join( " " ) }
-		onClick={ this.onMinifiedButtonClick }>
+	<section 
+		className="icon-container">
 		<a 
-			className={ [
-				"action-element"
-			].join( " " ) }
-			href={ [
-				"#",
-				"open-dashbar"
-			].join( "/" ) }>
-			
-			<div
-				className={ [ 
-					"dash-item-icon" 
-				].join( " " ) }>
-				<Icon 
-					className={ [
-						"dashbar-minified-icon"
-					].join( " " ) } 
-					name="ic_menu_24px" />
-			</div>
+			className="icon md-3x main-menu-icon md-menu" 
+			onClick={ this.onMinifiedButtonClick }>
 		</a>
-	</div>
+	</section>
 
-	<div 
+	<section 
 		className={ [
-			"dash-header-item",
-			"dash-item",
-			"dashbar-close-button",
-			componentState
-		].join( " " ) }
-		onClick={ this.onDashbarHeaderItemClick }>
-		<a 
-			className={ [
-				"action-element"
-			].join( " " ) }
-			href={ [
-				"#",
-				"close-dashbar"
-			].join( "/" ) }>
-
-			<div
-				className={ [ 
-					"dash-item-icon" 
-				].join( " " ) }>
-				<Icon 
-					className={ [
-						"dashbar-close-icon"
-					].join( " " ) } 
-					name="ic_close_24px" />
-			</div>
-			
-			<div
-				className={ [
-					"dashbar-header-label",
-					"dash-item-label"
-				].join( " " ) }>
-				<span>
-					CLOSE
-				</span>
-			</div>
-		</a>
-	</div>
-
-	<div
-		className={ [
-			"dash-list",
-			componentState
+			"card",
+			"main-menu-expanded",
+			( componentState == "dashbar-listed" )? "show": ""
 		].join( " " ) }>
-		{ dashList.map( this.onEachDashItem ) }
-	</div>
-</div>
+		<section 
+			className={ [
+				"card-container",
+				dashbarState
+			].join( " " ) }>
+
+			<section 
+				className="profile dashbar-profile">
+			</section>
+
+			<section 
+				className="menu-dashboard">
+				<ul 
+					className="menu">
+					{ dashList.map( this.onEachDashItem ) }
+				</ul>
+			</section>
+
+		</section>
+
+		<section 
+			className="card-container dashbar-profile-setting">
+		</section>
+	</section>
+</section>

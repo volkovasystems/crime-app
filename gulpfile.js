@@ -116,6 +116,11 @@ gulp.task( "copy-library",
 				"bower_components/*/build/**/*.css",
 				"bower_components/URIjs/src/*.js",
 				"bower_components/history.js/scripts/compressed/*.js",
+				"bower_components/*/css/*.css",
+				"bower_components/*/fonts/*.eot",
+				"bower_components/*/fonts/*.svg",
+				"bower_components/*/fonts/*.ttf",
+				"bower_components/*/fonts/*.woff",
 				"!bower_components/mathjs/lib/**/*.js",
 				"!**/Gruntfile.js",
 				"!**/index.js"
@@ -359,6 +364,7 @@ gulp.task( "watch",
 		gulp.watch( [ 
 			"client/script/**", 
 			"client/style/**", 
+			"client/template/**",
 			"client/index.html" 
 		], 
 		[ "reload" ] );
@@ -379,6 +385,7 @@ gulp.task( "serverless-watch",
 		gulp.watch( [ 
 			"client/script/**", 
 			"client/style/**", 
+			"client/template/**",
 			"client/index.html" 
 		], 
 		[ "reload" ] );

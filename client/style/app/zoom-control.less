@@ -1,0 +1,39 @@
+.zoom-control
+{
+    & > & {
+        margin: 0;
+        position: relative;
+    }
+    top: 10%;
+    left: 0;
+
+    position: absolute;
+
+    width: 60px;
+    height: 120px;
+    margin: 20px;
+    .control-container
+    {
+        .card
+        {
+            .transition-mixin();
+            &:last-child
+            {
+                margin: 5px 0 0;
+            }
+            &:hover,
+            &:active
+            {
+                .box-shadow-mixin(3);
+            }
+        }
+        .icon
+        {
+            display: block;
+
+            width: 60px;
+            height: 60px;
+            padding: 15px;
+        }
+    }
+}

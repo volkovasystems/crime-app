@@ -18,6 +18,16 @@ Crime
 						function onMapPointerDragged( mapPointer ){
 							scope.mapComponent.setCenter( mapPointer.getPosition( ) );
 						} );
+
+					scope.on( "proceed-default-app-flow",
+						function onProceedDefaultAppFlow( ){
+							scope.publish( "create-map-pointer", "../image/map-pointer.png" );
+						} );
+
+					scope.on( "report-control-clicked:report",
+						function onReportControlClicked( ){
+							scope.publish( "show-map-pointer" );
+						} );
 				}
 			}
 		}

@@ -1,8 +1,10 @@
-angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
+angular.module( "Dashbar", [ "PageFlow", "Event", "Icon", "Profile", "ProfileSetting" ] )
 
 	.factory( "Dashbar", [
 		"Icon",
-		function factory( Icon ){
+		"attachProfile",
+		"attachProfileSetting",
+		function factory( Icon, attachProfile, attachProfileSetting ){
 			var Dashbar = React.createClass( {
 				"statics": {
 					"dashList": [ ],
@@ -49,6 +51,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 						"dashItemIconSet": null,
 						"hiddenDashItemList": null,
 						"disabledDashItemList": null,
+						"dashbarState": "dashbar-main-view",
 						"componentState": "dashbar-minified"
 					};
 				},
@@ -142,6 +145,20 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 							self.setComponentState( "dashbar-listed" );
 						} );
 
+					this.scope.on( "show-dashbar-sub-view",
+						function onShowDashbarSubView( ){
+							self.setState( {
+								"dashbarState": "dashbar-sub-view"
+							} );
+						} );
+
+					this.scope.on( "show-dashbar-main-view",
+						function onShowDashbarMainView( ){
+							self.setState( {
+								"dashbarState": "dashbar-main-view"
+							} );
+						} );
+
 					this.scope.on( "set-hidden-dash-item-list",
 						function onSetHiddenDashItemList( hiddenDashItemList ){
 							self.setState( {
@@ -164,6 +181,8 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 				},
 
 				"render": function onRender( ){
+					var dashbarState = this.state.dashbarState; 
+
 					var componentState = this.state.componentState;
 
 					var dashList = this.getDashList( );
@@ -172,6 +191,16 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 				},
 
 				"componentDidMount": function componentDidMount( ){
+					attachProfile( {
+						"scope": this.scope,
+						"element": $( ".dashbar-profile", this.getDOMNode( ) )
+					} );
+
+					attachProfileSetting( {
+						"scope": this.scope,
+						"element": $( ".dashbar-profile-setting", this.getDOMNode( ) )
+					} );
+
 					this.scope.broadcast( "dashbar-rendered" );	
 				}
 			} );
@@ -197,7 +226,7 @@ angular.module( "Dashbar", [ "PageFlow", "Event", "Icon" ] )
 
 				Event( scope );
 
-				PageFlow( scope, element, "dashbar" );
+				PageFlow( scope, element, "dashbar overflow" );
 
 				scope.on( "show-minified-dashbar",
 					function onShowMinifiedDashbar( ){
