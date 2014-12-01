@@ -13,12 +13,12 @@ var labelData = {
 	"NAME_PLACEHOLDER": "Your Name here",
 	"EMAIL_LABEL": "Email",
 	"EMAIL_PLACEHOLDER": "Your Email here",
-	"UPDATE_BUTTON_LABEL": "update",
-	"CANCEL_BUTTON_LABEL": "cancel",
+	"UPDATE_BUTTON_LABEL": "Update",
+	"CANCEL_BUTTON_LABEL": "Cancel",
 	"USER_AVATAR_ALTERNATIVE": "My Avatar",
 	"CHANGE_AVATAR_LABEL": "Change Avatar",
 
-	"SEARCH_PLACEHOLDER": "Search",
+	"SEARCH_PLACEHOLDER": "Search Address",
 
 	"USER_UPDATE_SUCCESS_PROMPT": "Your profile is updated.",
 	"USER_UPDATE_FAILED_PROMPT": "Sorry, your profile is not updated properly.",
@@ -28,7 +28,8 @@ var labelData = {
 	"USER_GET_ERROR_PROMPT": "We've encountered an error while updating your profile.",
 
 	"REPORT_CONTROL_LABEL": "Report a Crime",
-	"CONFIRM_LOCATION_CONTROL_LABEL": "Confirm location",
+	"CONFIRM_LOCATION_CONTROL_LABEL": "Confirm",
+	"CANCEL_LOCATION_CONTROL_LABEL": "Cancel",
 
 	"REPORT_CASE_TITLE_PHRASE": "Incident",
 	"DATE_AND_TIME_LABEL": "Date and Time",
@@ -42,7 +43,7 @@ var labelData = {
 	"INCIDENT_DETAIL_PROGRESS_LABEL": "Incident Details",
 	"REPORT_FINAL_PROGRESS_LABEL": "Thank you!",
 
-	"CONFIRM_BUTTON_LABEL": "confirm",
+	"CONFIRM_BUTTON_LABEL": "Confirm",
 	"CLOSE_BUTTON_LABEL": "close",
 	"MY_REPORT_BUTTON_LABEL": "My Reports",
 	"TITLE_LABEL": "Title",
