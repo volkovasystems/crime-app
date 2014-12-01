@@ -14,7 +14,7 @@ angular
 				"statics": {
 					"attach": function attach( scope, container ){
 
-						React.render( <ReportTableList scope={ scope }/>, container[ 0 ] );
+						React.render( <ReportTableList scope={ scope } />, container[ 0 ] );
 
 						return this;
 					}					
@@ -37,17 +37,18 @@ angular
 				},
 
 				"componentWillMount": function componentWillMount( ){										
-					this.scope = this.props.scope;
+					this.scope = this.props.report;
+					this.parentScope = this.props.scope;
 
 					this.attachAllComponentEventListener( );
 				},
 
 				"onReportStateAccept": function onReportStateSet ( ) {
-					this.onReportStateSet( "accept" );
+					this.onReportStateSet( "approved" );
 				},
 
 				"onReportStateReject": function onReportStateSet ( ) {
-					this.onReportStateSet( "reject" );
+					this.onReportStateSet( "rejected" );
 				},
 
 				"onReportStateSet": function onReportStateSet ( state ) {					
@@ -64,9 +65,9 @@ angular
 					} );
 				},
 
-				"updateReport": function updateReport ( ) {
-					alert("Send");
-					console.log(this.state.report);
+				"updateReport": function updateReport ( ) {										
+					this.parentScope.publish( "update-report-data" , this.state.report );
+
 					this.setState( {
 						report: null
 					} );					
@@ -91,22 +92,22 @@ angular
 							</td>
 							<td>
 								<input type="button" 
-									   disabled={ reportData.reportState == "accept" } 
+									   disabled={ reportData.reportState == "approved" } 
 									   name="reportStatusAccept" 
-									   value="Accept"
+									   value="Approve"
 									   onClick={ this.onReportStateAccept }
 									   className={ [
 									   		"btn",
-											( reportData.state == "accept" ) ? "disabled" : 'enabled'
+											( reportData.state == "approved" ) ? "disabled" : 'enabled'
 										].join( " " ) }/>
 								<input type="button" 
-									   disabled={ reportData.reportState == "reject" } 
+									   disabled={ reportData.reportState == "rejected" } 
 									   name="reportStatusReject" 
 									   value="Reject" 
 									   onClick={ this.onReportStateReject }
 									   className={ [
 									   		"btn",
-											( reportData.state == "reject" ) ? "disabled" : 'enabled'
+											( reportData.state == "rejected" ) ? "disabled" : 'enabled'
 										].join( " " ) } />
 
 								<input type="button" 
@@ -179,7 +180,7 @@ angular
 
 				"onEachReportItem": function onEachReportItem( reportData ){
 					return (
-						<ReportTableList scope={reportData} />
+						<ReportTableList scope={this.scope} report={reportData} />
 					);
 				},
 

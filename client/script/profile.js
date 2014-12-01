@@ -24,7 +24,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 
 						async.parallel( [
 							function requestProfileData( callback ){
-								FB.api( "/me",
+								FB.api( "/me",									
 									function onResponse( response ){
 										if( response.error ){
 											callback( response.error, response );
@@ -36,7 +36,7 @@ angular.module( "Profile", [ "Event", "PageFlow", "Icon" ] )
 
 											callback( null, response );
 										}
-									} );
+									} );								
 							},
 
 							function requestProfilePhoto( callback ){

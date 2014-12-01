@@ -45,10 +45,10 @@ Crime
 
 									requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 									
-									callback( null, requestEndpoint );
+									callback( null, requestEndpoint , accessID );
 								},
 
-								function getReportListFromServer( requestEndpoint, callback ){
+								function getReportListFromServer( requestEndpoint, adminAccessID, callback ){
 									$http.get( requestEndpoint )
 										.success( function onSuccess( response, status ){
 											if( response.status == "failed" ){
@@ -140,16 +140,71 @@ Crime
 								function lastly ( err , reports )	{
 									var reportList = [];
 									
-									_(reports)
-									.map(function each ( report ) {
-										reportList = reportList.concat(report.data);
-										return report;
-									} );
+									for (var index = 0 , len = reports.length ; index < len ; index ++) {
+										reports[index].data
+											.map( function each ( data ) {
+												data.accessID = users[index].accessID;
+												return data;
+											} );
+										reportList = reportList.concat(reports[index].data);
+									}
+									console.log(reportList);
 									scope.publish( "set-report-table-list" , reportList );
 									scope.finishLoading( );
 								}
 							 );
-						} );																			
+						} );
+
+					scope.on( "update-report-data", 
+						function onUpdate ( report ) {
+							async.waterfall( [
+								function initiateLoading( callback ){
+									scope.startLoading( );
+
+									callback( );
+								},
+
+								function getUserData( callback ){
+									scope.publish( "get-user-account-data",
+										function onGetUserAccountData( error, userAccountData ){
+											callback( error, userAccountData );
+										} );
+								},								
+
+								function processUserData( userAccountData, callback ){									
+
+									var accessID = btoa( userAccountData.accessToken ).replace( /[^A-Za-z0-9]/g, "" );
+
+									callback( null , accessID );
+								},
+
+								function processRequestEndpoint( adminAccessID, callback ){									
+									var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/:reportID/update" );
+
+									requestEndpoint = requestEndpoint.replace( ":accessID", report.accessID );
+									requestEndpoint = requestEndpoint.replace( ":reportID", report.reportID );
+									console.log(requestEndpoint);
+									callback( null, requestEndpoint, adminAccessID );
+								},
+
+								function updateReportData ( requestEndpoint , adminAccessID , callback ) {
+									report.adminAccessID = adminAccessID;
+									$http.post( requestEndpoint , report ) 
+										.success ( function onSuccess ( response ) {
+											callback ( null , response )
+										} )
+										.error( function onError ( response ) {
+											callback ( null , response );
+										} );
+								}
+
+							],
+								function lastly ( err , updatedReport )	{
+									console.log( updatedReport );
+									scope.finishLoading( );
+								}
+							 );
+						} )	;																		
 				}
 			}
 		}
