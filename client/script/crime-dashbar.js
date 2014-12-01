@@ -16,6 +16,10 @@ Crime
 							"title": labelData.REPORT_DASHBAR_LABEL
 						},
 						{
+							"name": "report-table",
+							"title": labelData.REPORT_TABLE_DASHBAR_LABEL
+						},
+						{
 							"name": "my-report",
 							"title": labelData.MY_REPORT_DASHBAR_LABEL
 						},
@@ -39,6 +43,7 @@ Crime
 					scope.dashItemIconSet = {
 						"profile": "md-person",
 						"report": "md-report",
+						"report-table": "md-list",
 						"my-report": "md-list",
 						"logout": "md-exit-to-app"
 					};

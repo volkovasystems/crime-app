@@ -8,6 +8,7 @@ var labelData = {
 	"REPORT_DASHBAR_LABEL": "Reports",
 	"MY_REPORT_DASHBAR_LABEL": "My Reports",
 	"LOGOUT_DASHBAR_LABEL": "Logout",
+	"REPORT_TABLE_DASHBAR_LABEL": "Report Table",
 
 	"NAME_LABEL": "Name",
 	"NAME_PLACEHOLDER": "Your Name here",

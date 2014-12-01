@@ -18,6 +18,7 @@ angular
 		"MapInfoPin",
 		"Report",
 		"ReportList",
+		"ReportTable",
 		"CaseCategoryList",
 		"Notify",
 		"ImageUpload"
@@ -125,6 +126,12 @@ angular
 				},
 				function checkRender( callback ){
 					$rootScope.on( "confirm-location-control-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+				function checkRender( callback ){
+					$rootScope.on( "report-table-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
