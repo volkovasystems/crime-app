@@ -15,7 +15,7 @@ angular.module( "ConfirmLocationControl", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickConfirmLocation": function onClickReport( ){
-					this.scope.publish( "confirm-location-control-clicked:confirm-location" );
+					this.scope.publish( "confirm-location-control-click:confirm-location" );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){

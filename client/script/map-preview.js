@@ -15,16 +15,18 @@ angular.module( "MapPreview", [ "MapView" ] )
 		"getGoogleAPIKey",
 		"DEFAULT_POSITION",
 		"DEFAULT_MAP_ZOOM",
-		function factory( getGoogleAPIKey, DEFAULT_POSITION, DEFAULT_MAP_ZOOM ){
+		function factory( 
+			getGoogleAPIKey, 
+			DEFAULT_POSITION, 
+			DEFAULT_MAP_ZOOM
+		){
 			var MapPreview = React.createClass( {
 				statics: {
 					"constructStaticMapURL": function constructStaticMapURL( position, zoom, pinIconURL, width, height ){
 						var latitude = position.lat( );
 						var longitude = position.lng( );
 
-						return [
-							"https://maps.googleapis.com/maps/api/staticmap?",
-							
+						var queryString = [
 							[ "center", 
 								[ latitude, longitude ].join( "," ) 
 							].join( "=" ),
@@ -34,11 +36,26 @@ angular.module( "MapPreview", [ "MapView" ] )
 							[ "size", [ width || 500, height || 400 ].join( "x" ) ].join( "=" ),
 
 							[ "markers", 
-								[ "icon", pinIconURL ].join( ":" )
+								[
+									( pinIconURL && production )?  
+										[ "icon", pinIconURL ].join( ":" ) :
+										[
+											[ "color", "blue" ].join( ":" ),
+											[ "label", "C" ].join( ":" )
+										].join( "|" ),
+									[ latitude, longitude ].join( "," )
+								].join( "|" )
 							].join( "=" ),
 
 							[ "key", getGoogleAPIKey( ) ].join( "=" )
 						].join( "&" );
+
+						var staticMapURL = [
+							"https://maps.googleapis.com/maps/api/staticmap",
+							URI.encodeReserved( queryString )
+						].join( "?" );
+
+						return staticMapURL;
 					},
 				},
 
@@ -52,8 +69,8 @@ angular.module( "MapPreview", [ "MapView" ] )
 					return {
 						"position": DEFAULT_POSITION,
 						"zoom": DEFAULT_MAP_ZOOM,
-						"pinIconURL": "#",
-						"staticMapURL": "#",
+						"pinIconURL": "../image/empty.png",
+						"staticMapURL": "../image/empty.png",
 						"height": 400,
 						"width": 500
 					};

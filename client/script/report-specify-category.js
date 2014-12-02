@@ -1,4 +1,4 @@
-angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "CaseCategoryList" ] )
+angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "CaseCategoryList", "MapView" ] )
 	
 	.constant( "REPORT_HEADER_TITLE", labelData.REPORT_HEADER_TITLE )
 
@@ -16,6 +16,8 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 
 	.factory( "ReportSpecifyCategory", [
 		"MapPreview",
+		"DEFAULT_POSITION",
+		"DEFAULT_MAP_ZOOM",
 		"attachCaseCategoryList",
 		"REPORT_HEADER_TITLE",
 		"SPECIFY_CATEGORY_PROGRESS_LABEL",
@@ -26,6 +28,8 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 		"WARN_IF_NO_SELECTED_CATEGORY",
 		function factory( 
 			MapPreview,
+			DEFAULT_POSITION, 
+			DEFAULT_MAP_ZOOM,
 			attachCaseCategoryList,
 			REPORT_HEADER_TITLE,
 			SPECIFY_CATEGORY_PROGRESS_LABEL,
@@ -52,7 +56,10 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 				"getInitialState": function getInitialState( ){
 					return {
 						"staticMapURL": "",
-						"selectedCaseCategory": ""
+						"selectedCaseCategory": "",
+						"latitude": DEFAULT_POSITION.lat( ),
+						"longitude": DEFAULT_POSITION.lng( ),
+						"zoom": DEFAULT_MAP_ZOOM
 					};
 				},
 
@@ -94,6 +101,16 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 								"selectedCaseCategory": self.state.selectedCaseCategory
 							} );
 						} );
+
+					this.scope.on( "show-report-specify-category",
+						function onShowReportSpecifyCategory( ){
+							self.scope.publish( "show-case-category-list", "report-specify-category" );
+						} );
+
+					this.scope.on( "hide-report-specify-category",
+						function onHideReportSpecifyCategory( ){
+							self.scope.publish( "hide-case-category-list", "report-specify-category" );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -122,7 +139,7 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 					var categoryIconPinSource = [ 
 						currentHostAddress, 
 						"image", 
-						[ "map-pointer.png" ].join( "-" ) 
+						"map-pointer.png"
 					].join( "/" );
 
 					return; //: @template: template/report-specify-category.html
@@ -146,7 +163,7 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 						var categoryIconPinSource = [ 
 							currentHostAddress, 
 							"image", 
-							[ "map-pointer.png" ].join( "-" ) 
+							"map-pointer.png"
 						].join( "/" );
 
 						this.setState( {
@@ -154,7 +171,7 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 								.constructStaticMapURL( 
 									position, 
 									this.state.zoom, 
-									"#",
+									categoryIconPinSource,
 									staticData.REPORT_MAP_PREVIEW_WIDTH,
 									staticData.REPORT_MAP_PREVIEW_HEIGHT )
 						} );
@@ -179,7 +196,7 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 						var categoryIconPinSource = [ 
 							currentHostAddress, 
 							"image", 
-							[ this.state.selectedCaseCategory[ 0 ], "marker.png" ].join( "-" ) 
+							[ this.state.selectedCaseCategory[ 0 ], "small", "marker.png" ].join( "-" ) 
 						].join( "/" );
 
 						this.setState( {
@@ -198,7 +215,8 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 					attachCaseCategoryList( {
 						"scope": this.scope,
 						"element": $( ".case-category-list", this.getDOMNode( ) ),
-						"onSelectCaseCategory": this.onSelectCaseCategory
+						"onSelectCaseCategory": this.onSelectCaseCategory,
+						"namespace": "report-specify-category"
 					} );
 
 					this.scope.publish( "report-specify-category-rendered" );

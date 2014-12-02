@@ -178,16 +178,20 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 				}
 
 				scope.on( "show-case-category-list",
-					function onShowCaseCategoryList( ){
-						scope.showPage( );
+					function onShowCaseCategoryList( namespace ){
+						if( optionSet.namespace == namespace ){
+							scope.showPage( );	
+						}
 					} );
 
 				scope.on( "hide-case-category-list",
-					function onHideCaseCategoryList( ){
-						scope.hidePage( );
+					function onHideCaseCategoryList( namespace ){
+						if( optionSet.namespace == namespace ){
+							scope.hidePage( );
+						}
 					} );
 
-				scope.publish( "hide-case-category-list" );
+				scope.publish( "hide-case-category-list", optionSet.namespace );
 
 				CaseCategoryList.attach( scope, element, {
 					"onSelectCaseCategory": optionSet.onSelectCaseCategory
