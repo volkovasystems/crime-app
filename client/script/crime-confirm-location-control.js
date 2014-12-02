@@ -45,7 +45,14 @@ Crime
 							}
 						} );
 
-					scope.on( "confirm-location-control-clicked:confirm-location",
+					scope.on( "confirm-location-control-click:confirm-location",
+						function onConfirmLocation( ){
+							scope.publish( "hide-confirm-location-control" );
+
+							scope.isReporting = false;
+						} );
+
+					scope.on( "confirm-location-control-click:cancel-location",
 						function onConfirmLocation( ){
 							scope.publish( "hide-confirm-location-control" );
 

@@ -34,6 +34,11 @@ Crime
 						function onMapViewRendered( ){
 							scope.publish( "create-map-pointer" );
 						} );
+
+					scope.on( "confirm-location-control-click:cancel-location",
+						function onConfirmLocation( ){
+							scope.publish( "hide-map-pointer" );
+						} );
 				}
 			}
 		}

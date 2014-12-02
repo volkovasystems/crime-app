@@ -48,6 +48,8 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickMoreCategory": function onClickMoreCategory( ){
+					var caseCategoryList = this.state.caseCategoryList;
+
 					this.setState( {
 						"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT ),
 						"isMoreCategory": false,
@@ -56,6 +58,8 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickLessCategory": function onClickLessCategory( ){
+					var caseCategoryList = this.state.caseCategoryList;
+					
 					this.setState( {
 						"viewableCategoryList": _.clone( caseCategoryList ),
 						"isMoreCategory": true,
