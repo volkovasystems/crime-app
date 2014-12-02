@@ -44,6 +44,20 @@ Crime
 								scope.publish( "show-confirm-location-control" );	
 							}
 						} );
+
+					scope.on( "confirm-location-control-click:confirm-location",
+						function onConfirmLocation( ){
+							scope.publish( "hide-confirm-location-control" );
+
+							scope.isReporting = false;
+						} );
+
+					scope.on( "confirm-location-control-click:cancel-location",
+						function onConfirmLocation( ){
+							scope.publish( "hide-confirm-location-control" );
+
+							scope.isReporting = false;
+						} );
 				}
 			}
 		}

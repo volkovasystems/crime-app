@@ -21,12 +21,23 @@ Crime
 
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){
-							scope.publish( "create-map-pointer", "../image/map-pointer.png" );
+							scope.publish( "create-map-pointer", 
+								staticData.MAP_POINTER_ICON );
 						} );
 
 					scope.on( "report-control-clicked:report",
 						function onReportControlClicked( ){
 							scope.publish( "show-map-pointer" );
+						} );
+
+					scope.on( "map-view-rendered",
+						function onMapViewRendered( ){
+							scope.publish( "create-map-pointer" );
+						} );
+
+					scope.on( "confirm-location-control-click:cancel-location",
+						function onConfirmLocation( ){
+							scope.publish( "hide-map-pointer" );
 						} );
 				}
 			}

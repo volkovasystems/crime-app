@@ -18,6 +18,11 @@ Crime
 						function onReportControlClick( ){
 							scope.publish( "hide-report-control" );
 						} );
+
+					scope.on( "confirm-location-control-click:cancel-location",
+						function onConfirmLocation( ){
+							scope.publish( "show-report-control" );
+						} );
 				}
 			}
 		}

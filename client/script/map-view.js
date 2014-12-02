@@ -1,12 +1,13 @@
 angular.module( "MapView", [ "Event", "PageFlow" ] )
 
-	.constant( "DEFAULT_POSITION", new google.maps.LatLng( 14.5980716, 120.9797033 ) )
+	.constant( "DEFAULT_POSITION", 
+		new google.maps.LatLng( staticData.DEFAULT_LATITUDE, staticData.DEFAULT_LONGITUDE ) )
 
-	.constant( "DEFAULT_MAP_ZOOM", 15 )
+	.constant( "DEFAULT_MAP_ZOOM", staticData.DEFAULT_MAP_ZOOM )
 
-	.constant( "DEFAULT_MAP_ZOOM_START", 10 )
+	.constant( "DEFAULT_MAP_ZOOM_START", staticData.DEFAULT_MAP_ZOOM_START )
 
-	.constant( "DEFAULT_MAP_ZOOM_END", 25 )
+	.constant( "DEFAULT_MAP_ZOOM_END", staticData.DEFAULT_MAP_ZOOM_END )
 
 	.factory( "MapView", [
 		"DEFAULT_POSITION",

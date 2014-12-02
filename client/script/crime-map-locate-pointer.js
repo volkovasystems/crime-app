@@ -1,5 +1,5 @@
 Crime
-	.directive( "locateControlController", [
+	.directive( "mapLocatePointerController", [
 		"Event",
 		function directive( Event ){
 			return {
@@ -11,14 +11,12 @@ Crime
 
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){
-							scope.publish( "show-locate-control" );
-						} );
+							scope.publish( "create-map-locate-pointer", 
+								staticData.MAP_LOCATE_POINTER_ICON );
 
-					scope.on( "locate-control-click:locate",
-						function onLocate( ){
-							scope.publish( "locate-current-position" );
+							scope.publish( "show-map-locate-pointer" );
 						} );
 				}
 			}
 		}
-	] );
+	] )

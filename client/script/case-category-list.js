@@ -48,6 +48,8 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickMoreCategory": function onClickMoreCategory( ){
+					var caseCategoryList = this.state.caseCategoryList;
+
 					this.setState( {
 						"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT ),
 						"isMoreCategory": false,
@@ -56,6 +58,8 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickLessCategory": function onClickLessCategory( ){
+					var caseCategoryList = this.state.caseCategoryList;
+					
 					this.setState( {
 						"viewableCategoryList": _.clone( caseCategoryList ),
 						"isMoreCategory": true,
@@ -178,16 +182,20 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 				}
 
 				scope.on( "show-case-category-list",
-					function onShowCaseCategoryList( ){
-						scope.showPage( );
+					function onShowCaseCategoryList( namespace ){
+						if( optionSet.namespace == namespace ){
+							scope.showPage( );	
+						}
 					} );
 
 				scope.on( "hide-case-category-list",
-					function onHideCaseCategoryList( ){
-						scope.hidePage( );
+					function onHideCaseCategoryList( namespace ){
+						if( optionSet.namespace == namespace ){
+							scope.hidePage( );
+						}
 					} );
 
-				scope.publish( "hide-case-category-list" );
+				scope.publish( "hide-case-category-list", optionSet.namespace );
 
 				CaseCategoryList.attach( scope, element, {
 					"onSelectCaseCategory": optionSet.onSelectCaseCategory

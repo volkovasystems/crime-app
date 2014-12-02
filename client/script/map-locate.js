@@ -125,6 +125,18 @@ angular.module( "MapLocate", [ "Event" ] )
 							} );
 						} );
 
+					scope.on( "locate-current-position",
+						function onLocateCurrentPosition( ){
+							getCurrentPosition( function callback( error, currentPosition ){
+								if( error ){
+									//: @todo: Do some error handling here!
+										
+								}else{
+									scope.mapComponent.setCenter( currentPosition );	
+								}
+							} );
+						} );
+
 					scope.on( "set-position-at-address",
 						function onSetPositionAtAddress( address ){
 							getPositionAtAddress( address,

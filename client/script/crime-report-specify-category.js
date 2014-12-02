@@ -11,6 +11,47 @@ Crime
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
+					scope.on( "confirm-location-control-click:confirm-location",
+						function onConfirmLocation( ){
+							async.waterfall( [
+								function getCurrentPosition( callback ){
+									scope.publish( "get-current-position",
+										function onGetCurrentPosition( error, position ){
+											callback( error, {
+												"latitude": position.lat( ),
+												"longitude": position.lng( )
+											} );
+										} );
+								},
+
+								function getMapZoom( position, callback ){
+									scope.publish( "get-map-zoom",
+										function onGetMapZoom( error, mapZoom ){
+											position.zoom = mapZoom;
+
+											callback( error, position );
+										} );
+								},
+
+								function setReportSpecifyCategoryData( position, callback ){
+									scope.publish( "set-report-specify-category-data", position );
+
+									callback( );
+								},
+
+								function showReportSpecifyCategoryForm( callback ){
+									scope.publish( "show-report-specify-category" );
+
+									callback( );
+								}
+							],
+								function lastly( state ){
+									if( state instanceof Error ){
+										
+									}
+								} );
+						} );
+
 				}
 			};
 		}

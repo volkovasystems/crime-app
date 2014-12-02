@@ -15,6 +15,7 @@ angular
 		"MapView",
 		"MapLocate",
 		"MapPointer",
+		"MapLocatePointer",
 		"MapMarker",
 		"MapInfoPin",
 		"ReportSpecifyCategory",

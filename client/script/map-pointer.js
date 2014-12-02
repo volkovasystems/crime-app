@@ -130,19 +130,6 @@ angular.module( "MapPointer", [ "Event" ] )
 
 							scope.publish( "map-pointer-created", mapPointer );
 						} );
-
-					scope.on( "map-view-rendered",
-						function onMapViewRendered( ){
-							var mapPointer = createMapPointer( scope.mapComponent );
-
-							mapPointer.setVisible( false );
-
-							attachMapPointerEventListener( mapPointer, scope );
-
-							scope.mapPointer = mapPointer;
-
-							scope.publish( "map-pointer-created", mapPointer );
-						} );
 				}
 			};
 		}

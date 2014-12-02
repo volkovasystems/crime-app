@@ -1,4 +1,15 @@
 Crime
+
+	.factory( "getDefaultCaseCategoryList", [
+		function factory( ){
+			var getDefaultCaseCategoryList = function getDefaultCaseCategoryList( ){
+
+			};
+
+			return getDefaultCaseCategoryList;
+		}
+	] )
+
 	.directive( "caseCategoryListController", [
 		"Event",
 		"ProgressBar",
