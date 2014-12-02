@@ -1,10 +1,22 @@
 <section 
-	className="confirm-location-control card">
-	<button 
-		className="btn btn-primary report-btn"
-		onClick={ this.onClickConfirmLocation }>
-		<span>
-			{ CONFIRM_LOCATION_CONTROL_LABEL }
-		</span>
-	</button>
+	className="confirm-location-control">
+  <section className="card">  
+    <button 
+      className="btn btn-primary report-btn"
+      onClick={ this.onClickConfirmLocation }>
+      <span>
+        { CONFIRM_LOCATION_CONTROL_LABEL }
+      </span>
+    </button>
+  </section>
+	
+<section className="card">  
+  <button 
+    className="btn cancel-btn">
+    <span>
+      Cancel
+    </span>
+  </button>
+</section>
+
 </section>
