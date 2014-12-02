@@ -1,0 +1,32 @@
+<section 
+	className="crime-category">
+	<p>
+		{ CHOOSE_CATEGORY_PHRASE }
+	</p>
+	<ul 
+		className={ [
+			"popular categories",
+			( isMoreCategory )? "more-category" : "",
+			( isLessCategory )? "less-category" : "",
+		].join( " " ) }>
+		{ viewableCategoryList.map( this.onEachCaseCategoryItem ) }
+	</ul>
+	<a
+		href="#" 
+		className={ [
+			"more-categories",
+			( isLessCategory )? "shown" : "hidden"
+		].join( " " ) }
+		onClick={ this.onClickMoreCategory }>
+		{ MORE_CATEGORY_LABEL }
+	</a>
+	<a
+		href="#" 
+		className={ [
+			"less-categories",
+			( isMoreCategory )? "shown" : "hidden"
+		].join( " " ) }
+		onClick={ this.onClickLessCategory }>
+		{ LESS_CATEGORY_LABEL }
+	</a>
+</section>

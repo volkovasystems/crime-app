@@ -95,8 +95,7 @@
 					<textarea 
 						className="input-md" 
 						required="" 
-						rows="5" 
-						style="  ">
+						rows="5">
 					</textarea>
 					<span 
 						className="highlight">
@@ -126,7 +125,7 @@
 					</span>
 					<label 
 						className="label">
-						Time the incident happened?
+						{ TIME_HAPPENED_PHRASE }
 					</label>
 				</section>
 				<section 
@@ -143,7 +142,7 @@
 					</span>
 					<label 
 						className="label">
-						Date happened?
+						{ DATE_HAPPENED_PHRASE }
 					</label>
 				</section>
 			</section>
@@ -155,7 +154,7 @@
 						<input 
 							type="checkbox" 
 							className="checkbox send-report" />
-							Send this report anonymously
+							{ SEND_REPORT_ANONYMOUSLY_PHRASE }
 					</label>
 				</p>
 			</section>
@@ -164,24 +163,30 @@
 				<label>
 					<input 
 						type="checkbox" 
-						className="checkbox agree">
-						I hereby agree on CrimeWatch.ph's 
+						className="checkbox agree" />
+						{ AGREEMENT_PHRASE }
 						<a 
 							target="_blank" 
 							href="http://crimewatch.ph/privacy-policy">
-							Privacy Policy
+							{ PRIVACY_POLICY_LABEL }
 						</a>
 				</label>
 			</p>
 			<section 
 				className="form-actions">
 				<button 
-					className="btn btn-primary btn-xlarge">
+					className={ [
+						"btn btn-primary btn-xlarge",
+						( hasAgreed )? "" : "disabled"
+					].join( " " ) }
+					disabled={ !hasAgreed }
+					onClick={ this.onClickConfirm }>
 					{ CONFIRM_BUTTON_LABEL }
 				</button>
 				<button 
 					href="#" 
-					className="btn btn-gray btn-xlarge">
+					className="btn btn-gray btn-xlarge"
+					onClick={ this.onClickCancel }>
 					{ CANCEL_BUTTON_LABEL }
 				</button>
 			</section>
