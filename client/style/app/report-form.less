@@ -1,6 +1,18 @@
+.report-specify-category.shown
+{
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+}
+
 .crime-report
 {
-    max-width: 480px;
+   width: 480px;
+transform: translateX(-50%);
+left: 50%;
+
+    transform: translateX(-50%);
     .card-heading
     {
         position: relative;
@@ -99,11 +111,22 @@
     .location-image
     {
         width: 500px;
-        margin: 0 -10px 20px;
+        height: 208px;
+        background-color: #EEE;
+        overflow: hidden;
+
+        margin-right: -10px;
+        margin-left: -10px;
+
+        border-radius: 2px;
+
+        .box-shadow-mixin(2);
+        .img
+        {
+            width: 100%;
+        }
     }
-
     /* form starting stylings */
-
     .group
     {
         position: relative;

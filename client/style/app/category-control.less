@@ -17,16 +17,13 @@
     }
 }
 
-.crime-report {
-    .category-component {
-        padding: 0;
-    }
-}
-
 .category-component
 {
-
     padding: 20px;
+}
+.category-component,
+.crime-report .case-category-list
+{
     &.card
     {
         top: -80px;
@@ -42,7 +39,8 @@
             color: @body-copy-color;
         }
     }
-    .card-category
+    .card-category,
+    .crime-category
     {
         display: table;
 
@@ -83,20 +81,24 @@
         }
         .categories
         {
-            display: table;
+            display: block;
+            overflow-y: scroll;
 
             width: 100%;
+            height: 200px;
             padding: 0;
         }
         .hidden
         {
             display: none;
         }
-        .more-categories
+        .more-categories,
+        .less-categories
         {
             font-weight: 700;
 
             display: block;
+            clear: both;
 
             width: 100%;
             margin: 10px 0;
@@ -106,7 +108,6 @@
             text-transform: uppercase;
 
             color: @body-copy-color-light;
-            border: 1px solid @body-copy-color-light;
             border-radius: 2px;
             &:hover,
             &:active
@@ -117,4 +118,11 @@
             }
         }
     }
+}
+
+
+.crime-report,
+.case-category-list
+{
+    padding: 0 !important;
 }
