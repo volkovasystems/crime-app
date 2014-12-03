@@ -242,7 +242,11 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 
 				var scope = optionSet.scope || $rootScope;
 
-				scope = scope.$new( true );
+				if( optionSet.embedState != "no-embed" ){
+					scope = scope.$new( true );
+				}
+
+				scope.namespace = optionSet.namespace;
 
 				Event( scope );
 
@@ -283,7 +287,8 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 						"scope": scope,
 						"element": element,
 						"attributeSet": attributeSet,
-						"embedState": "no-embed"
+						"embedState": "no-embed",
+						"namespace": "report-specify-category"
 					} );
 				}
 			}

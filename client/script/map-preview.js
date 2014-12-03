@@ -104,6 +104,12 @@ angular.module( "MapPreview", [ "MapView" ] )
 					return; //: @template: template/map-preview.html
 				},
 
+				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
+					if( !_.isEqual( prevProps, this.props ) ){
+						this.updateStaticMapImage( );	
+					}
+				},
+
 				"componentDidMount": function componentDidMount( ){
 					this.updateStaticMapImage( );
 				}
