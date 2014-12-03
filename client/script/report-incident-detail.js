@@ -96,6 +96,54 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 
 				},
 
+				"onChangeTitle": function onChangeTitle( event ){
+					var title = event.target.value;
+
+					this.setState( {
+						"title": title
+					} );
+				},
+
+				"onChangeDescription": function onChangeDescription( ){
+					var description = event.target.value;
+
+					this.setState( {
+						"description": description
+					} );
+				},
+
+				"onChangeTime": function onChangeTime( ){
+					var time = event.target.value;
+
+					this.setState( {
+						"time": time
+					} );
+				},
+
+				"onChangeDate": function onChangeDate( ){
+					var date = event.target.value;
+
+					this.setState( {
+						"date": date
+					} );
+				},
+
+				"onChangeIsAnonymous": function onChangeIsAnonymous( ){
+					var isAnonymous = event.target.value;
+
+					this.setState( {
+						"isAnonymous": isAnonymous
+					} );
+				},
+
+				"onChangeHasAgreed": function onChangeHasAgreed( ){
+					var hasAgreed = event.target.value;
+
+					this.setState( {
+						"hasAgreed": hasAgreed
+					} );
+				},
+
 				"onClickConfirm": function onClickConfirm( ){
 					if( this.state.hasAgreed ){
 						this.scope.publish( "confirm-report-incident-detail" );

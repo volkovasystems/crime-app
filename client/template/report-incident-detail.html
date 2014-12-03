@@ -76,6 +76,7 @@
 						type="text" 
 						className="input-md" 
 						value={ title }
+						onChange={ this.onChangeTitle }
 						required />
 					<span 
 						className="highlight">
@@ -97,6 +98,7 @@
 						className="input-md" 
 						rows="5"
 						value={ description }
+						onChange={ this.onChangeDescription }
 						required >
 					</textarea>
 					<span 
@@ -120,6 +122,7 @@
 						className="input-md input-time"
 						placeholder={ TIME_FORMAT_PLACEHOLDER }
 						value={ time }
+						onChange={ this.onChangeTime }
 						required />
 					<span 
 						className="highlight">
@@ -139,6 +142,7 @@
 						className="input-md input-date"
 						placeholder={ DATE_FORMAT_PLACEHOLDER }
 						value={ date }
+						onChange={ this.onChangeDate }
 						required />
 					<span 
 						className="highlight">
@@ -160,7 +164,9 @@
 						<input 
 							type="checkbox" 
 							className="checkbox send-report"
-							checked={ isAnonymous } />
+							checked={ isAnonymous }
+							value={ isAnonymous }
+							onChange={ this.onChangeIsAnonymous } />
 							{ SEND_REPORT_ANONYMOUSLY_PHRASE }
 					</label>
 				</p>
@@ -171,7 +177,9 @@
 					<input 
 						type="checkbox" 
 						className="checkbox agree"
-						checked={ hasAgreed } />
+						checked={ hasAgreed }
+						value={ hasAgreed }
+						onChange={ this.onChangeHasAgreed } />
 						{ AGREEMENT_PHRASE }
 						<a 
 							target="_blank" 

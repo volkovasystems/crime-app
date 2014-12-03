@@ -35,6 +35,11 @@ Crime
 							scope.publish( "create-map-pointer" );
 						} );
 
+					scope.on( "confirm-location-control-click:confirm-location",
+						function onConfirmLocation( ){
+							scope.publish( "hide-map-pointer" );
+						} );
+
 					scope.on( "confirm-location-control-click:cancel-location",
 						function onConfirmLocation( ){
 							scope.publish( "hide-map-pointer" );
