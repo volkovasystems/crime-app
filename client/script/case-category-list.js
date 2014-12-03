@@ -36,8 +36,8 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 						"selectedCaseCategory": [ ],
 						"caseCategoryList": [ ],
 						"viewableCategoryList": [ ],
-						"isMoreCategory": false,
-						"isLessCategory": true
+						"isMoreCategory": true,
+						"isLessCategory": false
 					};
 				},
 
@@ -51,7 +51,7 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 					var caseCategoryList = this.state.caseCategoryList;
 
 					this.setState( {
-						"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT ),
+						"viewableCategoryList": _.clone( caseCategoryList ),
 						"isMoreCategory": false,
 						"isLessCategory": true
 					} );
@@ -61,7 +61,7 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 					var caseCategoryList = this.state.caseCategoryList;
 					
 					this.setState( {
-						"viewableCategoryList": _.clone( caseCategoryList ),
+						"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT ),
 						"isMoreCategory": true,
 						"isLessCategory": false
 					} );
@@ -117,7 +117,7 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 
 					var caseCategoryTitle = caseCategoryData.title;
 
-					var caseCategoryIconSource = caseCategoryData.source;
+					var caseCategoryIconSource = [ caseCategoryName, "icon.png" ].join( "-" );
 
 					var isSelected = _.contains( selectedCaseCategory, caseCategoryName );
 
@@ -171,7 +171,9 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 
 				var scope = optionSet.scope || $rootScope;
 
-				scope = scope.$new( true );
+				if( optionSet.embedState != "no-embed" ){
+					scope = scope.$new( true );
+				}
 
 				Event( scope );
 

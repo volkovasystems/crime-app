@@ -22,9 +22,13 @@ angular.module( "MapPointer", [ "Event" ] )
 	.factory( "createPointerImage", [
 		function factory( ){
 			var createPointerImage = function createPointerImage( imageSource ){
+				var width = staticData.MAP_POINTER_WIDTH;
+
+				var height = staticData.MAP_POINTER_HEIGHT;
+
 				var pointerImage = {
 					"url": imageSource,
-					"scaledSize": new google.maps.Size( 41, 55 )
+					"scaledSize": new google.maps.Size( width, height )
 				};
 
 				return pointerImage;

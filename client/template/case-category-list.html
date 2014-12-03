@@ -15,7 +15,7 @@
 		href="#" 
 		className={ [
 			"more-categories",
-			( isLessCategory )? "shown" : "hidden"
+			( isMoreCategory )? "shown" : "hidden"
 		].join( " " ) }
 		onClick={ this.onClickMoreCategory }>
 		{ MORE_CATEGORY_LABEL }
@@ -24,7 +24,7 @@
 		href="#" 
 		className={ [
 			"less-categories",
-			( isMoreCategory )? "shown" : "hidden"
+			( isLessCategory )? "shown" : "hidden"
 		].join( " " ) }
 		onClick={ this.onClickLessCategory }>
 		{ LESS_CATEGORY_LABEL }
