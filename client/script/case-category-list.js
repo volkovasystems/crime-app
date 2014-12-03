@@ -36,8 +36,8 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 						"selectedCaseCategory": [ ],
 						"caseCategoryList": [ ],
 						"viewableCategoryList": [ ],
-						"isMoreCategory": false,
-						"isLessCategory": true
+						"isMoreCategory": true,
+						"isLessCategory": false
 					};
 				},
 

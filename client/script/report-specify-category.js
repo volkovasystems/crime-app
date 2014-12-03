@@ -78,7 +78,7 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 
 				"onSelectCaseCategory": function onSelectCaseCategory( selectedCaseCategory ){
 					this.setState( {
-						"selectedCaseCategory": selectedCaseCategory[ 0 ]
+						"selectedCaseCategory": _.last( selectedCaseCategory )
 					} );
 				},
 
@@ -136,10 +136,14 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 							[ uri.domain( ), uri.port( ) ].join( ":" ) 
 					].join( "/" );
 
+					var selectedCaseCategory = this.state.selectedCaseCategory;
+
 					var categoryIconPinSource = [ 
 						currentHostAddress, 
 						"image", 
-						"map-pointer.png"
+						( selectedCaseCategory )?
+							[ selectedCaseCategory, "small", "marker.png" ].join( "-" ) :
+							"small-map-pointer.png"
 					].join( "/" );
 
 					return; //: @template: template/report-specify-category.html
@@ -160,10 +164,14 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 								[ uri.domain( ), uri.port( ) ].join( ":" ) 
 						].join( "/" );
 
+						var selectedCaseCategory = this.state.selectedCaseCategory;
+
 						var categoryIconPinSource = [ 
 							currentHostAddress, 
-							"image", 
-							"map-pointer.png"
+							"image",
+							( selectedCaseCategory )?
+								[ selectedCaseCategory, "small", "marker.png" ].join( "-" ) :
+								"small-map-pointer.png"
 						].join( "/" );
 
 						this.setState( {
@@ -193,10 +201,12 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 								[ uri.domain( ), uri.port( ) ].join( ":" ) 
 						].join( "/" );
 
+						var selectedCaseCategory = this.state.selectedCaseCategory;
+
 						var categoryIconPinSource = [ 
 							currentHostAddress, 
 							"image", 
-							[ this.state.selectedCaseCategory[ 0 ], "small", "marker.png" ].join( "-" ) 
+							[ selectedCaseCategory, "small", "marker.png" ].join( "-" ) 
 						].join( "/" );
 
 						this.setState( {
