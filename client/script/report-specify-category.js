@@ -102,6 +102,15 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 							} );
 						} );
 
+					this.scope.on( "clear-report-specify-category-data",
+						function onClearReportSpecifyCategoryData( ){
+							self.setState( {
+								"latitude": DEFAULT_POSITION.lat( ),
+								"longitude": DEFAULT_POSITION.lng( ),
+								"zoom": DEFAULT_MAP_ZOOM
+							} );
+						} );
+
 					this.scope.on( "show-report-specify-category",
 						function onShowReportSpecifyCategory( ){
 							self.scope.publish( "show-case-category-list", "report-specify-category" );

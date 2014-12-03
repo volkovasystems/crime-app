@@ -75,6 +75,7 @@
 					<input 
 						type="text" 
 						className="input-md" 
+						value={ title }
 						required />
 					<span 
 						className="highlight">
@@ -94,8 +95,9 @@
 					className="group">
 					<textarea 
 						className="input-md" 
-						required="" 
-						rows="5">
+						rows="5"
+						value={ description }
+						required >
 					</textarea>
 					<span 
 						className="highlight">
@@ -115,8 +117,10 @@
 					className="group">
 					<input 
 						type="text" 
-						className="input-md input-time" 
-						required="" />
+						className="input-md input-time"
+						placeholder={ TIME_FORMAT_PLACEHOLDER }
+						value={ time }
+						required />
 					<span 
 						className="highlight">
 					</span>
@@ -132,8 +136,10 @@
 					className="group">
 					<input 
 						type="text" 
-						className="input-md input-date" 
-						required="" />
+						className="input-md input-date"
+						placeholder={ DATE_FORMAT_PLACEHOLDER }
+						value={ date }
+						required />
 					<span 
 						className="highlight">
 					</span>
@@ -153,7 +159,8 @@
 					<label>
 						<input 
 							type="checkbox" 
-							className="checkbox send-report" />
+							className="checkbox send-report"
+							checked={ isAnonymous } />
 							{ SEND_REPORT_ANONYMOUSLY_PHRASE }
 					</label>
 				</p>
@@ -163,7 +170,8 @@
 				<label>
 					<input 
 						type="checkbox" 
-						className="checkbox agree" />
+						className="checkbox agree"
+						checked={ hasAgreed } />
 						{ AGREEMENT_PHRASE }
 						<a 
 							target="_blank" 
