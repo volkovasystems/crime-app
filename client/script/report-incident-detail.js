@@ -28,6 +28,10 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 
 	.constant( "WARN_IF_NOT_AGREED_PROMPT", labelData.WARN_IF_NOT_AGREED_PROMPT )
 
+	.constant( "TIME_FORMAT_PLACEHOLDER", labelData.TIME_FORMAT_PLACEHOLDER )
+
+	.constant( "DATE_FORMAT_PLACEHOLDER", labelData.DATE_FORMAT_PLACEHOLDER )
+
 	.factory( "ReportIncidentDetail", [
 		"REPORT_HEADER_TITLE",
 		"SPECIFY_CATEGORY_PROGRESS_LABEL",
@@ -43,6 +47,8 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 		"AGREEMENT_PHRASE",
 		"PRIVACY_POLICY_LABEL",
 		"WARN_IF_NOT_AGREED_PROMPT",
+		"TIME_FORMAT_PLACEHOLDER",
+		"DATE_FORMAT_PLACEHOLDER",
 		function factory( 
 			REPORT_HEADER_TITLE,
 			SPECIFY_CATEGORY_PROGRESS_LABEL,
@@ -57,7 +63,9 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 			SEND_REPORT_ANONYMOUSLY_PHRASE,
 			AGREEMENT_PHRASE,
 			PRIVACY_POLICY_LABEL,
-			WARN_IF_NOT_AGREED_PROMPT
+			WARN_IF_NOT_AGREED_PROMPT,
+			TIME_FORMAT_PLACEHOLDER,
+			DATE_FORMAT_PLACEHOLDER
 		){
 			var ReportIncidentDetail = React.createClass( {
 				"statics": {
@@ -86,6 +94,54 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 
 				"componentWillUpdate": function componentWillUpdate( ){
 
+				},
+
+				"onChangeTitle": function onChangeTitle( event ){
+					var title = event.target.value;
+
+					this.setState( {
+						"title": title
+					} );
+				},
+
+				"onChangeDescription": function onChangeDescription( ){
+					var description = event.target.value;
+
+					this.setState( {
+						"description": description
+					} );
+				},
+
+				"onChangeTime": function onChangeTime( ){
+					var time = event.target.value;
+
+					this.setState( {
+						"time": time
+					} );
+				},
+
+				"onChangeDate": function onChangeDate( ){
+					var date = event.target.value;
+
+					this.setState( {
+						"date": date
+					} );
+				},
+
+				"onChangeIsAnonymous": function onChangeIsAnonymous( ){
+					var isAnonymous = event.target.value;
+
+					this.setState( {
+						"isAnonymous": isAnonymous
+					} );
+				},
+
+				"onChangeHasAgreed": function onChangeHasAgreed( ){
+					var hasAgreed = event.target.value;
+
+					this.setState( {
+						"hasAgreed": hasAgreed
+					} );
 				},
 
 				"onClickConfirm": function onClickConfirm( ){
@@ -136,7 +192,17 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 				},
 
 				"render": function onRender( ){
+					var title = this.state.title;
+
+					var description = this.state.description;
+
+					var time = this.state.time;
+
+					var date = this.state.date;
+
 					var hasAgreed = this.state.hasAgreed;
+
+					var isAnonymous = this.state.isAnonymous;
 					
 					return; //: @template: template/report-incident-detail.html
 				},

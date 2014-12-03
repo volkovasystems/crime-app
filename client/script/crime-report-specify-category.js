@@ -52,6 +52,17 @@ Crime
 								} );
 						} );
 
+					scope.on( "confirm-report-specify-category",
+						function onConfirmReportSpecifyCategory( ){
+							scope.publish( "hide-report-specify-category" );
+						} );
+
+					scope.on( "cancel-report-specify-category",
+						function onCancelReportSpecifyCategory( ){
+							scope.publish( "clear-report-specify-category-data" );
+
+							scope.publish( "hide-report-specify-category" );
+						} );
 				}
 			};
 		}

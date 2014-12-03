@@ -75,6 +75,8 @@
 					<input 
 						type="text" 
 						className="input-md" 
+						value={ title }
+						onChange={ this.onChangeTitle }
 						required />
 					<span 
 						className="highlight">
@@ -94,8 +96,10 @@
 					className="group">
 					<textarea 
 						className="input-md" 
-						required="" 
-						rows="5">
+						rows="5"
+						value={ description }
+						onChange={ this.onChangeDescription }
+						required >
 					</textarea>
 					<span 
 						className="highlight">
@@ -115,8 +119,11 @@
 					className="group">
 					<input 
 						type="text" 
-						className="input-md input-time" 
-						required="" />
+						className="input-md input-time"
+						placeholder={ TIME_FORMAT_PLACEHOLDER }
+						value={ time }
+						onChange={ this.onChangeTime }
+						required />
 					<span 
 						className="highlight">
 					</span>
@@ -132,8 +139,11 @@
 					className="group">
 					<input 
 						type="text" 
-						className="input-md input-date" 
-						required="" />
+						className="input-md input-date"
+						placeholder={ DATE_FORMAT_PLACEHOLDER }
+						value={ date }
+						onChange={ this.onChangeDate }
+						required />
 					<span 
 						className="highlight">
 					</span>
@@ -153,7 +163,10 @@
 					<label>
 						<input 
 							type="checkbox" 
-							className="checkbox send-report" />
+							className="checkbox send-report"
+							checked={ isAnonymous }
+							value={ isAnonymous }
+							onChange={ this.onChangeIsAnonymous } />
 							{ SEND_REPORT_ANONYMOUSLY_PHRASE }
 					</label>
 				</p>
@@ -163,7 +176,10 @@
 				<label>
 					<input 
 						type="checkbox" 
-						className="checkbox agree" />
+						className="checkbox agree"
+						checked={ hasAgreed }
+						value={ hasAgreed }
+						onChange={ this.onChangeHasAgreed } />
 						{ AGREEMENT_PHRASE }
 						<a 
 							target="_blank" 

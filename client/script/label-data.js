@@ -56,6 +56,8 @@ var labelData = {
 	"THANK_SUBMISSION_PHRASE": "Thank you for your submission.",
 	"VERIFY_SUBMISSION_PHRASE": "We will review and verify your report within 24 hours.",
 	"WARN_IF_NOT_AGREED_PROMPT": "Please agree to our terms if you want to post this report.",
+	"TIME_FORMAT_PLACEHOLDER": "HH:MM AM/PM",
+	"DATE_FORMAT_PLACEHOLDER": "MM/DD/YYYY",
 
 	"CHOOSE_CATEGORY_PHRASE": "Please choose a crime category below:",
 	"MORE_CATEGORY_LABEL": "More Categories",
