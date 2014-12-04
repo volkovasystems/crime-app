@@ -96,6 +96,11 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 								"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT )
 							} );
 						} );
+
+					this.scope.on( "get-case-category-list",
+						function onGetCaseCategoryList( callback ){
+							callback( null, self.state.caseCategoryList );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){

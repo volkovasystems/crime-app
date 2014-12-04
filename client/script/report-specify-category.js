@@ -98,7 +98,10 @@ angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "C
 						function onGetReportSpecifyCategoryData( callback ){
 							callback( null, {
 								"staticMapURL": self.state.staticMapURL,
-								"selectedCaseCategory": self.state.selectedCaseCategory
+								"selectedCaseCategory": self.state.selectedCaseCategory,
+								"latitude": self.state.latitude,
+								"longitude": self.state.longitude,
+								"zoom": self.state.zoom
 							} );
 						} );
 

@@ -65,6 +65,7 @@ var scriptList = [
 	"crime-report-specify-category.js",
 	"crime-report-incident-detail.js",
 	"crime-report-final.js",
+	"crime-report.js",
 	"crime-report-list.js",
 	"crime-case-category-list.js",
 	"crime-image-upload.js",

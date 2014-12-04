@@ -44,7 +44,8 @@ var labelData = {
 	"REPORT_FINAL_PROGRESS_LABEL": "Thank you!",
 
 	"CONFIRM_BUTTON_LABEL": "Confirm",
-	"CLOSE_BUTTON_LABEL": "close",
+	"SEND_BUTTON_LABEL": "Send",
+	"CLOSE_BUTTON_LABEL": "Close",
 	"MY_REPORT_BUTTON_LABEL": "My Reports",
 	"TITLE_LABEL": "Title",
 	"DESCRIPTION_PHRASE": "Describe what happened?",

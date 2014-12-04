@@ -16,9 +16,11 @@ Crime
 							scope.publish( "show-report-incident-detail" );
 						} );
 
-					scope.on( "confirm-report-incident-detail",
+					scope.on( "send-report-incident-detail",
 						function onConfirmReportIncidentDetail( ){
 							scope.publish( "hide-report-incident-detail" );
+
+							scope.publish( "send-report" );
 						} );
 
 					scope.on( "cancel-report-incident-detail",

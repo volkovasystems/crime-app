@@ -165,7 +165,6 @@
 							type="checkbox" 
 							className="checkbox send-report"
 							checked={ isAnonymous }
-							value={ isAnonymous }
 							onChange={ this.onChangeIsAnonymous } />
 							{ SEND_REPORT_ANONYMOUSLY_PHRASE }
 					</label>
@@ -178,7 +177,6 @@
 						type="checkbox" 
 						className="checkbox agree"
 						checked={ hasAgreed }
-						value={ hasAgreed }
 						onChange={ this.onChangeHasAgreed } />
 						{ AGREEMENT_PHRASE }
 						<a 
@@ -196,8 +194,8 @@
 						( hasAgreed )? "" : "disabled"
 					].join( " " ) }
 					disabled={ !hasAgreed }
-					onClick={ this.onClickConfirm }>
-					{ CONFIRM_BUTTON_LABEL }
+					onClick={ this.onClickSend }>
+					{ SEND_BUTTON_LABEL }
 				</button>
 				<button 
 					href="#" 

@@ -164,6 +164,11 @@ angular.module( "MapLocate", [ "Event" ] )
 						function getCurrentAddress( callback ){
 							getAddressAtPosition( scope.mapComponent.getCenter( ), callback );
 						} );
+
+					scope.on( "get-address-at-position",
+						function onGetAddressAtPosition( position, callback ){
+							getAddressAtPosition( position, callback );
+						} );
 				}
 			};
 		}

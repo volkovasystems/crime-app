@@ -8,7 +8,7 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 
 	.constant( "REPORT_FINAL_PROGRESS_LABEL", labelData.REPORT_FINAL_PROGRESS_LABEL )
 
-	.constant( "CONFIRM_BUTTON_LABEL", labelData.CONFIRM_BUTTON_LABEL )
+	.constant( "SEND_BUTTON_LABEL", labelData.SEND_BUTTON_LABEL )
 
 	.constant( "CANCEL_BUTTON_LABEL", labelData.CANCEL_BUTTON_LABEL )
 
@@ -37,7 +37,7 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 		"SPECIFY_CATEGORY_PROGRESS_LABEL",
 		"INCIDENT_DETAIL_PROGRESS_LABEL",
 		"REPORT_FINAL_PROGRESS_LABEL",
-		"CONFIRM_BUTTON_LABEL",
+		"SEND_BUTTON_LABEL",
 		"CANCEL_BUTTON_LABEL",
 		"TITLE_LABEL",
 		"DESCRIPTION_PHRASE",
@@ -54,7 +54,7 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 			SPECIFY_CATEGORY_PROGRESS_LABEL,
 			INCIDENT_DETAIL_PROGRESS_LABEL,
 			REPORT_FINAL_PROGRESS_LABEL,
-			CONFIRM_BUTTON_LABEL,
+			SEND_BUTTON_LABEL,
 			CANCEL_BUTTON_LABEL,
 			TITLE_LABEL,
 			DESCRIPTION_PHRASE,
@@ -104,7 +104,7 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 					} );
 				},
 
-				"onChangeDescription": function onChangeDescription( ){
+				"onChangeDescription": function onChangeDescription( event ){
 					var description = event.target.value;
 
 					this.setState( {
@@ -112,7 +112,7 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 					} );
 				},
 
-				"onChangeTime": function onChangeTime( ){
+				"onChangeTime": function onChangeTime( event ){
 					var time = event.target.value;
 
 					this.setState( {
@@ -120,7 +120,7 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 					} );
 				},
 
-				"onChangeDate": function onChangeDate( ){
+				"onChangeDate": function onChangeDate( event ){
 					var date = event.target.value;
 
 					this.setState( {
@@ -128,25 +128,25 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 					} );
 				},
 
-				"onChangeIsAnonymous": function onChangeIsAnonymous( ){
-					var isAnonymous = event.target.value;
+				"onChangeIsAnonymous": function onChangeIsAnonymous( event ){
+					var isAnonymous = event.target.checked;
 
 					this.setState( {
 						"isAnonymous": isAnonymous
 					} );
 				},
 
-				"onChangeHasAgreed": function onChangeHasAgreed( ){
-					var hasAgreed = event.target.value;
+				"onChangeHasAgreed": function onChangeHasAgreed( event ){
+					var hasAgreed = event.target.checked;
 
 					this.setState( {
 						"hasAgreed": hasAgreed
 					} );
 				},
 
-				"onClickConfirm": function onClickConfirm( ){
+				"onClickSend": function onClickSend( ){
 					if( this.state.hasAgreed ){
-						this.scope.publish( "confirm-report-incident-detail" );
+						this.scope.publish( "send-report-incident-detail" );
 
 					}else{
 						this.scope.publish( "notify", WARN_IF_NOT_AGREED_PROMPT, "warn" );

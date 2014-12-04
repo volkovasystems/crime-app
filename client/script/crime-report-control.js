@@ -23,6 +23,16 @@ Crime
 						function onConfirmLocation( ){
 							scope.publish( "show-report-control" );
 						} );
+
+					scope.on( "cancel-report-specify-category",
+						function onCancelReportSpecifyCategory( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "cancel-report-incident-detail",
+						function onCancelReportIncidentDetail( ){
+							scope.publish( "show-report-control" );
+						} );
 				}
 			}
 		}
