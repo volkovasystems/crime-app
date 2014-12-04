@@ -1,11 +1,12 @@
-angular.module( "Search", [ "Event", "PageFlow", "Icon" ] )
+angular.module( "Search", [ "Event", "PageFlow" ] )
 
 	.constant( "SEARCH_PLACEHOLDER", labelData.SEARCH_PLACEHOLDER )
 
 	.factory( "Search", [
-		"Icon",
 		"SEARCH_PLACEHOLDER",
-		function factory( Icon, SEARCH_PLACEHOLDER ){
+		function factory( 
+			SEARCH_PLACEHOLDER
+		){
 			var Search = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){

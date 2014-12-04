@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "profileController", [
 		"Event",
 		"getUserData",

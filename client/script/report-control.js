@@ -15,7 +15,7 @@ angular.module( "ReportControl", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickReport": function onClickReport( ){
-					this.scope.publish( "report-control-clicked:report" );
+					this.scope.publish( "report-control-click:report" );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){

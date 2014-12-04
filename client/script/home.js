@@ -1,10 +1,12 @@
 angular.module( "Home", [ "Event", "PageFlow" ] )
 
-	.value( "APP_LOGO_IMAGE_SOURCE", "../image/empty.png" )
+	.constant( "APP_LOGO_IMAGE_SOURCE", staticData.APP_LOGO_IMAGE_SOURCE )
 
 	.factory( "Home", [
 		"APP_LOGO_IMAGE_SOURCE",
-		function factory( APP_LOGO_IMAGE_SOURCE ){
+		function factory( 
+			APP_LOGO_IMAGE_SOURCE 
+		){
 			var Home = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){

@@ -1,15 +1,18 @@
-angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
+angular.module( "ReportList", [ "Event", "PageFlow", "MapPreview" ] )
 
 	.constant( "REPORT_LIST_HEADER_LABEL", labelData.REPORT_LIST_HEADER_LABEL )
 
 	.constant( "REPORT_ITEM_PHRASE", labelData.REPORT_ITEM_PHRASE )
 
 	.factory( "ReportList", [
-		"Icon",
 		"MapPreview",
 		"REPORT_LIST_HEADER_LABEL",
 		"REPORT_ITEM_PHRASE",
-		function factory( Icon, MapPreview, REPORT_LIST_HEADER_LABEL, REPORT_ITEM_PHRASE ){
+		function factory( 
+			MapPreview, 
+			REPORT_LIST_HEADER_LABEL, 
+			REPORT_ITEM_PHRASE
+		){
 			var ReportList = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){

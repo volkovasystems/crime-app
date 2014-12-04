@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "mapPointerController", [
 		"Event",
 		function directive( Event ){
@@ -25,7 +26,7 @@ Crime
 								staticData.MAP_POINTER_ICON );
 						} );
 
-					scope.on( "report-control-clicked:report",
+					scope.on( "report-control-click:report",
 						function onReportControlClicked( ){
 							scope.publish( "show-map-pointer" );
 						} );

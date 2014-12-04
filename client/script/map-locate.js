@@ -1,6 +1,6 @@
 angular.module( "MapLocate", [ "Event" ] )
 
-	.constant( "DEFAULT_MAP_ADDRESS", "Manila, Philippines" )
+	.constant( "DEFAULT_MAP_ADDRESS", staticData.DEFAULT_MAP_ADDRESS )
 
 	.factory( "createGeoCoder", [
 		function factory( ){

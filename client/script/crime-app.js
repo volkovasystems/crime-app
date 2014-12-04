@@ -105,13 +105,6 @@ Crime
 				},
 
 				function checkAllRequestedIconSet( callback ){
-					$rootScope.on( "all-icon-set-requested", 
-						function onRendered( ){ 
-							callback( ); 
-						} );
-				},
-
-				function checkAllRequestedIconSet( callback ){
 					$rootScope.on( "all-app-component-rendered", 
 						function onRendered( ){ 
 							callback( ); 

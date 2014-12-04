@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "dashList", [
 		function directive( ){
 			return {
@@ -10,10 +11,6 @@ Crime
 						{
 							"name": "profile",
 							"title": labelData.PROFILE_DASHBAR_LABEL
-						},
-						{
-							"name": "report",
-							"title": labelData.REPORT_DASHBAR_LABEL
 						},
 						{
 							"name": "my-report",
@@ -38,7 +35,6 @@ Crime
 				"link": function onLink( scope, element, attribute ){
 					scope.dashItemIconSet = {
 						"profile": "md-person",
-						"report": "md-report",
 						"my-report": "md-list",
 						"logout": "md-exit-to-app"
 					};

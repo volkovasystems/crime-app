@@ -1,4 +1,4 @@
-angular.module( "Notify", [ "Icon", "Event", "PageFlow" ] )
+angular.module( "Notify", [ "Event", "PageFlow" ] )
 
 	.constant( "INFO_TYPE", "info-type" )
 
@@ -9,13 +9,11 @@ angular.module( "Notify", [ "Icon", "Event", "PageFlow" ] )
 	.constant( "SUCCESS_TYPE", "success-type" )
 
 	.factory( "Notify", [
-		"Icon",
 		"INFO_TYPE",
 		"WARN_TYPE",
 		"ERROR_TYPE",
 		"SUCCESS_TYPE",
 		function factory(
-			Icon,
 			INFO_TYPE,
 			WARN_TYPE,
 			ERROR_TYPE,
@@ -129,7 +127,6 @@ angular.module( "Notify", [ "Icon", "Event", "PageFlow" ] )
 					Event( scope );
 
 					PageFlow( scope, element, "notify" );
-
 
 					scope.on( "show-notify",
 						function onShowNotify( ){
