@@ -148,7 +148,8 @@ Crime
 					},
 
 					function processRequestEndpoint( accessID, callback ){
-						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/query/latest/pending" );
+						var requestEndpoint = getReportServerData( )
+							.joinPath( "api/:accessID/report/query/latest/pending" );
 
 						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
@@ -257,7 +258,8 @@ Crime
 					},
 
 					function processRequestEndpoint( accessID, callback ){
-						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/query/latest/approved" );
+						var requestEndpoint = getReportServerData( )
+							.joinPath( "api/:accessID/report/query/latest/approved" );
 
 						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
@@ -366,7 +368,8 @@ Crime
 					},
 
 					function processRequestEndpoint( accessID, callback ){
-						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/query/latest/rejected" );
+						var requestEndpoint = getReportServerData( )
+							.joinPath( "api/:accessID/report/query/latest/rejected" );
 
 						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
@@ -477,7 +480,8 @@ Crime
 					},
 
 					function processRequestEndpoint( accessID, callback ){
-						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/query/latest" );
+						var requestEndpoint = getReportServerData( )
+							.joinPath( "api/:accessID/report/query/latest" );
 
 						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
@@ -533,7 +537,6 @@ Crime
 	] )
 
 	.directive( "reportListController", [
-		"ProgressBar",
 		"Event",
 		"getReportList",
 		"getAllPendingReportList",
@@ -541,7 +544,6 @@ Crime
 		"getAllRejectedReportList",
 		"getAllReportList",
 		function directive( 
-			ProgressBar, 
 			Event, 
 			getReportList,
 			getAllPendingReportList,
@@ -554,8 +556,6 @@ Crime
 				"scope": true,
 				"priority": 1,
 				"link": function onLink( scope, element, attributeSet ){
-					ProgressBar( scope );
-
 					Event( scope );
 
 					scope.pageSize = staticData.REPORT_LIST_PAGE_SIZE;
@@ -579,9 +579,24 @@ Crime
 							scope.publish( "show-minified-report-list" );
 						} );
 
-					scope.on( "show-report",
-						function onShowReport( ){
+					scope.on( "show-report-incident-detail",
+						function onShowReportIncidentDetail( ){
 							scope.publish( "hide-report-list" );
+						} );
+
+					scope.on( "show-minified-report-list",
+						function onShowMinifiedReportList( ){
+							$( "body" ).removeClass( "report-feed-expanded" );
+						} );
+
+					scope.on( "show-expanded-report-list",
+						function onShowExpandedReportList( ){
+							$( "body" ).addClass( "report-feed-expanded" );
+						} );
+
+					scope.on( "close-report-final",
+						function onCloseReportFinal( ){
+							scope.publish( "show-minified-report-list" );
 						} );
 				}
 			}

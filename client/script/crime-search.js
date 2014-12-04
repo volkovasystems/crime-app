@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "searchController", [
 		"Event",
 		function directive( Event ){

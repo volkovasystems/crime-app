@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "mapViewController", [
 		"Event",
 		function directive( Event ){

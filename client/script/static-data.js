@@ -26,5 +26,10 @@ var staticData = {
 	"MAP_POINTER_WIDTH": 41,
 	"MAP_POINTER_HEIGHT": 55,
 
-	"REPORT_LIST_PAGE_SIZE": 6
+	"REPORT_LIST_PAGE_SIZE": 6,
+
+	"CRIME_LOGO_IMAGE_SOURCE": "../image/crimewatch.png",
+	"APP_LOGO_IMAGE_SOURCE": "../image/empty.png",
+
+	"DEFAULT_MAP_ADDRESS": "Manila, Philippines"
 };

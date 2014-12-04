@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "reportIncidentDetailController", [
 		"Event",
 		"$http",
@@ -11,6 +12,25 @@ Crime
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
+					scope.on( "send-report",
+						function onSendReport( ){
+							scope.publish( "show-report-final" );
+						} );
+
+					scope.on( "send-report-incident-detail",
+						function onSendReportIncidentDetail( ){
+							scope.publish( "send-report" );
+						} );
+
+					scope.on( "report-sent",
+						function onSendReport( ){
+							scope.publish( "report-added" );
+						} );
+
+					scope.on( "close-report-final",
+						function onCloseReportFinal( ){
+							scope.publish( "hide-report-final" );
+						} );
 				}
 			};
 		}

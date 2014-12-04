@@ -1,4 +1,5 @@
 Crime
+
 	.factory( "getAllCrimeNearReporter", [
 		"$http",
 		"getReportServerData",

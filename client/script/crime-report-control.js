@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "reportControlController", [
 		"Event",
 		function directive( Event ){
@@ -14,7 +15,7 @@ Crime
 							scope.publish( "show-report-control" );
 						} );
 
-					scope.on( "report-control-clicked:report",
+					scope.on( "report-control-click:report",
 						function onReportControlClick( ){
 							scope.publish( "hide-report-control" );
 						} );
@@ -31,6 +32,11 @@ Crime
 
 					scope.on( "cancel-report-incident-detail",
 						function onCancelReportIncidentDetail( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "close-report-final",
+						function onCloseReportFinal( ){
 							scope.publish( "show-report-control" );
 						} );
 				}

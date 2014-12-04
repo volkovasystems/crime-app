@@ -53,7 +53,7 @@ angular.module( "ReportFinal", [ "Event", "PageFlow" ] )
 					this.scope.publish( "open-my-report" );
 				},
 
-				"onClickClose": function onClickClose( ){
+				"onClickCloseReportFinal": function onClickCloseReportFinal( ){
 					this.scope.publish( "close-report-final" );
 				},
 

@@ -1,10 +1,12 @@
-angular.module( "Dashbar", [ "PageFlow", "Event", "Icon", "Profile", "ProfileSetting" ] )
+angular.module( "Dashbar", [ "PageFlow", "Event", "Profile", "ProfileSetting" ] )
 
 	.factory( "Dashbar", [
-		"Icon",
 		"attachProfile",
 		"attachProfileSetting",
-		function factory( Icon, attachProfile, attachProfileSetting ){
+		function factory( 
+			attachProfile, 
+			attachProfileSetting 
+		){
 			var Dashbar = React.createClass( {
 				"statics": {
 					"dashList": [ ],

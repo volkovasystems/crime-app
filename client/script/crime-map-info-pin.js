@@ -1,4 +1,5 @@
 Crime
+
 	.factory( "attachAllMapInfoPin", [
 		"getAllCrimeNearReporter",
 		function factory( getAllCrimeNearReporter ){

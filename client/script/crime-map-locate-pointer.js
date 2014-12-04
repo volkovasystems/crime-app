@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "mapLocatePointerController", [
 		"Event",
 		function directive( Event ){

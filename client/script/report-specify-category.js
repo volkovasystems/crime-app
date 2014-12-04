@@ -1,4 +1,10 @@
-angular.module( "ReportSpecifyCategory", [ "Event", "PageFlow", "MapPreview", "CaseCategoryList", "MapView" ] )
+angular.module( "ReportSpecifyCategory", [ 
+	"Event", 
+	"PageFlow", 
+	"MapPreview", 
+	"CaseCategoryList", 
+	"MapView" 
+] )
 	
 	.constant( "REPORT_HEADER_TITLE", labelData.REPORT_HEADER_TITLE )
 

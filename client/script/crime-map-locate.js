@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "mapLocateController", [
 		"Event",
 		"getAddressAtPosition",

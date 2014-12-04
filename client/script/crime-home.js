@@ -1,10 +1,14 @@
 Crime
-	.value( "CRIME_LOGO_IMAGE_SOURCE", "../image/crimewatch.png" )
+
+	.constant( "CRIME_LOGO_IMAGE_SOURCE", staticData.CRIME_LOGO_IMAGE_SOURCE )
 
 	.directive( "homeController", [
 		"Event",
 		"CRIME_LOGO_IMAGE_SOURCE",
-		function directive( Event, CRIME_LOGO_IMAGE_SOURCE ){
+		function directive( 
+			Event, 
+			CRIME_LOGO_IMAGE_SOURCE 
+		){
 			return {
 				"restrict": "A",
 				"scope": true,

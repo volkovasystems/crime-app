@@ -1,4 +1,4 @@
-angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
+angular.module( "ProfileSetting", [ "Event", "PageFlow" ] )
 	
 	.constant( "NAME_LABEL", labelData.NAME_LABEL )
 
@@ -17,7 +17,6 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 	.constant( "CHANGE_AVATAR_LABEL", labelData.CHANGE_AVATAR_LABEL )
 	
 	.factory( "ProfileSetting", [
-		"Icon",
 		"NAME_LABEL",
 		"NAME_PLACEHOLDER",
 		"EMAIL_LABEL",
@@ -27,7 +26,6 @@ angular.module( "ProfileSetting", [ "Event", "PageFlow", "Icon" ] )
 		"USER_AVATAR_ALTERNATIVE",
 		"CHANGE_AVATAR_LABEL",
 		function factory( 
-			Icon,
 			NAME_LABEL,
 			NAME_PLACEHOLDER,
 			EMAIL_LABEL,

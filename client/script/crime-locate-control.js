@@ -1,4 +1,5 @@
 Crime
+	
 	.directive( "locateControlController", [
 		"Event",
 		function directive( Event ){
