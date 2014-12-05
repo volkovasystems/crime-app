@@ -171,7 +171,7 @@ app.get( "/api/:accessID/report/query/latest/:reportState",
 					} )
 
 					.sort( {
-						"reportTimestamp": "ascending" 
+						"reportTimestamp": "descending" 
 					} )
 
 					.limit( count )
@@ -243,7 +243,7 @@ app.get( "/api/:accessID/report/query/latest",
 					.find( { } )
 
 					.sort( {
-						"reportTimestamp": "ascending" 
+						"reportTimestamp": "descending" 
 					} )
 
 					.limit( count )
