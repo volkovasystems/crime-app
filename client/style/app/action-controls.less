@@ -2,10 +2,19 @@
 {
     .icon
     {
+
+      color: @action-control-color;
         &:active
         {
-            color: #FFFFFF;
-            background-color: lighten(@body-copy-color, 20%);
+            padding: 2px;
+
+            color: #fff;
+            border-radius: 50%;
+            background-color: lighten(@body-copy-color, 40%);
         }
+    }
+
+    a {
+      text-decoration: none;
     }
 }
