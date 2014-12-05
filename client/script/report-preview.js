@@ -82,9 +82,7 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 					var uri = new URI( );
 					var currentHostAddress = [ 
 						"http:/",
-						( production )?
-							uri.domain( ) :
-							[ uri.domain( ), uri.port( ) ].join( ":" ) 
+						uri.host( )
 					].join( "/" );
 
 					var categoryIconPinSource = [ 

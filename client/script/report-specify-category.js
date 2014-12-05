@@ -149,9 +149,7 @@ angular.module( "ReportSpecifyCategory", [
 					var uri = new URI( );
 					var currentHostAddress = [ 
 						"http:/",
-						( production )?
-							uri.domain( ) :
-							[ uri.domain( ), uri.port( ) ].join( ":" ) 
+						uri.host( )
 					].join( "/" );
 
 					var selectedCaseCategory = this.state.selectedCaseCategory;
@@ -177,9 +175,7 @@ angular.module( "ReportSpecifyCategory", [
 						var uri = new URI( );
 						var currentHostAddress = [ 
 							"http:/",
-							( production )?
-								uri.domain( ) :
-								[ uri.domain( ), uri.port( ) ].join( ":" ) 
+							uri.host( )
 						].join( "/" );
 
 						var selectedCaseCategory = this.state.selectedCaseCategory;
@@ -214,9 +210,7 @@ angular.module( "ReportSpecifyCategory", [
 						var uri = new URI( );
 						var currentHostAddress = [ 
 							"http:/",
-							( production )?
-								uri.domain( ) :
-								[ uri.domain( ), uri.port( ) ].join( ":" ) 
+							uri.host( )
 						].join( "/" );
 
 						var selectedCaseCategory = this.state.selectedCaseCategory;
