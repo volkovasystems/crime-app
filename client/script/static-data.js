@@ -31,5 +31,7 @@ var staticData = {
 	"CRIME_LOGO_IMAGE_SOURCE": "image/crimewatch.png",
 	"APP_LOGO_IMAGE_SOURCE": "image/empty.png",
 
-	"DEFAULT_MAP_ADDRESS": "Manila, Philippines"
+	"DEFAULT_MAP_ADDRESS": "Manila, Philippines",
+
+	"STATIC_SERVER_URL": "http://map.crimewatch.ph"
 };

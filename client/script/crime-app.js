@@ -216,8 +216,14 @@ Crime
 		function onRun( $http, $rootScope, Event ){
 			Event( $rootScope );
 
+			var requestEndpoint = "/get/all/api/endpoint";
+
+			if( window.cordova ){
+				requestEndpoint = [ staticData.STATIC_SERVER_URL, requestEndpoint ].join( "" );
+			}
+
 			//: @todo: Get the server list from the static server.
-			$http.get( "/get/all/api/endpoint" )
+			$http.get( requestEndpoint )
 				.success( function onSuccess( data, status ){
 					$rootScope.serverSet = data;
 				} )
