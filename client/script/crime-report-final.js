@@ -31,6 +31,11 @@ Crime
 						function onCloseReportFinal( ){
 							scope.publish( "hide-report-final" );
 						} );
+
+					scope.on( "open-my-report",
+						function onOpenMyReport( ){
+							scope.publish( "close-report-final" );
+						} );
 				}
 			};
 		}

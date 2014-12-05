@@ -39,6 +39,20 @@ Crime
 						function onCloseReportFinal( ){
 							scope.publish( "show-report-control" );
 						} );
+
+					scope.on( "close-report-pin",
+						function onCloseReportPin( stopFlag ){
+							if( stopFlag ){
+								scope.publish( "show-report-control" );	
+							}
+						} );
+
+					scope.on( "open-report-pin",
+						function onOpenReportPin( stopFlag ){
+							if( stopFlag ){
+								scope.publish( "hide-report-control" );	
+							}
+						} );
 				}
 			}
 		}

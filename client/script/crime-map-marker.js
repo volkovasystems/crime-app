@@ -122,7 +122,7 @@ Crime
 						function onLoginSuccess( ){
 							mapAllCrimeNearReporter( scope );
 
-							scope.on( "map-position-changed",
+							/*scope.on( "map-position-changed",
 								function onMapPositionChanged( position ){
 									if( self.timeout ){
 										clearTimeout( self.timeout );
@@ -137,7 +137,7 @@ Crime
 
 										self.timeout = null;
 									}, 3000 );
-								} );
+								} );*/
 						} );
 
 					scope.on( "report-added",

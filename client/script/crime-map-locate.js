@@ -23,11 +23,6 @@ Crime
 									}
 								} );
 						} );
-
-					scope.on( "dash-clicked:report",
-						function onNavigateReport( ){
-							scope.publish( "control-click:crime-confirm-location" );
-						} );
 				}
 			};
 		}

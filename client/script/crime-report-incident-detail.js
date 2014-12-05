@@ -28,6 +28,11 @@ Crime
 						function onConfirmReportSpecifyCategory( ){
 							scope.publish( "show-report-incident-detail" );
 						} );
+
+					scope.on( "close-report-final",
+						function onCloseReportFinal( ){
+							scope.publish( "clear-report-incident-detail-data" );
+						} );
 				}
 			};
 		}

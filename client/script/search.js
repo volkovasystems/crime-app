@@ -44,7 +44,7 @@ angular.module( "Search", [ "Event", "PageFlow" ] )
 						this.timeout = null;
 					}
 
-					self.scope.publish( "search-text-changed", this.state.searchText );
+					this.scope.publish( "search-text-changed", this.state.searchText );
 				},
 
 				"onChangeSearchText": function onChangeSearchText( event ){

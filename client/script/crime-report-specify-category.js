@@ -64,6 +64,11 @@ Crime
 
 							scope.publish( "hide-report-specify-category" );
 						} );
+
+					scope.on( "close-report-final",
+						function onCloseReportFinal( ){
+							scope.publish( "clear-report-specify-category-data" );
+						} );
 				}
 			};
 		}
