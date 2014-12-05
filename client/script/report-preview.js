@@ -37,11 +37,11 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickCloseReportPreview": function onClickCloseReportPreview( ){
-					this.scope.publish( "close-report-preview", this.props.reportPreviewID );
+					this.scope.publish( "close-report-preview", this.props.reportPreviewID, true );
 				},
 
 				"onClickMoreDetail": function onClickMoreDetail( ){
-					this.scope.publish( "open-report-detail", this.props.reportPreviewID );
+					this.scope.publish( "open-report-detail", this.props.reportPreviewID, true );
 				},
 
 				"getDefaultProps": function getDefaultProps( ){

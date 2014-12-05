@@ -79,12 +79,14 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 									mapComponent.panTo( position );
 
+									scope.publish( "open-report-pin", true );
+
 									for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
 										if( cleanMapInfoID != mapInfoID ){
-											scope.publish( "open-report-preview", mapInfoID );	
+											scope.publish( "open-report-preview", mapInfoID, false );	
 										}
 									}
-								}	
+								}
 							}
 						} );
 
@@ -103,7 +105,7 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 						} );
 
 					scope.on( "close-report-detail",
-						function onCloseReportDetail( reportDetailID ){
+						function onCloseReportDetail( reportDetailID, propagationFlag ){
 							if( reportDetailID == cleanMapInfoID &&
 								_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) )
 							{
@@ -112,30 +114,34 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 								OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
 
 								EXPANDED_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
+
+								scope.publish( "close-report-pin", propagationFlag );
 							}
 
 							for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
-								scope.publish( "open-report-preview", mapInfoID );
+								scope.publish( "open-report-preview", mapInfoID, false );
 							}
 						} );
 
 					scope.on( "close-report-preview",
-						function onCloseReportPreview( reportPreviewID ){
+						function onCloseReportPreview( reportPreviewID, propagationFlag ){
 							if( reportPreviewID == cleanMapInfoID &&
 								_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) )
 							{
 								mapInfoPin.close( );
 
 								OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
+
+								scope.publish( "close-report-pin", propagationFlag );
 							}
 
 							for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
-								scope.publish( "open-report-preview", mapInfoID );
+								scope.publish( "open-report-preview", mapInfoID, false );
 							}
 						} );
 
 					scope.on( "open-report-detail",
-						function onOpenReportDetail( reportDetailID ){
+						function onOpenReportDetail( reportDetailID, propagationFlag ){
 							if( reportDetailID == cleanMapInfoID &&
 								_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) )
 							{
@@ -149,11 +155,13 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 								mapInfoPin.setContent( mapInfoPinContent );
 
 								mapComponent.panTo( position );
+
+								scope.publish( "open-report-pin", propagationFlag );
 							}
 						} );
 
 					scope.on( "open-report-preview",
-						function onOpenReportDetail( reportPreviewID ){
+						function onOpenReportDetail( reportPreviewID, propagationFlag ){
 							if( reportPreviewID == cleanMapInfoID &&
 								_.contains( MAP_INFO_PIN_LIST, mapInfoPin ) )
 							{
@@ -167,6 +175,8 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 								mapInfoPin.setContent( mapInfoPinContent );
 
 								mapComponent.panTo( position );
+
+								scope.publish( "open-report-pin", propagationFlag );
 							}
 						} );
 
