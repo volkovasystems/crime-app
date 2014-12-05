@@ -1,0 +1,61 @@
+.my-reports
+{
+    position: absolute;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+
+    display: table;
+
+    width: 480px;
+    width: 100%;
+    height: 100%;
+
+    transform: translate(-50%, -50%);
+
+    background-color: rgba(0, 0, 0, .3) !important;
+    .container
+    {
+        padding: 20px;
+    }
+    h4
+    {
+        font-size: 1.1em;
+    }
+    h2
+    {
+        font-size: 1.6em;
+
+        margin: 10px 0 20px;
+    }
+    .table
+    {
+        font-weight: 200;
+
+        width: 100%;
+        margin: 30px 0;
+        .pending
+        {
+            color: @body-copy-color-light;
+        }
+        .row
+        {
+            .status
+            {
+                font-weight: 600;
+            }
+            td
+            {
+                padding: 7px 0;
+            }
+        }
+        th
+        {
+            font-weight: 600;
+
+            text-align: left;
+
+            color: @body-copy-color-light;
+        }
+    }
+}
