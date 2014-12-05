@@ -49,6 +49,7 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 		){
 			var createMapInfoPin = function createMapInfoPin( position, mapInfoData, mapComponent, scope ){
 				var timeout = setTimeout( function onTimeout( ){
+					position = new google.maps.LatLng( position.latitude, position.longitude );
 
 					var cleanMapInfoID = mapInfoData.mapInfoID.replace( /[^A-Za-z0-9]/g, "" );
 
@@ -75,6 +76,8 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 									OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = marker;
 
 									mapInfoPin.open( mapComponent, marker );
+
+									mapComponent.panTo( position );
 
 									for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
 										if( cleanMapInfoID != mapInfoID ){
@@ -144,6 +147,8 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 								var mapInfoPinContent = generateMapInfoPinContent( cleanMapInfoID, width, height );
 
 								mapInfoPin.setContent( mapInfoPinContent );
+
+								mapComponent.panTo( position );
 							}
 						} );
 
@@ -159,7 +164,9 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 								var mapInfoPinContent = generateMapInfoPinContent( cleanMapInfoID, width, height );
 
-								mapInfoPin.setContent( mapInfoPinContent );	
+								mapInfoPin.setContent( mapInfoPinContent );
+
+								mapComponent.panTo( position );
 							}
 						} );
 

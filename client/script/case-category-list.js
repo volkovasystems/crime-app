@@ -122,8 +122,20 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 
 					var caseCategoryTitle = caseCategoryData.title;
 
-					var caseCategoryIconSource = [ caseCategoryName, "icon.png" ].join( "-" );
+					var uri = new URI( );
+					var currentHostAddress = [ 
+						"http:/",
+						( production )?
+							uri.domain( ) :
+							[ uri.domain( ), uri.port( ) ].join( ":" ) 
+					].join( "/" );
 
+					var caseCategoryIconSource = [ 
+						currentHostAddress, 
+						"image", 
+						[ caseCategoryName, "icon.png" ].join( "-" ) 
+					].join( "/" );
+					
 					var isSelected = _.contains( selectedCaseCategory, caseCategoryName );
 
 					return; //: @template: template/case-category-item.html

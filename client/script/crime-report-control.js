@@ -39,6 +39,26 @@ Crime
 						function onCloseReportFinal( ){
 							scope.publish( "show-report-control" );
 						} );
+
+					scope.on( "close-report-detail",
+						function onCloseReportDetail( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "close-report-preview",
+						function onCloseReportPreview( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "open-report-preview",
+						function onOpenReportPreview( ){
+							scope.publish( "hide-report-control" );
+						} );
+
+					scope.on( "open-report-detail",
+						function onOpenReportFinal( ){
+							scope.publish( "hide-report-control" );
+						} );
 				}
 			}
 		}
