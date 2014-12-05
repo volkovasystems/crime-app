@@ -14,8 +14,8 @@ var staticData = {
 	"REPORT_MAP_PREVIEW_WIDTH": 600,
 	"REPORT_MAP_PREVIEW_HEIGHT": 250,
 
-	"MAP_LOCATE_POINTER_ICON": "../image/map-locate-pointer.gif",
-	"MAP_POINTER_ICON": "../image/map-pointer.png",
+	"MAP_LOCATE_POINTER_ICON": "image/map-locate-pointer.gif",
+	"MAP_POINTER_ICON": "image/map-pointer.png",
 
 	"MAP_LOCATE_POINTER_ICON_WIDTH": 32,
 	"MAP_LOCATE_POINTER_ICON_HEIGHT": 32,
@@ -28,8 +28,8 @@ var staticData = {
 
 	"REPORT_LIST_PAGE_SIZE": 6,
 
-	"CRIME_LOGO_IMAGE_SOURCE": "../image/crimewatch.png",
-	"APP_LOGO_IMAGE_SOURCE": "../image/empty.png",
+	"CRIME_LOGO_IMAGE_SOURCE": "image/crimewatch.png",
+	"APP_LOGO_IMAGE_SOURCE": "image/empty.png",
 
 	"DEFAULT_MAP_ADDRESS": "Manila, Philippines"
 };
