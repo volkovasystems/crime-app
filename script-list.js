@@ -34,6 +34,7 @@ var scriptList = [
 	"search.js",
 	
 	"case-category-list.js",
+	"case-category-filter.js",
 
 	"report-specify-category.js",
 	"report-incident-detail.js",

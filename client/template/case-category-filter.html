@@ -3,18 +3,23 @@
 	<section 
 		className="icon-container">
 		<a 
-			className="icon md-3x main-menu-icon md-filter-list">
+			className="icon md-3x main-menu-icon md-filter-list"
+			onClick={ this.onClickOpenCaseCategoryFilter }>
 		</a>
 	</section>
 	<section 
-		className="category-component card show">
+		className={ [
+			"category-component card",
+			( componentState == "case-category-filter-expanded" )? "show" : ""
+		].join( " " ) }>
 		<section 
 			className="card-category">
 			<section 
 				className="close-action pull-right">
 				<a 
 					className="icon" 
-					href="#"> 
+					href="#"
+					onClick={ this.onClickCloseCaseCategoryFilter }> 
 					<i 
 						className="md-2x md-close">
 					</i> 
@@ -22,6 +27,19 @@
 			</section>
 			<section 
 				className="case-category-list">
+			</section>
+			<section 
+				className="form-actions">
+				<button 
+					className="btn btn-primary btn-xlarge"
+					onClick={ this.onClickConfirm }>
+					{ CONFIRM_BUTTON_LABEL }
+				</button>
+				<button 
+					className="btn btn-gray btn-xlarge"
+					onClick={ this.onClickCancel }>
+					{ CANCEL_BUTTON_LABEL }
+				</button>
 			</section>
 		</section>
 	</section>

@@ -1,24 +1,22 @@
 angular.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" ] )
 	
-	.constant( "CHOOSE_CATEGORY_PHRASE", labelData.CHOOSE_CATEGORY_PHRASE )
+	.constant( "CONFIRM_BUTTON_LABEL", labelData.CONFIRM_BUTTON_LABEL )
 
-	.constant( "MORE_CATEGORY_LABEL", labelData.MORE_CATEGORY_LABEL )
-
-	.constant( "LESS_CATEGORY_LABEL", labelData.LESS_CATEGORY_LABEL )
+	.constant( "CANCEL_BUTTON_LABEL", labelData.CANCEL_BUTTON_LABEL )
 
 	.factory( "CaseCategoryFilter", [
-		"CHOOSE_CATEGORY_PHRASE",
-		"MORE_CATEGORY_LABEL",		
-		"LESS_CATEGORY_LABEL",
+		"attachCaseCategoryList",
+		"CONFIRM_BUTTON_LABEL",
+		"CANCEL_BUTTON_LABEL",
 		function factory(
-			CHOOSE_CATEGORY_PHRASE,
-			MORE_CATEGORY_LABEL,
-			LESS_CATEGORY_LABEL
+			attachCaseCategoryList,
+			CONFIRM_BUTTON_LABEL,
+			CANCEL_BUTTON_LABEL
 		){
 			var CaseCategoryFilter = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container, optionSet ){
-						var caseCategoryListComponent = (
+						var caseCategoryFilterComponent = (
 							<CaseCategoryFilter 
 								scope={ scope }
 								container={ container } />
@@ -32,24 +30,58 @@ angular.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" 
 
 				"getInitialState": function getInitialState( ){
 					return {
+						"selectedCaseCategory": [ ],
+						"componentState": "case-category-filter-minified"
 					};
 				},
 
-				"getDefaultProps": function getDefaultProps( ){
-					return {
-					};
+				"onClickConfirm": function onClickConfirm( ){
+					this.scope.publish( "filter-by-case-category", this.state.selectedCaseCategory );
+				},
+
+				"onClickCancel": function onClickCancel( ){
+					this.scope.publish( "close-case-category-filter" );
+				},
+
+				"onClickOpenCaseCategoryFilter": function onClickOpenCaseCategoryFilter( ){
+					this.setState( {
+						"componentState": "case-category-filter-expanded"
+					} );
+				},
+
+				"onClickCloseCaseCategoryFilter": function onClickCloseCaseCategoryFilter( ){
+					this.setState( {
+						"componentState": "case-category-filter-minified"
+					} );
 				},
 
 				"onSelectCaseCategory": function onSelectCaseCategory( selectedCaseCategory ){
 					this.setState( {
-						"selectedCaseCategory": _.last( selectedCaseCategory )
+						"selectedCaseCategory": selectedCaseCategory
 					} );
 				},
 				
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 
-					
+					this.scope.on( "show-case-category-filter",
+						function onShowCaseCategoryFilter( ){
+							self.scope.publish( "show-case-category-list", "case-category-filter" );
+						} );
+
+					this.scope.on( "hide-case-category-filter",
+						function onHideCaseCategoryFilter( ){
+							self.scope.publish( "hide-case-category-list", "case-category-filter" );
+						} );
+
+					this.scope.on( "clear-case-category-filter-data",
+						function onClearReportSpecifyCategoryData( ){
+							self.setState( {
+								"selectedCaseCategory": [ ] 
+							} );
+
+							self.scope.publish( "clear-selected-case-category", "case-category-filter" );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -63,6 +95,8 @@ angular.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" 
 				},
 
 				"render": function onRender( ){
+					var componentState = this.state.componentState;
+
 					return; //: @template: template/case-category-filter.html
 				},
 
@@ -71,11 +105,18 @@ angular.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" 
 				},
 
 				"componentDidMount": function componentDidMount( ){
+					attachCaseCategoryList( {
+						"scope": this.scope,
+						"element": $( ".case-category-list", this.getDOMNode( ) ),
+						"onSelectCaseCategory": this.onSelectCaseCategory,
+						"namespace": "case-category-filter"
+					} );
+
 					this.scope.publish( "case-category-filter-rendered" );	
 				}
 			} );
 
-			return CaseCategoryList;
+			return CaseCategoryFilter;
 		}
 	] )
 
@@ -103,6 +144,8 @@ angular.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" 
 					scope = scope.$new( true );
 				}
 
+				scope.namespace = optionSet.namespace;
+
 				Event( scope );
 
 				var pageFlow = PageFlow( scope, element, "case-category-filter overflow" );
@@ -112,20 +155,16 @@ angular.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" 
 				}
 
 				scope.on( "show-case-category-filter",
-					function onShowCaseCategoryFilter( namespace ){
-						if( optionSet.namespace == namespace ){
-							scope.showPage( );	
-						}
+					function onShowCaseCategoryFilter( ){
+						scope.showPage( );
 					} );
 
 				scope.on( "hide-case-category-filter",
-					function onHideCaseCategoryFilter( namespace ){
-						if( optionSet.namespace == namespace ){
-							scope.hidePage( );
-						}
+					function onHideCaseCategoryFilter( ){
+						scope.hidePage( );
 					} );
 
-				scope.publish( "hide-case-category-filter", optionSet.namespace );
+				scope.publish( "hide-case-category-filter" );
 
 				CaseCategoryFilter.attach( scope, element );
 			};
@@ -146,7 +185,8 @@ angular.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" 
 						"scope": scope,
 						"element": element,
 						"attributeSet": attributeSet,
-						"embedState": "no-embed"
+						"embedState": "no-embed",
+						"namespace": "case-category-filter"
 					} );
 				}
 			};

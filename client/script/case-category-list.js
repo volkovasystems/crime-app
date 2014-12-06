@@ -128,6 +128,13 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 								} );
 							}
 						} );
+
+					this.scope.on( "clear-selected-case-category",
+						function onClearSelectedCaseCategory( namespace ){
+							self.setState( {
+								"selectedCaseCategory": [ ]
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){

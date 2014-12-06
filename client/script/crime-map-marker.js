@@ -1,10 +1,21 @@
 Crime
 
 	.factory( "getAllCrimeNearReporter", [
+		"Event",
+		"ProgressBar",
 		"$http",
 		"getReportServerData",
-		function factory( $http, getReportServerData ){
+		function factory( 
+			Event,
+			ProgressBar,
+			$http, 
+			getReportServerData
+		){
 			var getAllCrimeNearReporter = function getAllCrimeNearReporter( scope, callback ){
+				Event( scope );
+
+				ProgressBar( scope );
+				
 				async.waterfall( [
 					function initiateLoading( callback ){
 						scope.startLoading( );
@@ -79,26 +90,46 @@ Crime
 		}
 	] )
 
+	.factory( "mapAllCrimeReport", [
+		"Event",
+		function factory( Event ){
+			var mapAllCrimeReport = function mapAllCrimeReport( scope, reportList ){
+				Event( scope );
+
+				_.each( reportList,
+					function onEachReportItem( reportData ){
+						var iconData = {
+							"markerID": reportData.reportID,
+							"sourceURL": "../image/@reportCaseType-marker.png"
+								.replace( "@reportCaseType", reportData.reportCaseType )
+						};
+
+						scope.publish( "create-map-marker", 
+							reportData.reportLocation, 
+							iconData, 
+							scope.mapComponent );
+					} );
+			};
+
+			return mapAllCrimeReport;
+		}
+	] )
+
 	.factory( "mapAllCrimeNearReporter", [
 		"getAllCrimeNearReporter",
-		function factory( getAllCrimeNearReporter ){
+		"mapAllCrimeReport",
+		function factory( 
+			getAllCrimeNearReporter,
+			mapAllCrimeReport 
+		){
 			var mapAllCrimeNearReporter = function mapAllCrimeNearReporter( scope ){
-				
 				getAllCrimeNearReporter( scope,
 					function onResult( error, reportList ){
-						_.each( reportList,
-							function onEachReportItem( reportData ){
-								var iconData = {
-									"markerID": reportData.reportID,
-									"sourceURL": "../image/@reportCaseType-marker.png"
-										.replace( "@reportCaseType", reportData.reportCaseType )
-								};
-
-								scope.publish( "create-map-marker", 
-									reportData.reportLocation, 
-									iconData, 
-									scope.mapComponent );
-							} );
+						if( error ){
+							//: @todo: notify on error.
+						}else{
+							mapAllCrimeReport( scope, reportList );	
+						}
 					} );
 			};
 
@@ -109,7 +140,12 @@ Crime
 	.directive( "mapMarkerController", [
 		"Event",
 		"mapAllCrimeNearReporter",
-		function directive( Event, mapAllCrimeNearReporter ){
+		"mapAllCrimeReport",
+		function directive( 
+			Event, 
+			mapAllCrimeNearReporter,
+			mapAllCrimeReport
+		){
 			return {
 				"restrict": "A",
 				"scope": true,
@@ -143,6 +179,11 @@ Crime
 					scope.on( "report-added",
 						function onLoginSuccess( ){
 							mapAllCrimeNearReporter( scope );
+						} );
+
+					scope.on( "map-all-filtered-report",
+						function onMapAllFilteredReport( reportList ){
+							mapAllCrimeReport( scope, reportList );
 						} );
 				}
 			}

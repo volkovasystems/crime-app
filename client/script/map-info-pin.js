@@ -77,7 +77,7 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 									mapInfoPin.open( mapComponent, marker );
 
-									mapComponent.panTo( position );
+									//mapComponent.panTo( position );
 
 									scope.publish( "open-report-pin", true );
 
@@ -154,7 +154,7 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 								mapInfoPin.setContent( mapInfoPinContent );
 
-								mapComponent.panTo( position );
+								//mapComponent.panTo( position );
 
 								scope.publish( "open-report-pin", propagationFlag );
 							}
@@ -174,7 +174,7 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 								mapInfoPin.setContent( mapInfoPinContent );
 
-								mapComponent.panTo( position );
+								//mapComponent.panTo( position );
 
 								scope.publish( "open-report-pin", propagationFlag );
 							}

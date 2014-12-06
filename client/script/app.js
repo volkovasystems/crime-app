@@ -21,6 +21,7 @@ angular
 		"ReportIncidentDetail",
 		"ReportFinal",
 		"ReportList",
+		"CaseCategoryFilter",
 		"Notify"
 	] )
 	.run( [
@@ -104,6 +105,13 @@ angular
 
 				function checkRender( callback ){
 					$rootScope.on( "notify-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+
+				function checkRender( callback ){
+					$rootScope.on( "case-category-filter-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );

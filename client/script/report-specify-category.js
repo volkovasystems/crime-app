@@ -22,9 +22,9 @@ angular.module( "ReportSpecifyCategory", [
 
 	.factory( "ReportSpecifyCategory", [
 		"MapPreview",
+		"attachCaseCategoryList",
 		"DEFAULT_POSITION",
 		"DEFAULT_MAP_ZOOM",
-		"attachCaseCategoryList",
 		"REPORT_HEADER_TITLE",
 		"SPECIFY_CATEGORY_PROGRESS_LABEL",
 		"INCIDENT_DETAIL_PROGRESS_LABEL",
@@ -34,9 +34,9 @@ angular.module( "ReportSpecifyCategory", [
 		"WARN_IF_NO_SELECTED_CATEGORY",
 		function factory( 
 			MapPreview,
+			attachCaseCategoryList,
 			DEFAULT_POSITION, 
 			DEFAULT_MAP_ZOOM,
-			attachCaseCategoryList,
 			REPORT_HEADER_TITLE,
 			SPECIFY_CATEGORY_PROGRESS_LABEL,
 			INCIDENT_DETAIL_PROGRESS_LABEL,
@@ -122,6 +122,8 @@ angular.module( "ReportSpecifyCategory", [
 								"longitude": DEFAULT_POSITION.lng( ),
 								"zoom": DEFAULT_MAP_ZOOM
 							} );
+
+							self.scope.publish( "clear-selected-case-category", "report-specify-category" );
 						} );
 
 					this.scope.on( "show-report-specify-category",
