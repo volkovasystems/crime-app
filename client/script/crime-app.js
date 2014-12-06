@@ -6,6 +6,12 @@ var Crime = angular.module( "Crime", [
 ] );
 
 Crime
+	.config( [
+		"$compileProvider",
+		function configuration ( $compileProvider ) {
+			$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
+		}
+	] )
 	.factory( "resolveURL", [
 		function factory( ){
 			var resolveURL = function resolveURL( serverData ){
@@ -81,7 +87,7 @@ Crime
 		"resolveURL",
 		function factory( $rootScope, resolveURL ){
 			var getAppServerData = function getAppServerData( ){
-				return resolveURL( $rootScope.serverSet.user );
+				return resolveURL( $rootScope.serverSet.app );
 			};
 
 			return getAppServerData;

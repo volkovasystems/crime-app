@@ -5,7 +5,8 @@ Crime
 		"$http",
 		"getUserServerData",
 		"getReportServerData",
-		function directive( Event , ProgressBar , $http , getUserServerData , getReportServerData ){
+		"getAppServerData",
+		function directive( Event , ProgressBar , $http , getUserServerData , getReportServerData , getAppServerData ){
 			return {
 				"restrict": "A",
 				"scope": true,
@@ -102,8 +103,7 @@ Crime
 									.map(function each ( user ) {
 										return requestEndpoint.replace(":accessID" , user.accessID);
 									} )
-									.map(function each ( requestEndpoint ) { 
-										console.log(requestEndpoint);										
+									.map(function each ( requestEndpoint ) { 																			
 										return function ( callback ) {
 											$http.get(requestEndpoint , {
 												headers: {
@@ -180,27 +180,65 @@ Crime
 
 								function processRequestEndpoint( adminAccessID, callback ){									
 									var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/:reportID/update" );
+									var appRequestEndPoint = getAppServerData( ).joinPath( "api/:accessID/report/:state" );
+
+									console.log(report);									
 
 									requestEndpoint = requestEndpoint.replace( ":accessID", report.accessID );
 									requestEndpoint = requestEndpoint.replace( ":reportID", report.reportID );
-									console.log(requestEndpoint);
-									callback( null, requestEndpoint, adminAccessID );
+									appRequestEndPoint = appRequestEndPoint.replace( ":accessID" , report.accessID );
+
+									if ( report.reportState == "approved" ) {
+										appRequestEndPoint = appRequestEndPoint.replace( ":state" , "approve" );
+									}else if ( report.reportState == "rejected" ) {
+										appRequestEndPoint = appRequestEndPoint.replace( ":state" , "reject" );
+									}
+									console.log(appRequestEndPoint);
+									
+									callback( null, requestEndpoint, appRequestEndPoint, adminAccessID );
 								},
 
-								function updateReportData ( requestEndpoint , adminAccessID , callback ) {
+								function updateReportFormat ( requestEndpoint , appRequestEndPoint, adminAccessID , callback ) {
 									report.adminAccessID = adminAccessID;
-									$http.post( requestEndpoint , report ) 
-										.success ( function onSuccess ( response ) {
-											callback ( null , response )
-										} )
-										.error( function onError ( response ) {
-											callback ( null , response );
+									callback ( null , [
+											function ( callback ) {
+												$http.post( requestEndpoint , report ) 
+												.success ( function onSuccess ( response ) {
+													callback ( null , response );
+												} )
+												.error( function onError ( response ) {
+													callback ( null , response );
+												} );
+											},
+											function ( callback ) {
+												$http.post( appRequestEndPoint , 
+														{
+															"reportID": report.reportID,
+															"reporterID": report.reporterID,
+															"adminAccessID": adminAccessID
+														} 
+													) 
+													.success ( function onSuccess ( response ) {
+														callback ( null , response )
+													} )
+													.error( function onError ( response ) {
+														callback ( null , response );
+													} );
+											}
+										] );
+								},
+
+								function updateReportData ( requests , callback ) {									
+									async
+									.parallel(requests,
+										function lastly ( error , responseList  ) {
+											callback( error, responseList )
 										} );
 								}
 
 							],
-								function lastly ( err , updatedReport )	{
-									console.log( updatedReport );
+								function lastly ( err , response )	{
+									console.log( response );
 									scope.finishLoading( );
 								}
 							 );

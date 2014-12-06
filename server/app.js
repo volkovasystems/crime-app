@@ -49,6 +49,7 @@ app.use( function allowCrossDomain( request, response, next ){
 	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
 	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept, Administrator-Access-ID" );
 	response.header( "Access-Control-Max-Age", 10 );
+	response.header( "Cache-Control", "no-cache, no-store, must-revalidate" );
 	  
 	if( "OPTIONS" == request.method.toUpperCase( ) ){
 		response.sendStatus( 200 );
@@ -257,7 +258,7 @@ app.post( "/api/:accessID/report/approve",
 				var requestEndpoint = userServer.joinPath( "api/:accessID/user/get" );
 
 				requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
-
+				console.log(requestEndpoint);
 				unirest
 					.get( requestEndpoint )
 					.headers( { 
@@ -365,7 +366,7 @@ app.post( "/api/:accessID/report/approve",
 	} );
 
 app.post( "/api/:accessID/report/reject",
-	function onReportReject( ){
+	function onReportReject( request, response ){
 		var accessID = request.param( "accessID" );
 
 		var ReportState = mongoose.model( "ReportState" );
