@@ -4,28 +4,20 @@
 
     padding: 20px;
 
-    background-color: #eee;
+    background-color: @bg-color-alt;
     .edit-action
     {
         position: absolute;
         right: 15px;
         bottom: 30px;
-    }
-    .close-action
-    {
-        position: absolute;
-        top: 20px;
-        right: 15px;
-    }
-    .edit-action a,
-    .close-action a
-    {
-        text-decoration: none;
-    }
-    .edit-action .icon,
-    .close-action .icon
-    {
-        color: #c8c8c8;
+        a
+        {
+            text-decoration: none;
+        }
+        .icon
+        {
+            color: @action-control-color;
+        }
     }
     .edit-avatar
     {

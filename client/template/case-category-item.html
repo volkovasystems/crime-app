@@ -1,0 +1,23 @@
+<li 
+	key={ hashedValue }
+	className="category-list-item"
+	value={ caseCategoryName }
+	onClick={ this.onSelectCaseCategory }>
+	<a 
+		className={ [
+			"list-item",
+			( isSelected )? "active" : ""
+		].join( " " ) } 
+		href="#">
+		<section 
+			className="icon">
+			<img 
+				className="img" 
+				src={ caseCategoryIconSource } />
+		</section>
+		<span 
+			className="name">
+			{ caseCategoryTitle }
+		</span>
+	</a>
+</li>

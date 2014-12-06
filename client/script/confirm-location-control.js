@@ -2,9 +2,15 @@ angular.module( "ConfirmLocationControl", [ "Event", "PageFlow" ] )
 
 	.constant( "CONFIRM_LOCATION_CONTROL_LABEL", labelData.CONFIRM_LOCATION_CONTROL_LABEL )
 
+	.constant( "CANCEL_LOCATION_CONTROL_LABEL", labelData.CANCEL_LOCATION_CONTROL_LABEL )
+
 	.factory( "ConfirmLocationControl", [
 		"CONFIRM_LOCATION_CONTROL_LABEL",
-		function factory( CONFIRM_LOCATION_CONTROL_LABEL ){
+		"CANCEL_LOCATION_CONTROL_LABEL",
+		function factory( 
+			CONFIRM_LOCATION_CONTROL_LABEL,
+			CANCEL_LOCATION_CONTROL_LABEL
+		){
 			var ConfirmLocationControl = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -14,8 +20,12 @@ angular.module( "ConfirmLocationControl", [ "Event", "PageFlow" ] )
 					}
 				},
 
-				"onClickConfirmLocation": function onClickReport( ){
-					this.scope.publish( "confirm-location-control-clicked:confirm-location" );
+				"onClickConfirmLocation": function onClickConfirmLocation( ){
+					this.scope.publish( "confirm-location-control-click:confirm-location" );
+				},
+
+				"onClickCancelLocation": function onClickCancelLocation( ){
+					this.scope.publish( "confirm-location-control-click:cancel-location" );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){

@@ -1,8 +1,7 @@
 angular
 	.module( "ReportTable", [ 
 		"Event", 
-		"PageFlow",
-		"Icon"
+		"PageFlow"
 	] )
 
 	.value( "REPORT_HEADER_LABEL", "report a crime" )
@@ -129,9 +128,8 @@ angular
 	
 	.factory( "ReportTable", [
 		"REPORT_HEADER_LABEL",
-		"Icon",
 		"ReportTableList",
-		function factory( REPORT_HEADER_LABEL , Icon , ReportTableList ){
+		function factory( REPORT_HEADER_LABEL , ReportTableList ){
 			var ReportTable = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -203,7 +201,7 @@ angular
 											"shown",
 											"inline-block"
 										].join( " " ) }>
-										<Icon name="ic_report_problem_24px" />
+										
 									</div>
 
 									<div
@@ -238,11 +236,7 @@ angular
 												}
 											}>
 											
-											<Icon
-												className={ [
-													"close-report-table-icon"
-												].join( " " ) }
-												name="ic_close_24px" />
+											
 										</a>
 									</div>
 								</div>

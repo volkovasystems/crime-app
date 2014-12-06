@@ -4,16 +4,6 @@
 		className="container">
 		<section 
 			className="card-heading">
-			<section 
-				className="close-action pull-right">
-				<a 
-					className="icon" 
-					href="#">
-					<i 
-						className="md-2x md-close">
-					</i> 
-				</a>
-			</section>
 			<h2 
 				className="title">
 				{ REPORT_HEADER_TITLE }
@@ -75,6 +65,8 @@
 					<input 
 						type="text" 
 						className="input-md" 
+						value={ title }
+						onChange={ this.onChangeTitle }
 						required />
 					<span 
 						className="highlight">
@@ -94,9 +86,10 @@
 					className="group">
 					<textarea 
 						className="input-md" 
-						required="" 
-						rows="5" 
-						style="  ">
+						rows="5"
+						value={ description }
+						onChange={ this.onChangeDescription }
+						required >
 					</textarea>
 					<span 
 						className="highlight">
@@ -116,8 +109,14 @@
 					className="group">
 					<input 
 						type="text" 
-						className="input-md input-time" 
-						required="" />
+						className={ [
+							"input-md input-time",
+							( isTimeValid )? "valid" : "invalid"  
+						].join( " " ) }
+						placeholder={ TIME_FORMAT_PLACEHOLDER }
+						value={ time }
+						onChange={ this.onChangeTime }
+						required />
 					<span 
 						className="highlight">
 					</span>
@@ -126,15 +125,21 @@
 					</span>
 					<label 
 						className="label">
-						Time the incident happened?
+						{ TIME_HAPPENED_PHRASE }
 					</label>
 				</section>
 				<section 
 					className="group">
 					<input 
 						type="text" 
-						className="input-md input-date" 
-						required="" />
+						className={ [
+							"input-md input-date",
+							( isDateValid )? "valid" : "invalid"  
+						].join( " " ) }
+						placeholder={ DATE_FORMAT_PLACEHOLDER }
+						value={ date }
+						onChange={ this.onChangeDate }
+						required />
 					<span 
 						className="highlight">
 					</span>
@@ -143,7 +148,7 @@
 					</span>
 					<label 
 						className="label">
-						Date happened?
+						{ DATE_HAPPENED_PHRASE }
 					</label>
 				</section>
 			</section>
@@ -154,8 +159,10 @@
 					<label>
 						<input 
 							type="checkbox" 
-							className="checkbox send-report" />
-							Send this report anonymously
+							className="checkbox send-report"
+							checked={ isAnonymous }
+							onChange={ this.onChangeIsAnonymous } />
+							{ SEND_REPORT_ANONYMOUSLY_PHRASE }
 					</label>
 				</p>
 			</section>
@@ -164,24 +171,31 @@
 				<label>
 					<input 
 						type="checkbox" 
-						className="checkbox agree">
-						I hereby agree on CrimeWatch.ph's 
+						className="checkbox agree"
+						checked={ hasAgreed }
+						onChange={ this.onChangeHasAgreed } />
+						{ AGREEMENT_PHRASE } &nbsp;
 						<a 
 							target="_blank" 
 							href="http://crimewatch.ph/privacy-policy">
-							Privacy Policy
+							{ PRIVACY_POLICY_LABEL }
 						</a>
 				</label>
 			</p>
 			<section 
 				className="form-actions">
 				<button 
-					className="btn btn-primary btn-xlarge">
-					{ CONFIRM_BUTTON_LABEL }
+					className={ [
+						"btn btn-primary btn-xlarge",
+						( hasAgreed )? "" : "disabled"
+					].join( " " ) }
+					onClick={ this.onClickSend }>
+					{ SEND_BUTTON_LABEL }
 				</button>
 				<button 
 					href="#" 
-					className="btn btn-gray btn-xlarge">
+					className="btn btn-gray btn-xlarge"
+					onClick={ this.onClickCancel }>
 					{ CANCEL_BUTTON_LABEL }
 				</button>
 			</section>

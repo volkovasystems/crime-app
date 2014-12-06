@@ -1,0 +1,15 @@
+<div className="report-table-container">
+	<div 								
+		className={ [
+			"report-table-component",
+		].join( " " ) }>
+		<table border="1">
+			<tr>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Report Status</th>
+			</tr>
+			{ reportList.map( this.onEachReportItem ) } 								
+		</table>
+	</div>
+</div>

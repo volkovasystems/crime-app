@@ -1,12 +1,23 @@
+.report-feed-expanded .report-list {
+    width: 300px;
+    height: 100%;
+    right: -296px;
+}
+
+.report-feed-expanded {
+    left: -300px !important;
+    overflow: visible !important;
+}
+
 .report-list
 {
+    width: 100px;  
+    height: 100px;
     position: absolute;
     z-index: 5;
     top: 0;
     right: 0;
 
-    width: 300px;
-    height: 100%;
     .report-list-container
     {
         color: #fff;
@@ -202,13 +213,5 @@
                 }
             }
         }
-    }
-}
-
-@media (max-width: 600px)
-{
-    .report-list
-    {
-        width: 250px;
     }
 }

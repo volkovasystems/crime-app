@@ -1,28 +1,38 @@
-<section className="feeder-menu card">
-	<section className="icon-container">
-	<a className="icon md-3x feeder-menu-icon md-track-changes"></a>
+<section 
+	className="feeder-menu card">
+	
+	<section 
+		className="icon-container">
+		<a 
+			className="icon md-3x feeder-menu-icon md-track-changes"
+			onClick={ this.onClickExpandReportList }>
+		</a>
 	</section>
 
 	<section 
-	className="feedbar card">
- 	<section 
- 		className="toolbar">
-		
-		<h5 
-			className="headline">
-			{ REPORT_LIST_HEADER_LABEL }
-			
-			<section className="close-action pull-right">
-    <a className="md-close icon" href="#">
-  </a></section>
-		</h5>
-	</section>
+		className={ [
+			"feedbar card",
+			( componentState == "report-list-expanded" )? "show" : "" 
+		].join( " " ) }>
+		<section 
+			className="toolbar">
+			<h5 
+				className="headline">
+				{ REPORT_LIST_HEADER_LABEL }
+				<section 
+					className="close-action pull-right">
+					<a 
+						className="md-close md-2x icon" href="#"
+						onClick={ this.onClickCloseReportList }>
+					</a>
+				</section>
+			</h5>
+		</section>
 
-	<section className="feed-streams">
-		{ reportList.map( this.onEachReportItem ) }
+		<section 
+			className="feed-streams">
+			{ reportList.map( this.onEachReportItem ) }
+		</section>
 	</section>
-  
-</section>
-
 </section>
 

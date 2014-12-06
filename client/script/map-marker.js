@@ -7,9 +7,13 @@ angular.module( "MapMarker", [ "Event" ] )
 		function factory( MAP_MARKER_LIST ){
 			var createMapMarker = function createMapMarker( position, iconData, mapComponent, scope ){
 				var timeout = setTimeout( function onTimeout( ){
+					var width = staticData.MAP_MARKER_WIDTH;
+
+					var height = staticData.MAP_MARKER_HEIGHT;
+
 					var markerIcon = {
 						"url": iconData.sourceURL,
-						"scaledSize": new google.maps.Size( 41, 55 )
+						"scaledSize": new google.maps.Size( width, height )
 					};
 
 					var marker = new google.maps.Marker( {

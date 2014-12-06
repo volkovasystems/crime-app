@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "reportControlController", [
 		"Event",
 		function directive( Event ){
@@ -14,9 +15,43 @@ Crime
 							scope.publish( "show-report-control" );
 						} );
 
-					scope.on( "report-control-clicked:report",
+					scope.on( "report-control-click:report",
 						function onReportControlClick( ){
 							scope.publish( "hide-report-control" );
+						} );
+
+					scope.on( "confirm-location-control-click:cancel-location",
+						function onConfirmLocation( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "cancel-report-specify-category",
+						function onCancelReportSpecifyCategory( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "cancel-report-incident-detail",
+						function onCancelReportIncidentDetail( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "close-report-final",
+						function onCloseReportFinal( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "close-report-pin",
+						function onCloseReportPin( stopFlag ){
+							if( stopFlag ){
+								scope.publish( "show-report-control" );	
+							}
+						} );
+
+					scope.on( "open-report-pin",
+						function onOpenReportPin( stopFlag ){
+							if( stopFlag ){
+								scope.publish( "hide-report-control" );	
+							}
 						} );
 				}
 			}

@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "mapLocateController", [
 		"Event",
 		"getAddressAtPosition",
@@ -21,11 +22,6 @@ Crime
 										scope.publish( "set-current-address", address );	
 									}
 								} );
-						} );
-
-					scope.on( "dash-clicked:report",
-						function onNavigateReport( ){
-							scope.publish( "control-click:crime-confirm-location" );
 						} );
 				}
 			};

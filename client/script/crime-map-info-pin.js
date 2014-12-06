@@ -1,22 +1,21 @@
 Crime
 	.factory( "attachAllMapInfoPin", [
-		"getAllCrimeNearReporter",
-		function factory( getAllCrimeNearReporter ){
-			var attachAllMapInfoPin = function attachAllMapInfoPin( scope ){
-				getAllCrimeNearReporter( scope,
-					function onResult( error, reportList ){
-						_.each( reportList,
-							function onEachReportItem( reportData ){
-								var mapInfoData = {
-									"mapInfoID": reportData.reportID,
-									"reportData": reportData
-								};
+		"Event",
+		function factory( Event ){
+			var attachAllMapInfoPin = function attachAllMapInfoPin( scope, reportList ){
+				Event( scope );
 
-								scope.publish( "create-map-info-pin", 
-									reportData.reportLocation, 
-									mapInfoData, 
-									scope.mapComponent );
-							} );
+				_.each( reportList,
+					function onEachReportItem( reportData ){
+						var mapInfoData = {
+							"mapInfoID": reportData.reportID,
+							"reportData": reportData
+						};
+
+						scope.publish( "create-map-info-pin", 
+							reportData.reportLocation, 
+							mapInfoData, 
+							scope.mapComponent );
 					} );
 			};
 
@@ -24,10 +23,38 @@ Crime
 		}
 	] )
 
+	.factory( "attachAllMapInfoPinNearReporter", [
+		"getAllCrimeNearReporter",
+		"attachAllMapInfoPin",
+		function factory( 
+			getAllCrimeNearReporter,
+			attachAllMapInfoPin
+		){
+			var attachAllMapInfoPinNearReporter = function attachAllMapInfoPinNearReporter( scope ){
+				getAllCrimeNearReporter( scope,
+					function onResult( error, reportList ){
+						if( error ){
+							//: @todo: Notify error here.
+
+						}else{
+							attachAllMapInfoPin( scope, reportList );
+						}
+					} );
+			};
+
+			return attachAllMapInfoPinNearReporter;
+		}
+	] )
+
 	.directive( "mapInfoPinController", [
 		"Event",
+		"attachAllMapInfoPinNearReporter",
 		"attachAllMapInfoPin",
-		function directive( Event, attachAllMapInfoPin ){
+		function directive( 
+			Event, 
+			attachAllMapInfoPinNearReporter,
+			attachAllMapInfoPin
+		){
 			return {
 				"restrict": "A",
 				"scope": true,
@@ -38,9 +65,9 @@ Crime
 					var self = this;
 					scope.on( "login-success",
 						function onLoginSuccess( ){
-							attachAllMapInfoPin( scope );
+							attachAllMapInfoPinNearReporter( scope );
 
-							scope.on( "map-position-changed",
+							/*scope.on( "map-position-changed",
 								function onMapPositionChanged( position ){
 									if( self.timeout ){
 										clearTimeout( self.timeout );
@@ -55,12 +82,17 @@ Crime
 
 										self.timeout = null;
 									}, 3000 );
-								} );
+								} );*/
 						} );
 
 					scope.on( "report-added",
 						function onLoginSuccess( ){
-							attachAllMapInfoPin( scope );
+							attachAllMapInfoPinNearReporter( scope );
+						} );
+
+					scope.on( "map-all-filtered-report",
+						function onMapAllFilteredReport( reportList ){
+							attachAllMapInfoPin( scope, reportList );
 						} );
 				}
 			}

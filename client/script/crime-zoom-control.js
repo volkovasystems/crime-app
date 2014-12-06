@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "zoomControlController", [
 		"Event",
 		function directive( Event ){
@@ -12,6 +13,16 @@ Crime
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){
 							scope.publish( "show-zoom-control" );
+						} );
+
+					scope.on( "zoom-control-click:zoom-in",
+						function onZoomIn( ){
+							scope.publish( "map-zoom-in" );
+						} );
+
+					scope.on( "zoom-control-click:zoom-out",
+						function onZoomOut( ){
+							scope.publish( "map-zoom-out" );
 						} );
 				}
 			}

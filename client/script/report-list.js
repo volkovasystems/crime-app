@@ -1,15 +1,18 @@
-angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
+angular.module( "ReportList", [ "Event", "PageFlow", "MapPreview" ] )
 
 	.constant( "REPORT_LIST_HEADER_LABEL", labelData.REPORT_LIST_HEADER_LABEL )
 
 	.constant( "REPORT_ITEM_PHRASE", labelData.REPORT_ITEM_PHRASE )
 
 	.factory( "ReportList", [
-		"Icon",
 		"MapPreview",
 		"REPORT_LIST_HEADER_LABEL",
 		"REPORT_ITEM_PHRASE",
-		function factory( Icon, MapPreview, REPORT_LIST_HEADER_LABEL, REPORT_ITEM_PHRASE ){
+		function factory( 
+			MapPreview, 
+			REPORT_LIST_HEADER_LABEL, 
+			REPORT_ITEM_PHRASE
+		){
 			var ReportList = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
@@ -22,12 +25,20 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 				"getInitialState": function getInitialState( ){
 					return {
 						"reportList": [ ],
-						"componentState": "report-list-normal"
+						"componentState": "report-list-minified"
 					};
 				},
 
-				"onClickCloseReportListButton": function onClickCloseReportListButton( event ){
-					this.scope.publish( "hide-report-list" );
+				"onClickExpandReportList": function onClickExpandReportList( ){
+					this.scope.publish( "show-expanded-report-list" );
+
+					this.setState( {
+						"componentState": "report-list-expanded"
+					} );
+				},
+
+				"onClickCloseReportList": function onClickCloseReportList( event ){
+					this.scope.publish( "show-minified-report-list" );
 				},
 
 				"onClickReportItem": function onClickReportItem( event ){
@@ -82,6 +93,15 @@ angular.module( "ReportList", [ "Event", "PageFlow", "Icon", "MapPreview" ] )
 							self.setState( {
 								"reportList": reportList
 							} );
+						} );
+
+					this.scope.on( "show-minified-report-list",
+						function onShowMinifiedReportList( ){
+							self.setState( {
+								"componentState": "report-list-minified"
+							} );
+
+							self.scope.publish( "show-report-list" );
 						} );
 				},
 

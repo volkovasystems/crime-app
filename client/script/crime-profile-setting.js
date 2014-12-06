@@ -1,4 +1,5 @@
 Crime
+
 	.factory( "updateUserData", [
 		"ProgressBar",
 		"Event",

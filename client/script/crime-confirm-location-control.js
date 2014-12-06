@@ -9,7 +9,7 @@ Crime
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
-					scope.on( "report-control-clicked:report",
+					scope.on( "report-control-click:report",
 						function onReportControlClick( ){
 							scope.publish( "show-confirm-location-control" );
 
@@ -43,6 +43,25 @@ Crime
 							if( scope.isReporting ){
 								scope.publish( "show-confirm-location-control" );	
 							}
+						} );
+
+					scope.on( "confirm-location-control-click:confirm-location",
+						function onConfirmLocation( ){
+							scope.publish( "hide-confirm-location-control" );
+
+							scope.isReporting = false;
+						} );
+
+					scope.on( "confirm-location-control-click:cancel-location",
+						function onConfirmLocation( ){
+							scope.publish( "hide-confirm-location-control" );
+
+							scope.isReporting = false;
+						} );
+
+					scope.on( "close-report-final",
+						function onCloseReportFinal( ){
+							scope.isReporting = false;
 						} );
 				}
 			}

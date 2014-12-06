@@ -1,4 +1,5 @@
 Crime
+
 	.directive( "searchController", [
 		"Event",
 		function directive( Event ){
@@ -22,6 +23,20 @@ Crime
 					scope.on( "set-current-address",
 						function onSetCurrentAddress( address ){
 							scope.publish( "set-search-text", address );
+						} );
+
+					scope.on( "close-report-pin",
+						function onCloseReportPin( stopFlag ){
+							if( stopFlag ){
+								scope.publish( "show-search" );	
+							}
+						} );
+
+					scope.on( "open-report-pin",
+						function onOpenReportPin( stopFlag ){
+							if( stopFlag ){
+								scope.publish( "hide-search" );	
+							}
 						} );
 				}
 			}

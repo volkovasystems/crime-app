@@ -1,12 +1,18 @@
 angular.module( "MapView", [ "Event", "PageFlow" ] )
 
-	.constant( "DEFAULT_POSITION", new google.maps.LatLng( 14.5980716, 120.9797033 ) )
+	.constant( "DEFAULT_POSITION", ( function( ){
+		var latitude = staticData.DEFAULT_LATITUDE;
 
-	.constant( "DEFAULT_MAP_ZOOM", 15 )
+		var longitude = staticData.DEFAULT_LONGITUDE;
 
-	.constant( "DEFAULT_MAP_ZOOM_START", 10 )
+		return new google.maps.LatLng( latitude, longitude );
+	} )( ) )
 
-	.constant( "DEFAULT_MAP_ZOOM_END", 25 )
+	.constant( "DEFAULT_MAP_ZOOM", staticData.DEFAULT_MAP_ZOOM )
+
+	.constant( "DEFAULT_MAP_ZOOM_START", staticData.DEFAULT_MAP_ZOOM_START )
+
+	.constant( "DEFAULT_MAP_ZOOM_END", staticData.DEFAULT_MAP_ZOOM_END )
 
 	.factory( "MapView", [
 		"DEFAULT_POSITION",
@@ -259,20 +265,7 @@ angular.module( "MapView", [ "Event", "PageFlow" ] )
 				"render": function onRender( ){
 					var componentState = this.state.componentState;
 
-					return ( 
-						<div 
-							className={ [
-								"map-view-container",
-								componentState
-							].join( " " ) }>
-							<div 
-								className={ [
-									"map-component",
-									componentState
-								].join( " " ) }>
-							</div>
-						</div>
-					);
+					return; //: @template: template/map-view.html
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){

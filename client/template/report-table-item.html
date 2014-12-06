@@ -1,0 +1,43 @@
+<tr>
+	<td>								
+		<input type="text"
+			   name="reportTitle"
+			   value={reportData.reportTitle} 
+			   onChange={this.onChangeHandler} />
+	</td>
+	<td>								
+		<input type="text"
+			   name="reportDescription"
+			   value={reportData.reportDescription}
+			   onChange={this.onChangeHandler} />
+	</td>
+	<td>
+		<input type="button" 
+			   disabled={ reportData.reportState == "approved" } 
+			   name="reportStatusAccept" 
+			   value="Approve"
+			   onClick={ this.onReportStateAccept }
+			   className={ [
+			   		"btn",
+					( reportData.state == "approved" ) ? "disabled" : 'enabled'
+				].join( " " ) }/>
+				
+		<input type="button" 
+			   disabled={ reportData.reportState == "rejected" } 
+			   name="reportStatusReject" 
+			   value="Reject" 
+			   onClick={ this.onReportStateReject }
+			   className={ [
+			   		"btn",
+					( reportData.state == "rejected" ) ? "disabled" : 'enabled'
+				].join( " " ) } />
+
+		<input type="button" 
+			   disabled={!this.state.report} 
+			   value="Update"
+			   className={[
+			   		"btn"
+			   	].join( " " )}
+			   onClick={this.updateReport} />
+	</td>
+</tr>

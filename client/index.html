@@ -6,9 +6,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 			
-		<!-- <link rel="icon" type="image/ico" href="https://dl.dropboxusercontent.com/u/10676965/crime.ico"> -->
+		<link rel="icon" type="image/ico" href="image/favicon.ico">
 
-		<title>Crime</title>
+		<title>CrimeWatch.ph</title>
 
 		<!--[if lt IE 9]>
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -55,15 +55,16 @@
 		<section 
 			map-view
 			map-pointer
+			map-locate-pointer
 			map-locate
 			map-marker
 			map-info-pin
 			map-view-controller
 			map-locate-controller
 			map-pointer-controller
+			map-locate-pointer-controller
 			map-marker-controller
-			map-info-pin-controller
-			map-filter-controller>
+			map-info-pin-controller>
 		</section>
 
 		<section 
@@ -92,22 +93,19 @@
 		</section>
 
 		<section 
-			report
-			report-controller>
-		</section>
-
-		<section 
 			report-specify-category
-			report-controller>
+			report-specify-category-controller
+			case-category-list-controller>
 		</section>
 
 		<section 
 			report-incident-detail
-			report-controller>
+			report-incident-detail-controller>
 		</section>
 
 		<section 
 			report-final
+			report-final-controller
 			report-controller>
 		</section>
 
@@ -117,21 +115,9 @@
 		</section>
 
 		<section 
-			case-category>
-		</section>
-
-		<section 
-			case-category-list
+			case-category-filter
+			case-category-filter-controller
 			case-category-list-controller>
-		</section>
-
-		<section account>
-		</section>
-
-		<section statistic>
-		</section>
-
-		<section dashboard>
 		</section>
 
 		<section 
@@ -156,6 +142,11 @@
 		</section>
 
 		<section 
+			locate-control
+			locate-control-controller>
+		</section>
+
+		<section 
 			report-control
 			report-control-controller>
 		</section>
@@ -163,9 +154,6 @@
 		<section 
 			confirm-location-control
 			confirm-location-control-controller>
-		</section>
-
-		<section control>
 		</section>
 
 		<!--: @production-mode:

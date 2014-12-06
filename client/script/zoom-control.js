@@ -38,7 +38,7 @@ angular.module( "ZoomControl", [ "Event", "PageFlow" ] )
 				}
 			} );
 
-			return ZoomControl
+			return ZoomControl;
 		}
 	] )
 

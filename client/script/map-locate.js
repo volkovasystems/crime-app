@@ -1,6 +1,6 @@
 angular.module( "MapLocate", [ "Event" ] )
 
-	.constant( "DEFAULT_MAP_ADDRESS", "Manila, Philippines" )
+	.constant( "DEFAULT_MAP_ADDRESS", staticData.DEFAULT_MAP_ADDRESS )
 
 	.factory( "createGeoCoder", [
 		function factory( ){
@@ -125,6 +125,20 @@ angular.module( "MapLocate", [ "Event" ] )
 							} );
 						} );
 
+					scope.on( "locate-current-position",
+						function onLocateCurrentPosition( ){
+							getCurrentPosition( function callback( error, currentPosition ){
+								if( error ){
+									//: @todo: Do some error handling here!
+										
+								}else{
+									scope.mapComponent.setCenter( currentPosition );
+
+									scope.publish( "current-position-located" );
+								}
+							} );
+						} );
+
 					scope.on( "set-position-at-address",
 						function onSetPositionAtAddress( address ){
 							getPositionAtAddress( address,
@@ -151,6 +165,11 @@ angular.module( "MapLocate", [ "Event" ] )
 					scope.on( "get-current-address",
 						function getCurrentAddress( callback ){
 							getAddressAtPosition( scope.mapComponent.getCenter( ), callback );
+						} );
+
+					scope.on( "get-address-at-position",
+						function onGetAddressAtPosition( position, callback ){
+							getAddressAtPosition( position, callback );
 						} );
 				}
 			};

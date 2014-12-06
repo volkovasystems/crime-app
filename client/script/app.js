@@ -4,8 +4,8 @@ angular
 		"ProgressBar",
 		"Event",
 		"Home",
-		"Control",
 		"ZoomControl",
+		"LocateControl",
 		"ReportControl",
 		"ConfirmLocationControl",
 		"Login",
@@ -14,14 +14,16 @@ angular
 		"MapView",
 		"MapLocate",
 		"MapPointer",
+		"MapLocatePointer",
 		"MapMarker",
 		"MapInfoPin",
-		"Report",
+		"ReportSpecifyCategory",
+		"ReportIncidentDetail",
+		"ReportFinal",
 		"ReportList",
 		"ReportTable",
-		"CaseCategoryList",
-		"Notify",
-		"ImageUpload"
+		"CaseCategoryFilter",
+		"Notify"
 	] )
 	.run( [
 		"$rootScope",
@@ -39,99 +41,113 @@ angular
 					callback( );
 				},
 
-				function checkAllRequestedIconSet( callback ){
-					$rootScope.on( "all-icon-set-requested", 
-						function onRendered( ){ 
-							callback( ); 
-						} );
-				},
-
 				function checkRender( callback ){
 					$rootScope.on( "home-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
 					$rootScope.on( "dashbar-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 					} );
 				},
-				function checkRender( callback ){
-					$rootScope.on( "control-rendered", 
-						function onRendered( ){ 
-							callback( ); 
-					} );
-				},
+
 				function checkRender( callback ){
 					$rootScope.on( "login-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
 					$rootScope.on( "map-view-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
 					$rootScope.on( "search-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
-					$rootScope.on( "report-rendered", 
+					$rootScope.on( "report-specify-category-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
+				function checkRender( callback ){
+					$rootScope.on( "report-incident-detail-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+
+				function checkRender( callback ){
+					$rootScope.on( "report-final-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+
 				function checkRender( callback ){
 					$rootScope.on( "report-list-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
-					$rootScope.on( "case-category-list-rendered", 
+					$rootScope.on( "report-table-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
 					$rootScope.on( "notify-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
-					$rootScope.on( "image-upload-rendered", 
+					$rootScope.on( "case-category-filter-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
 					$rootScope.on( "zoom-control-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+				
+				function checkRender( callback ){
+					$rootScope.on( "locate-control-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+
 				function checkRender( callback ){
 					$rootScope.on( "report-control-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
 				},
+
 				function checkRender( callback ){
 					$rootScope.on( "confirm-location-control-rendered", 
-						function onRendered( ){ 
-							callback( ); 
-						} );
-				},
-				function checkRender( callback ){
-					$rootScope.on( "report-table-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );

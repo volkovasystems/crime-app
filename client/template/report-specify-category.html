@@ -66,13 +66,18 @@
 		<section 
 			className="card-body form">
 			<section 
+				className="case-category-list">
+			</section>
+			<section 
 				className="form-actions">
 				<button 
-					className="btn btn-primary btn-xlarge">
+					className="btn btn-primary btn-xlarge"
+					onClick={ this.onClickConfirm }>
 					{ CONFIRM_BUTTON_LABEL }
 				</button>
 				<button 
-					className="btn btn-gray btn-xlarge">
+					className="btn btn-gray btn-xlarge"
+					onClick={ this.onClickCancel }>
 					{ CANCEL_BUTTON_LABEL }
 				</button>
 			</section>

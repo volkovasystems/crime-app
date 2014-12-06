@@ -43,11 +43,11 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 				},
 
 				"onClickCloseReportDetail": function onClickCloseReportDetail( ){
-					this.scope.publish( "close-report-detail", this.props.reportDetailID );
+					this.scope.publish( "close-report-detail", this.props.reportDetailID, true );
 				},
 
 				"onClickLessDetail": function onClickLessDetail( ){
-					this.scope.publish( "open-report-preview", this.props.reportDetailID );
+					this.scope.publish( "open-report-preview", this.props.reportDetailID, true );
 				},
 
 				"getDefaultProps": function getDefaultProps( ){
@@ -92,9 +92,7 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 					var uri = new URI( );
 					var currentHostAddress = [ 
 						"http:/",
-						( production )?
-							uri.domain( ) :
-							[ uri.domain( ), uri.port( ) ].join( ":" ) 
+						uri.host( )
 					].join( "/" );
 
 					var categoryIconPinSource = [ 

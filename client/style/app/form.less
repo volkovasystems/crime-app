@@ -31,8 +31,27 @@
             outline: none;
             &:focus
             {
-                border-bottom: 3px solid #61a7ca;
+                border-bottom: 3px solid @primary-color;
             }
         }
     }
+}
+
+.filter-select
+{
+    .input-select
+    {
+        padding: 8px 10px 8px 0;
+
+        cursor: pointer;
+
+        border: 0;
+        border-bottom: 2px solid @primary-color;
+        outline: none;
+    }
+}
+
+
+.form-actions {
+    text-align: right;
 }
