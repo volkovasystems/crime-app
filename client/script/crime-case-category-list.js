@@ -144,7 +144,9 @@ Crime
 					scope.on( "show-case-category-list",
 						function onShowCaseCategoryList( namespace ){
 							if( scope.namespace == namespace ){
-								scope.publish( "set-case-category-list", getDefaultCaseCategoryList( ) );	
+								scope.publish( "set-case-category-list",
+									getDefaultCaseCategoryList( ), 
+									namespace );	
 							}
 						} );
 				}

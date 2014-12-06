@@ -22,6 +22,7 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 							<CaseCategoryList 
 								scope={ scope }
 								container={ container }
+								namespace={ optionSet.namespace }
 								onSelectCaseCategory={ optionSet.onSelectCaseCategory } />
 						);
 
@@ -43,6 +44,7 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 
 				"getDefaultProps": function getDefaultProps( ){
 					return {
+						"namespace": "",
 						"onSelectCaseCategory": function onSelectCaseCategory( ){ }
 					};
 				},
@@ -90,16 +92,41 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 					var self = this;
 
 					this.scope.on( "set-case-category-list",
-						function onSetCaseCategoryList( caseCategoryList ){
-							self.setState( {
-								"caseCategoryList": caseCategoryList,
-								"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT )
-							} );
+						function onSetCaseCategoryList( caseCategoryList, namespace ){
+							if( self.props.namespace == namespace ){
+								self.setState( {
+									"caseCategoryList": caseCategoryList,
+									"viewableCategoryList": _.first( caseCategoryList, staticData.LESS_CATEGORY_LIST_COUNT )
+								} );	
+							}
 						} );
 
 					this.scope.on( "get-case-category-list",
-						function onGetCaseCategoryList( callback ){
-							callback( null, self.state.caseCategoryList );
+						function onGetCaseCategoryList( callback, namespace ){
+							if( self.props.namespace == namespace ){
+								callback( null, self.state.caseCategoryList );
+
+							}else if( !callback.hasCalled ){
+								callback.hasCalled = true;
+								
+								callback( null, self.state.caseCategoryList );
+							}
+						} );
+
+					this.scope.on( "set-selected-case-category",
+						function onSetSelectedCaseCategory( selectedCaseCategory, namespace ){
+							if( self.props.namespace == namespace ){
+								selectedCaseCategory = [
+									_( [ selectedCaseCategory ] )
+										.flatten( )
+										.compact( )
+										.last( )
+								];
+
+								self.setState( {
+									"selectedCaseCategory": selectedCaseCategory
+								} );
+							}
 						} );
 				},
 
@@ -215,6 +242,7 @@ angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 				scope.publish( "hide-case-category-list", optionSet.namespace );
 
 				CaseCategoryList.attach( scope, element, {
+					"namespace": optionSet.namespace,
 					"onSelectCaseCategory": optionSet.onSelectCaseCategory
 				} );
 			};

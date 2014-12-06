@@ -598,6 +598,18 @@ Crime
 						function onCloseReportFinal( ){
 							scope.publish( "show-minified-report-list" );
 						} );
+
+					scope.on( "report-added",
+						function onLoginSuccess( ){
+							getAllReportList( scope,
+								function onGetAllReportList( state, reportList ){
+									if( state ){
+
+									}else{
+										scope.publish( "set-report-list", reportList );
+									}
+								} );
+						} );
 				}
 			}
 		}

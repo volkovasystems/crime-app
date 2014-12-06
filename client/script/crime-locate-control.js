@@ -19,6 +19,11 @@ Crime
 						function onLocate( ){
 							scope.publish( "locate-current-position" );
 						} );
+
+					scope.on( "current-position-located",
+						function onCurrentPositionLocated( ){
+							scope.publish( "relocate-map-locate-pointer" );
+						} );
 				}
 			}
 		}

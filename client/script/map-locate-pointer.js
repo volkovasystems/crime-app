@@ -94,6 +94,16 @@ angular.module( "MapLocatePointer", [ "Event" ] )
 
 							scope.publish( "map-locate-pointer-created", mapLocatePointer );
 						} );
+
+					scope.on( "relocate-map-locate-pointer",
+						function onRelocateMapLocatePointer( ){
+							if( "mapLocatePointer" in scope &&
+								scope.mapLocatePointer )
+							{
+								var position = scope.mapLocatePointer.getMap( ).getCenter( );
+								scope.mapLocatePointer.setPosition( position );
+							}
+						} );
 				}
 			};
 		}

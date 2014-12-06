@@ -109,7 +109,10 @@
 					className="group">
 					<input 
 						type="text" 
-						className="input-md input-time"
+						className={ [
+							"input-md input-time",
+							( isTimeValid )? "valid" : "invalid"  
+						].join( " " ) }
 						placeholder={ TIME_FORMAT_PLACEHOLDER }
 						value={ time }
 						onChange={ this.onChangeTime }
@@ -129,7 +132,10 @@
 					className="group">
 					<input 
 						type="text" 
-						className="input-md input-date"
+						className={ [
+							"input-md input-date",
+							( isDateValid )? "valid" : "invalid"  
+						].join( " " ) }
 						placeholder={ DATE_FORMAT_PLACEHOLDER }
 						value={ date }
 						onChange={ this.onChangeDate }

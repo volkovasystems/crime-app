@@ -132,7 +132,9 @@ angular.module( "MapLocate", [ "Event" ] )
 									//: @todo: Do some error handling here!
 										
 								}else{
-									scope.mapComponent.setCenter( currentPosition );	
+									scope.mapComponent.setCenter( currentPosition );
+
+									scope.publish( "current-position-located" );
 								}
 							} );
 						} );

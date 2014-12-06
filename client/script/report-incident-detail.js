@@ -85,10 +85,12 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 					return {
 						"title": "",
 						"description": "",
-						"time": "",
-						"date": "",
+						"time": moment( ).format( "hh:mm A" ),
+						"date": moment( ).format( "MM/DD/YYYY" ),
 						"hasAgreed": false,
-						"isAnonymous": false
+						"isAnonymous": false,
+						"isTimeValid": true,
+						"isDateValid": true
 					};
 				},
 
@@ -115,16 +117,22 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 				"onChangeTime": function onChangeTime( event ){
 					var time = event.target.value;
 
+					var isTimeValid = moment( time.toUpperCase( ), "hh:mm A" ).isValid( );
+
 					this.setState( {
-						"time": time
+						"time": time,
+						"isTimeValid": isTimeValid
 					} );
 				},
 
 				"onChangeDate": function onChangeDate( event ){
 					var date = event.target.value;
 
+					var isDateValid = moment( date.toUpperCase( ), "MM/DD/YYYY" ).isValid( );
+
 					this.setState( {
-						"date": date
+						"date": date,
+						"isDateValid": isDateValid
 					} );
 				},
 
@@ -162,14 +170,26 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 
 					this.scope.on( "get-report-incident-detail-data",
 						function onGetReportIncidentDetailData( callback ){
+							var timestampString = [ self.state.time, self.state.date ].join( " " );
+
+							var timestamp = moment( timestampString, "hh:mm A MM/DD/YYYY" ).valueOf( );	
+
 							var reportData = {
 								"title": self.state.title,
 								"description": self.state.description,
-								"timestamp": Date.now( ),
+								"timestamp": timestamp,
 								"anonymous": self.state.isAnonymous
 							};
 
 							callback( null, reportData );
+						} );
+
+					this.scope.on( "show-report-incident-detail",
+						function onShowReportIncidentDetail( ){
+							self.setState( {
+								"time": moment( ).format( "hh:mm A" ),
+								"date": moment( ).format( "MM/DD/YYYY" )
+							} );
 						} );
 
 					this.scope.on( "clear-report-incident-detail-data",
@@ -177,8 +197,8 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 							self.setState( {
 								"title": "",
 								"description": "",
-								"time": "",
-								"date": "",
+								"time": moment( ).format( "hh:mm A" ),
+								"date": moment( ).format( "MM/DD/YYYY" ),
 								"isAnonymous": false,
 								"hasAgreed": false
 							} );
@@ -203,6 +223,10 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 					var hasAgreed = this.state.hasAgreed;
 
 					var isAnonymous = this.state.isAnonymous;
+
+					var isTimeValid = this.state.isTimeValid;
+
+					var isDateValid = this.state.isDateValid;
 					
 					return; //: @template: template/report-incident-detail.html
 				},

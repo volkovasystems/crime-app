@@ -83,9 +83,13 @@ angular.module( "ReportSpecifyCategory", [
 				},
 
 				"onSelectCaseCategory": function onSelectCaseCategory( selectedCaseCategory ){
+					selectedCaseCategory = _.last( selectedCaseCategory );
 					this.setState( {
-						"selectedCaseCategory": _.last( selectedCaseCategory )
+						"selectedCaseCategory": selectedCaseCategory
 					} );
+
+					this.scope.publish( "set-selected-case-category", 
+						selectedCaseCategory, "report-specify-category" );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
