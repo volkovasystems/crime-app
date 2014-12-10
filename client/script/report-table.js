@@ -42,11 +42,11 @@ angular
 					this.attachAllComponentEventListener( );
 				},
 
-				"onReportStateAccept": function onReportStateSet ( ) {
+				"onReportStateAccept": function onReportStateAccept ( ) {
 					this.onReportStateSet( "approved" );
 				},
 
-				"onReportStateReject": function onReportStateSet ( ) {
+				"onReportStateReject": function onReportStateReject ( ) {
 					this.onReportStateSet( "rejected" );
 				},
 
@@ -75,50 +75,13 @@ angular
 				"render": function onRender( ){
 					var reportData = this.state.report || this.scope;
 
-					return (
-						<tr>
-							<td>								
-								<input type="text"
-									   name="reportTitle"
-									   value={reportData.reportTitle} 
-									   onChange={this.onChangeHandler} />
-							</td>
-							<td>								
-								<input type="text"
-									   name="reportDescription"
-									   value={reportData.reportDescription}
-									   onChange={this.onChangeHandler} />
-							</td>
-							<td>
-								<input type="button" 
-									   disabled={ reportData.reportState == "approved" } 
-									   name="reportStatusAccept" 
-									   value="Approve"
-									   onClick={ this.onReportStateAccept }
-									   className={ [
-									   		"btn",
-											( reportData.state == "approved" ) ? "disabled" : 'enabled'
-										].join( " " ) }/>
-								<input type="button" 
-									   disabled={ reportData.reportState == "rejected" } 
-									   name="reportStatusReject" 
-									   value="Reject" 
-									   onClick={ this.onReportStateReject }
-									   className={ [
-									   		"btn",
-											( reportData.state == "rejected" ) ? "disabled" : 'enabled'
-										].join( " " ) } />
+					var reportTimestamp = reportData.reportTimestamp.toString( );
 
-								<input type="button" 
-									   disabled={!this.state.report} 
-									   value="Update"
-									   className={[
-									   		"btn"
-									   	].join( " " )}
-									   onClick={this.updateReport} />
-							</td>
-						</tr>
-					);
+					var reportDate = moment( reportTimestamp ).format( "MMMM DD, YYYY" );
+
+					var reportTime = moment( reportTimestamp ).format( "hh:mm A" );
+
+					return; //: @template: template/report-table-item.html
 				}
 			} );
 
@@ -185,72 +148,7 @@ angular
 				"render": function onRender( ){
 					var reportList = this.state.reportList;
 
-					return ( 
-						<div className="report-table-container">
-							<div 								
-								className={ [
-									"report-table-component",
-								].join( " " ) }>
-								<div 
-									className={ [
-										"report-table-header"
-									].join( " " ) }>
-									<div
-										className={ [
-											"header-icon",
-											"shown",
-											"inline-block"
-										].join( " " ) }>
-										
-									</div>
-
-									<div
-										className={ [
-											"header-title",
-											"shown",
-											"inline-block"
-										].join( " " ) }>
-										<span>
-											{ REPORT_HEADER_LABEL.toUpperCase( ) }
-										</span>
-									</div>
-
-									<div 
-										className={ [
-											"close-report-table-button",
-											"shown",
-											"inline-block"
-										].join( " " ) }
-										onClick={ this.onClickCloseReportButton }>
-										<a 
-											className={ [
-												"action-element"
-											].join( " " ) }
-											href={ [
-												"#",
-												"close-report"
-											].join( "/" ) }
-											style={
-												{
-													"display": "block"
-												}
-											}>
-											
-											
-										</a>
-									</div>
-								</div>
-								<table border="1">
-								<tr>
-									<th>Title</th>
-									<th>Description</th>
-									<th>Report Status</th>
-								</tr>
-									{ reportList.map( this.onEachReportItem ) } 								
-								</table>
-							</div>
-						</div>
-					);
+					return; //: @template: template/report-table.html
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
@@ -277,7 +175,7 @@ angular
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
-					PageFlow( scope, element, "report-table" );
+					PageFlow( scope, element, "report-table overflow" );
 
 					scope.on( "show-report-table",
 						function onShowReportTable( ){

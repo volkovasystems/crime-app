@@ -1,15 +1,44 @@
-<div className="report-table-container">
-	<div 								
-		className={ [
-			"report-table-component",
-		].join( " " ) }>
-		<table border="1">
-			<tr>
-				<th>Title</th>
-				<th>Description</th>
-				<th>Report Status</th>
-			</tr>
-			{ reportList.map( this.onEachReportItem ) } 								
-		</table>
-	</div>
-</div>
+<section className="reports admin-reports page">
+	<section className="card">
+		<section className="container">
+			<section className="close-action pull-right">
+				<a className="icon md-2x md-close" href="#"></a>
+			</section>
+
+			<h2>
+				Admin Reports
+			</h2>
+			   
+			<table className="table style-zebra-stripes">
+				<thead>
+					<tr>
+						<th>
+							Incident
+						</th>
+						<th>
+							Title
+						</th>
+						<th>
+							Description
+						</th>
+						<th>
+							Address
+						</th>
+						<th>
+							Time
+						</th>
+						<th>
+							Date
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{ reportList.map( this.onEachReportItem ) }
+				</tbody>
+			</table>
+		</section>
+	</section>
+</section>
