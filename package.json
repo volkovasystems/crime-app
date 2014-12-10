@@ -78,7 +78,7 @@
       "port": 9001
     },
     "app": {
-      "remote": "",
+      "remote": "ec2-54-77-161-77.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 10000
     },
