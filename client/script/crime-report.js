@@ -5,11 +5,13 @@ Crime
 		"ProgressBar",
 		"$http",
 		"getReportServerData",
+		"getAppServerData",
 		function factory( 
 			Event, 
 			ProgressBar, 
 			$http,
-			getReportServerData
+			getReportServerData,
+			getAppServerData
 		){
 			var sendReport = function sendReport( scope, callback ){
 				callback = callback || function callback( ){ };
@@ -175,11 +177,34 @@ Crime
 									callback( response.data );
 
 								}else{
-									callback( );
+									callback( null, userData, reportData );
 								}
 							} )
 							.error( function onError( response, status ){
 								callback( new Error( "error sending report data" ) );
+							} );
+					},
+
+					function sendReportStateData( userData, reportData, callback ){
+						var requestEndpoint = getAppServerData( ).joinPath( "api/:accessID/report/pending" );
+
+						requestEndpoint = requestEndpoint.replace( ":accessID", userData.accessID );
+
+						$http
+							.post( requestEndpoint, {
+								"reportID": reportData.reportID,
+								"reporterID": reportData.reporterID
+							} )
+							.success( function onSuccess( response, status ){
+								if( response.status == "failed" ){
+									callback( response.data );
+
+								}else{
+									callback( );
+								}
+							} )
+							.error( function onError( response, status ){
+								callback( new Error( "error sending report state data" ) );
 							} );
 					}
 				],
