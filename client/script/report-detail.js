@@ -1,4 +1,6 @@
-angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
+angular
+	
+	.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 	
 	.constant( "REPORT_CASE_TITLE_PHRASE", labelData.REPORT_CASE_TITLE_PHRASE )
 
@@ -98,7 +100,7 @@ angular.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
 					var categoryIconPinSource = [ 
 						currentHostAddress, 
 						"image", 
-						[ reportData.reportCaseType, "marker.png" ].join( "-" ) 
+						[ reportData.reportCaseType, "small", "marker.png" ].join( "-" ) 
 					].join( "/" );
 
 					var categoryIconSource = [ 
