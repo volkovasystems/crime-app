@@ -46,6 +46,7 @@ app.use( session( {
 	https://gist.github.com/cuppster/2344435
 */
 app.use( function allowCrossDomain( request, response, next ){
+	console.log( request.headers.origin );
 	response.header( "Access-Control-Allow-Origin", request.headers.origin || "*" );
 	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
 	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept, Administrator-Access-ID" );
