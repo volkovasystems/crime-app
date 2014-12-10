@@ -13,7 +13,7 @@ require( "./app-data.js" );
 
 var serverSet = require( "./package.js" ).packageData.serverSet;
 var serverData = serverSet.app;
-var host = serverData.host;
+var host = argv.host || serverData.host;
 var port = serverData.port;
 
 var resolveURL = require( "./resolve-url.js" ).resolveURL;
@@ -29,7 +29,8 @@ if( argv.production ){
 }
 mandrill = mandrill( mandrillAPIKey );
 
-var administratorDefaultEMail = "admin@crimewatch.ph"
+var administratorDefaultEMail = "admin@crimewatch.ph";
+var administratorName = "CrimeWatch.ph Administrator";
 
 var app = express( );
 
@@ -221,7 +222,26 @@ app.post( "/api/:accessID/report/approve",
 
 			function trySavingReportState( reportStateData, callback ){
 				if( _.isEmpty( reportStateData ) ){
-					callback( "no-report-data" );
+					callback( );
+
+				}else{
+					callback( null, reportStateData );
+				}
+			},
+
+			function handleEmptyReportStateData( reportStateData, callback ){
+				if( _.isEmpty( reportStateData ) ){
+					var newReportState = new ReportState( {
+						"reportID": 	request.param( "reportID" ),
+						"reporterID": 	request.param( "reporterID" ),
+						"reportState": 	"pending"
+					} );
+
+					newReportState.save( function onSave( error ){
+						setTimeout( function onTimeout( ){
+							callback( error, newReportState );
+						}, 1000 );
+					} );
 
 				}else{
 					callback( null, reportStateData );
@@ -315,6 +335,7 @@ app.post( "/api/:accessID/report/approve",
 
 			function sendApproveReportEMail( userData, reportData, callback ){
 				mandrill( "/messages/send", {
+					//"template_name": "approved-report-email-template",
 					"message": {
 						"to": [
 							{
@@ -322,9 +343,10 @@ app.post( "/api/:accessID/report/approve",
 								"name": userData.userProfileName
 							}
 						],
+						"from_name": administratorName,
 						"from_email": administratorDefaultEMail,
 						"subject": "CrimeWatch Report Approved",
-						"text": "We just approved your report."
+						"text": "Your report has been approved."
 					}
 				}, 
 					function onSent( error ){
@@ -382,7 +404,26 @@ app.post( "/api/:accessID/report/reject",
 
 			function trySavingReportState( reportStateData, callback ){
 				if( _.isEmpty( reportStateData ) ){
-					callback( "no-report-data" );
+					callback( );
+
+				}else{
+					callback( null, reportStateData );
+				}
+			},
+
+			function handleEmptyReportStateData( reportStateData, callback ){
+				if( _.isEmpty( reportStateData ) ){
+					var newReportState = new ReportState( {
+						"reportID": 	request.param( "reportID" ),
+						"reporterID": 	request.param( "reporterID" ),
+						"reportState": 	"pending"
+					} );
+
+					newReportState.save( function onSave( error ){
+						setTimeout( function onTimeout( ){
+							callback( error, newReportState );
+						}, 1000 );
+					} );
 
 				}else{
 					callback( null, reportStateData );
@@ -476,6 +517,7 @@ app.post( "/api/:accessID/report/reject",
 
 			function sendRejectReportEMail( userData, reportData, callback ){
 				mandrill( "/messages/send", {
+					//"template_name": "rejected-report-email-template",
 					"message": {
 						"to": [
 							{
@@ -483,9 +525,10 @@ app.post( "/api/:accessID/report/reject",
 								"name": userData.userProfileName
 							}
 						],
+						"from_name": administratorName,
 						"from_email": administratorDefaultEMail,
 						"subject": "CrimeWatch Report Rejected",
-						"text": "Sorry we rejected your report."
+						"text": "Sorry, your report is rejected due to insufficient data. Please try again."
 					}
 				}, 
 					function onSent( error ){
@@ -620,6 +663,7 @@ app.post( "/api/:accessID/report/pending",
 
 			function sendPendingReportEMail( userData, reportData, callback ){
 				mandrill( "/messages/send", {
+					//"template_name": "pending-report-email-template",
 					"message": {
 						"to": [
 							{
@@ -627,12 +671,13 @@ app.post( "/api/:accessID/report/pending",
 								"name": userData.userProfileName
 							}
 						],
+						"from_name": administratorName,
 						"from_email": administratorDefaultEMail,
 						"subject": "CrimeWatch Report Pending",
-						"text": "We have recieved your report, please wait for the approval."
+						"text": "We've received your report, and we're already reviewing it. Please wait for further notice."
 					}
 				}, 
-					function onSent( error ){
+					function onSent( error, response ){
 						if( error ){
 							callback( error );
 

@@ -65,6 +65,13 @@ Crime
 							scope.publish( "hide-report-specify-category" );
 						} );
 
+					scope.on( "cancel-report-incident-detail",
+						function onCancelReportIncidentDetail( ){
+							scope.publish( "clear-report-specify-category-data" );
+
+							scope.publish( "hide-report-specify-category" );
+						} );
+
 					scope.on( "close-report-final",
 						function onCloseReportFinal( ){
 							scope.publish( "clear-report-specify-category-data" );

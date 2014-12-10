@@ -81,7 +81,7 @@ Crime
 		"resolveURL",
 		function factory( $rootScope, resolveURL ){
 			var getAppServerData = function getAppServerData( ){
-				return resolveURL( $rootScope.serverSet.user );
+				return resolveURL( $rootScope.serverSet.app );
 			};
 
 			return getAppServerData;
