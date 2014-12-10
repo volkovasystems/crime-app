@@ -1,4 +1,6 @@
-angular.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
+angular
+	
+	.module( "CaseCategoryList", [ "Event", "PageFlow" ] )
 	
 	.constant( "CHOOSE_CATEGORY_PHRASE", labelData.CHOOSE_CATEGORY_PHRASE )
 
