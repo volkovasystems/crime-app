@@ -11,7 +11,7 @@ var util = require( "util" );
 require( "./user-data.js" );
 
 var serverData = require( "./package.js" ).packageData.serverSet.user;
-var host = serverData.host;
+var host = argv.host || serverData.host;
 var port = serverData.port;
 
 var resolveURL = require( "./resolve-url.js" ).resolveURL;
