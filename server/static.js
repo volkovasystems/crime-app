@@ -5,8 +5,8 @@ var express = require( "express" );
 
 var serverSet = require( "./package.js" ).packageData.serverSet;
 var serverData = serverSet[ "static" ];
-var host = argv.host ||  serverData.host;
-var port = serverData.port;
+var host = argv.host || serverData.host;
+var port = argv.port || serverData.port;
 
 var app = express( );
 
