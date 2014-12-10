@@ -1,4 +1,4 @@
-.my-reports
+.reports
 {
     position: absolute;
     z-index: 9999;
@@ -7,7 +7,6 @@
 
     display: table;
 
-    width: 480px;
     width: 100%;
     height: 100%;
 
@@ -56,6 +55,27 @@
             text-align: left;
 
             color: @body-copy-color-light;
+        }
+    }
+    &.admin-reports
+    {
+        .row
+        {
+            opacity: .5;
+            &:hover
+            {
+                opacity: 1;
+            }
+        }
+        .form
+        {
+            padding: 0;
+            .input-md
+            {
+                width: 100%;
+                height: 40px;
+                padding: 10px;
+            }
         }
     }
 }
