@@ -318,10 +318,39 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 							}
 						} );
 
+					this.scope.on( "check-if-logged-in",
+						function onCheckIfLoggedIn( callback ){
+							Login.checkIfLoggedIn( self.state.loginType,
+								function onCheckIfLoggedIn( error, isLoggedIn, loginData, response ){
+									if( error ){
+										callback( error );
+
+									}else if( isLoggedIn ){
+										self.setState( {
+											"userID": loginData.userID,
+											"accessToken": loginData.accessToken,
+											"loginState": "logged-in"
+										}, function onStateChanged( ){
+											callback( null, true );
+										} );
+
+									}else{
+										callback( null, false );
+									}
+								} );
+						} );
+
 					this.scope.on( "set-logging-in-state",
 						function onSetLoggingInState( ){
 							self.setState( {
 								"loginState": "logging-in"
+							} );
+						} );
+
+					this.scope.on( "set-logged-out-state",
+						function onSetLoggingInState( ){
+							self.setState( {
+								"loginState": "logged-out"
 							} );
 						} );
 				},

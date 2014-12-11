@@ -216,6 +216,72 @@ Crime
 	] )
 
 	.run( [
+		"Store",
+		"Event",
+		"ProgressBar",
+		"$rootScope",
+		"getStaticServerData",
+		function onRun( 
+			Store,
+			Event,
+			ProgressBar,
+			$rootScope,
+			getStaticServerData 
+		){
+			Store( $rootScope );
+
+			ProgressBar( $rootScope );
+
+			Event( $rootScope );
+
+			$rootScope.subscribe( "all-component-loaded",
+				function onAllComponentLoaded( ){
+					async.waterfall( [
+						function initiateLoading( callback ){
+							$rootScope.startLoading( );
+
+							callback( );
+						},
+
+						function trySettingLogging( callback ){
+							var uri = new URI( );
+
+							if( uri.hasQuery( "has-logged-in" ) ){
+								callback( "defer-logged-in" );	
+
+							}else{
+								$rootScope.publish( "set-logging-in-state" );
+
+								callback( );
+							}
+						},
+
+						function checkIfLoggedIn( callback ){
+							$rootScope.publish( "check-if-logged-in",
+								function onCheckIfLoggedIn( error, hasLoggedIn ){
+									if( error ){
+										$rootScope.publish( "set-logged-out-state" );
+										callback( error );
+
+									}else if( hasLoggedIn ){
+										callback( );
+
+									}else{
+										$rootScope.publish( "set-logged-out-state" );
+										callback( );
+									}
+								} );
+						}
+					],
+						function lastly( state ){
+
+							$rootScope.finishLoading( );
+						} );
+				} );
+		}
+	] )
+
+	.run( [
 		"$http",
 		"$rootScope",
 		"Event",
