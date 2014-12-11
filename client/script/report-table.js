@@ -37,6 +37,7 @@ angular
 
 				"componentWillMount": function componentWillMount( ){										
 					this.scope = this.props.report;
+
 					this.parentScope = this.props.scope;
 
 					this.attachAllComponentEventListener( );
@@ -44,6 +45,7 @@ angular
 
 				"onReportStateAccept": function onReportStateAccept ( event ) {
 					var state = $( event.currentTarget ).attr( "value" );
+
 					if( state != "approved" ){
 						this.onReportStateSet( "approved" );
 					}
@@ -51,6 +53,7 @@ angular
 
 				"onReportStateReject": function onReportStateReject ( event ) {
 					var state = $( event.currentTarget ).attr( "value" );
+
 					if( state != "rejected" ){
 						this.onReportStateSet( "rejected" );
 					}
@@ -58,13 +61,15 @@ angular
 
 				"onReportStateSet": function onReportStateSet ( state ) {					
 					this.scope.reportState = state;
+
 					this.setState( {
 						report: this.scope
 					} );
 				},
 
-				"onChangeHandler": function onChangeHandler ( evt ) {
-					this.scope[ evt.target.name ] = evt.target.value;
+				"onChangeHandler": function onChangeHandler ( event ) {
+					this.scope[ event.target.name ] = event.target.value;
+
 					this.setState( {
 						report: this.scope
 					} );
@@ -138,6 +143,7 @@ angular
 
 				"onClickCloseReportTable": function onClickCloseReportTable( event ){
 					this.scope.publish( "hide-report-table" );
+					
 					this.scope.publish( "show-control" );
 				},
 

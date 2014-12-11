@@ -29,7 +29,7 @@
 		<a 
 			className={ [
 				"btn",
-				( reportData.state == "approved" ) ? "disabled" : "enabled"
+				( reportData.reportState == "approved" ) ? "disabled" : "enabled"
 			].join( " " ) }
 			href="#"
 			value={ reportData.reportState }
@@ -42,7 +42,7 @@
 			href="#"
 			className={ [
 				"btn",
-				( reportData.state == "rejected" ) ? "disabled" : "enabled"
+				( reportData.reportState == "rejected" ) ? "disabled" : "enabled"
 			].join( " " ) }
 			href="#"
 			value={ reportData.reportState }
