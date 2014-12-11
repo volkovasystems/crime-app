@@ -221,15 +221,6 @@ app.post( "/api/:accessID/report/approve",
 					} );
 			},
 
-			function trySavingReportState( reportStateData, callback ){
-				if( _.isEmpty( reportStateData ) ){
-					callback( );
-
-				}else{
-					callback( null, reportStateData );
-				}
-			},
-
 			function handleEmptyReportStateData( reportStateData, callback ){
 				if( _.isEmpty( reportStateData ) ){
 					var newReportState = new ReportState( {
@@ -401,15 +392,6 @@ app.post( "/api/:accessID/report/reject",
 					}, function onFound( error, reportStateData ){
 						callback( error, reportStateData );
 					} );
-			},
-
-			function trySavingReportState( reportStateData, callback ){
-				if( _.isEmpty( reportStateData ) ){
-					callback( );
-
-				}else{
-					callback( null, reportStateData );
-				}
 			},
 
 			function handleEmptyReportStateData( reportStateData, callback ){

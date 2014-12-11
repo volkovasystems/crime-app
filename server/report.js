@@ -472,10 +472,10 @@ app.get( "/api/:accessID/report/get/:reportID",
 					requestEndpoint = requestEndpoint.replace( ":accessID", request.param( "accessID" ) );
 
 					unirest
+						.get( requestEndpoint )
 						.headers( { 
 							"Administrator-Access-ID": adminAccessID 
 						} )
-						.get( requestEndpoint )
 						.end( function onResponse( response ){
 							var status = response.body.status;
 

@@ -42,12 +42,18 @@ angular
 					this.attachAllComponentEventListener( );
 				},
 
-				"onReportStateAccept": function onReportStateAccept ( ) {
-					this.onReportStateSet( "approved" );
+				"onReportStateAccept": function onReportStateAccept ( event ) {
+					var state = $( event.currentTarget ).attr( "value" );
+					if( state != "approved" ){
+						this.onReportStateSet( "approved" );
+					}
 				},
 
-				"onReportStateReject": function onReportStateReject ( ) {
-					this.onReportStateSet( "rejected" );
+				"onReportStateReject": function onReportStateReject ( event ) {
+					var state = $( event.currentTarget ).attr( "value" );
+					if( state != "rejected" ){
+						this.onReportStateSet( "rejected" );
+					}
 				},
 
 				"onReportStateSet": function onReportStateSet ( state ) {					
@@ -64,12 +70,14 @@ angular
 					} );
 				},
 
-				"updateReport": function updateReport ( ) {										
-					this.parentScope.publish( "update-report-data" , this.state.report );
+				"updateReport": function updateReport ( ) {	
+					if( !_.isEmpty( this.state.report ) ){
+						this.parentScope.publish( "update-report-data" , this.state.report );
 
-					this.setState( {
-						report: null
-					} );					
+						this.setState( {
+							report: null
+						} );	
+					}			
 				},
 
 				"render": function onRender( ){
@@ -128,7 +136,7 @@ angular
 								
 				},
 
-				"onClickCloseReportButton": function onClickCloseReportButton( event ){
+				"onClickCloseReportTable": function onClickCloseReportTable( event ){
 					this.scope.publish( "hide-report-table" );
 					this.scope.publish( "show-control" );
 				},

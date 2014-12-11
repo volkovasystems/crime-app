@@ -32,6 +32,7 @@
 				( reportData.state == "approved" ) ? "disabled" : "enabled"
 			].join( " " ) }
 			href="#"
+			value={ reportData.reportState }
 			disabled={ reportData.reportState == "approved" } 
 			onClick={ this.onReportStateAccept }>
 			Approve
@@ -44,6 +45,7 @@
 				( reportData.state == "rejected" ) ? "disabled" : "enabled"
 			].join( " " ) }
 			href="#"
+			value={ reportData.reportState }
 			disabled={ reportData.reportState == "rejected" } 
 			onClick={ this.onReportStateReject }>
 			Reject
@@ -53,7 +55,7 @@
 				"btn"
 			].join( " " )}
 			href="#"
-			disabled={ !this.state.report } 
+			disabled={ !_.isEmpty( this.state.report ) } 
 			onClick={ this.updateReport }>
 			Update
 		</a>
