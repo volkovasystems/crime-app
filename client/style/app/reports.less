@@ -59,6 +59,25 @@
     }
     &.admin-reports
     {
+        top: 0;
+        left: 0;
+
+        transform: none;
+        .scrollable
+        {
+            display: block;
+            overflow-y: scroll;
+
+            height: 500px;
+        }
+        .table input
+        {
+            padding: 4px;
+
+            border: none;
+            border-bottom: 1px solid #aaa;
+            outline: none;
+        }
         .row
         {
             opacity: .5;
@@ -78,4 +97,12 @@
             }
         }
     }
+}
+
+.report-table
+{
+    display: table;
+
+    width: 100%;
+    height: 100%;
 }
