@@ -12,7 +12,7 @@ exports.cors = function cors( app ){
 		https://gist.github.com/cuppster/2344435
 	*/
 	app.use( function allowCrossDomain( request, response, next ){
-		var allowedOriginURL = request.headers.origin;
+		var allowedOriginURL = request.headers.origin || request.get( "Host" );
 
 		console.log( allowedOriginURL );
 
