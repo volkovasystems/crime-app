@@ -25,6 +25,8 @@ exports.cors = function cors( app ){
 					"status": "error",
 					"data": "origin is not allowed"
 				} );
+
+			return;
 		}
 
 		response.header( "Access-Control-Allow-Origin", allowedOriginURL );
