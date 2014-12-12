@@ -21,6 +21,7 @@ angular
 		"ReportIncidentDetail",
 		"ReportFinal",
 		"ReportList",
+		"UserReportList",
 		"CaseCategoryFilter",
 		"Notify"
 	] )
@@ -98,6 +99,13 @@ angular
 
 				function checkRender( callback ){
 					$rootScope.on( "report-list-rendered", 
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+
+				function checkRender( callback ){
+					$rootScope.on( "user-report-list-rendered", 
 						function onRendered( ){ 
 							callback( ); 
 						} );
