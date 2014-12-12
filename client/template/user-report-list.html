@@ -1,0 +1,53 @@
+<section 
+	className="reports my-reports page">
+	<section 
+		className="card">
+		<section 
+			className="container">
+				<section 
+					className="close-action pull-right">
+					<a 
+						className="icon md-2x md-close" 
+						href="#"
+						onClick={ this.onClickCloseUserReportList }>
+					</a>
+				</section>
+				
+				<h2>
+					My Reports
+				</h2>
+
+				<table 
+					className="table style-zebra-stripes">
+					<thead>
+						<tr>
+							<th>
+								Incident
+							</th>
+							<th>
+								Title
+							</th>
+							<th>
+								Description
+							</th>
+							<th>
+								Address
+							</th>
+							<th>
+								Time
+							</th>
+							<th>
+								Date
+							</th>
+							<th>
+								Status
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{ reportList.map( this.onEachReportItem ) }
+					</tbody>
+				</table>
+		</section>
+	</section>
+</section>

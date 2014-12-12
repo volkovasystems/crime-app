@@ -320,8 +320,12 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 
 					this.scope.on( "check-if-logged-in",
 						function onCheckIfLoggedIn( callback ){
+							self.scope.notify( "show-spinner", "login-spinner" );
+
 							Login.checkIfLoggedIn( self.state.loginType,
 								function onCheckIfLoggedIn( error, isLoggedIn, loginData, response ){
+									self.scope.notify( "hide-spinner", "login-spinner" );
+									
 									if( error ){
 										callback( error );
 

@@ -1,4 +1,6 @@
-angular.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" ] )
+angular
+
+	.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" ] )
 	
 	.constant( "CONFIRM_BUTTON_LABEL", labelData.CONFIRM_BUTTON_LABEL )
 

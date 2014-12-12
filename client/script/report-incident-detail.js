@@ -152,6 +152,10 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 					} );
 				},
 
+				"onClickCloseReportIncidentDetail": function onClickCloseReportIncidentDetail( ){
+					this.scope.publish( "close-report-incident-detail" );
+				},
+
 				"onClickSend": function onClickSend( ){
 					if( this.state.hasAgreed ){
 						this.scope.publish( "send-report-incident-detail" );

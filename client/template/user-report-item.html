@@ -1,0 +1,28 @@
+<tr 
+	className={ [
+		"row",
+		reportData.reportState
+	].join( " " ) }>
+	<td>
+		{ reportData.reportCaseTitle }
+	</td>
+	<td>
+		{ reportData.reportTitle }
+	</td>
+	<td>
+		{ reportData.reportDescription }
+	</td>
+	<td>
+		{ reportData.reportAddress }
+	</td>
+	<td>
+		{ reportTime }
+	</td>
+	<td>
+		{ reportDate }
+	</td>
+	<td
+		className="status">
+		{ reportStatus }
+	</td>
+</tr>
