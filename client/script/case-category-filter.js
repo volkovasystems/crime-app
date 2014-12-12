@@ -177,7 +177,7 @@ angular
 						scope.hidePage( );
 					} );
 
-				scope.publish( "show-case-category-filter" );
+				scope.publish( "hide-case-category-filter" );
 
 				CaseCategoryFilter.attach( scope, element );
 			};
