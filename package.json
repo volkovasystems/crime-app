@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "preinstall": "npm install gulp bower forever -g",
-    "postinstall": "bower install & bower update",
+    "postinstall": "bower install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "~/nodejs/bin/node ~/crime-app/server/main.js &"
   },
