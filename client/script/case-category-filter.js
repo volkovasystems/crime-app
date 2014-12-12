@@ -42,6 +42,10 @@ angular
 				},
 
 				"onClickCancel": function onClickCancel( ){
+					this.setState( {
+						"componentState": "case-category-filter-minified"
+					} );
+					
 					this.scope.publish( "close-case-category-filter" );
 				},
 
@@ -49,6 +53,8 @@ angular
 					this.setState( {
 						"componentState": "case-category-filter-expanded"
 					} );
+
+					this.scope.publish( "open-case-category-filter" );
 				},
 
 				"onClickCloseCaseCategoryFilter": function onClickCloseCaseCategoryFilter( ){
@@ -58,9 +64,14 @@ angular
 				},
 
 				"onSelectCaseCategory": function onSelectCaseCategory( selectedCaseCategory ){
+					selectedCaseCategory = _.last( selectedCaseCategory );
+
 					this.setState( {
 						"selectedCaseCategory": selectedCaseCategory
 					} );
+
+					this.scope.publish( "set-selected-case-category", 
+						selectedCaseCategory, "case-category-filter" );
 				},
 				
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
@@ -166,7 +177,7 @@ angular
 						scope.hidePage( );
 					} );
 
-				scope.publish( "hide-case-category-filter" );
+				scope.publish( "show-case-category-filter" );
 
 				CaseCategoryFilter.attach( scope, element );
 			};
