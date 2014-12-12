@@ -46,7 +46,8 @@
     "jquery.cookie": "https://github.com/carhartl/jquery-cookie.git#~1.4.1",
     "URIjs": "https://github.com/medialize/URI.js.git#~1.14.1",
     "history.js": "https://github.com/browserstate/history.js.git#~1.8.0",
-    "material-design-iconic-font": "https://github.com/zavoloklom/material-design-iconic-font.git#~1.0.1"
+    "material-design-iconic-font": "https://github.com/zavoloklom/material-design-iconic-font.git#~1.0.1",
+    "tablesaw": "https://github.com/filamentgroup/tablesaw.git"
   },
   "resolutions": {
     "react": "~0.12.0",
