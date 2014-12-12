@@ -26,9 +26,10 @@
             padding: 8px;
         }
     }
-    
-    .feedbar {
-      width: 320px;
+
+    .feedbar
+    {
+        width: 320px;
     }
 
 
@@ -85,5 +86,27 @@
             transform: none;
         }
     }
+}
 
+@media (max-width: 639px)
+{
+    .reports
+    {
+        .table
+        {
+            display: block;
+            overflow-y: scroll;
+
+            height: 400px;
+            tr
+            {
+                display: inline-block;
+                
+                margin-bottom: 20px;
+                td {
+                    line-height: 1.7;
+                }
+            }
+        }
+    }
 }
