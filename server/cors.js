@@ -2,7 +2,6 @@ var argv = require( "yargs" ).argv;
 
 var allowedOriginDomainPattern = /.+/;
 if( argv.production ){
-	//: @todo: We need to fix this for security issues.
 	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$/;
 }
 
@@ -13,10 +12,6 @@ exports.cors = function cors( app ){
 	*/
 	app.use( function allowCrossDomain( request, response, next ){
 		var allowedOriginURL = request.headers.origin || request.get( "Host" );
-
-		console.log( allowedOriginURL );
-
-		console.log( allowedOriginDomainPattern.toString( ) );
 
 		if( !allowedOriginDomainPattern.test( allowedOriginURL ) ){
 			response
