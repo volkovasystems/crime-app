@@ -191,7 +191,7 @@ angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 							var containerExpanded = $( "[map-info-pin-expand]#@mapInfoID"
 								.replace( "@mapInfoID", cleanMapInfoID ) );
 
-							var containerPreview = $( "[map-info-pin]#@mapInfoID"
+							var containerPreview = $( "[id='#@mapInfoID'][map-info-pin]"
 								.replace( "@mapInfoID", cleanMapInfoID ) );
 
 							if( !containerPreview.attr( "has-rendered" ) ){
