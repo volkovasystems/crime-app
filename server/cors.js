@@ -14,6 +14,10 @@ exports.cors = function cors( app ){
 	app.use( function allowCrossDomain( request, response, next ){
 		var allowedOriginURL = request.headers.origin;
 
+		console.log( allowedOriginURL );
+
+		console.log( allowedOriginDomainPattern.toString( ) );
+
 		if( !allowedOriginDomainPattern.test( allowedOriginURL ) ){
 			response
 				.status( 500 )
