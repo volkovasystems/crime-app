@@ -17,6 +17,39 @@
 .show
 {
     display: table !important;
+    
+    &-mobile {
+        display: none;
+    }
+
+    @media (max-width: @mobile-breakpoint) {
+        &-mobile {
+            display: block !important;
+        }
+    }
+
+    &-tablet {
+        display: block !important;
+    }
+}
+
+.hide 
+{
+    display: none !important;
+
+    &-mobile {
+        display: block;
+    }
+
+    @media (max-width: @mobile-breakpoint) {
+        &-mobile {
+            display: none !important;
+        }
+    }
+    
+    &-tablet {
+        display: none !important;
+    }
 }
 
 .crime-time-relative
