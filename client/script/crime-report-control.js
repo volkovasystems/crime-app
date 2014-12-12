@@ -40,6 +40,16 @@ Crime
 							scope.publish( "show-report-control" );
 						} );
 
+					scope.on( "close-report-specify-category",
+						function onCloseReportSpecifyCategory( ){
+							scope.publish( "show-report-control" );
+						} );
+
+					scope.on( "close-report-incident-detail",
+						function onCloseReportIncidentDetail( ){
+							scope.publish( "show-report-control" );
+						} );
+
 					scope.on( "close-report-pin",
 						function onCloseReportPin( stopFlag ){
 							if( stopFlag ){

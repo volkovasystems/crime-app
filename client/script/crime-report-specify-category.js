@@ -76,6 +76,18 @@ Crime
 						function onCloseReportFinal( ){
 							scope.publish( "clear-report-specify-category-data" );
 						} );
+
+					scope.on( "close-report-specify-category",
+						function onCloseReportSpecifyCategory( ){
+							scope.publish( "clear-report-specify-category-data" );
+
+							scope.publish( "hide-report-specify-category" );
+						} );
+
+					scope.on( "close-report-incident-detail",
+						function onCloseReportIncidentDetail( ){
+							scope.publish( "clear-report-specify-category-data" );
+						} );
 				}
 			};
 		}
