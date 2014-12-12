@@ -2,7 +2,8 @@ var argv = require( "yargs" ).argv;
 
 var allowedOriginDomainPattern = /.+/;
 if( argv.production ){
-	allowedOriginDomainPattern = /crimewatch\.ph$/;
+	//: @todo: We need to fix this for security issues.
+	allowedOriginDomainPattern = /.+/;
 }
 
 exports.cors = function cors( app ){
