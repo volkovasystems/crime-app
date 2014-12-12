@@ -1,18 +1,16 @@
+require( "./user-data.js" );
+
 var _ = require( "lodash" );
 var async = require( "async" );
 var argv = require( "yargs" ).argv;
-var bodyParser = require( "body-parser" );
 var express = require( "express" );
 var mongoose = require( "mongoose" );
-var session = require( "express-session" );
 var unirest = require( "unirest" );
 var util = require( "util" );
 
-require( "./user-data.js" );
-
 var serverData = require( "./package.js" ).packageData.serverSet.user;
-var host = argv.host || serverData.host;
-var port = serverData.port;
+var host = argv.host ||  serverData.host;
+var port = parseInt( argv.port || 0 ) || serverData.port;
 
 var resolveURL = require( "./resolve-url.js" ).resolveURL;
 resolveURL( serverData );
@@ -20,31 +18,7 @@ var userServer = serverData;
 
 var app = express( );
 
-app.use( bodyParser.json( ) );
-app.use( session( { 
-	"secret": "#3vtl+6gw)eew8vdonh(z86mvi)#cn4__isxqoy#(_svy2g2hy",
-	"resave": true,
-	"saveUninitialized": true
-} ) );
-
-/*:
-	Solution taken from this:
-	https://gist.github.com/cuppster/2344435
-*/
-app.use( function allowCrossDomain( request, response, next ){
-	response.header( "Access-Control-Allow-Origin", request.headers.origin || "*" );
-	response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
-	response.header( "Access-Control-Allow-Headers", "Content-Type, Accept, Administrator-Access-ID" );
-	response.header( "Access-Control-Max-Age", 10 );
-	response.header( "Cache-Control", "no-cache, no-store, must-revalidate" );
-	  
-	if( "OPTIONS" == request.method.toUpperCase( ) ){
-		response.sendStatus( 200 );
-
-	}else{
-		next( );
-	}
-} );
+require( "./configure-app.js" ).configureApp( app );
 
 app.all( "/api/:accessID/*",
 	function verifyAccessID( request, response, next ){
@@ -688,9 +662,4 @@ app.post( "/user/:accessID/logout",
 			} );
 	} );
 
-if( argv.production ){
-	app.listen( port );
-	
-}else{
-	app.listen( port, host );	
-}
+require( "./start-app.js" ).startApp( app, port, host );

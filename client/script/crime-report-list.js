@@ -600,7 +600,7 @@ Crime
 						} );
 
 					scope.on( "report-added",
-						function onLoginSuccess( ){
+						function onReportAdded( ){
 							getAllReportList( scope,
 								function onGetAllReportList( state, reportList ){
 									if( state ){
