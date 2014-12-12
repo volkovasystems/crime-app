@@ -78,6 +78,10 @@ angular.module( "ReportSpecifyCategory", [
 					}
 				},
 
+				"onClickCloseReportSpecifyCategory": function onClickCloseReportSpecifyCategory( ){
+					this.scope.publish( "close-report-specify-category" );
+				},
+
 				"onClickCancel": function onClickCancel( ){
 					this.scope.publish( "cancel-report-specify-category" );
 				},

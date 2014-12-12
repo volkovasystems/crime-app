@@ -1,7 +1,6 @@
 var argv = require( "yargs" ).argv;
-var path = require( "path" );
-var compression = require( "compression" );
 var express = require( "express" );
+var path = require( "path" );
 
 var serverSet = require( "./package.js" ).packageData.serverSet;
 var serverData = serverSet[ "static" ];
@@ -10,7 +9,7 @@ var port = parseInt( argv.port || 0 ) || serverData.port;
 
 var app = express( );
 
-app.use( compression( ) );
+require( "./configure-app.js" ).configureApp( app );
 
 app.use( function onRequest( request, response, next ){
 	console.log( request.path );
@@ -34,9 +33,4 @@ app.use( function onRequest( request, response, next ){
 	response.redirect( "/" );
 } );
 
-if( argv.production ){
-	app.listen( port );
-	
-}else{
-	app.listen( port, host );	
-}
+require( "./start-app.js" ).startApp( app, port, host );

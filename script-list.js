@@ -41,6 +41,7 @@ var scriptList = [
 	"report-final.js",
 	"report-list.js",
 	"report-table.js",
+	"user-report-list.js",
 	
 	"dashbar.js",
 	"home.js",
@@ -65,7 +66,9 @@ var scriptList = [
 	"crime-report.js",
 	"crime-report-list.js",
 	"crime-report-table.js",
+	"crime-user-report-list.js",
 	"crime-case-category-list.js",
+	"crime-case-category-filter.js",
 	"crime-zoom-control.js",
 	"crime-locate-control.js",
 	"crime-report-control.js",

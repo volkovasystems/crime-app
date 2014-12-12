@@ -33,6 +33,13 @@ Crime
 						function onCloseReportFinal( ){
 							scope.publish( "clear-report-incident-detail-data" );
 						} );
+
+					scope.on( "close-report-incident-detail",
+						function onCloseReportIncidentDetail( ){
+							scope.publish( "clear-report-incident-detail-data" );
+
+							scope.publish( "hide-report-incident-detail" );
+						} );
 				}
 			};
 		}

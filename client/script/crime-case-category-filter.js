@@ -104,13 +104,13 @@ Crime
 
 					scope.on( "close-case-category-filter",
 						function onCloseCaseCategoryFilter( ){
-							scope.publish( "hide-case-category-filter" );
-
 							scope.publish( "clear-case-category-filter-data" );
+
+							scope.publish( "refresh-map" );
 						} );
 
 					scope.on( "open-case-category-filter",
-						function onCloseCaseCategoryFilter( ){
+						function onOpenCaseCategoryFilter( ){
 							scope.publish( "show-case-category-filter" );
 						} );
 

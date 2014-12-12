@@ -22,6 +22,7 @@ angular
 		"ReportFinal",
 		"ReportList",
 		"ReportTable",
+		"UserReportList",
 		"CaseCategoryFilter",
 		"Notify"
 	] )
@@ -105,7 +106,14 @@ angular
 				},
 
 				function checkRender( callback ){
-					$rootScope.on( "report-table-rendered", 
+					$rootScope.on( "report-table-rendered",
+						function onRendered( ){ 
+							callback( ); 
+						} );
+				},
+
+				function checkRender( callback ){
+					$rootScope.on( "user-report-list-rendered",
 						function onRendered( ){ 
 							callback( ); 
 						} );
