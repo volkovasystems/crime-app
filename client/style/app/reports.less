@@ -13,6 +13,13 @@
     transform: translate(-50%, -50%);
 
     background-color: rgba(0, 0, 0, .3) !important;
+    .scrollable
+    {
+        display: block;
+        overflow-y: scroll;
+
+        height: 500px;
+    }
     &.my-reports
     {
         top: 0;
@@ -70,13 +77,6 @@
         left: 0;
 
         transform: none;
-        .scrollable
-        {
-            display: block;
-            overflow-y: scroll;
-
-            height: 500px;
-        }
         .table input
         {
             padding: 4px;

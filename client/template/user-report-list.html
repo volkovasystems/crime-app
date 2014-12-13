@@ -16,7 +16,9 @@
 				<h2>
 					My Reports
 				</h2>
-				<table 
+				<section 
+					className="scrollable">
+					<table 
 					className="table tablesaw tablesaw-stack" data-tablesaw-mode="stack">
 					<thead>
 						<tr>
@@ -47,6 +49,7 @@
 						{ reportList.map( this.onEachReportItem ) }
 					</tbody>
 				</table>
+				</section>
 		</section>
 	</section>
 </section>

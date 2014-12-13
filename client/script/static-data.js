@@ -28,7 +28,7 @@ var staticData = {
 
 	"REPORT_LIST_PAGE_SIZE": 6,
 
-	"CRIME_LOGO_IMAGE_SOURCE": "image/crimewatch.png",
+	"CRIME_LOGO_IMAGE_SOURCE": "image/logotype.png",
 	"APP_LOGO_IMAGE_SOURCE": "image/empty.png",
 
 	"DEFAULT_MAP_ADDRESS": "Manila, Philippines",
