@@ -2,8 +2,7 @@ var argv = require( "yargs" ).argv;
 
 var allowedOriginDomainPattern = /.+/;
 if( argv.production ){
-	//: @todo: We need to fix this for security issues.
-	allowedOriginDomainPattern = /.+/;
+	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$/;
 }
 
 exports.cors = function cors( app ){
@@ -12,7 +11,7 @@ exports.cors = function cors( app ){
 		https://gist.github.com/cuppster/2344435
 	*/
 	app.use( function allowCrossDomain( request, response, next ){
-		var allowedOriginURL = request.headers.origin;
+		var allowedOriginURL = request.headers.origin || request.get( "Host" );
 
 		if( !allowedOriginDomainPattern.test( allowedOriginURL ) ){
 			response
@@ -21,6 +20,8 @@ exports.cors = function cors( app ){
 					"status": "error",
 					"data": "origin is not allowed"
 				} );
+
+			return;
 		}
 
 		response.header( "Access-Control-Allow-Origin", allowedOriginURL );

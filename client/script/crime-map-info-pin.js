@@ -94,6 +94,11 @@ Crime
 						function onMapAllFilteredReport( reportList ){
 							attachAllMapInfoPin( scope, reportList );
 						} );
+
+					scope.on( "refresh-map",
+						function onRefreshMap( ){
+							attachAllMapInfoPinNearReporter( scope );
+						} );
 				}
 			}
 		}

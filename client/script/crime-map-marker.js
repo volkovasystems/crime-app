@@ -185,6 +185,11 @@ Crime
 						function onMapAllFilteredReport( reportList ){
 							mapAllCrimeReport( scope, reportList );
 						} );
+
+					scope.on( "refresh-map",
+						function onRefreshMap( ){
+							mapAllCrimeNearReporter( scope );
+						} );
 				}
 			}
 		}

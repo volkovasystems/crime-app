@@ -102,15 +102,20 @@ Crime
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
+					scope.on( "proceed-default-app-flow",
+						function onProceedDefaultAppFlow( ){
+							scope.publish( "show-case-category-filter" );
+						} );
+
 					scope.on( "close-case-category-filter",
 						function onCloseCaseCategoryFilter( ){
-							scope.publish( "hide-case-category-filter" );
-
 							scope.publish( "clear-case-category-filter-data" );
+
+							scope.publish( "refresh-map" );
 						} );
 
 					scope.on( "open-case-category-filter",
-						function onCloseCaseCategoryFilter( ){
+						function onOpenCaseCategoryFilter( ){
 							scope.publish( "show-case-category-filter" );
 						} );
 
