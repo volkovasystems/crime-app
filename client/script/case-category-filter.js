@@ -61,6 +61,8 @@ angular
 					this.setState( {
 						"componentState": "case-category-filter-minified"
 					} );
+
+					this.scope.publish( "close-case-category-filter" );
 				},
 
 				"onSelectCaseCategory": function onSelectCaseCategory( selectedCaseCategory ){
