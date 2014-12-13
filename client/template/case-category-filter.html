@@ -3,7 +3,11 @@
 	<section 
 		className="icon-container">
 		<a 
-			className="icon md-3x main-menu-icon md-filter-list"
+			className="hide-mobile icon md-3x main-menu-icon md-filter-list"
+			onClick={ this.onClickOpenCaseCategoryFilter }>
+		</a>
+		<a 
+			className="show-mobile icon md-2x main-menu-icon md-filter-list"
 			onClick={ this.onClickOpenCaseCategoryFilter }>
 		</a>
 	</section>
