@@ -22,7 +22,7 @@ exports.cors = function cors( app ){
 	app.use( function allowCrossDomain( request, response, next ){
 		var allowedOriginURL = request.headers.origin || request.get( "Host" );
 
-		if( !allowedOriginDomainPattern.test( allowedOriginURL ) ||
+		if( !allowedOriginDomainPattern.test( allowedOriginURL ) &&
 			!_.contains( publicDomainAddressList, allowedOriginURL ) )
 		{
 			response
