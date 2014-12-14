@@ -1,9 +1,48 @@
 @media (max-width: 480px)
 {
+    .search
+    {
+        left: 0;
+
+        width: 100%;
+        .input-wrapper
+        {
+            display: inline-block;
+            float: none;
+
+            width: 90%;
+        }
+        .search-bar
+        {
+            width: 100%;
+            margin: 0;
+
+            transform: none;
+            .bar-wrapper
+            {
+                display: block;
+                .button-wrapper
+                {
+                    display: inline-block;
+                    float: none;
+
+                    width: 25%;
+                }
+                .input-wrapper
+                {
+                    width: 75%;
+                    .input
+                    {
+                        width: auto;
+                    }
+                }
+            }
+        }
+    }
+
     .zoom-control
     {
         position: absolute;
-        top: 10%;
         left: 0;
 
         width: auto;
@@ -50,15 +89,13 @@
 
     .locate-control
     {
-        bottom: 50%;
-
         width: auto;
         height: auto;
         .control-container .icon
         {
             width: auto;
-            height: auto;
-            padding: 7px;
+            height: 44px;
+            padding: 8px;
 
             vertical-align: middle;
         }
@@ -101,6 +138,120 @@
     .login .login-container .login-component
     {
         margin: 65% auto 0;
+    }
+
+    .main-menu .card
+    {
+        top: -55px;
+        left: -10px;
+
+        width: 300px;
+    }
+
+    .profile
+    {
+        padding: 10px;
+        .profile-teaser .profile-detail-teaser
+        {
+            padding: 20px 20px 10px;
+        }
+        .avatar
+        {
+            width: 120px;
+            height: 120px;
+            margin: 10px auto;
+            padding: 0;
+        }
+    }
+
+    .profile-container
+    {
+        .form .form-group .input
+        {
+            height: 40px;
+            margin-bottom: 10px;
+        }
+    }
+
+
+
+
+    .menu-dashboard .menu
+    {
+        padding: 10px 0;
+    }
+
+    .main-menu.card
+    {
+        top: 60px;
+    }
+
+    .zoom-control
+    {
+        top: 120px;
+        .zoom-control
+        {
+            top: 0;
+        }
+    }
+
+    .locate-control
+    {
+        top: 230px;
+    }
+
+    .category-button
+    {
+        margin: 20px;
+    }
+
+    .case-category-filter
+    {
+        top: 120px;
+    }
+
+    .report-list
+    {
+        top: 60px;
+    }
+
+
+    .category-component.card,
+    .crime-report .case-category-list.card
+    {
+        z-index: 9999;
+        top: -200px;
+        left: -250px;
+
+        width: 300px;
+    }
+
+    .category-component .card-category .list-item .icon,
+    .crime-report .case-category-list .card-category .list-item .icon,
+    .category-component .crime-category .list-item .icon,
+    .crime-report .case-category-list .crime-category .list-item .icon
+    {
+        width: 30px;
+    }
+
+    .category-component .card-category .list-item,
+    .crime-report .case-category-list .card-category .list-item,
+    .category-component .crime-category .list-item,
+    .crime-report .case-category-list .crime-category .list-item
+    {
+        font-size: .8em;
+        line-height: 1.2em;
+
+        width: 75px;
+        height: 75px;
+    }
+
+    .category-component .card-category .categories,
+    .crime-report .case-category-list .card-category .categories,
+    .category-component .crime-category .categories,
+    .crime-report .case-category-list .crime-category .categories
+    {
+        height: 170px;
     }
 }
 

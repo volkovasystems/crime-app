@@ -268,6 +268,9 @@ Crime
 
 									}else{
 										$rootScope.publish( "set-logged-out-state" );
+
+										$rootScope.broadcast( "show-default-page" );
+										
 										callback( );
 									}
 								} );
