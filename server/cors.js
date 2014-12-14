@@ -1,20 +1,27 @@
 var _ = require( "lodash" );
 var argv = require( "yargs" ).argv;
 
-var allowedOriginDomainPattern = /.+/;
+var allowedOriginDomainPattern = /^localhost\:\d{4,5}$/;
 if( argv.production ){
-	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$/;
+	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$|^localhost\:\d{4,5}$/;
 }
 
-var publicDomainAddressList = [ ];
+var serverSet = require( "./package.js" ).packageData.serverSet;
+
+var publicDomainAddressList = _( serverSet )
+		.map( function onEachServerData( serverData ){
+			return [ serverData.host, serverData.port ].join( ":" );
+		} )
+		.compact( )
+		.value( );
+
 if( argv.production ){
-	var serverSet = require( "./package.js" ).packageData.serverSet;
-	
 	publicDomainAddressList = _( serverSet )
 		.map( function onEachServerData( serverData ){
 			return serverData.remote;
 		} )
 		.compact( )
+		.union( publicDomainAddressList )
 		.value( );
 }
 
