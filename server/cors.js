@@ -28,7 +28,7 @@ exports.cors = function cors( app ){
 
 		console.log( "allowedOriginURL: " + allowedOriginURL );
 
-		console.log( "publicDomainAddressList: ", + publicDomainAddressList );
+		console.log( "publicDomainAddressList: " + publicDomainAddressList );
 
 		if( !allowedOriginDomainPattern.test( allowedOriginURL ) &&
 			!_.contains( publicDomainAddressList, allowedOriginURL ) )
