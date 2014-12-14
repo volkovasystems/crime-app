@@ -1,9 +1,18 @@
+var _ = require( "lodash" );
 var argv = require( "yargs" ).argv;
 
 var allowedOriginDomainPattern = /.+/;
 if( argv.production ){
 	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$/;
 }
+
+var serverSet = require( "./package.js" ).packageData.serverSet;
+var publicDomainAddressList = _( serverSet )
+	.map( function onEachServerData( serverData ){
+		return serverData.remote;
+	} )
+	.compact( )
+	.value( );
 
 exports.cors = function cors( app ){
 	/*:
@@ -13,7 +22,9 @@ exports.cors = function cors( app ){
 	app.use( function allowCrossDomain( request, response, next ){
 		var allowedOriginURL = request.headers.origin || request.get( "Host" );
 
-		if( !allowedOriginDomainPattern.test( allowedOriginURL ) ){
+		if( !allowedOriginDomainPattern.test( allowedOriginURL ) ||
+			!_.contains( publicDomainAddressList, allowedOriginURL ) )
+		{
 			response
 				.status( 500 )
 				.json( {
