@@ -6,13 +6,17 @@ if( argv.production ){
 	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$/;
 }
 
-var serverSet = require( "./package.js" ).packageData.serverSet;
-var publicDomainAddressList = _( serverSet )
-	.map( function onEachServerData( serverData ){
-		return serverData.remote;
-	} )
-	.compact( )
-	.value( );
+var publicDomainAddressList = [ ];
+if( argv.production ){
+	var serverSet = require( "./package.js" ).packageData.serverSet;
+	
+	publicDomainAddressList = _( serverSet )
+		.map( function onEachServerData( serverData ){
+			return serverData.remote;
+		} )
+		.compact( )
+		.value( );
+}
 
 exports.cors = function cors( app ){
 	/*:
