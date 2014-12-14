@@ -1,9 +1,9 @@
 var _ = require( "lodash" );
 var argv = require( "yargs" ).argv;
 
-var allowedOriginDomainPattern = /^localhost\:\d{4,5}$/;
+var allowedOriginDomainPattern = /^(https?\:\/\/)?localhost\:\d{4,5}$/;
 if( argv.production ){
-	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$|^localhost\:\d{4,5}$/;
+	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$|^(https?\:\/\/)?localhost\:\d{4,5}$/;
 }
 
 var serverSet = require( "./package.js" ).packageData.serverSet;
