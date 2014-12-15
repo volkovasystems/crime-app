@@ -12,5 +12,6 @@ client/fonts/
 key-*
 userdb
 reportdb
+appdb
 *.log
 *.db

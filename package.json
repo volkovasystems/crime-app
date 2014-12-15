@@ -62,22 +62,22 @@
   },
   "serverSet": {
     "static": {
-      "remote": "ec2-54-171-91-108.eu-west-1.compute.amazonaws.com",
+      "remote": "ec2-54-76-186-172.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 8000
     },
     "user": {
-      "remote": "ec2-46-51-205-79.eu-west-1.compute.amazonaws.com",
+      "remote": "ec2-54-77-145-27.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 9000
     },
     "report": {
-      "remote": "ec2-54-77-242-9.eu-west-1.compute.amazonaws.com",
+      "remote": "ec2-54-77-183-193.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 9001
     },
     "app": {
-      "remote": "ec2-54-77-161-77.eu-west-1.compute.amazonaws.com",
+      "remote": "ec2-54-154-5-86.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 10000
     },
