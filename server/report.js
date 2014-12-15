@@ -119,6 +119,100 @@ app.all( "/api/:accessID/*",
 		}
 	} );
 
+app.get( "/api/:accessID/report/query/all/near",
+	function onReportGetNear( request, response ){
+		var Report = mongoose.model( "Report" );
+
+		async.waterfall( [
+			function checkPageData( callback ){
+				var MAXIMUM_COUNT = 10;
+
+				var count = parseInt( request.param( "count" ) || 0 ) || MAXIMUM_COUNT;
+
+				if( count > MAXIMUM_COUNT ){
+					count = MAXIMUM_COUNT;
+				}
+
+				var index = request.param( "index" ) || 0;
+
+				callback( null, count, index );
+			},
+
+			function queryAllNearReport( count, index, callback ){
+				var propertyName = request.param( "propertyName" );
+
+				var propertyValue = request.param( "propertyValue" );
+
+				var queryData = { };
+
+				queryData[ propertyName ] = { "$in": _.compact( [ propertyValue ] ) };
+
+				var latitude = request.param( "latitude" );
+
+				var longitude = request.param( "longitude" );
+
+				var distance = parseInt( request.param( "distance" ) || 0 ) || 500;
+
+				Report
+					.find( queryData )
+
+					.where( "reportLocation.coordinate" )
+
+					.near( {
+						"center": [ latitude, longitude ],
+						"maxDistance": distance,
+						"spherical": true
+					} )
+
+					.sort( {
+						"reportTimestamp": "descending" 
+					} )
+
+					.limit( count )
+
+					.skip( index * count )
+
+					.exec( function onResult( error, reportList ){
+						if( error ){
+							callback( error );
+
+						}else if( _.isEmpty( reportList ) ){
+							callback( "no-report-data" );
+
+						}else{
+							callback( null, reportList );
+						}
+					} );
+			},
+		],
+			function lastly( state, reportList ){
+				if( state === "no-report-data" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "success",
+							"data": reportList
+						} );
+				}
+			} );
+	} );
+
 app.get( "/api/:accessID/report/query/latest/:reportState",
 	function onReportQueryAll( request, response ){
 		var Report = mongoose.model( "Report" );

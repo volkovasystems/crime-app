@@ -90,6 +90,114 @@ Crime
 		}
 	] )
 
+	.factory( "getAllFilteredCrimeNearReporter", [
+		"Event",
+		"ProgressBar",
+		"$http",
+		"getReportServerData",
+		function factory( 
+			Event,
+			ProgressBar,
+			$http, 
+			getReportServerData
+		){
+			var getAllFilteredCrimeNearReporter = function getAllFilteredCrimeNearReporter( scope, propertyName, propertyValue, callback ){
+				Event( scope );
+
+				ProgressBar( scope );
+				
+				async.waterfall( [
+					function initiateLoading( callback ){
+						scope.startLoading( );
+
+						callback( );
+					},
+
+					function getUserData( callback ){
+						scope.publish( "get-user-account-data",
+							function onGetUserAccountData( error, userAccountData ){
+								callback( error, userAccountData );
+							} );
+					},
+
+					function processUserData( userAccountData, callback ){
+						var accessID = btoa( userAccountData.accessToken ).replace( /[^A-Za-z0-9]/g, "" );
+
+						callback( null, accessID );
+					},
+
+					function processRequestEndpoint( accessID, callback ){
+						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/query/all/near" );
+
+						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
+						callback( null, requestEndpoint );
+					},
+
+					function getCurrentPosition( requestEndpoint, callback ){
+						var position = scope.mapComponent.getCenter( );
+
+						var latitude = position.lat( );
+						var radianLatitude = math.unit( latitude, "deg" ).to( "rad" ).value;
+
+						var longitude = position.lng( );
+						var radianLongitude = math.unit( longitude, "deg" ).to( "rad" ).value;
+
+						callback( null, requestEndpoint, radianLatitude, radianLongitude );
+					},
+
+					function bindAllFilterParameter( requestEndpoint, latitude, longitude, callback ){
+						var count = scope.pageSize;
+
+						var index = scope.pageIndex;
+
+						var queryParameterString = URI.buildQuery( {
+							"propertyName": propertyName,
+							"propertyValue": propertyValue,
+							"latitude": latitude,
+							"longitude": longitude,
+							"count": count,
+							"index": index
+						} );
+
+						requestEndpoint = [
+							requestEndpoint,
+							queryParameterString
+						].join( "?" );
+
+						callback( null, requestEndpoint );
+					},
+
+					function getReportListFromServer( requestEndpoint, callback ){
+						$http.get( requestEndpoint )
+							.success( function onSuccess( response, status ){
+								if( response.status == "error" ){
+									callback( response.data );
+
+								}else if( response.status == "failed" ){
+									callback( response.data );
+
+								}else{
+									callback( null, response.data );
+								}
+							} )
+							.error( function onError( response, status ){
+								//: @todo: Do something on error.
+								callback( new Error( "error sending report data" ) );
+							} );
+					}
+				],
+					function lastly( error, reportList ){
+						callback( error, reportList );
+
+						scope.finishLoading( );
+					} );
+			};
+
+			return getAllFilteredCrimeNearReporter;
+		}
+	] )
+
 	.factory( "mapAllCrimeReport", [
 		"Event",
 		function factory( Event ){
@@ -141,10 +249,12 @@ Crime
 		"Event",
 		"mapAllCrimeNearReporter",
 		"mapAllCrimeReport",
+		"getAllFilteredCrimeNearReporter",
 		function directive( 
 			Event, 
 			mapAllCrimeNearReporter,
-			mapAllCrimeReport
+			mapAllCrimeReport,
+			getAllFilteredCrimeNearReporter
 		){
 			return {
 				"restrict": "A",
@@ -156,7 +266,14 @@ Crime
 					var self = this;
 					scope.on( "login-success",
 						function onLoginSuccess( ){
-							mapAllCrimeNearReporter( scope );
+							getAllFilteredCrimeNearReporter( scope, "reportState", "approved",
+								function onResult( error, reportList ){
+									if( error ){
+
+									}else{
+										mapAllCrimeReport( scope, reportList );	
+									}
+								} );
 
 							/*scope.on( "map-position-changed",
 								function onMapPositionChanged( position ){
@@ -176,10 +293,11 @@ Crime
 								} );*/
 						} );
 
-					scope.on( "report-added",
+					//: @note: This is temporarily disabled.
+					/*scope.on( "report-added",
 						function onLoginSuccess( ){
 							mapAllCrimeNearReporter( scope );
-						} );
+						} );*/
 
 					scope.on( "map-all-filtered-report",
 						function onMapAllFilteredReport( reportList ){
@@ -188,7 +306,14 @@ Crime
 
 					scope.on( "refresh-map",
 						function onRefreshMap( ){
-							mapAllCrimeNearReporter( scope );
+							getAllFilteredCrimeNearReporter( scope, "reportState", "approved",
+								function onResult( error, reportList ){
+									if( error ){
+
+									}else{
+										mapAllCrimeReport( scope, reportList );	
+									}
+								} );
 						} );
 				}
 			}
