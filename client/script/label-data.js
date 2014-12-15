@@ -1,7 +1,7 @@
 var labelData = {
 	"LOGIN_LABEL": "Login with Facebook",
 
-	"REPORT_LIST_HEADER_LABEL": "Report Feeds",
+	"REPORT_LIST_HEADER_LABEL": "CrimeFeed",
 	"REPORT_ITEM_PHRASE": "incident reported happened on",
 
 	"PROFILE_DASHBAR_LABEL": "Profile",
