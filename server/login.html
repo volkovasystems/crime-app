@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Login Redirect</title>
+	</head>
+	<body>
+		<h1>Redirect</h1>
+		<div id="fb-root"></div>
+
+		<input type="button" id="login" value="Log In" />
+		<input type="button" id="logout" value="Log Out" />
+
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"></script>
+		<script type="text/javascript">
+		var facebookAppID = "1527551047486209";
+		var hostAddress = "http://192.168.1.44:8000";
+
+		window.fbAsyncInit = function() {
+		FB.init({
+		appId      : facebookAppID,
+		status	 : true,
+		cookie	 : true,
+		xfbml      : true,
+		version    : 'v2.2'
+		});	        
+		};
+
+		$( function ( ) {
+		$("#login").click( function ( ) {
+		var redirectURL = [ 
+		"https://www.facebook.com/dialog/oauth/?",
+		[ 
+		[ "client_id" , facebookAppID ].join( "=" ),
+		[ "redirect_uri", hostAddress ].join( "=" ),						
+		[ "scope", "email" ].join( "=" )
+							].join( "&" )
+							].join( "" );
+
+		window.location = redirectURL;
+		} );
+
+		$("#logout").click( function ( ) {
+		alert( "hello" );
+		FB.logout( function ( response ) {} );	   			
+		} );
+		} );
+
+		</script>
+	</body>
+</html>
