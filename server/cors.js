@@ -33,12 +33,8 @@ exports.cors = function cors( app ){
 	app.use( function allowCrossDomain( request, response, next ){
 		var allowedOriginURL = request.headers.origin || request.get( "Host" );
 
-		console.log( "allowedOriginURL: " + allowedOriginURL );
-
-		console.log( "publicDomainAddressList: " + publicDomainAddressList );
-
 		if( !allowedOriginDomainPattern.test( allowedOriginURL ) &&
-			!_.contains( publicDomainAddressList, allowedOriginURL ) )
+			!_.contains( publicDomainAddressList, allowedOriginURL.replace( /https?\:\/\//, "" ) ) )
 		{
 			response
 				.status( 500 )
