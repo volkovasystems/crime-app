@@ -564,7 +564,7 @@ Crime
 
 					scope.on( "login-success",
 						function onLoginSuccess( ){
-							getAllReportList( scope,
+							getAllApprovedReportList( scope,
 								function onGetAllReportList( state, reportList ){
 									if( state ){
 
@@ -599,7 +599,8 @@ Crime
 							scope.publish( "show-minified-report-list" );
 						} );
 
-					scope.on( "report-added",
+					//: @note: I'm temporarily disabling this.
+					/*scope.on( "report-added",
 						function onReportAdded( ){
 							getAllReportList( scope,
 								function onGetAllReportList( state, reportList ){
@@ -609,7 +610,7 @@ Crime
 										scope.publish( "set-report-list", reportList );
 									}
 								} );
-						} );
+						} );*/
 				}
 			}
 		}

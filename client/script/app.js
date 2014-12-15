@@ -26,6 +26,7 @@ angular
 		"CaseCategoryFilter",
 		"Notify"
 	] )
+
 	.run( [
 		"$rootScope",
 		"ProgressBar",
@@ -178,6 +179,15 @@ angular
 				Event( $rootScope );
 
 				window.rootScope = $rootScope;
+			}
+		}
+	] )
+
+	.run( [
+		"$rootScope",
+		function onRun( $rootScope ){
+			if( window.cordova ){
+				$rootScope.isMobile = true;
 			}
 		}
 	] );

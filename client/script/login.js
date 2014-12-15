@@ -44,7 +44,9 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 					"tryLoggingInFacebook": function tryLoggingInFacebook( callback, loginFlow ){
 						callback = callback || function callback( ){ };
 
-						if( loginFlow == POPUP_LOGIN_FLOW ){
+						if( $rootScope.isMobile ){
+							
+						}else if( loginFlow == POPUP_LOGIN_FLOW ){
 							FB.login( function onLogin( response ){
 								if( response.error ){
 									callback( response.error, false, null, response );
