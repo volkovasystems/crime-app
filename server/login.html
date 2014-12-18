@@ -1,51 +1,78 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Login Redirect</title>
+		<title>CrimeMap | CrimeWatch.ph</title>
 	</head>
 	<body>
-		<h1>Redirect</h1>
 		<div id="fb-root"></div>
 
-		<input type="button" id="login" value="Log In" />
-		<input type="button" id="logout" value="Log Out" />
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/jquery.min.js">
+		</script>
 
-		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"></script>
-		<script type="text/javascript">
-		var facebookAppID = "1527551047486209";
-		var hostAddress = "http://192.168.1.44:8000";
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/URI.min.js">
+		</script>
+		
+		<script 
+			type="text/javascript" 
+			src="http://connect.facebook.net/en_US/sdk.js">
+		</script>
 
-		window.fbAsyncInit = function() {
-		FB.init({
-		appId      : facebookAppID,
-		status	 : true,
-		cookie	 : true,
-		xfbml      : true,
-		version    : 'v2.2'
-		});	        
-		};
+		<script 
+			type="text/javascript">
+			var facebookAppID = "@facebookAppID";
 
-		$( function ( ) {
-		$("#login").click( function ( ) {
-		var redirectURL = [ 
-		"https://www.facebook.com/dialog/oauth/?",
-		[ 
-		[ "client_id" , facebookAppID ].join( "=" ),
-		[ "redirect_uri", hostAddress ].join( "=" ),						
-		[ "scope", "email" ].join( "=" )
-							].join( "&" )
-							].join( "" );
+			var uri = URI( );
 
-		window.location = redirectURL;
-		} );
+			//: Do not query anymore if it is already redirected with logged-in parameter.
+			if( !uri.hasQuery( "logged-in" ) ){
+				var hostAddress = [ 
+					"http:/",
+					uri.host( ) + uri.path( )
+				].join( "/" );
 
-		$("#logout").click( function ( ) {
-		alert( "hello" );
-		FB.logout( function ( response ) {} );	   			
-		} );
-		} );
+				var redirectToFacebookLogin = function redirectToFacebookLogin( ){
+					var redirectURL = [ 
+						"https://www.facebook.com/dialog/oauth/?",
+						[ 
+							[ "client_id" , facebookAppID ].join( "=" ),
+							[ "redirect_uri", hostAddress ].join( "=" ),						
+							[ "scope", "email" ].join( "=" )
+						].join( "&" )
+					].join( "" );
 
+					window.location = redirectURL;
+				};
+
+				window.fbAsyncInit = function fbAsyncInit( ){
+					FB.init( {
+						"appId": facebookAppID,
+						"status": true,
+						"cookie": true,
+						"version": "v2.2"
+					} );	        
+
+					$( "#fb-root" ).ready( function onReady( ){
+						FB.getLoginStatus( function onReponseLoginStatus( response ){
+							if( response.error ){
+								redirectToFacebookLogin( );
+
+							}else if( response.status === "connected" ){
+								window.location = [
+									hostAddress,
+									[ "logged-in", true ].join( "=" )  
+								].join( "?" );
+
+							}else{
+								redirectToFacebookLogin( );
+							}
+						} );
+					} );
+				};	
+			}			
 		</script>
 	</body>
 </html>

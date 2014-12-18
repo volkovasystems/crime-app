@@ -1,5 +1,68 @@
 Crime
 
+	.factory( "mobileLogin", [
+		"getUserServerData",
+		function factory( getUserServerData ){
+			var mobileLogin = function mobileLogin( callback ){
+				callback = callback || function callback( ){ };
+
+				var requestEndpoint = getUserServerData( ).joinPath( "user/login/mobile" );
+
+				var redirectWindow = window.open( requestEndpoint , "_blank", "location=no" );
+				
+				redirectWindow.addEventListener( "loadstop",
+					function onLoadStop( event ){
+						/*:
+							Check the content of event here I assume that
+								this will be called several times.
+
+							My assumptions are these,
+							1. Since we are using in app browser the same reference
+								to window may be retained even if we redirect it to facebook
+								and going back.
+
+							2. Due to assumption #1 loadstop event must be called thrice.
+								First is when login.html was rendered.
+								Second is when facebook login is rendered.
+								Third is when facebook redirects back to login.html
+
+							event.url may contain information regarding this.
+
+							Assumption #1 and #2 will happen only when the user is not really logged in
+								at the very first of the app. It means either any local storage
+								or cookie set by facebook is not yet set.
+
+							Alternatively, we provided inside login.html a check if the user already logs in.
+
+							This resolves the issue of what should we do if facebook redirects back to login.html.
+
+							Lastly, if facebook is already logged in we will redirect it to this url
+								/login.html?logged-in=true
+
+							Then using this listener we will listen to that url in event.url
+								hopefully the original window reference was not destroyed.
+
+							When we encounter that url we will close this window
+
+							Proceed to checking if the user already logged in here.
+						*/
+						if( event.code ){
+							//: @todo: Do something because we have an error.
+							callback( error, false );
+
+						}else if( URI( event.url ).hasQuery( "logged-in" ) ){
+							callback( null, true );
+
+						}else{
+							//: @todo: Should we place a timeout here?
+						}
+					} );
+			};
+
+			return mobileLogin;
+		}
+	] )
+
 	.factory( "getFacebookAppID", [
 		"Event",
 		"$rootScope",
@@ -8,15 +71,13 @@ Crime
 
 			var getFacebookAppID =  function getFacebookAppID( ){
 				if( window.production ){
-					//: This is the production app in Facebook.
-					return "1468622340087258";
+					return staticData.PRODUCTION_FACEBOOK_APPLICATION_ID;
 					
 					//: This is the production test app in Facebook.
 					//return "725798337493212";
 				
 				}else{
-					//: This is the development app in Facebook.
-					return "1536844313229530";
+					return staticData.DEVELOPMENT_FACEBOOK_APPLICATION_ID;
 				}
 			};
 
@@ -201,11 +262,13 @@ Crime
 		"Event",
 		"CRIME_LOGO_IMAGE_SOURCE",
 		"sendUserDataToServer",
+		"mobileLogin",
 		function directive( 
 			ProgressBar,
 			Event, 
 			CRIME_LOGO_IMAGE_SOURCE,
-			sendUserDataToServer
+			sendUserDataToServer,
+			mobileLogin
 		){
 			return {
 				"restrict": "A",
@@ -247,6 +310,11 @@ Crime
 					scope.on( "dash-clicked:logout",
 						function onNavigateLogout( ){
 							
+						} );
+
+					scope.on( "mobile-login",
+						function onMobileLogin( callback ){
+							mobileLogin( callback );
 						} );
 				}
 			}

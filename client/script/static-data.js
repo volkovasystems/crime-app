@@ -33,5 +33,15 @@ var staticData = {
 
 	"DEFAULT_MAP_ADDRESS": "Manila, Philippines",
 
-	"STATIC_SERVER_URL": "http://map.crimewatch.ph"
+	"STATIC_SERVER_URL": "http://map.crimewatch.ph",
+
+	"PRODUCTION_FACEBOOK_APPLICATION_ID": "1468622340087258",
+
+	"DEVELOPMENT_FACEBOOK_APPLICATION_ID": "1536844313229530"
 };
+
+//: @ignore:
+if( typeof exports != "undefined" ){
+	exports.staticData = staticData;
+}
+//: @end-ignore
