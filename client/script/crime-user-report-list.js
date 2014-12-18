@@ -32,6 +32,20 @@ Crime
 								} );
 						} );
 
+					scope.on( "open-my-report",
+						function onOpenMyReport( ){
+							scope.publish( "show-user-report-list" );
+
+							getReportList( scope,
+								function onGetReportList( state, reportList ){
+									if( state ){
+
+									}else{
+										scope.publish( "set-user-report-list", reportList );
+									}
+								} );
+						} );
+
 					scope.on( "close-user-report-list",
 						function onCloseUserReportList( ){
 							scope.publish( "hide-user-report-list" );

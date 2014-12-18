@@ -95,6 +95,23 @@ Crime
 	] )
 
 	.run( [
+		function onRun( ){
+			/*:
+				@todo: This is wrong, the mobile should send the server
+					this parameter on a specific endpoint to activate
+					an optimize version of all requests.
+
+					mobile=true
+
+				For now we will do this.
+			*/
+			if( window.cordova ){
+				window.mobile = true;
+			}
+		}
+	] )
+
+	.run( [
 		"$rootScope",
 		"ProgressBar",
 		"Event",
@@ -293,7 +310,7 @@ Crime
 
 			var requestEndpoint = "/get/all/api/endpoint";
 
-			if( window.cordova ){
+			if( window.mobile ){
 				requestEndpoint = [ staticData.STATIC_SERVER_URL, requestEndpoint ].join( "" );
 			}
 

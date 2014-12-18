@@ -181,13 +181,4 @@ angular
 				window.rootScope = $rootScope;
 			}
 		}
-	] )
-
-	.run( [
-		"$rootScope",
-		function onRun( $rootScope ){
-			if( window.cordova ){
-				$rootScope.isMobile = true;
-			}
-		}
 	] );

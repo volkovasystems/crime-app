@@ -44,8 +44,14 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 					"tryLoggingInFacebook": function tryLoggingInFacebook( callback, loginFlow ){
 						callback = callback || function callback( ){ };
 
-						if( $rootScope.isMobile ){
-							
+						if( window.mobile ){
+							//: @todo: We forget to send the login type. But that's low priority.
+
+							$rootScope.publish( "mobile-login",
+								function onMobileLogin( error, hasLoggedIn ){
+									$rootScope.publish( "check-if-logged-in" );
+								} );
+
 						}else if( loginFlow == POPUP_LOGIN_FLOW ){
 							FB.login( function onLogin( response ){
 								if( response.error ){

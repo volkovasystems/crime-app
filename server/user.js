@@ -4,17 +4,31 @@ var _ = require( "lodash" );
 var async = require( "async" );
 var argv = require( "yargs" ).argv;
 var express = require( "express" );
+var fs = require( "fs" );
 var mongoose = require( "mongoose" );
 var unirest = require( "unirest" );
 var util = require( "util" );
 
-var serverData = require( "./package.js" ).packageData.serverSet.user;
+var serverSet = require( "./package.js" ).packageData.serverSet;
+var serverData = serverSet.user;
 var host = argv.host ||  serverData.host;
 var port = parseInt( argv.port || 0 ) || serverData.port;
 
 var resolveURL = require( "./resolve-url.js" ).resolveURL;
 resolveURL( serverData );
 var userServer = serverData;
+
+var facebookAppID = require( "../client/script/static-data.js" ).staticData.DEVELOPMENT_FACEBOOK_APPLICATION_ID;
+if( argv.production ){
+	facebookAppID = require( "../client/script/static-data.js" ).staticData.PRODUCTION_FACEBOOK_APPLICATION_ID;
+}
+
+var mobileLoginTemplate = fs.readFileSync( "./server/login.html", { "encoding": "utf8" } );
+mobileLoginTemplate = mobileLoginTemplate.replace( "@facebookAppID", facebookAppID );
+
+resolveURL( serverSet[ "static" ] );
+var staticServer = serverSet[ "static" ];
+mobileLoginTemplate = mobileLoginTemplate.replace( /\@staticServerURL/g, staticServer.joinPath( "" ).replace( /\/$/, "" ) );
 
 var app = express( );
 
@@ -273,6 +287,14 @@ app.get( "/api/:accessID/user/get",
 						} );
 				}
 			} );
+	} );
+
+app.get( "/user/login/mobile",
+	function onUserLoginMobile( request, response ){
+		response
+			.status( 200 )
+			.type( "html" )
+			.send( mobileLoginTemplate );
 	} );
 
 app.post( "/api/:accessID/user/update",
