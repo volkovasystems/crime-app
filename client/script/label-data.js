@@ -43,6 +43,7 @@ var labelData = {
 	"SPECIFY_CATEGORY_PROGRESS_LABEL": "Specify Category",
 	"INCIDENT_DETAIL_PROGRESS_LABEL": "Incident Details",
 	"REPORT_FINAL_PROGRESS_LABEL": "Thank you!",
+	"WARN_IF_NO_SELECTED_CATEGORY_PROMPT": "Please select a category.", 
 
 	"CONFIRM_BUTTON_LABEL": "Confirm",
 	"SEND_BUTTON_LABEL": "Send",
@@ -58,6 +59,8 @@ var labelData = {
 	"THANK_SUBMISSION_PHRASE": "Thank you for your submission.",
 	"VERIFY_SUBMISSION_PHRASE": "We will review and verify your report within 24 hours.",
 	"WARN_IF_NOT_AGREED_PROMPT": "Please agree to our terms if you want to post this report.",
+	"WARN_IF_MINIMUM_INPUT_REPORT_TITLE_PROMPT": "Please try to set 3 or more words for your title.",
+	"WARN_IF_MINIMUM_INPUT_REPORT_DESCRIPTION_PROMPT": "Please try to set 25 or more words for your description.",
 	"TIME_FORMAT_PLACEHOLDER": "",
 	"DATE_FORMAT_PLACEHOLDER": "",
 

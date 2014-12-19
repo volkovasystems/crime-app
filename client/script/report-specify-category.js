@@ -18,7 +18,7 @@ angular.module( "ReportSpecifyCategory", [
 
 	.constant( "CANCEL_BUTTON_LABEL", labelData.CANCEL_BUTTON_LABEL )
 
-	.constant( "WARN_IF_NO_SELECTED_CATEGORY", labelData.WARN_IF_NO_SELECTED_CATEGORY )
+	.constant( "WARN_IF_NO_SELECTED_CATEGORY_PROMPT", labelData.WARN_IF_NO_SELECTED_CATEGORY_PROMPT )
 
 	.factory( "ReportSpecifyCategory", [
 		"MapPreview",
@@ -31,7 +31,7 @@ angular.module( "ReportSpecifyCategory", [
 		"REPORT_FINAL_PROGRESS_LABEL",
 		"CONFIRM_BUTTON_LABEL",
 		"CANCEL_BUTTON_LABEL",
-		"WARN_IF_NO_SELECTED_CATEGORY",
+		"WARN_IF_NO_SELECTED_CATEGORY_PROMPT",
 		function factory( 
 			MapPreview,
 			attachCaseCategoryList,
@@ -43,7 +43,7 @@ angular.module( "ReportSpecifyCategory", [
 			REPORT_FINAL_PROGRESS_LABEL,
 			CONFIRM_BUTTON_LABEL,
 			CANCEL_BUTTON_LABEL,
-			WARN_IF_NO_SELECTED_CATEGORY
+			WARN_IF_NO_SELECTED_CATEGORY_PROMPT
 		){
 			var ReportSpecifyCategory = React.createClass( {
 				"statics": {
@@ -71,7 +71,7 @@ angular.module( "ReportSpecifyCategory", [
 
 				"onClickConfirm": function onClickConfirm( ){
 					if( _.isEmpty( this.state.selectedCaseCategory ) ){
-						this.scope.publish( "notify", WARN_IF_NO_SELECTED_CATEGORY, "warn" );
+						this.scope.publish( "notify", WARN_IF_NO_SELECTED_CATEGORY_PROMPT, "warn" );
 
 					}else{
 						this.scope.publish( "confirm-report-specify-category" );	
