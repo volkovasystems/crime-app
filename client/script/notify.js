@@ -70,9 +70,13 @@ angular.module( "Notify", [ "Event", "PageFlow" ] )
 							self.scope.publish( "show-notify" );
 
 							self.timeout = setTimeout( function onTimeout( ){
-								$( self.refs.notifyComponent.getDOMNode( ) ).fadeOut( "slow", 
+								var notifyElement = $( "*", self.refs.notifyComponent.getDOMNode( ) );
+								
+								notifyElement.fadeOut( 1000, 
 									function onFadeOut( ){
 										self.scope.publish( "hide-notify" );
+
+										notifyElement.fadeIn( "fast" );
 
 										clearTimeout( self.timeout );
 

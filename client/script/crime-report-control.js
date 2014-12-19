@@ -18,6 +18,13 @@ Crime
 					scope.on( "report-control-click:report",
 						function onReportControlClick( ){
 							scope.publish( "hide-report-control" );
+
+							$( "body" ).addClass( "reporting" );
+						} );
+
+					scope.on( "show-report-control",
+						function onShowReportControl( ){
+							$( "body" ).removeClass( "reporting" );
 						} );
 
 					scope.on( "confirm-location-control-click:cancel-location",

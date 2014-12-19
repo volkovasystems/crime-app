@@ -28,6 +28,10 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 
 	.constant( "WARN_IF_NOT_AGREED_PROMPT", labelData.WARN_IF_NOT_AGREED_PROMPT )
 
+	.constant( "WARN_IF_MINIMUM_INPUT_REPORT_TITLE_PROMPT", labelData.WARN_IF_MINIMUM_INPUT_REPORT_TITLE_PROMPT )
+
+	.constant( "WARN_IF_MINIMUM_INPUT_REPORT_DESCRIPTION_PROMPT", labelData.WARN_IF_MINIMUM_INPUT_REPORT_DESCRIPTION_PROMPT )
+
 	.constant( "TIME_FORMAT_PLACEHOLDER", labelData.TIME_FORMAT_PLACEHOLDER )
 
 	.constant( "DATE_FORMAT_PLACEHOLDER", labelData.DATE_FORMAT_PLACEHOLDER )
@@ -49,6 +53,8 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 		"WARN_IF_NOT_AGREED_PROMPT",
 		"TIME_FORMAT_PLACEHOLDER",
 		"DATE_FORMAT_PLACEHOLDER",
+		"WARN_IF_MINIMUM_INPUT_REPORT_TITLE_PROMPT",
+		"WARN_IF_MINIMUM_INPUT_REPORT_DESCRIPTION_PROMPT",
 		function factory( 
 			REPORT_HEADER_TITLE,
 			SPECIFY_CATEGORY_PROGRESS_LABEL,
@@ -65,7 +71,9 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 			PRIVACY_POLICY_LABEL,
 			WARN_IF_NOT_AGREED_PROMPT,
 			TIME_FORMAT_PLACEHOLDER,
-			DATE_FORMAT_PLACEHOLDER
+			DATE_FORMAT_PLACEHOLDER,
+			WARN_IF_MINIMUM_INPUT_REPORT_TITLE_PROMPT,
+			WARN_IF_MINIMUM_INPUT_REPORT_DESCRIPTION_PROMPT
 		){
 			var ReportIncidentDetail = React.createClass( {
 				"statics": {
@@ -157,7 +165,17 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 				},
 
 				"onClickSend": function onClickSend( ){
-					if( this.state.hasAgreed ){
+					var title = this.state.title;
+					
+					var description = this.state.description;
+
+					if( title.split( " " ).length < staticData.REPORT_TITLE_MINIMUM_INPUT ){
+						this.scope.publish( "notify", WARN_IF_MINIMUM_INPUT_REPORT_TITLE_PROMPT, "warn" );
+
+					}else if( description.split( " " ).length < staticData.REPORT_DESCRIPTION_MINIMUM_INPUT ){
+						this.scope.publish( "notify", WARN_IF_MINIMUM_INPUT_REPORT_DESCRIPTION_PROMPT, "warn" );
+
+					}else if( this.state.hasAgreed ){
 						this.scope.publish( "send-report-incident-detail" );
 
 					}else{
