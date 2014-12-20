@@ -84,7 +84,7 @@ angular.module( "Profile", [ "Event", "PageFlow" ] )
 					return {
 						"profileName": "",
 						"profileURL": "",
-						"profileImage": "../image/profile.png",
+						"profileImage": staticData.DEFAULT_PROFILE_IMAGE_SOURCE,
 						"profileEMail": "",
 
 						"displayName": "",
