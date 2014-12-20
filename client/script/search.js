@@ -1,4 +1,5 @@
-angular.module( "Search", [ "Event", "PageFlow" ] )
+angular
+	.module( "Search", [ "Event", "PageFlow" ] )
 
 	.constant( "SEARCH_PLACEHOLDER", labelData.SEARCH_PLACEHOLDER )
 

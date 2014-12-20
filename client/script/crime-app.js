@@ -2,7 +2,8 @@ var Crime = angular.module( "Crime", [
 	"App",
 	"Login",
 	"Event",
-	"MapLocate" 
+	"MapLocate",
+	"AutocompletePlaceSearch"
 ] );
 
 Crime
