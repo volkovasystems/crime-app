@@ -85,17 +85,21 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 						uri.host( )
 					].join( "/" );
 
-					var categoryIconPinSource = [ 
+					if( !( /https?/ ).test( uri.protocol( ) ) ){
+						currentHostAddress = "";
+					}
+
+					var categoryIconPinSource = _.compact( [ 
 						currentHostAddress, 
 						"image", 
 						[ reportData.reportCaseType, "marker.png" ].join( "-" ) 
-					].join( "/" );
+					] ).join( "/" );
 
-					var categoryIconSource = [ 
+					var categoryIconSource = _.compact( [ 
 						currentHostAddress, 
 						"image", 
 						[ reportData.reportCaseType, "icon.png" ].join( "-" ) 
-					].join( "/" );
+					] ).join( "/" );
 
 					var reportTimestamp = reportData.reportTimestamp;
 

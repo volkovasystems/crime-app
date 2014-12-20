@@ -46,12 +46,14 @@ Crime
 
 							Proceed to checking if the user already logged in here.
 						*/
-						if( event.code ){
+						if( event.code || URI( event.url ).hasQuery( "error" ) ){
 							//: @todo: Do something because we have an error.
-							callback( error, false );
+							callback( new Error( "error encountered during login" ), false );
 
 						}else if( URI( event.url ).hasQuery( "logged-in" ) ){
-							callback( null, true );
+							callback( null, true, URI.parseQuery( URI( event.url ).query( ) ) );
+
+							redirectWindow.close( );
 
 						}else{
 							//: @todo: Should we place a timeout here?

@@ -1,4 +1,6 @@
-angular.module( "Profile", [ "Event", "PageFlow" ] )
+angular
+	
+	.module( "Profile", [ "Event", "PageFlow" ] )
 
 	.constant( "FACEBOOK_PROFILE_TYPE", "facebook" )
 	
@@ -153,6 +155,17 @@ angular.module( "Profile", [ "Event", "PageFlow" ] )
 							}else{
 								Profile.getBasicProfileData( self.state.profileType, callback );
 							}
+						} );
+
+					this.scope.on( "set-basic-profile-data",
+						function onSetBasicProfileData( profileData ){
+							self.setState( {
+								"profileName": profileData.profileName,
+								"profileURL": profileData.profileURL,
+								"profileImage": profileData.profileImage,
+								"profileEMail": profileData.profileEMail,
+								"profileState": "profile-ready"
+							} );
 						} );
 
 					this.scope.on( "set-profile-data",

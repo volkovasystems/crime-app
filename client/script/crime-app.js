@@ -90,23 +90,6 @@ Crime
 	] )
 
 	.run( [
-		function onRun( ){
-			/*:
-				@todo: This is wrong, the mobile should send the server
-					this parameter on a specific endpoint to activate
-					an optimize version of all requests.
-
-					mobile=true
-
-				For now we will do this.
-			*/
-			if( window.cordova ){
-				window.mobile = true;
-			}
-		}
-	] )
-
-	.run( [
 		"$rootScope",
 		"ProgressBar",
 		"Event",
@@ -176,6 +159,11 @@ Crime
 			$rootScope,
 			getStaticServerData 
 		){
+			//: This will not work in mobile.
+			if( window.mobile ){
+				return;
+			}
+
 			Store( $rootScope );
 
 			ProgressBar( $rootScope );
@@ -247,6 +235,11 @@ Crime
 			$rootScope,
 			getStaticServerData 
 		){
+			//: This will not work in mobile.
+			if( window.mobile ){
+				return;
+			}
+			
 			Store( $rootScope );
 
 			ProgressBar( $rootScope );

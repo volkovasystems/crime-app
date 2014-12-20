@@ -48,8 +48,29 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 							//: @todo: We forget to send the login type. But that's low priority.
 
 							$rootScope.publish( "mobile-login",
-								function onMobileLogin( error, hasLoggedIn ){
-									$rootScope.publish( "check-if-logged-in" );
+								function onMobileLogin( error, hasLoggedIn, userData ){
+									if( error ){
+										callback( error, false, null, { } );
+
+									}else if( hasLoggedIn ){
+										var loginData = {
+											"loginType": FACEBOOK_LOGIN_TYPE,
+											"userID": userData.userID,
+											"accessToken": userData.accessToken
+										};
+
+										$rootScope.publish( "set-basic-profile-data", {
+											"profileName": URI.decode( userData.profileName ),
+											"profileURL": URI.decode( userData.profileURL ),
+											"profileImage": URI.decode( userData.profileImage ),
+											"profileEMail": URI.decode( userData.profileEMail )
+										} );
+
+										callback( null, true, loginData, { } );
+
+									}else{
+										callback( "login-failed", false, null, { } );
+									}
 								} );
 
 						}else if( loginFlow == POPUP_LOGIN_FLOW ){
@@ -212,6 +233,12 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 						},
 
 						function checkIfLoggedIn( callback ){
+							if( window.mobile ){
+								callback( );
+
+								return;
+							}
+
 							Login.checkIfLoggedIn( self.state.loginType,
 								function onCheckIfLoggedIn( error, isLoggedIn, loginData, response ){
 									if( error ){

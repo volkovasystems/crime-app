@@ -34,6 +34,17 @@
 		</script>
 		@end-production-mode -->
 
+		<!--: @production-mode:
+		<script type="text/javascript">
+			if( window.cordova && !( "mobile" in window ) ){
+				window.mobile = true;
+				
+			}else{
+				window.mobile = false;
+			}
+		</script>
+		@end-production-mode -->
+
 		<!--: @development-mode:
 		<script type="text/javascript">
 			window.development = true;
