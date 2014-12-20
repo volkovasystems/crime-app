@@ -208,7 +208,7 @@ Crime
 					function onEachReportItem( reportData ){
 						var iconData = {
 							"markerID": reportData.reportID,
-							"sourceURL": "../image/@reportCaseType-marker.png"
+							"sourceURL": "image/@reportCaseType-marker.png"
 								.replace( "@reportCaseType", reportData.reportCaseType )
 						};
 

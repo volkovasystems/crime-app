@@ -162,15 +162,19 @@ angular.module( "ReportSpecifyCategory", [
 						uri.host( )
 					].join( "/" );
 
+					if( !( /https?/ ).test( uri.protocol( ) ) ){
+						currentHostAddress = "";
+					}
+
 					var selectedCaseCategory = this.state.selectedCaseCategory;
 
-					var categoryIconPinSource = [ 
+					var categoryIconPinSource = _.compact( [ 
 						currentHostAddress, 
 						"image", 
 						( selectedCaseCategory )?
 							[ selectedCaseCategory, "small", "marker.png" ].join( "-" ) :
 							"small-map-pointer.png"
-					].join( "/" );
+					] ).join( "/" );
 
 					return; //: @template: template/report-specify-category.html
 				},
@@ -188,15 +192,19 @@ angular.module( "ReportSpecifyCategory", [
 							uri.host( )
 						].join( "/" );
 
+						if( !( /https?/ ).test( uri.protocol( ) ) ){
+							currentHostAddress = "";
+						}
+
 						var selectedCaseCategory = this.state.selectedCaseCategory;
 
-						var categoryIconPinSource = [ 
+						var categoryIconPinSource = _.compact( [ 
 							currentHostAddress, 
 							"image",
 							( selectedCaseCategory )?
 								[ selectedCaseCategory, "small", "marker.png" ].join( "-" ) :
 								"small-map-pointer.png"
-						].join( "/" );
+						] ).join( "/" );
 
 						this.setState( {
 							"staticMapURL": MapPreview
@@ -223,13 +231,17 @@ angular.module( "ReportSpecifyCategory", [
 							uri.host( )
 						].join( "/" );
 
+						if( !( /https?/ ).test( uri.protocol( ) ) ){
+							currentHostAddress = "";
+						}
+
 						var selectedCaseCategory = this.state.selectedCaseCategory;
 
-						var categoryIconPinSource = [ 
+						var categoryIconPinSource = _.compact( [ 
 							currentHostAddress, 
 							"image", 
 							[ selectedCaseCategory, "small", "marker.png" ].join( "-" ) 
-						].join( "/" );
+						] ).join( "/" );
 
 						this.setState( {
 							"staticMapURL": MapPreview

@@ -1,4 +1,6 @@
-angular.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
+angular
+	
+	.module( "MapInfoPin", [ "Event", "ReportDetail", "ReportPreview" ] )
 
 	.constant( "MAP_INFO_PIN_LIST", [ ] )
 

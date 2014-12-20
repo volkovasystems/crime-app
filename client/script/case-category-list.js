@@ -164,11 +164,15 @@ angular
 						uri.host( )
 					].join( "/" );
 
-					var caseCategoryIconSource = [ 
+					if( !( /https?/ ).test( uri.protocol( ) ) ){
+						currentHostAddress = "";
+					}
+
+					var caseCategoryIconSource = _.compact( [ 
 						currentHostAddress, 
 						"image", 
 						[ caseCategoryName, "icon.png" ].join( "-" ) 
-					].join( "/" );
+					] ).join( "/" );
 					
 					var isSelected = _.contains( selectedCaseCategory, caseCategoryName );
 
