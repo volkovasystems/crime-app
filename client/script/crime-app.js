@@ -2,7 +2,8 @@ var Crime = angular.module( "Crime", [
 	"App",
 	"Login",
 	"Event",
-	"MapLocate" 
+	"MapLocate",
+	"AutocompletePlaceSearch"
 ] );
 
 Crime
@@ -129,16 +130,23 @@ Crime
 
 				function checkAllRequestedIconSet( callback ){
 					$rootScope.on( "all-app-component-rendered", 
-						function onRendered( ){ 
+						function onAllAppComponentRendered( ){ 
 							callback( ); 
 						} );
 				},
 
 				function checkAllRequestedIconSet( callback ){
 					$rootScope.on( "facebook-sdk-loaded", 
-						function onRendered( ){ 
+						function onFacebookSDKLoaded( ){ 
 							callback( ); 
 						} );
+				},
+
+				function checkIfServerSetLoaded( callback ){
+					$rootScope.on( "server-set-loaded", 
+						function onServerSetLoaded( ){ 
+							callback( ); 
+						} );	
 				}				
 			],
 				function lastly( ){
@@ -301,11 +309,19 @@ Crime
 		}
 	] )
 
+	.constant( "LOADING_SERVER_SET_FAILED_PROMPT", labelData.LOADING_SERVER_SET_FAILED_PROMPT )
+
 	.run( [
 		"$http",
 		"$rootScope",
 		"Event",
-		function onRun( $http, $rootScope, Event ){
+		"LOADING_SERVER_SET_FAILED_PROMPT",
+		function onRun( 
+			$http, 
+			$rootScope, 
+			Event,
+			LOADING_SERVER_SET_FAILED_PROMPT
+		){
 			Event( $rootScope );
 
 			var requestEndpoint = "/get/all/api/endpoint";
@@ -318,9 +334,14 @@ Crime
 			$http.get( requestEndpoint )
 				.success( function onSuccess( data, status ){
 					$rootScope.serverSet = data;
+
+					$rootScope.publish( "server-set-loaded" );
 				} )
 				.error( function onError( data, status ){
 					//: @todo: Do something on error.
+					$rootScope.publish( "notify", LOADING_SERVER_SET_FAILED_PROMPT, "error" );
+
+					$rootScope.publish( "server-set-loaded" );
 				} );
 		}
 	] );

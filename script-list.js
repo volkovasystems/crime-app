@@ -32,6 +32,7 @@ var scriptList = [
 	"profile-setting.js",
 	
 	"search.js",
+	"autocomplete-place-search.js",
 	
 	"case-category-list.js",
 	"case-category-filter.js",

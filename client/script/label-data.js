@@ -66,5 +66,7 @@ var labelData = {
 
 	"CHOOSE_CATEGORY_PHRASE": "Please choose a crime category below:",
 	"MORE_CATEGORY_LABEL": "More Categories",
-	"LESS_CATEGORY_LABEL": "Less Categories"
+	"LESS_CATEGORY_LABEL": "Less Categories",
+
+	"LOADING_SERVER_SET_FAILED_PROMPT": "Critical server data have failed to load. Please report this to the administrator."
 };
