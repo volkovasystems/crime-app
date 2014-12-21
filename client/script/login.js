@@ -265,13 +265,13 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 										callback( error, response );
 
 									}else{
-										callback( null,  loginData );
+										callback( null, loginData, response );
 									}
 
 								}, self.state.loginFlow );
 						},
 
-						function setLoginData( loginData, callback ){
+						function setLoginData( loginData, response, callback ){
 							self.setState( {
 								"userID": loginData.userID,
 								"accessToken": loginData.accessToken
