@@ -7,6 +7,24 @@ var Crime = angular.module( "Crime", [
 ] );
 
 Crime
+	
+	.config( [
+		"$httpProvider",
+		function configure( $httpProvider ){
+			if( window.mobile ){
+				$httpProvider.interceptors.push( function mobileInterceptor( ){
+					return {
+						"request": function onRequest( config ){
+							config.headers[ "Device-Type" ] = "Mobile";
+
+							return config;
+						}
+					};
+				} );	
+			}
+		}
+	] )
+
 	.factory( "resolveURL", [
 		function factory( ){
 			var resolveURL = function resolveURL( serverData ){
