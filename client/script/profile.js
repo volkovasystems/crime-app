@@ -104,6 +104,10 @@ angular
 				},
 
 				"initiateBasicProfileDataRetrieval": function initiateBasicProfileDataRetrieval( profileType ){
+					if( this.state.profileState == "profile-ready" ){
+						return;
+					}
+
 					var self = this;
 					this.setState( {
 							"profileType": profileType,

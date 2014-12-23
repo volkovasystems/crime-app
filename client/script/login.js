@@ -296,6 +296,13 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 								} );
 
 								callback( state, false );
+
+							}else{
+								self.setState( {
+									"loginState": "logged-in"
+								} );
+
+								callback( null, true );
 							}
 
 							self.scope.notify( "hide-spinner", "login-spinner" );
