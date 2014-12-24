@@ -6,9 +6,27 @@
 	<body>
 		<div id="fb-root"></div>
 
+		<section class="logo-container">
+			<div class="logo">
+				<img src="@staticServerURL/image/logotype.png" />
+			</div>
+			<div class="spinner">
+			</div>
+		</section>
+
 		<script 
 			type="text/javascript" 
 			src="@staticServerURL/library/jquery.min.js">
+		</script>
+
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/spin.js">
+		</script>
+
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/jquery.spin.js">
 		</script>
 
 		<script 
@@ -33,6 +51,8 @@
 
 		<script 
 			type="text/javascript">
+			$( ".spinner" ).spin( );
+
 			var deviceType = "@deviceType";
 
 			if( deviceType == "mobile" ){
