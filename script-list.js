@@ -28,6 +28,7 @@ var scriptList = [
 	"notify.js",
 	
 	"login.js",
+	"logout.js",
 	"profile.js",
 	"profile-setting.js",
 	
@@ -51,6 +52,7 @@ var scriptList = [
 	"crime-home.js",
 	"crime-dashbar.js",
 	"crime-login.js",
+	"crime-logout.js",
 	"crime-profile.js",
 	"crime-profile-setting.js",
 	"crime-search.js",

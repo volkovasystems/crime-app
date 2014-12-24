@@ -16,7 +16,10 @@ Crime
 				"link": function onLink( scope, element, attributeSet ){
 					Event( scope );
 
-					scope.broadcast( "change-logo-image", CRIME_LOGO_IMAGE_SOURCE );
+					scope.on( "show-home",
+						function onShowHome( ){
+							scope.broadcast( "change-logo-image", CRIME_LOGO_IMAGE_SOURCE );
+						} );
 				}
 			};
 		}

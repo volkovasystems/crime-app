@@ -281,7 +281,10 @@ Crime
 
 					Event( scope );
 
-					scope.publish( "change-logo-image", CRIME_LOGO_IMAGE_SOURCE );
+					scope.on( "show-login",
+						function onShowLogin( ){
+							scope.broadcast( "change-logo-image", CRIME_LOGO_IMAGE_SOURCE );
+						} );
 
 					//: Login user in the server. This is a second verification.
 					//: If the user is not yet register, it will do a registration based on his third party account.
@@ -307,11 +310,6 @@ Crime
 					scope.on( "proceed-default-app-flow",
 						function onProceedDefaultAppFlow( ){
 							scope.publish( "hide-login" );
-						} );
-
-					scope.on( "dash-clicked:logout",
-						function onNavigateLogout( ){
-							
 						} );
 
 					scope.on( "mobile-login",

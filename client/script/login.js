@@ -1,4 +1,6 @@
-angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", "Spinner" ] )
+angular
+	
+	.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", "Spinner" ] )
 
 	.value( "LOGIN_LABEL", labelData.LOGIN_LABEL )
 
@@ -469,6 +471,7 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 			return {
 				"restrict": "EA",
 				"scope": true,
+				"priority": 3,
 				"link": function onLink( scope, element, attributeSet ){
 					ProgressBar( scope );
 

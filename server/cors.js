@@ -33,8 +33,6 @@ exports.cors = function cors( app ){
 	app.use( function allowCrossDomain( request, response, next ){
 		var allowedOriginURL = request.headers.origin || request.get( "Host" );
 
-		console.log( request.get( "Device-Type" ) );
-
 		if( request.get( "Device-Type" ) != "Mobile" &&
 			!allowedOriginDomainPattern.test( allowedOriginURL ) &&
 			!_.contains( publicDomainAddressList, allowedOriginURL.replace( /https?\:\/\//, "" ) ) )

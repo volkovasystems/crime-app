@@ -9,6 +9,7 @@ angular
 		"ReportControl",
 		"ConfirmLocationControl",
 		"Login",
+		"Logout",
 		"Dashbar",
 		"Search",
 		"MapView",
