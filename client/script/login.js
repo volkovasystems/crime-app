@@ -399,6 +399,22 @@ angular.module( "Login", [ "Event", "PageFlow", "Store", "ProgressBar", "Home", 
 								"loginState": "logged-out"
 							} );
 						} );
+
+					this.scope.on( "clear-login-data",
+						function onClearLoginData( ){
+							self.setState( {
+								"appLogoImageSource": APP_LOGO_IMAGE_SOURCE,
+
+								"loginType": FACEBOOK_LOGIN_TYPE,
+								"loginFlow": REDIRECT_LOGIN_FLOW,
+
+								"loginState": "logged-out",
+								"componentState": "login-standby",
+
+								"userID": "",
+								"accessToken": ""
+							} );
+						} );
 				},
 
 				"notifyLoginState": function notifyLoginState( ){

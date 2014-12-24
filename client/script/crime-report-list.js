@@ -579,11 +579,6 @@ Crime
 							scope.publish( "show-minified-report-list" );
 						} );
 
-					scope.on( "show-report-incident-detail",
-						function onShowReportIncidentDetail( ){
-							scope.publish( "hide-report-list" );
-						} );
-
 					scope.on( "show-minified-report-list",
 						function onShowMinifiedReportList( ){
 							$( "body" ).removeClass( "report-feed-expanded" );
@@ -594,8 +589,8 @@ Crime
 							$( "body" ).addClass( "report-feed-expanded" );
 						} );
 
-					scope.on( "close-report-final",
-						function onCloseReportFinal( ){
+					scope.on( "show-report-specify-category",
+						function onShowReportSpecifyCategory( ){
 							scope.publish( "show-minified-report-list" );
 						} );
 

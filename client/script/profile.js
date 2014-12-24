@@ -180,6 +180,24 @@ angular
 								"userAvatar": userData.userAvatar
 							} );
 						} );
+
+					this.scope.on( "clear-profile-data",
+						function onClearProfileData( ){
+							self.setState( {
+								"profileName": "",
+								"profileURL": "",
+								"profileImage": staticData.DEFAULT_PROFILE_IMAGE_SOURCE,
+								"profileEMail": "",
+
+								"displayName": "",
+								"userEMail": "",
+								"userAvatar": "",
+								
+								"profileType": FACEBOOK_PROFILE_TYPE,
+								
+								"profileState": "profile-empty"
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){

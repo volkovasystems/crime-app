@@ -99,6 +99,13 @@ angular
 								"searchText": searchText
 							} );
 						} );
+
+					this.scope.on( "clear-search-text",
+						function onClearSearchText( ){
+							self.setState( {
+								"searchText": ""
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
