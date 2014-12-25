@@ -35,6 +35,13 @@ angular.module( "UserReportList", [ "Event", "PageFlow" ] )
 								"reportList": reportList
 							} );
 						} );
+
+					this.scope.on( "clear-user-report-list",
+						function onClearUserReportList( reportList ){
+							self.setState( {
+								"reportList": [ ]
+							} );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){

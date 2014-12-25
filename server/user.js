@@ -30,6 +30,17 @@ resolveURL( serverSet[ "static" ] );
 var staticServer = serverSet[ "static" ];
 mobileLoginTemplate = mobileLoginTemplate.replace( /\@staticServerURL/g, staticServer.joinPath( "" ).replace( /\/$/, "" ) );
 
+var logoutTemplate = fs.readFileSync( "./server/logout.html", { "encoding": "utf8" } );
+logoutTemplate = logoutTemplate.replace( "@facebookAppID", facebookAppID );
+logoutTemplate = logoutTemplate.replace( /\@staticServerURL/g, staticServer.joinPath( "" ).replace( /\/$/, "" ) );
+if( argv.production ){
+	logoutTemplate = logoutTemplate.replace( "@buildType", "production" );
+
+}else{
+	logoutTemplate = logoutTemplate.replace( "@buildType", "development" );
+}
+
+
 var app = express( );
 
 require( "./configure-app.js" ).configureApp( app );
@@ -289,12 +300,66 @@ app.get( "/api/:accessID/user/get",
 			} );
 	} );
 
-app.get( "/user/login/mobile",
-	function onUserLoginMobile( request, response ){
-		response
-			.status( 200 )
-			.type( "html" )
-			.send( mobileLoginTemplate );
+app.post( "/api/:accessID/logout",
+	function onUserLogout( request, response ){
+		var User = mongoose.model( "User" );
+
+		async.waterfall( [
+			function checkIfUserExists( callback ){
+				User
+					.findOne( { 
+						"accessID": request.param( "accessID" ) 
+					}, function onFound( error, userData ){
+						if( error ){
+							callback( error );
+						
+						}else if( _.isEmpty( userData ) ){
+							callback( "no-user-data" );
+
+						}else{
+							callback( null, userData );
+						}
+					} );
+			},
+
+			function logoutUser( userData, callback ){
+				userData.userState = "logged-out";
+
+				userData.accessState = "dropped";
+
+				userData.save( function onSave( error ){
+					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
+					setTimeout( function onTimeout( ){
+						callback( error );
+					}, 1000 );
+				} );
+			}
+		],
+			function lastly( state ){
+				if( typeof state == "string" ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "success"
+						} );
+				}
+			} );
 	} );
 
 app.post( "/api/:accessID/user/update",
@@ -385,6 +450,32 @@ app.post( "/api/:accessID/user/update",
 app.post( "/api/:accessID/user/delete",
 	function onUserDelete( request, response ){
 
+	} );
+
+app.get( "/user/login/mobile",
+	function onUserLoginMobile( request, response ){
+		response
+			.status( 200 )
+			.type( "html" )
+			.send( mobileLoginTemplate );
+	} );
+
+app.get( "/user/logout/mobile",
+	function onUserLogout( request, response ){
+		var mobileLogoutTemplate = logoutTemplate.replace( "@deviceType", "mobile" );
+
+		response
+			.status( 200 )
+			.type( "html" )
+			.send( mobileLogoutTemplate );
+	} );
+
+app.get( "/user/logout",
+	function onUserLogout( request, response ){
+		response
+			.status( 200 )
+			.type( "html" )
+			.send( logoutTemplate );
 	} );
 
 app.post( "/user/register",
@@ -617,68 +708,6 @@ app.post( "/user/login",
 						.json( {
 							"status": "success",
 							"data": userData
-						} );
-				}
-			} );
-	} );
-
-app.post( "/user/:accessID/logout",
-	function onUserLogout( request, response ){
-		var User = mongoose.model( "User" );
-
-		async.waterfall( [
-			function checkIfUserExists( callback ){
-				User
-					.findOne( { 
-						"accessID": request.param( "accessID" ) 
-					}, function onFound( error, userData ){
-						if( error ){
-							callback( error );
-						
-						}else if( _.isEmpty( userData ) ){
-							callback( "no-user-data" );
-
-						}else{
-							callback( null, userData );
-						}
-					} );
-			},
-
-			function logoutUser( userData, callback ){
-				userData.userState = "logged-out";
-
-				userData.accessState = "dropped";
-
-				userData.save( function onSave( error ){
-					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
-					setTimeout( function onTimeout( ){
-						callback( error );
-					}, 1000 );
-				} );
-			}
-		],
-			function lastly( state ){
-				if( typeof state == "string" ){
-					response
-						.status( 200 )
-						.json( {
-							"status": "failed",
-							"data": state
-						} );
-
-				}else if( state instanceof Error ){
-					response
-						.status( 500 )
-						.json( {
-							"status": "error",
-							"data": state.message
-						} );
-
-				}else if( !_.isEmpty( userData ) ){
-					response
-						.status( 200 )
-						.json( {
-							"status": "success"
 						} );
 				}
 			} );

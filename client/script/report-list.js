@@ -95,6 +95,13 @@ angular.module( "ReportList", [ "Event", "PageFlow", "MapPreview" ] )
 							} );
 						} );
 
+					this.scope.on( "clear-report-list",
+						function onClearReportList( ){
+							self.setState( {
+								"reportList": [ ]
+							} );
+						} );
+
 					this.scope.on( "show-minified-report-list",
 						function onShowMinifiedReportList( ){
 							self.setState( {

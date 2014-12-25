@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CrimeMap | CrimeWatch.ph</title>
+	</head>
+	<body>
+		<div id="fb-root"></div>
+
+		<section class="logo-container">
+			<div class="logo">
+				<img src="@staticServerURL/image/logotype.png" />
+			</div>
+			<div class="spinner">
+			</div>
+		</section>
+
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/jquery.min.js">
+		</script>
+
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/spin.js">
+		</script>
+
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/jquery.spin.js">
+		</script>
+
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/URI.min.js">
+		</script>
+
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/async.js">
+		</script>
+
+		<script 
+			type="text/javascript" 
+			src="@staticServerURL/library/lodash.min.js">
+		</script>
+		
+		<script 
+			type="text/javascript" 
+			src="http://connect.facebook.net/en_US/sdk.js">
+		</script>
+
+		<script 
+			type="text/javascript">
+			$( ".spinner" ).spin( );
+
+			var deviceType = "@deviceType";
+
+			if( deviceType == "mobile" ){
+				window.mobile = true;
+			}
+
+			var buildType = "@buildType";
+			if( buildType == "production" ){
+				window.production = true;
+
+			}else{
+				window.development = true;
+			}
+
+			var facebookAppID = "@facebookAppID";
+
+			var uri = URI( );
+
+			//: Do not query anymore if it is already redirected with logged-out parameter.
+			if( !uri.hasQuery( "logged-out" ) &&
+				!uri.hasQuery( "error" ) )
+			{
+				window.fbAsyncInit = function fbAsyncInit( ){
+					FB.init( {
+						"appId": facebookAppID,
+						"status": true,
+						"cookie": true,
+						"version": "v2.2"
+					} );
+
+					$( "#fb-root" ).ready( function onReady( ){
+						FB.getLoginStatus( function onReponseLoginStatus( response ){
+							if( response.error ){
+								if( window.mobile ){
+									window.location = [
+										hostAddress,
+										[ "error", true ].join( "=" )  
+									].join( "?" );
+
+								}else if( window.production ){
+									window.location = "http://map.crimewatch.ph";
+
+								}else{
+									window.location = "http://localhost:8000/";
+								}
+
+							}else if( response.status === "connected" ){
+								FB.logout( function onLogout( ){
+									if( window.mobile ){
+										window.location = [
+											hostAddress,
+											[ "logged-out", true ].join( "=" )  
+										].join( "?" );
+
+									}else if( window.production ){
+										window.location = "http://map.crimewatch.ph";
+
+									}else{
+										window.location = "http://localhost:8000/";
+									}								
+								} );
+
+							}else{
+								if( window.mobile ){
+									window.location = [
+										hostAddress,
+										[ "error", true ].join( "=" )  
+									].join( "?" );
+
+								}else if( window.production ){
+									window.location = "http://map.crimewatch.ph";
+
+								}else{
+									window.location = "http://localhost:8000/";
+								}
+							}
+						} );
+					} );
+				};	
+			}			
+		</script>
+	</body>
+</html>
