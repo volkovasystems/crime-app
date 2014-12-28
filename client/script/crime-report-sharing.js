@@ -61,8 +61,12 @@ Crime
 
 					scope.on( "show-report-final",
 						function onShowReportFinal( ){
-							scope.publish( "show-report-sharing", scope.namespace );
 							scope.publish( "initiate-report-sharing", scope.namespace );
+						} );
+
+					scope.on( "report-sent",
+						function onReportSent( ){
+							scope.publish( "show-report-sharing", scope.namespace );
 						} );
 				}
 			};
