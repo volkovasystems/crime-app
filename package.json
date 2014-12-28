@@ -91,5 +91,8 @@
       "host": "localhost",
       "port": 11001
     }
-  }
+  },
+  "publicPathList": [
+    "/report/share/facebook"
+  ]
 }

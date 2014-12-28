@@ -4,6 +4,7 @@ var _ = require( "lodash" );
 var argv = require( "yargs" ).argv;
 var async = require( "async" );
 var express = require( "express" );
+var fs = require( "fs" );
 var mongoose = require( "mongoose" );
 var unirest = require( "unirest" );
 var util = require( "util" );
@@ -16,6 +17,8 @@ var port = serverData.port;
 var resolveURL = require( "./resolve-url.js" ).resolveURL;
 resolveURL( serverSet.user );
 var userServer = serverSet.user;
+
+var facebookShareTemplate = fs.readFileSync( "./server/template/facebook-share.html", { "encoding": "utf8" } );
 
 var app = express( );
 
@@ -790,7 +793,10 @@ app.post( "/api/:accessID/report/add",
 					"reportDescription": 	request.param( "reportDescription" ),
 					"reportCaseType": 		request.param( "reportCaseType" ),
 					"reportCaseTitle": 		request.param( "reportCaseTitle" ),
-					"reportAddress": 		request.param( "reportAddress" )
+					"reportAddress": 		request.param( "reportAddress" ),
+					"reportReferenceID": 	request.param( "reportReferenceID" ),
+					"reportShareURL": 		request.param( "reportShareURL" ),
+					"reportReferenceTitle": request.param( "reportReferenceTitle" )
 				} );
 
 				newReport.save( function onSave( error ){
@@ -874,6 +880,12 @@ app.post( "/api/:accessID/report/:reportID/update",
 			
 				reportData.reportAddress = request.param( "reportAddress" ) || reportData.reportAddress;
 
+				reportData.reportReferenceID = request.param( "reportReferenceID" ) || reportData.reportReferenceID;
+
+				reportData.reportShareURL = request.param( "reportShareURL" ) || reportData.reportShareURL;
+
+				reportData.reportReferenceTitle = request.param( "reportReferenceTitle" ) || reportData.reportReferenceTitle;
+
 				reportData.save( function onSave( error ){
 					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
 					setTimeout( function onTimeout( ){
@@ -912,6 +924,82 @@ app.post( "/api/:accessID/report/:reportID/update",
 app.post( "/api/:accessID/report/:reportID/delete",
 	function onReportDelete( request, response ){
 
+	} );
+
+app.get( "/report/share/facebook/:reference",
+	function onReportShareFacebook( request, response ){
+		var Report = mongoose.model( "Report" );
+
+		var template = facebookShareTemplate.toString( );
+
+		var reference = request.param( "reference" );
+
+		var referenceTokenList = reference.split( "-" );
+
+		var reportReferenceID = _.last( referenceTokenList );
+
+		async.waterfall( [
+			function checkReportReferenceID( callback ){
+				Report
+					.findOne( { 
+						"reportReferenceID": reportReferenceID 
+					}, function onFound( error, reportData ){
+						callback( error, reportData );
+					} );
+			},
+
+			function checkReportReferenceTitle( reportData, callback ){
+				if( _.isEmpty( reportData ) ){
+					var reportReferenceTitle = reference;
+
+					Report
+						.findOne( { 
+							"reportReferenceTitle": reportReferenceTitle
+						}, function onFound( error, reportData ){
+							callback( error, reportData );
+						} );
+
+				}else{
+					callback( null, reportData );
+				}
+			},
+
+			function processShareTemplate( reportData, callback ){
+				template = template.replace( "@reportTitle", reportData.reportTitle );
+
+				template = template.replace( "@reportDescription", reportData.reportDescription );
+
+				template = template.replace( "@reportShareURL", reportData.reportShareURL );
+
+				template = template.replace( "@reportMapImageURL", reportData.reportMapImageURL );
+
+				callback( null, template );
+			}
+		],
+			function lastly( state, template ){
+				if( typeof state == "string" ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.type( "html" )
+						.send( template );
+				}
+			} );
 	} );
 
 require( "./start-app.js" ).startApp( app, port, host );

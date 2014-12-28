@@ -197,8 +197,8 @@ angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 							var timestamp = moment( timestampString, "hh:mm A MM/DD/YYYY" ).valueOf( );	
 
 							var reportData = {
-								"title": self.state.title,
-								"description": self.state.description,
+								"title": self.state.title.trim( ),
+								"description": self.state.description.trim( ),
 								"timestamp": timestamp,
 								"anonymous": self.state.isAnonymous
 							};

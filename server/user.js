@@ -23,14 +23,14 @@ if( argv.production ){
 	facebookAppID = require( "../client/script/static-data.js" ).staticData.PRODUCTION_FACEBOOK_APPLICATION_ID;
 }
 
-var mobileLoginTemplate = fs.readFileSync( "./server/login.html", { "encoding": "utf8" } );
+var mobileLoginTemplate = fs.readFileSync( "./server/template/login.html", { "encoding": "utf8" } );
 mobileLoginTemplate = mobileLoginTemplate.replace( "@facebookAppID", facebookAppID );
 
 resolveURL( serverSet[ "static" ] );
 var staticServer = serverSet[ "static" ];
 mobileLoginTemplate = mobileLoginTemplate.replace( /\@staticServerURL/g, staticServer.joinPath( "" ).replace( /\/$/, "" ) );
 
-var logoutTemplate = fs.readFileSync( "./server/logout.html", { "encoding": "utf8" } );
+var logoutTemplate = fs.readFileSync( "./server/template/logout.html", { "encoding": "utf8" } );
 logoutTemplate = logoutTemplate.replace( "@facebookAppID", facebookAppID );
 logoutTemplate = logoutTemplate.replace( /\@staticServerURL/g, staticServer.joinPath( "" ).replace( /\/$/, "" ) );
 if( argv.production ){
@@ -454,10 +454,12 @@ app.post( "/api/:accessID/user/delete",
 
 app.get( "/user/login/mobile",
 	function onUserLoginMobile( request, response ){
+		var template = mobileLoginTemplate.toString( );
+
 		response
 			.status( 200 )
 			.type( "html" )
-			.send( mobileLoginTemplate );
+			.send( template );
 	} );
 
 app.get( "/user/logout/mobile",
@@ -472,10 +474,12 @@ app.get( "/user/logout/mobile",
 
 app.get( "/user/logout",
 	function onUserLogout( request, response ){
+		var template = logoutTemplate.toString( );
+
 		response
 			.status( 200 )
 			.type( "html" )
-			.send( logoutTemplate );
+			.send( template );
 	} );
 
 app.post( "/user/register",

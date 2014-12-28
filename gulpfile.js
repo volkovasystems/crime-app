@@ -43,6 +43,8 @@ const DEVELOPMENT_MODE_REPLACER = "$1$2$3";
 
 const TEMPLATE_PATTERN = /\;\s*\/\/\:\s*\@template\:\s*([^\s]+)/;
 
+const APPLICATION_NAME = "crime-app";
+
 var scriptList = require( "./script-list.js" ).scriptList;
 
 gulp.task( "default", [
@@ -171,10 +173,10 @@ gulp.task( "build-script",
 			} ) )
 			.pipe( react( ) )
 			.pipe( sourcemaps.init( ) )
-			.pipe( concat( "crime-app.js" ) )
+			.pipe( concat( [ APPLICATION_NAME, "js" ].join( "." ) ) )
 			.pipe( gulp.dest( "build/script" ) )
 			.pipe( uglify( ) )
-			.pipe( rename( "crime-app.min.js" ) )
+			.pipe( rename( [ APPLICATION_NAME, "min", "js" ].join( "." ) ) )
 			.pipe( sourcemaps.write( "./" ) )
 			.pipe( gulp.dest( "build/script" ) )
 	} );
@@ -210,7 +212,7 @@ gulp.task( "build-less",
 			.pipe( plumber( ) )
 			.pipe( less( ) )
 			.pipe( filter( [ "app.css" ] ) )
-			.pipe( rename( "crime-app.css" ) )
+			.pipe( rename( [ APPLICATION_NAME, "css" ].join( "." ) ) )
 			.pipe( gulp.dest( "temp/style" ) );
 	} );
 
@@ -223,7 +225,7 @@ gulp.task( "build-style",
 			.pipe( gulp.dest( "build/style" ) )
 			.pipe( sourcemaps.init( ) )
 			.pipe( minifyCSS( { "keepBreaks": true } ) )
-			.pipe( rename( "crime-app.min.css" ) )
+			.pipe( rename( [ APPLICATION_NAME, "min", "css" ].join( "." ) ) )
 			.pipe( sourcemaps.write( "./" ) )
 			.pipe( gulp.dest( "build/style" ) );
 	} );
