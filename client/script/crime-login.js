@@ -104,7 +104,7 @@ Crime
 					"appId": getFacebookAppID( ),
 					"xfbml": true,
 					"cookie": true,
-					"version": "v2.1"
+					"version": "v2.2"
 				} );
 
 				$rootScope.publish( "facebook-sdk-loaded" );

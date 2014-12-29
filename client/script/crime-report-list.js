@@ -594,6 +594,11 @@ Crime
 							scope.publish( "show-minified-report-list" );
 						} );
 
+					scope.on( "show-pinned-report",
+						function onShowPinnedReport( reportID ){
+							scope.publish( "open-map-marker", reportID );
+						} );
+
 					//: @note: I'm temporarily disabling this.
 					/*scope.on( "report-added",
 						function onReportAdded( ){

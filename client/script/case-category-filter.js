@@ -2,16 +2,20 @@ angular
 
 	.module( "CaseCategoryFilter", [ "Event", "PageFlow", "CaseCategoryList" ] )
 	
+	.constant( "CASE_CATEGORY_FILTER_HEADER_LABEL", labelData.CASE_CATEGORY_FILTER_HEADER_LABEL )
+
 	.constant( "CONFIRM_BUTTON_LABEL", labelData.CONFIRM_BUTTON_LABEL )
 
 	.constant( "CANCEL_BUTTON_LABEL", labelData.CANCEL_BUTTON_LABEL )
 
 	.factory( "CaseCategoryFilter", [
 		"attachCaseCategoryList",
+		"CASE_CATEGORY_FILTER_HEADER_LABEL",
 		"CONFIRM_BUTTON_LABEL",
 		"CANCEL_BUTTON_LABEL",
 		function factory(
 			attachCaseCategoryList,
+			CASE_CATEGORY_FILTER_HEADER_LABEL,
 			CONFIRM_BUTTON_LABEL,
 			CANCEL_BUTTON_LABEL
 		){

@@ -18,17 +18,18 @@
 		].join( " " ) }>
 		<section 
 			className="card-category">
-			<section 
-				className="close-action pull-right">
-				<a 
-					className="icon" 
-					href="#"
-					onClick={ this.onClickCloseCaseCategoryFilter }> 
-					<i 
-						className="md-2x md-close">
-					</i> 
-				</a>
-			</section>
+			<h5 
+				className="headline">
+				{ CASE_CATEGORY_FILTER_HEADER_LABEL }
+				<section 
+					className="close-action pull-right">
+					<a 
+						className="md-close md-2x icon" 
+						href="#"
+						onClick={ this.onClickCloseCaseCategoryFilter }>
+					</a>
+				</section>
+			</h5>
 			<section 
 				className="case-category-list">
 			</section>

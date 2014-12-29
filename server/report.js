@@ -4,7 +4,9 @@ var _ = require( "lodash" );
 var argv = require( "yargs" ).argv;
 var async = require( "async" );
 var express = require( "express" );
+var fs = require( "fs" );
 var mongoose = require( "mongoose" );
+var querystring = require( "querystring" );
 var unirest = require( "unirest" );
 var util = require( "util" );
 
@@ -16,6 +18,29 @@ var port = serverData.port;
 var resolveURL = require( "./resolve-url.js" ).resolveURL;
 resolveURL( serverSet.user );
 var userServer = serverSet.user;
+
+resolveURL( serverSet[ "static" ] );
+var staticServer = serverSet[ "static" ];
+
+var staticData = require( "../client/script/static-data.js" ).staticData;
+
+var facebookAppID = staticData.DEVELOPMENT_FACEBOOK_APPLICATION_ID;
+if( argv.production ){
+	facebookAppID = staticData.PRODUCTION_FACEBOOK_APPLICATION_ID;
+}
+
+var facebookShareTemplate = fs.readFileSync( "./server/template/facebook-share.html", { "encoding": "utf8" } );
+facebookShareTemplate = facebookShareTemplate.replace( "@facebookAppID", facebookAppID );
+
+var twitterShareTemplate = fs.readFileSync( "./server/template/twitter-share.html", { "encoding": "utf8" } );
+
+var googleAPIKey = staticData.DEVELOPMENT_GOOGLE_API_KEY;
+if( argv.production ){
+	googleAPIKey = staticData.PRODUCTION_GOOGLE_API_KEY;
+}
+
+var googleURLShortenerAPIURL = "https://www.googleapis.com/urlshortener/v1/url?key=@googleAPIKey"
+	.replace( "@googleAPIKey", googleAPIKey );
 
 var app = express( );
 
@@ -790,7 +815,10 @@ app.post( "/api/:accessID/report/add",
 					"reportDescription": 	request.param( "reportDescription" ),
 					"reportCaseType": 		request.param( "reportCaseType" ),
 					"reportCaseTitle": 		request.param( "reportCaseTitle" ),
-					"reportAddress": 		request.param( "reportAddress" )
+					"reportAddress": 		request.param( "reportAddress" ),
+					"reportReferenceID": 	request.param( "reportReferenceID" ),
+					"reportShareURL": 		request.param( "reportShareURL" ),
+					"reportReferenceTitle": request.param( "reportReferenceTitle" )
 				} );
 
 				newReport.save( function onSave( error ){
@@ -874,6 +902,12 @@ app.post( "/api/:accessID/report/:reportID/update",
 			
 				reportData.reportAddress = request.param( "reportAddress" ) || reportData.reportAddress;
 
+				reportData.reportReferenceID = request.param( "reportReferenceID" ) || reportData.reportReferenceID;
+
+				reportData.reportShareURL = request.param( "reportShareURL" ) || reportData.reportShareURL;
+
+				reportData.reportReferenceTitle = request.param( "reportReferenceTitle" ) || reportData.reportReferenceTitle;
+
 				reportData.save( function onSave( error ){
 					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
 					setTimeout( function onTimeout( ){
@@ -912,6 +946,177 @@ app.post( "/api/:accessID/report/:reportID/update",
 app.post( "/api/:accessID/report/:reportID/delete",
 	function onReportDelete( request, response ){
 
+	} );
+
+app.get( "/report/share/facebook/:reference",
+	function onReportShareFacebook( request, response ){
+		var Report = mongoose.model( "Report" );
+
+		var template = facebookShareTemplate.toString( );
+
+		var reference = request.param( "reference" );
+
+		var referenceTokenList = reference.split( "-" );
+
+		var reportReferenceID = _.last( referenceTokenList );
+
+		async.waterfall( [
+			function checkReportReferenceID( callback ){
+				Report
+					.findOne( { 
+						"reportReferenceID": reportReferenceID 
+					}, function onFound( error, reportData ){
+						callback( error, reportData );
+					} );
+			},
+
+			function checkReportReferenceTitle( reportData, callback ){
+				if( _.isEmpty( reportData ) ){
+					var reportReferenceTitle = reference;
+
+					Report
+						.findOne( { 
+							"reportReferenceTitle": reportReferenceTitle
+						}, function onFound( error, reportData ){
+							callback( error, reportData );
+						} );
+
+				}else{
+					callback( null, reportData );
+				}
+			},
+
+			function processShareTemplate( reportData, callback ){
+				template = template.replace( "@reportTitle", reportData.reportTitle );
+
+				template = template.replace( "@reportDescription", reportData.reportDescription );
+
+				template = template.replace( "@reportMapImageURL", reportData.reportMapImageURL );
+
+				template = template.replace( /\@reportShareURL/g, reportData.reportShareURL );
+
+				template = querystring.escape( new Buffer( template ).toString( "base64" ) );
+
+				callback( null, template );
+			}
+		],
+			function lastly( state, template ){
+				if( typeof state == "string" ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					var redirectURL = staticServer.joinPath( "action/render-template/template/:template" );
+
+					redirectURL = redirectURL.replace( ":template", template );
+
+					response.redirect( 301, redirectURL );
+				}
+			} );
+	} );
+
+app.get( "/report/share/twitter/:reference",
+	function onReportShareFacebook( request, response ){
+		var Report = mongoose.model( "Report" );
+
+		var template = twitterShareTemplate.toString( );
+
+		var reference = request.param( "reference" );
+
+		var referenceTokenList = reference.split( "-" );
+
+		var reportReferenceID = _.last( referenceTokenList );
+
+		async.waterfall( [
+			function checkReportReferenceID( callback ){
+				Report
+					.findOne( { 
+						"reportReferenceID": reportReferenceID 
+					}, function onFound( error, reportData ){
+						callback( error, reportData );
+					} );
+			},
+
+			function checkReportReferenceTitle( reportData, callback ){
+				if( _.isEmpty( reportData ) ){
+					var reportReferenceTitle = reference;
+
+					Report
+						.findOne( { 
+							"reportReferenceTitle": reportReferenceTitle
+						}, function onFound( error, reportData ){
+							callback( error, reportData );
+						} );
+
+				}else{
+					callback( null, reportData );
+				}
+			},
+
+			function shortenReportShareURL( reportData, callback ){
+				unirest
+					.post( googleURLShortenerAPIURL )
+					.type( "json" )
+					.send( {
+						"longUrl": reportData.reportShareURL
+					} )
+					.end( function onResponse( response ){
+						if( response.ok ){
+							callback( null, reportData, response.body.id );
+						
+						}else{
+							callback( response.error );
+						}
+					} );
+			},
+
+			function processShareTemplate( reportData, shortenedReportShareURL, callback ){
+				template = template.replace( "@reportTitle", reportData.reportTitle );
+
+				template = template.replace( "@reportShareURL", shortenedReportShareURL );
+
+				template = querystring.escape( new Buffer( template ).toString( "base64" ) );
+
+				callback( null, template );
+			}
+		],
+			function lastly( state, template ){
+				if( typeof state == "string" ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "failed",
+							"data": state
+						} );
+
+				}else if( state instanceof Error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else{
+					var redirectURL = staticServer.joinPath( "action/render-template/template/:template" );
+
+					redirectURL = redirectURL.replace( ":template", template );
+
+					response.redirect( 301, redirectURL );
+				}
+			} );
 	} );
 
 require( "./start-app.js" ).startApp( app, port, host );

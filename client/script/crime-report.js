@@ -6,6 +6,7 @@ Crime
 		"$http",
 		"getReportServerData",
 		"getAppServerData",
+		"getStaticServerData",
 		function factory( 
 			Event, 
 			ProgressBar, 
@@ -141,6 +142,47 @@ Crime
 						var longitude = reportData.longitude;
 						var radianLongitude = math.unit( longitude, "deg" ).to( "rad" ).value;
 
+						/*:
+							Note that reportReferenceID and reportShareURL
+								are not part of the hashedValue.
+
+							Because, they are extremely dynamic.
+
+							Changes to the reportTitle may invoke a change
+								in the reportShareURL but not the reportReferenceID.
+						*/
+
+						var reportReferenceTitle = reportData.title
+							.trim( )
+							.replace( /[^a-zA-Z0-9\s]+/g, "" )
+							.replace( /\s+/g, "-" )
+
+						var reportReferenceID = btoa( [
+								reportData.timestamp,
+								reportReferenceTitle
+							].join( ":" ) )
+							.substring( 0, 10 );
+
+						var uri = new URI( );
+						var currentHostAddress = [ 
+							"http:/",
+							uri.host( )
+						].join( "/" );
+
+						if( !( /https?/ ).test( uri.protocol( ) ) &&
+							window.production )
+						{
+							currentHostAddress = getStaticServerData( ).joinPath( "" );
+						}
+
+						var reportShareURL = [
+							currentHostAddress,
+							URI.buildQuery( {
+								"action": "show-pinned-report",
+								"reference": reportReferenceTitle
+							} )
+						].join( "?" )
+
 						var formattedReportData = {
 							"reportID": 			hashedValue,
 							"reporterID": 			userData.userID,
@@ -160,7 +202,10 @@ Crime
 							"reportDescription": 	reportData.description,
 							"reportCaseType": 		reportData.category,
 							"reportCaseTitle": 		reportData.caseCategoryTitle,
-							"reportAddress": 		reportData.address
+							"reportAddress": 		reportData.address,
+							"reportReferenceTitle": reportReferenceTitle, 
+							"reportReferenceID": 	reportReferenceID,
+							"reportShareURL": 		reportShareURL
 						};
 
 						callback( null, userData, formattedReportData );
@@ -200,7 +245,7 @@ Crime
 									callback( response.data );
 
 								}else{
-									callback( );
+									callback( null );
 								}
 							} )
 							.error( function onError( response, status ){
@@ -218,7 +263,7 @@ Crime
 							callback( state );
 
 						}else{
-							callback( );
+							callback( null );
 						}
 					} );
 			};

@@ -1,4 +1,6 @@
-angular.module( "ReportFinal", [ "Event", "PageFlow" ] )
+angular
+	
+	.module( "ReportFinal", [ "Event", "PageFlow", "ReportSharing" ] )
 	
 	.constant( "REPORT_HEADER_TITLE", labelData.REPORT_HEADER_TITLE )
 
@@ -25,6 +27,7 @@ angular.module( "ReportFinal", [ "Event", "PageFlow" ] )
 		"CLOSE_BUTTON_LABEL",
 		"THANK_SUBMISSION_PHRASE",
 		"VERIFY_SUBMISSION_PHRASE",
+		"attachReportSharing",
 		function factory( 
 			REPORT_HEADER_TITLE,
 			SPECIFY_CATEGORY_PROGRESS_LABEL,
@@ -33,7 +36,8 @@ angular.module( "ReportFinal", [ "Event", "PageFlow" ] )
 			MY_REPORT_BUTTON_LABEL,
 			CLOSE_BUTTON_LABEL,
 			THANK_SUBMISSION_PHRASE,
-			VERIFY_SUBMISSION_PHRASE
+			VERIFY_SUBMISSION_PHRASE,
+			attachReportSharing
 		){
 			var ReportFinal = React.createClass( {
 				"statics": {
@@ -80,6 +84,12 @@ angular.module( "ReportFinal", [ "Event", "PageFlow" ] )
 				},
 
 				"componentDidMount": function componentDidMount( ){
+					attachReportSharing( {
+						"scope": this.scope,
+						"element": $( ".report-sharing", this.getDOMNode( ) ),
+						"namespace": "report-final"
+					} );
+
 					this.scope.publish( "report-final-rendered" );
 				}
 			} );
@@ -103,7 +113,11 @@ angular.module( "ReportFinal", [ "Event", "PageFlow" ] )
 
 				var scope = optionSet.scope || $rootScope;
 
-				scope = scope.$new( true );
+				if( optionSet.embedState != "no-embed" ){
+					scope = scope.$new( true );
+				}
+
+				scope.namespace = "report-final";
 
 				Event( scope );
 

@@ -1,6 +1,8 @@
 var _ = require( "lodash" );
 var argv = require( "yargs" ).argv;
 
+var publicPathList = require( "./package.js" ).packageData.publicPathList;
+
 var allowedOriginDomainPattern = /^(https?\:\/\/)?localhost\:\d{4,5}$/;
 if( argv.production ){
 	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$|^(https?\:\/\/)?localhost\:\d{4,5}$/;
@@ -9,11 +11,11 @@ if( argv.production ){
 var serverSet = require( "./package.js" ).packageData.serverSet;
 
 var publicDomainAddressList = _( serverSet )
-		.map( function onEachServerData( serverData ){
-			return [ serverData.host, serverData.port ].join( ":" );
-		} )
-		.compact( )
-		.value( );
+	.map( function onEachServerData( serverData ){
+		return [ serverData.host, serverData.port ].join( ":" );
+	} )
+	.compact( )
+	.value( );
 
 if( argv.production ){
 	publicDomainAddressList = _( serverSet )
@@ -31,12 +33,23 @@ exports.cors = function cors( app ){
 		https://gist.github.com/cuppster/2344435
 	*/
 	app.use( function allowCrossDomain( request, response, next ){
+		var path = request.path;
+
+		var approvedPath = _.filter( publicPathList,
+			function onEachPublicPath( publicPath ){
+				return _.contains( path, publicPath );
+			} )[ 0 ];
+
 		var allowedOriginURL = request.headers.origin || request.get( "Host" );
 
-		if( request.get( "Device-Type" ) != "Mobile" &&
+		var condition = request.get( "Device-Type" ) != "Mobile" &&
 			!allowedOriginDomainPattern.test( allowedOriginURL ) &&
-			!_.contains( publicDomainAddressList, allowedOriginURL.replace( /https?\:\/\//, "" ) ) )
-		{
+			!_.contains( publicDomainAddressList, 
+				allowedOriginURL.replace( /https?\:\/\//, "" ) );
+
+		condition = condition && _.isEmpty( approvedPath );
+
+		if( condition ){
 			response
 				.status( 500 )
 				.json( {

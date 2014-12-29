@@ -1,0 +1,27 @@
+<section 
+	className="report-share-control">
+	<iframe
+		src={ facebookShareURL }
+		style={
+			{
+				"width": "57px",
+				"height": "62px",
+				"position": "relative",
+				"top": "-3px"
+			}
+		}
+		onLoad={ this.onLoadFacebookShare }>
+	</iframe>
+
+	<iframe
+		src={ twitterShareURL }
+		style={
+			{
+				"width": "57px",
+				"height": "65px"
+			}
+		}
+		onLoad={ this.onLoadTwitterShare }>
+	</iframe>
+
+</section>

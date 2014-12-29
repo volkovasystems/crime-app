@@ -36,6 +36,30 @@ Crime
 						function onOpenMyReport( ){
 							scope.publish( "close-report-final" );
 						} );
+
+					scope.on( "get-report-reference",
+						function onGetReportReference( callback ){
+							scope.publish( "get-report-incident-detail-data",
+								function onGetReportIncidentDetailData( error, reportData ){
+									var reportReferenceTitle = reportData.title
+										.trim( )
+										.replace( /[^a-zA-Z0-9\s]+/g, "" )
+										.replace( /\s+/g, "-" );
+
+									var reportReferenceID = btoa( [
+											reportData.timestamp,
+											reportReferenceTitle
+										].join( ":" ) )
+										.substring( 0, 10 );
+
+									var reportReference = [
+										reportReferenceTitle,
+										reportReferenceID
+									].join( "-" );			
+										
+									callback( null, reportReference );
+								} );
+						} );
 				}
 			};
 		}
