@@ -44,7 +44,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "MapPreview" ] )
 				"onClickReportItem": function onClickReportItem( event ){
 					var reportID = $( event.currentTarget ).attr( "value" );
 
-					
+					this.scope.publish( "show-pinned-report", reportID );
 				},
 
 				"onEachReportItem": function onEachReportList( reportItem, index ){

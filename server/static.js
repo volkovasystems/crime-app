@@ -24,21 +24,26 @@ if( argv.production ){
 	staticDirectory = "deploy";
 }
 
-app.use( function onRequest( request, response, next ){
-	var template = request.get( "Template" ) || request.param( "template" );
+app.get( "/action/:action/:actionType/:actionValue",
+	function onAction( request, response ){
+		var action = request.param( "action" );
+		var actionType = request.param( "actionType" );
+		var actionValue = request.param( "actionValue" );
 
-	if( !_.isEmpty( template ) ){
-		template = querystring.unescape( new Buffer( template, "base64" ).toString( ) );
+		if( action == "render-template" && 
+			actionType == "template" )
+		{
+			var template = querystring.unescape( new Buffer( actionValue, "base64" ).toString( ) );
 
-		response
-			.status( 200 )
-			.type( "html" )
-			.send( template );
-
-	}else{
-		next( );
-	}
-} );
+			response
+				.status( 200 )
+				.type( "html" )
+				.send( template );
+				
+		}else{
+			response.redirect( "/" );
+		}
+	} );
 
 app.get( "/get/all/api/endpoint",
 	function onRequest( request, response ){

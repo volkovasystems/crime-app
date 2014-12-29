@@ -29,6 +29,15 @@ angular.module( "MapMarker", [ "Event" ] )
 							scope.publish( "pin-clicked", cleanMarkerID, marker );
 						} );
 
+					scope.on( "open-map-marker",
+						function onOpenMapMarker( markerID ){
+							var cleanMarkerID = markerID.replace( /[^A-Za-z0-9]/g, "" );
+
+							if( cleanMarkerID == iconData.markerID.replace( /[^A-Za-z0-9]/g, "" ) ){
+								google.maps.event.trigger( marker, "click" );
+							}
+						} );
+
 					MAP_MARKER_LIST.push( marker );
 
 					clearTimeout( timeout );

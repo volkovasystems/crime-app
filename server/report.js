@@ -1018,16 +1018,11 @@ app.get( "/report/share/facebook/:reference",
 						} );
 
 				}else{
-					var redirectURL = staticServer.joinPath( "" );
+					var redirectURL = staticServer.joinPath( "action/render-template/template/:template" );
 
-					redirectURL = [
-						redirectURL,
-						[ "template", template ].join( "=" )
-					].join( "?" );
+					redirectURL = redirectURL.replace( ":template", template );
 
-					response
-						.set( "Template", template )
-						.redirect( redirectURL );
+					response.redirect( 301, redirectURL );
 				}
 			} );
 	} );
@@ -1115,16 +1110,11 @@ app.get( "/report/share/twitter/:reference",
 						} );
 
 				}else{
-					var redirectURL = staticServer.joinPath( "" );
+					var redirectURL = staticServer.joinPath( "action/render-template/template/:template" );
 
-					redirectURL = [
-						redirectURL,
-						[ "template", template ].join( "=" )
-					].join( "?" );
+					redirectURL = redirectURL.replace( ":template", template );
 
-					response
-						.set( "Template", template )
-						.redirect( redirectURL );
+					response.redirect( 301, redirectURL );
 				}
 			} );
 	} );

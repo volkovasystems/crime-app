@@ -67,5 +67,7 @@ var labelData = {
 	"MORE_CATEGORY_LABEL": "More Categories",
 	"LESS_CATEGORY_LABEL": "Less Categories",
 
-	"LOADING_SERVER_SET_FAILED_PROMPT": "Critical server data have failed to load. Please report this to the administrator."
+	"LOADING_SERVER_SET_FAILED_PROMPT": "Critical server data have failed to load. Please report this to the administrator.",
+
+	"CASE_CATEGORY_FILTER_HEADER_LABEL": "Crime Category Filter"
 };

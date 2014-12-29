@@ -62,7 +62,7 @@ exports.cors = function cors( app ){
 
 		response.header( "Access-Control-Allow-Origin", allowedOriginURL );
 		response.header( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
-		response.header( "Access-Control-Allow-Headers", "Content-Type, Accept, Administrator-Access-ID, Device-Type, Template" );
+		response.header( "Access-Control-Allow-Headers", "Content-Type, Accept, Administrator-Access-ID, Device-Type" );
 		response.header( "Access-Control-Max-Age", 10 );
 		response.header( "Cache-Control", "no-cache, no-store, must-revalidate" );
 		  
