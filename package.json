@@ -62,6 +62,7 @@
   },
   "serverSet": {
     "static": {
+      "domain": "map.crimewatch.ph",
       "remote": "ec2-54-76-186-172.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 8000

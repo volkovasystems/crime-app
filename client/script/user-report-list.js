@@ -50,7 +50,11 @@ angular.module( "UserReportList", [ "Event", "PageFlow" ] )
 					this.attachAllComponentEventListener( );
 				},
 
-				"onEachReportItem": function onEachReportItem( reportData ){
+				"onEachReportItem": function onEachReportItem( reportData, index ){
+					var hashedValue = reportData.hashedValue || btoa( JSON.stringify( reportData ) );
+
+					var key = [ hashedValue, index ].join( ":" );
+					
 					var reportTimestamp = reportData.reportTimestamp.toString( );
 
 					var reportTime = moment( reportTimestamp ).format( "hh:mm A" );

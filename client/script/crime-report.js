@@ -6,6 +6,7 @@ Crime
 		"$http",
 		"getReportServerData",
 		"getAppServerData",
+		"getStaticServerData",
 		function factory( 
 			Event, 
 			ProgressBar, 
@@ -157,10 +158,10 @@ Crime
 							.replace( /\s+/g, "-" )
 
 						var reportReferenceID = btoa( [
-								reportReferenceTitle,
-								reportData.timestamp
+								reportData.timestamp,
+								reportReferenceTitle
 							].join( ":" ) )
-							.substring( 0, 5 );
+							.substring( 0, 10 );
 
 						var uri = new URI( );
 						var currentHostAddress = [ 
@@ -171,7 +172,7 @@ Crime
 						if( !( /https?/ ).test( uri.protocol( ) ) &&
 							window.production )
 						{
-							currentHostAddress = "http://map.crimewatch.ph";
+							currentHostAddress = getStaticServerData( ).joinPath( "" );
 						}
 
 						var reportShareURL = [

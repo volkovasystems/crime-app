@@ -18,9 +18,11 @@ var resolveURL = require( "./resolve-url.js" ).resolveURL;
 resolveURL( serverData );
 var userServer = serverData;
 
-var facebookAppID = require( "../client/script/static-data.js" ).staticData.DEVELOPMENT_FACEBOOK_APPLICATION_ID;
+var staticData = require( "../client/script/static-data.js" );
+
+var facebookAppID = staticData.DEVELOPMENT_FACEBOOK_APPLICATION_ID;
 if( argv.production ){
-	facebookAppID = require( "../client/script/static-data.js" ).staticData.PRODUCTION_FACEBOOK_APPLICATION_ID;
+	facebookAppID = staticData.PRODUCTION_FACEBOOK_APPLICATION_ID;
 }
 
 var mobileLoginTemplate = fs.readFileSync( "./server/template/login.html", { "encoding": "utf8" } );

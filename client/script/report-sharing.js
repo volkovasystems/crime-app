@@ -27,8 +27,20 @@ angular
 
 				"getInitialState": function getInitialState( ){
 					return {
-						"facebookShareURL": "#"
+						"facebookShareURL": "",
+						"twitterShareURL": ""
 					};
+				},
+
+				"onLoadFacebookShare": function onLoadFacebookShare( ){
+					FB.init( {
+						"xfbml": true,
+						"cookie": true,
+						"version": "v2.2"
+					} );
+				},
+
+				"onLoadTwitterShare": function onLoadTwitterShare( ){
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
@@ -43,10 +55,21 @@ angular
 							}
 						} );
 
+					this.scope.on( "set-twitter-share-url",
+						function onSetTwitterShareURL( namespace, twitterShareURL ){
+							if( self.props.namespace == namespace ){
+								self.setState( {
+									"twitterShareURL": twitterShareURL
+								} );
+							}
+						} );
+
 					this.scope.on( "initiate-report-sharing",
 						function onInitiateReportSharing( namespace ){
 							if( self.props.namespace == namespace ){
 								self.scope.publish( "initiate-facebook-sharing", namespace );
+
+								self.scope.publish( "initiate-twitter-sharing", namespace );
 							}
 						} );
 				},
@@ -60,17 +83,9 @@ angular
 				"render": function onRender( ){
 					var facebookShareURL = this.state.facebookShareURL;
 
-					return; //: @template: template/report-sharing.html	
-				},
+					var twitterShareURL = this.state.twitterShareURL;
 
-				"componentDidUpdate": function onComponentDidUpdate( prevProps, prevState ){
-					if( prevState.facebookShareURL != this.state.facebookShareURL ){
-						FB.init( {
-							"xfbml": true,
-							"cookie": true,
-							"version": "v2.2"
-						} );
-					}
+					return; //: @template: template/report-sharing.html	
 				},
 
 				"componentDidMount": function componentDidMount( ){

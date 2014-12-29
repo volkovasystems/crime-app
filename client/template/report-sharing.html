@@ -1,9 +1,27 @@
 <section 
 	className="report-share-control">
-	<div 
-		className="fb-share-button"
-		data-href={ facebookShareURL }
-		data-layout="box_count"
-		value="facebook">
-	</div>
+	<iframe
+		src={ facebookShareURL }
+		style={
+			{
+				"width": "57px",
+				"height": "62px",
+				"position": "relative",
+				"top": "-3px"
+			}
+		}
+		onLoad={ this.onLoadFacebookShare }>
+	</iframe>
+
+	<iframe
+		src={ twitterShareURL }
+		style={
+			{
+				"width": "57px",
+				"height": "65px"
+			}
+		}
+		onLoad={ this.onLoadTwitterShare }>
+	</iframe>
+
 </section>

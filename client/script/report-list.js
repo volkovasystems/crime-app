@@ -50,7 +50,7 @@ angular.module( "ReportList", [ "Event", "PageFlow", "MapPreview" ] )
 				"onEachReportItem": function onEachReportList( reportItem, index ){
 					var hashedValue = reportItem.hashedValue || btoa( JSON.stringify( reportItem ) );
 
-					var key = [ hashedValue, index ].join( ":" )
+					var key = [ hashedValue, index ].join( ":" );
 
 					var reportID = reportItem.reportID;
 

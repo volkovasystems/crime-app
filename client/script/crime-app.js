@@ -30,7 +30,9 @@ Crime
 			var resolveURL = function resolveURL( serverData ){
 				if( window.production ){
 					serverData.joinPath = function joinPath( pathString ){
-						return [ "http:/", serverData.remote, pathString ].join( "/" );
+						var hostName = serverData.domain || serverData.remote;
+
+						return [ "http:/", hostName, pathString ].join( "/" );
 					};
 
 				}else if( window.development ){

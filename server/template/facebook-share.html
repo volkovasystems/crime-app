@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html
+	style="display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top:0px;
+	left:0px;">
 	<head>
 		<title>CrimeMap | CrimeWatch.ph</title>
 
@@ -16,4 +22,48 @@
 			property="og:image" 
 			content="@reportMapImageURL" /> 
 	</head>
+	<body
+		style="margin: 0px;
+		position: absolute;
+		width: 100%;
+		height: 100%;">
+		<div id="fb-root"></div>
+
+		<section 
+			class="report-share-container"
+			style="position: absolute;
+			margin: 0px;
+			width: 55px;
+			height: 60px;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;">
+			<div
+				class="fb-share-button"
+				data-href="@reportShareURL"
+				data-layout="box_count"
+				value="facebook">
+			</div>
+		</section>
+
+		<script 
+			type="text/javascript" 
+			src="http://connect.facebook.net/en_US/sdk.js">
+		</script>
+
+		<script 
+			type="text/javascript">
+			var facebookAppID = "@facebookAppID";
+
+			window.fbAsyncInit = function fbAsyncInit( ){
+				FB.init( {
+					"appId": facebookAppID,
+					"xfbml": true,
+					"cookie": true,
+					"version": "v2.2"
+				} );
+			};			
+		</script>
+	</body>
 </html>

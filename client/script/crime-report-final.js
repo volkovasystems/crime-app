@@ -47,10 +47,10 @@ Crime
 										.replace( /\s+/g, "-" );
 
 									var reportReferenceID = btoa( [
-											reportReferenceTitle,
-											reportData.timestamp
+											reportData.timestamp,
+											reportReferenceTitle
 										].join( ":" ) )
-										.substring( 0, 5 );
+										.substring( 0, 10 );
 
 									var reportReference = [
 										reportReferenceTitle,
