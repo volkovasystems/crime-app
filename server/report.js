@@ -978,7 +978,12 @@ app.get( "/report/share/facebook/:reference",
 						.findOne( { 
 							"reportReferenceTitle": reportReferenceTitle
 						}, function onFound( error, reportData ){
-							callback( error, reportData );
+							if( _.isEmpty( reportData ) ){
+								callback( "no-report-data" );
+
+							}else{
+								callback( error, reportData );	
+							}
 						} );
 
 				}else{
@@ -1057,7 +1062,12 @@ app.get( "/report/share/twitter/:reference",
 						.findOne( { 
 							"reportReferenceTitle": reportReferenceTitle
 						}, function onFound( error, reportData ){
-							callback( error, reportData );
+							if( _.isEmpty( reportData ) ){
+								callback( "no-report-data" );
+
+							}else{
+								callback( error, reportData );	
+							}
 						} );
 
 				}else{

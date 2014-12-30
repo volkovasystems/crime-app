@@ -160,8 +160,7 @@ Crime
 						var reportReferenceID = btoa( [
 								reportData.timestamp,
 								reportReferenceTitle
-							].join( ":" ) )
-							.substring( 0, 10 );
+							].join( ":" ) );
 
 						var uri = new URI( );
 						var currentHostAddress = [ 

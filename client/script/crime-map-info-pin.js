@@ -16,6 +16,29 @@ Crime
 							reportData.reportLocation, 
 							mapInfoData, 
 							scope.mapComponent );
+
+						scope.on( "get-pinned-report-reference",
+							function onGetPinnedReportReference( cleanReportID, callback ){
+								if( cleanReportID == reportData.reportID.replace( /[^A-Za-z0-9]/g, "" ) ){
+									var reportReferenceTitle = reportData.reportTitle
+										.trim( )
+										.replace( /[^a-zA-Z0-9\s]+/g, "" )
+										.replace( /\s+/g, "-" );
+
+									var reportReferenceID = btoa( [
+											reportData.reportTimestamp,
+											reportReferenceTitle
+										].join( ":" ) )
+										.substring( 0, 10 );
+
+									var reportReference = [
+										reportReferenceTitle,
+										reportReferenceID
+									].join( "-" );			
+										
+									callback( null, reportReference );
+								}
+							} );
 					} );
 			};
 
@@ -98,6 +121,24 @@ Crime
 					scope.on( "refresh-map",
 						function onRefreshMap( ){
 							attachAllMapInfoPinNearReporter( scope );
+						} );
+
+					scope.on( "close-report-pin",
+						function onCloseReportPin( stopFlag, reportPinID ){
+							if( stopFlag ){
+								scope.publish( "clear-report-sharing-data", reportPinID );
+							}
+						} );
+
+					scope.on( "open-report-pin",
+						function onOpenReportPin( stopFlag, reportPinID ){
+							if( stopFlag ){
+								var timeout = setTimeout( function onTimeout( ){
+									scope.publish( "initiate-report-sharing", reportPinID, true );
+
+									clearTimeout( timeout );
+								}, 100 );
+							}
 						} );
 				}
 			}

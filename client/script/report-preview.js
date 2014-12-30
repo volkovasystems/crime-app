@@ -1,4 +1,4 @@
-angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
+angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 	
 	.constant( "REPORT_CASE_TITLE_PHRASE", labelData.REPORT_CASE_TITLE_PHRASE )
 
@@ -9,11 +9,13 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 	.constant( "MORE_DETAIL_LABEL", labelData.MORE_DETAIL_LABEL )
 
 	.factory( "ReportPreview", [
+		"attachReportSharing",
 		"REPORT_CASE_TITLE_PHRASE",
 		"DATE_AND_TIME_LABEL",
 		"REPORT_TITLE_LABEL",
 		"MORE_DETAIL_LABEL",
 		function factory(
+			attachReportSharing,
 			REPORT_CASE_TITLE_PHRASE,
 			DATE_AND_TIME_LABEL,
 			REPORT_TITLE_LABEL,
@@ -132,6 +134,12 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 
 				"componentDidMount": function componentDidMount( ){
 					var reportPreviewID = this.props.reportPreviewID;
+
+					attachReportSharing( {
+						"scope": this.scope,
+						"element": $( ".report-sharing", this.getDOMNode( ) ),
+						"namespace": reportPreviewID
+					} );
 					
 					var container = this.props.container
 
@@ -157,7 +165,11 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 
 				var scope = optionSet.scope || $rootScope;
 
-				scope = scope.$new( true );
+				if( optionSet.embedState != "no-embed" ){
+					scope = scope.$new( true );
+				}
+
+				scope.namespace = optionSet.reportPreviewID;
 
 				Event( scope );
 
@@ -204,7 +216,8 @@ angular.module( "ReportPreview", [ "Event", "PageFlow" ] )
 					attachReportPreview( {
 						"scope": scope,
 						"element": element,
-						"attributeSet": attributeSet
+						"attributeSet": attributeSet,
+						"embedState": "no-embed"
 					} );
 				}
 			};
