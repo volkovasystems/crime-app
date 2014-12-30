@@ -248,6 +248,11 @@ Crime
 
 							scope.publish( "show-report-sharing", scope.namespace );
 						} );
+
+					scope.on( "close-report-final",
+						function onCloseReportFinal( ){
+							scope.publish( "clear-report-sharing-data", scope.namespace );
+						} );
 				}
 			};
 		}

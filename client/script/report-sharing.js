@@ -38,9 +38,12 @@ angular
 						"cookie": true,
 						"version": "v2.2"
 					} );
+
+					this.scope.broadcast( "facebook-share-loaded" );
 				},
 
 				"onLoadTwitterShare": function onLoadTwitterShare( ){
+					this.scope.broadcast( "twitter-share-loaded" );
 				},
 
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
