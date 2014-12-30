@@ -48,7 +48,9 @@ angular
 
 					this.scope.on( "set-facebook-share-url",
 						function onSetFacebookShareURL( namespace, facebookShareURL ){
-							if( self.props.namespace == namespace ){
+							if( self.props.namespace == namespace &&
+								self.state.facebookShareURL != facebookShareURL )
+							{
 								self.setState( {
 									"facebookShareURL": facebookShareURL
 								} );
@@ -57,7 +59,9 @@ angular
 
 					this.scope.on( "set-twitter-share-url",
 						function onSetTwitterShareURL( namespace, twitterShareURL ){
-							if( self.props.namespace == namespace ){
+							if( self.props.namespace == namespace &&
+								self.state.twitterShareURL != twitterShareURL )
+							{
 								self.setState( {
 									"twitterShareURL": twitterShareURL
 								} );
@@ -65,11 +69,23 @@ angular
 						} );
 
 					this.scope.on( "initiate-report-sharing",
-						function onInitiateReportSharing( namespace ){
+						function onInitiateReportSharing( namespace, bypassDefaultProcedure ){
 							if( self.props.namespace == namespace ){
-								self.scope.publish( "initiate-facebook-sharing", namespace );
+								self.scope.publish( "initiate-facebook-sharing", namespace, bypassDefaultProcedure );
 
-								self.scope.publish( "initiate-twitter-sharing", namespace );
+								self.scope.publish( "initiate-twitter-sharing", namespace, bypassDefaultProcedure );
+							}
+						} );
+
+					this.scope.on( "clear-report-sharing-data",
+						function onClearReportSharingData( namespace ){
+							if( self.props.namespace == namespace ){
+								self.setState( {
+									"twitterShareURL": "",
+									"facebookShareURL": ""
+								} );
+
+								$( "iframe", self.getDOMNode( ) ).contents( ).empty( );
 							}
 						} );
 				},

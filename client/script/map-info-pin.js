@@ -81,7 +81,7 @@ angular
 
 									//mapComponent.panTo( position );
 
-									scope.publish( "open-report-pin", true );
+									scope.publish( "open-report-pin", true, cleanMapInfoID );
 
 									for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
 										if( cleanMapInfoID != mapInfoID ){
@@ -117,7 +117,7 @@ angular
 
 								EXPANDED_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
 
-								scope.publish( "close-report-pin", propagationFlag );
+								scope.publish( "close-report-pin", propagationFlag, cleanMapInfoID );
 							}
 
 							for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
@@ -134,7 +134,7 @@ angular
 
 								OPEN_MAP_INFO_PIN_SET[ cleanMapInfoID ] = false;
 
-								scope.publish( "close-report-pin", propagationFlag );
+								scope.publish( "close-report-pin", propagationFlag, cleanMapInfoID );
 							}
 
 							for( var mapInfoID in OPEN_MAP_INFO_PIN_SET ){
@@ -158,7 +158,7 @@ angular
 
 								//mapComponent.panTo( position );
 
-								scope.publish( "open-report-pin", propagationFlag );
+								scope.publish( "open-report-pin", propagationFlag, cleanMapInfoID );
 							}
 						} );
 
@@ -178,7 +178,7 @@ angular
 
 								//mapComponent.panTo( position );
 
-								scope.publish( "open-report-pin", propagationFlag );
+								scope.publish( "open-report-pin", propagationFlag, cleanMapInfoID );
 							}
 						} );
 

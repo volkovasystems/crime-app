@@ -1,6 +1,6 @@
 angular
 	
-	.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview" ] )
+	.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview", "ReportSharing" ] )
 	
 	.constant( "REPORT_CASE_TITLE_PHRASE", labelData.REPORT_CASE_TITLE_PHRASE )
 
@@ -14,6 +14,7 @@ angular
 
 	.factory( "ReportDetail", [
 		"MapPreview",
+		"attachReportSharing",
 		"REPORT_CASE_TITLE_PHRASE",
 		"DATE_AND_TIME_LABEL",
 		"REPORT_TITLE_LABEL",
@@ -21,6 +22,7 @@ angular
 		"LESS_DETAIL_LABEL",
 		function factory( 
 			MapPreview,
+			attachReportSharing,
 			REPORT_CASE_TITLE_PHRASE,
 			DATE_AND_TIME_LABEL,
 			REPORT_TITLE_LABEL,
@@ -141,6 +143,12 @@ angular
 				"componentDidMount": function componentDidMount( ){
 					var reportDetailID = this.props.reportDetailID;
 					
+					attachReportSharing( {
+						"scope": this.scope,
+						"element": $( ".report-sharing", this.getDOMNode( ) ),
+						"namespace": reportDetailID
+					} );
+
 					var container = this.props.container
 
 					this.scope.publish( "report-detail-rendered", reportDetailID, container );
@@ -165,7 +173,11 @@ angular
 
 				var scope = optionSet.scope || $rootScope;
 
-				scope = scope.$new( true );
+				if( optionSet.embedState != "no-embed" ){
+					scope = scope.$new( true );
+				}
+
+				scope.namespace = optionSet.reportDetailID;
 
 				Event( scope );
 
@@ -212,7 +224,8 @@ angular
 					attachReportDetail( {
 						"scope": scope,
 						"element": element,
-						"attributeSet": attributeSet
+						"attributeSet": attributeSet,
+						"embedState": "no-embed"
 					} );
 				}
 			};
