@@ -69,5 +69,7 @@ var labelData = {
 
 	"LOADING_SERVER_SET_FAILED_PROMPT": "Critical server data have failed to load. Please report this to the administrator.",
 
-	"CASE_CATEGORY_FILTER_HEADER_LABEL": "Crime Category Filter"
+	"CASE_CATEGORY_FILTER_HEADER_LABEL": "Crime Category Filter",
+
+	"REPORT_NOT_FOUND_PROMPT": "Sorry, the report was not found."
 };

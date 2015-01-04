@@ -11,6 +11,8 @@ angular.module( "MapMarker", [ "Event" ] )
 
 					var height = staticData.MAP_MARKER_HEIGHT;
 
+					var cleanMarkerID = iconData.markerID.replace( /[^A-Za-z0-9]/g, "" );
+
 					var markerIcon = {
 						"url": iconData.sourceURL,
 						"scaledSize": new google.maps.Size( width, height )
@@ -24,19 +26,17 @@ angular.module( "MapMarker", [ "Event" ] )
 
 					google.maps.event.addListener( marker, "click",
 						function onClick( ){
-							var cleanMarkerID = iconData.markerID.replace( /[^A-Za-z0-9]/g, "" );
-							
 							scope.publish( "pin-clicked", cleanMarkerID, marker );
 						} );
 
 					scope.on( "open-map-marker",
 						function onOpenMapMarker( markerID ){
-							var cleanMarkerID = markerID.replace( /[^A-Za-z0-9]/g, "" );
-
-							if( cleanMarkerID == iconData.markerID.replace( /[^A-Za-z0-9]/g, "" ) ){
+							if( cleanMarkerID == markerID.replace( /[^A-Za-z0-9]/g, "" ) ){
 								google.maps.event.trigger( marker, "click" );
 							}
 						} );
+
+					scope.publish( "map-marker-created", cleanMarkerID );
 
 					MAP_MARKER_LIST.push( marker );
 

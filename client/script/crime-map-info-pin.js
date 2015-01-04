@@ -6,7 +6,7 @@ Crime
 				Event( scope );
 
 				_.each( reportList,
-					function onEachReportItem( reportData ){
+					function onEachReportItem( reportData, index ){
 						var mapInfoData = {
 							"mapInfoID": reportData.reportID,
 							"reportData": reportData
@@ -16,6 +16,10 @@ Crime
 							reportData.reportLocation, 
 							mapInfoData, 
 							scope.mapComponent );
+
+						if( index == reportList.length - 1 ){
+							scope.publish( "all-map-info-pin-attached", reportList );
+						}
 
 						scope.on( "get-pinned-report-reference",
 							function onGetPinnedReportReference( cleanReportID, callback ){
