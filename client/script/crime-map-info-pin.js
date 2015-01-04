@@ -20,16 +20,9 @@ Crime
 						scope.on( "get-pinned-report-reference",
 							function onGetPinnedReportReference( cleanReportID, callback ){
 								if( cleanReportID == reportData.reportID.replace( /[^A-Za-z0-9]/g, "" ) ){
-									var reportReferenceTitle = reportData.reportTitle
-										.trim( )
-										.replace( /[^a-zA-Z0-9\s]+/g, "" )
-										.replace( /\s+/g, "-" );
+									var reportReferenceTitle = reportData.reportReferenceTitle;
 
-									var reportReferenceID = btoa( [
-											reportData.reportTimestamp,
-											reportReferenceTitle
-										].join( ":" ) )
-										.substring( 0, 10 );
+									var reportReferenceID = reportData.reportReferenceID
 
 									var reportReference = [
 										reportReferenceTitle,
@@ -135,6 +128,8 @@ Crime
 							if( stopFlag ){
 								var timeout = setTimeout( function onTimeout( ){
 									scope.publish( "initiate-report-sharing", reportPinID, true );
+
+									scope.publish( "show-report-sharing", reportPinID );
 
 									clearTimeout( timeout );
 								}, 100 );

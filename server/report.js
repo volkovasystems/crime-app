@@ -150,7 +150,7 @@ app.get( "/api/:accessID/report/query/all/near",
 
 		async.waterfall( [
 			function checkPageData( callback ){
-				var MAXIMUM_COUNT = 10;
+				var MAXIMUM_COUNT = 50;
 
 				var count = parseInt( request.param( "count" ) || 0 ) || MAXIMUM_COUNT;
 
@@ -244,7 +244,7 @@ app.get( "/api/:accessID/report/query/latest/:reportState",
 
 		async.waterfall( [
 			function checkPageData( callback ){
-				var MAXIMUM_COUNT = 10;
+				var MAXIMUM_COUNT = 50;
 
 				var count = parseInt( request.param( "count" ) || 0 ) || MAXIMUM_COUNT;
 
@@ -318,7 +318,7 @@ app.get( "/api/:accessID/report/query/latest",
 
 		async.waterfall( [
 			function checkPageData( callback ){
-				var MAXIMUM_COUNT = 10;
+				var MAXIMUM_COUNT = 50;
 
 				var count = parseInt( request.param( "count" ) || 0 ) || MAXIMUM_COUNT;
 
@@ -390,7 +390,7 @@ app.get( "/api/:accessID/report/query/all/:reportState",
 
 		async.waterfall( [
 			function checkPageData( callback ){
-				var MAXIMUM_COUNT = 10;
+				var MAXIMUM_COUNT = 50;
 
 				var count = parseInt( request.param( "count" ) || 0 ) || MAXIMUM_COUNT;
 
