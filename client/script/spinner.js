@@ -1,4 +1,5 @@
-angular.module( "Spinner", [ "Event", "PageFlow" ] )
+angular
+	.module( "Spinner", [ "Event", "PageFlow" ] )
 
 	.factory( "Spinner", [
 		function factory( ){
@@ -114,7 +115,8 @@ angular.module( "Spinner", [ "Event", "PageFlow" ] )
 						"scope": scope,
 						"element": element,
 						"attributeSet": attributeSet,
-						"namespace": scope.namespace || attributeSet.namespace
+						"namespace": scope.namespace || attributeSet.namespace,
+						"embedState": "no-embed"
 					} );
 				}
 			}
