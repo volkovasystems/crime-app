@@ -18,10 +18,12 @@ angular.module( "MapMarker", [ "Event" ] )
 						"scaledSize": new google.maps.Size( width, height )
 					};
 
+					var markerPosition = new google.maps.LatLng( position.latitude, position.longitude );
+
 					var marker = new google.maps.Marker( {
 						"map": mapComponent,
 						"icon": markerIcon,
-						"position": new google.maps.LatLng( position.latitude, position.longitude )
+						"position": markerPosition
 					} );
 
 					google.maps.event.addListener( marker, "click",
@@ -33,6 +35,23 @@ angular.module( "MapMarker", [ "Event" ] )
 						function onOpenMapMarker( markerID ){
 							if( cleanMarkerID == markerID.replace( /[^A-Za-z0-9]/g, "" ) ){
 								google.maps.event.trigger( marker, "click" );
+
+								var timeout = setTimeout( function onTimeout( ){
+									mapComponent.setCenter( markerPosition );
+
+									clearTimeout( timeout );
+								}, 100 );
+							}
+						} );
+
+					scope.on( "open-map-marker",
+						function onOpenMapMarker( markerID ){
+							if( cleanMarkerID == markerID.replace( /[^A-Za-z0-9]/g, "" ) ){
+								var timeout = setTimeout( function onTimeout( ){
+									mapComponent.setCenter( markerPosition );
+
+									clearTimeout( timeout );
+								}, 100 );
 							}
 						} );
 

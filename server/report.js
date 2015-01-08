@@ -42,6 +42,10 @@ if( argv.production ){
 var googleURLShortenerAPIURL = "https://www.googleapis.com/urlshortener/v1/url?key=@googleAPIKey"
 	.replace( "@googleAPIKey", googleAPIKey );
 
+const DEFAULT_MAXIMUM_DISTANCE = 500;
+
+const EARTH_RADIUS_RADIAN = 6371;
+
 var app = express( );
 
 require( "./configure-app.js" ).configureApp( app );
@@ -164,30 +168,29 @@ app.get( "/api/:accessID/report/query/all/near",
 			},
 
 			function queryAllNearReport( count, index, callback ){
-				var propertyName = request.param( "propertyName" );
-
-				var propertyValue = request.param( "propertyValue" );
-
-				var queryData = { };
-
-				queryData[ propertyName ] = { "$in": _.compact( [ propertyValue ] ) };
-
 				var latitude = request.param( "latitude" );
 
 				var longitude = request.param( "longitude" );
 
-				var distance = parseInt( request.param( "distance" ) || 0 ) || 500;
+				var distance = parseInt( request.param( "distance" ) || 0 ) || DEFAULT_MAXIMUM_DISTANCE;
+
+				distance = ( distance / 1000 ) / EARTH_RADIUS_RADIAN;
+
+				var queryData = { 
+					"reportLocation.coordinate": {
+						"$near": [ longitude, latitude ],
+						"$maxDistance": distance
+					}
+				};
+
+				var propertyName = request.param( "propertyName" );
+
+				var propertyValue = request.param( "propertyValue" );
+
+				queryData[ propertyName ] = { "$in": _.compact( [ propertyValue ] ) };
 
 				Report
 					.find( queryData )
-
-					.where( "reportLocation.coordinate" )
-
-					.near( {
-						"center": [ latitude, longitude ],
-						"maxDistance": distance,
-						"spherical": true
-					} )
 
 					.sort( {
 						"reportTimestamp": "descending" 
@@ -645,16 +648,21 @@ app.get( "/api/:accessID/report/get/all/near",
 
 		var longitude = request.param( "longitude" );
 
-		var distance = parseInt( request.param( "distance" ) || 0 ) || 500;
+		//: Distance is always received in meters. So convert this to km.
+		var distance = parseInt( request.param( "distance" ) || 0 ) || DEFAULT_MAXIMUM_DISTANCE;
+
+		distance = ( distance / 1000 ) / EARTH_RADIUS_RADIAN;
 
 		if( latitude && longitude ){
 			Report
-				.where( "reportLocation.coordinate" )
-				.near( {
-					"center": [ latitude, longitude ],
-					"maxDistance": distance,
-					"spherical": true
+				
+				.find( {
+					"reportLocation.coordinate": {
+						"$near": [ longitude, latitude ],
+						"$maxDistance": distance
+					}
 				} )
+
 				.exec( function onResult( error, reportList ){
 					if( error ){
 						response
@@ -692,22 +700,21 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 
 		var longitude = request.param( "longitude" );
 
-		var distance = parseInt( request.param( "distance" ) || 0 ) || 100;
+		var distance = parseInt( request.param( "distance" ) || 0 ) || DEFAULT_MAXIMUM_DISTANCE;
 
-		distance = ( distance / 1000 ) / 6371;
+		distance = ( distance / 1000 ) / EARTH_RADIUS_RADIAN;
 
 		if( latitude && longitude ){
 			Report
+			
 				.find( {
-					"reporterID": request.param( "reporterID" )
+					"reporterID": request.param( "reporterID" ),
+					"reportLocation.coordinate": {
+						"$near": [ longitude, latitude ],
+						"$maxDistance": distance
+					}
 				} )
-				.where( "reportLocation.coordinate" )
-				//: @todo: This is buggy, if can change this to use GeoJSON, instead of legacy coordinates.
-				.near( {
-					"center": [ longitude, latitude ],
-					"maxDistance": distance,
-					"spherical": true
-				} )
+
 				.exec( function onResult( error, reportList ){
 					if( error ){
 						response

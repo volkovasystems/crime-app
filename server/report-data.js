@@ -28,7 +28,10 @@ database.createDatabase( "Report", "reportdb", host, databasePort,
 					"latitude": Number,
 					"longitude": Number,
 					"zoom": Number,
-					"coordinate": Array
+					"coordinate": {
+						"type": [ Number ],
+						"index": "2d"
+					}
 				},
 				"reportMapImageURL": String,
 				"reportTitle": String,
@@ -41,8 +44,6 @@ database.createDatabase( "Report", "reportdb", host, databasePort,
 				"reportReferenceTitle": String,
 				"reportMediaList": Array
 			} );
-
-			report.index( { "reportLocation.coordinate": "2d" } );
 
 			mongoose.model( "Report", report );
 		}

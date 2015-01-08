@@ -192,8 +192,8 @@ Crime
 								"longitude": 		longitude,
 								"zoom": 			reportData.zoom,
 								"coordinate": 		[
-														radianLatitude,
-														radianLongitude
+														radianLongitude,
+														radianLatitude
 													]
 							},
 							"reportMapImageURL": 	reportData.staticMapURL,
