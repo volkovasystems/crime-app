@@ -18,7 +18,7 @@ var resolveURL = require( "./resolve-url.js" ).resolveURL;
 resolveURL( serverData );
 var userServer = serverData;
 
-var staticData = require( "../client/script/static-data.js" );
+var staticData = require( "../client/script/static-data.js" ).staticData;
 
 var facebookAppID = staticData.DEVELOPMENT_FACEBOOK_APPLICATION_ID;
 if( argv.production ){

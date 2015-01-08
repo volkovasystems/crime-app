@@ -351,4 +351,60 @@ Crime
 					$rootScope.publish( "server-set-loaded" );
 				} );
 		}
+	] )
+
+	.constant( "REPORT_NOT_FOUND_PROMPT", labelData.REPORT_NOT_FOUND_PROMPT )
+
+	.run( [
+		"$rootScope",
+		"Event",
+		"REPORT_NOT_FOUND_PROMPT",
+		function onRun(
+			$rootScope,
+			Event,
+			REPORT_NOT_FOUND_PROMPT
+		){
+			Event( $rootScope );
+
+			var uri = URI( );
+
+			if( uri.hasQuery( "action", "show-pinned-report" ) ){
+				$rootScope.subscribeOnce( "all-map-info-pin-attached",
+					function onAllMapInfoPinAttached( pinnedReportList ){
+						var queryData = uri.query( true );
+						var reportReferenceTitle = queryData.reference;
+
+						if( _.isEmpty( reportReferenceTitle ) ){
+							$rootScope.publish( "notify", REPORT_NOT_FOUND_PROMPT, "error" );
+							return;
+						} 
+
+						var reportData = _( pinnedReportList )
+							.filter(function onEachPinnedReportItem( reportData ){
+								return reportData.reportReferenceTitle == reportReferenceTitle;
+							} )
+							.first( );
+
+						var hasReport = !_.isEmpty( reportData );
+
+						var cleanReportID = reportData.reportID.replace( /[^A-Za-z0-9]/g, "" );
+
+						if( hasReport ){
+							$rootScope.on( "map-marker-created",	
+								function onMapMarkerCreated( cleanMapMarkerID ){
+									if( cleanReportID == cleanMapMarkerID ){
+										var timeout = setTimeout( function onTimeout( ){
+											$rootScope.publish( "open-map-marker", reportData.reportID );
+
+											clearTimeout( timeout );
+										}, 1000 );			
+									}
+								} );
+							
+						}else{
+
+						}
+					} );
+			}
+		}
 	] );

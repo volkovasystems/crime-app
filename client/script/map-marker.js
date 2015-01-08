@@ -11,32 +11,51 @@ angular.module( "MapMarker", [ "Event" ] )
 
 					var height = staticData.MAP_MARKER_HEIGHT;
 
+					var cleanMarkerID = iconData.markerID.replace( /[^A-Za-z0-9]/g, "" );
+
 					var markerIcon = {
 						"url": iconData.sourceURL,
 						"scaledSize": new google.maps.Size( width, height )
 					};
 
+					var markerPosition = new google.maps.LatLng( position.latitude, position.longitude );
+
 					var marker = new google.maps.Marker( {
 						"map": mapComponent,
 						"icon": markerIcon,
-						"position": new google.maps.LatLng( position.latitude, position.longitude )
+						"position": markerPosition
 					} );
 
 					google.maps.event.addListener( marker, "click",
 						function onClick( ){
-							var cleanMarkerID = iconData.markerID.replace( /[^A-Za-z0-9]/g, "" );
-							
 							scope.publish( "pin-clicked", cleanMarkerID, marker );
 						} );
 
 					scope.on( "open-map-marker",
 						function onOpenMapMarker( markerID ){
-							var cleanMarkerID = markerID.replace( /[^A-Za-z0-9]/g, "" );
-
-							if( cleanMarkerID == iconData.markerID.replace( /[^A-Za-z0-9]/g, "" ) ){
+							if( cleanMarkerID == markerID.replace( /[^A-Za-z0-9]/g, "" ) ){
 								google.maps.event.trigger( marker, "click" );
+
+								var timeout = setTimeout( function onTimeout( ){
+									mapComponent.setCenter( markerPosition );
+
+									clearTimeout( timeout );
+								}, 100 );
 							}
 						} );
+
+					scope.on( "open-map-marker",
+						function onOpenMapMarker( markerID ){
+							if( cleanMarkerID == markerID.replace( /[^A-Za-z0-9]/g, "" ) ){
+								var timeout = setTimeout( function onTimeout( ){
+									mapComponent.setCenter( markerPosition );
+
+									clearTimeout( timeout );
+								}, 100 );
+							}
+						} );
+
+					scope.publish( "map-marker-created", cleanMarkerID );
 
 					MAP_MARKER_LIST.push( marker );
 

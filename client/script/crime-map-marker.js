@@ -205,12 +205,16 @@ Crime
 				Event( scope );
 
 				_.each( reportList,
-					function onEachReportItem( reportData ){
+					function onEachReportItem( reportData, index ){
 						var iconData = {
 							"markerID": reportData.reportID,
 							"sourceURL": "image/@reportCaseType-marker.png"
 								.replace( "@reportCaseType", reportData.reportCaseType )
 						};
+
+						if( index == reportList.length - 1 ){
+							scope.publish( "all-crime-report-mapped", reportList );
+						}
 
 						scope.publish( "create-map-marker", 
 							reportData.reportLocation, 

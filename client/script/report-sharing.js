@@ -32,20 +32,6 @@ angular
 					};
 				},
 
-				"onLoadFacebookShare": function onLoadFacebookShare( ){
-					FB.init( {
-						"xfbml": true,
-						"cookie": true,
-						"version": "v2.2"
-					} );
-
-					this.scope.broadcast( "facebook-share-loaded" );
-				},
-
-				"onLoadTwitterShare": function onLoadTwitterShare( ){
-					this.scope.broadcast( "twitter-share-loaded" );
-				},
-
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 
@@ -108,6 +94,23 @@ angular
 				},
 
 				"componentDidMount": function componentDidMount( ){
+					var self = this;
+
+					this.shareComponentLoadCount = 0;
+					
+					$( "iframe", this.getDOMNode( ) ).hide( );
+
+					$( "iframe", this.getDOMNode( ) )
+						.load( function onLoad( ){
+							self.shareComponentLoadCount++;
+
+							if( self.shareComponentLoadCount == 2 ){
+								$( ".report-sharing-header > p", self.getDOMNode( ) ).hide( );
+
+								$( "iframe", self.getDOMNode( ) ).show( );
+							}
+						} );
+
 					this.scope.publish( "report-sharing-rendered" );	
 				}
 			} );
