@@ -31,3 +31,87 @@
     font-weight: bold;
   }
 }
+
+/* DOT STYLE */
+/* Common styles and resets */
+.dotstyle {
+  overflow: visible !important;
+}
+
+.dotstyle ul {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.dotstyle li {
+  position: relative;
+  display: block;
+  float: left;
+  margin: 0 10px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.dotstyle li a {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border-radius: 50%;
+  background-color: rgb(200, 200, 200);
+  text-indent: -999em; /* make the text accessible to screen readers */
+  cursor: pointer;
+  position: absolute;
+}
+
+.dotstyle li a:focus {
+  outline: none;
+}
+
+/* Circle grow */
+
+.dotstyle-circlegrow li a {
+  overflow: hidden;
+  background-color: transparent;
+  box-shadow: inset 0 0 0 2px rgb(150, 150, 150);
+  -webkit-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
+}
+
+.dotstyle-circlegrow li a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  border-radius: 50%;
+  background-color: @link-color;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
+}
+
+.dotstyle-circlegrow li a:hover,
+.dotstyle-circlegrow li a:focus {
+  opacity: 0.7;
+}
+
+.dotstyle-circlegrow li.current a::after {
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}

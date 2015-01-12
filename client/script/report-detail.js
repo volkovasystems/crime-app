@@ -149,7 +149,12 @@ angular
 						"namespace": reportDetailID
 					} );
 
-					var container = this.props.container
+					$( ".dotstyle > ul", this.getDOMNode( ) )
+						.each( function onEachDot( ){
+							new DotNav( $( this )[ 0 ] );
+						} );
+
+					var container = this.props.container;
 
 					this.scope.publish( "report-detail-rendered", reportDetailID, container );
 				}

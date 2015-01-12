@@ -140,8 +140,13 @@ angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 						"element": $( ".report-sharing", this.getDOMNode( ) ),
 						"namespace": reportPreviewID
 					} );
+
+					$( ".dotstyle > ul", this.getDOMNode( ) )
+						.each( function onEachDot( ){
+							new DotNav( $( this )[ 0 ] );
+						} );
 					
-					var container = this.props.container
+					var container = this.props.container;
 
 					this.scope.publish( "report-preview-rendered", reportPreviewID, container );
 				}
