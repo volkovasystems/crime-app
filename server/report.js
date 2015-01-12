@@ -42,7 +42,7 @@ if( argv.production ){
 var googleURLShortenerAPIURL = "https://www.googleapis.com/urlshortener/v1/url?key=@googleAPIKey"
 	.replace( "@googleAPIKey", googleAPIKey );
 
-const DEFAULT_MAXIMUM_DISTANCE = 500;
+const DEFAULT_MAXIMUM_DISTANCE = 50000;
 
 const EARTH_RADIUS_RADIAN = 6371;
 
@@ -706,7 +706,6 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 
 		if( latitude && longitude ){
 			Report
-			
 				.find( {
 					"reporterID": request.param( "reporterID" ),
 					"reportLocation.coordinate": {
