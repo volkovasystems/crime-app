@@ -1,10 +1,13 @@
-angular.module( "ReportSpecifyCategory", [ 
-	"Event", 
-	"PageFlow", 
-	"MapPreview", 
-	"CaseCategoryList", 
-	"MapView" 
-] )
+angular
+
+	.module( "ReportSpecifyCategory", [ 
+		"Event", 
+		"PageFlow", 
+		"MapPreview", 
+		"CaseCategoryList", 
+		"MapView",
+		"ImageUpload"
+	] )
 	
 	.constant( "REPORT_HEADER_TITLE", labelData.REPORT_HEADER_TITLE )
 
@@ -18,11 +21,14 @@ angular.module( "ReportSpecifyCategory", [
 
 	.constant( "CANCEL_BUTTON_LABEL", labelData.CANCEL_BUTTON_LABEL )
 
+	.constant( "UPLOAD_IMAGE_BUTTON_LABEL", labelData.UPLOAD_IMAGE_BUTTON_LABEL )
+
 	.constant( "WARN_IF_NO_SELECTED_CATEGORY_PROMPT", labelData.WARN_IF_NO_SELECTED_CATEGORY_PROMPT )
 
 	.factory( "ReportSpecifyCategory", [
 		"MapPreview",
 		"attachCaseCategoryList",
+		"attachImageUpload",
 		"DEFAULT_POSITION",
 		"DEFAULT_MAP_ZOOM",
 		"REPORT_HEADER_TITLE",
@@ -31,10 +37,12 @@ angular.module( "ReportSpecifyCategory", [
 		"REPORT_FINAL_PROGRESS_LABEL",
 		"CONFIRM_BUTTON_LABEL",
 		"CANCEL_BUTTON_LABEL",
+		"UPLOAD_IMAGE_BUTTON_LABEL",
 		"WARN_IF_NO_SELECTED_CATEGORY_PROMPT",
 		function factory( 
 			MapPreview,
 			attachCaseCategoryList,
+			attachImageUpload,
 			DEFAULT_POSITION, 
 			DEFAULT_MAP_ZOOM,
 			REPORT_HEADER_TITLE,
@@ -43,6 +51,7 @@ angular.module( "ReportSpecifyCategory", [
 			REPORT_FINAL_PROGRESS_LABEL,
 			CONFIRM_BUTTON_LABEL,
 			CANCEL_BUTTON_LABEL,
+			UPLOAD_IMAGE_BUTTON_LABEL,
 			WARN_IF_NO_SELECTED_CATEGORY_PROMPT
 		){
 			var ReportSpecifyCategory = React.createClass( {
@@ -84,6 +93,12 @@ angular.module( "ReportSpecifyCategory", [
 
 				"onClickCancel": function onClickCancel( ){
 					this.scope.publish( "cancel-report-specify-category" );
+				},
+
+				"onClickUploadImage": function onClickUploadImage( ){
+					this.scope.publish( "hide-case-category-list", "report-specify-category" );
+
+					this.scope.publish( "open-image-upload" );
 				},
 
 				"onSelectCaseCategory": function onSelectCaseCategory( selectedCaseCategory ){
@@ -260,6 +275,12 @@ angular.module( "ReportSpecifyCategory", [
 						"scope": this.scope,
 						"element": $( ".case-category-list", this.getDOMNode( ) ),
 						"onSelectCaseCategory": this.onSelectCaseCategory,
+						"namespace": "report-specify-category"
+					} );
+
+					attachImageUpload( {
+						"scope": this.scope,
+						"element": $( ".image-upload", this.getDOMNode( ) ),
 						"namespace": "report-specify-category"
 					} );
 

@@ -15,3 +15,8 @@ reportdb
 appdb
 *.log
 *.db
+locate-crimewatch.bat
+run-app-server.bat
+run-report-server.bat
+run-static-server.bat
+run-user-server.bat

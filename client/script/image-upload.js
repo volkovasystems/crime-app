@@ -1,20 +1,27 @@
 angular
 	
-	.module( "ImageUpload", [ "Event", "PageFlow" ] )
+	.module( "ImageUpload", [ 
+		"Event", 
+		"PageFlow",
+		"ImageGrid"
+	] )
 	
-	.constant( "IMAGE_UPLOAD_HEADER_TITLE", labelData.IMAGE_UPLOAD_HEADER_TITLE )
+	.constant( "UPLOAD_IMAGES_PHRASE", labelData.UPLOAD_IMAGES_PHRASE )
 
 	.factory( "ImageUpload", [
-		"IMAGE_UPLOAD_HEADER_TITLE",
+		"attachImageGrid",
+		"UPLOAD_IMAGES_PHRASE",
 		function factory( 
-			IMAGE_UPLOAD_HEADER_TITLE
+			attachImageGrid,
+			UPLOAD_IMAGES_PHRASE
 		){
 			var ImageUpload = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
 						var imageUploadComponent = (
 							<ImageUpload 
-								scope={ scope } />
+								scope={ scope }
+								container={ container } />
 						);
 
 						React.render( imageUploadComponent, container[ 0 ] );
@@ -25,6 +32,7 @@ angular
 
 				"getInitialState": function getInitialState( ){
 					return {
+						"filePath": ""
 					};
 				},
 
@@ -32,10 +40,56 @@ angular
 					
 				},
 
+				"onChangeFileSelection": function onChangeFileSelection( event ){
+					var self = this;
+
+					if( _.isEmpty( event.target.value ) ){
+						//: @todo: Send notification?
+						return;
+					}
+
+					if( "FileReader" in window ){
+						var fileBrowser = event.target;
+
+						var fileReader = new FileReader( );
+
+						fileReader.onload = function onLoad( fileLoadedEvent ){
+							var fileContent = fileLoadedEvent.target.result;
+
+							self.scope.publish( "push-image-data", "image-upload",
+								{
+									"imageDisplaySource": fileContent,
+									"imageFullSource": fileContent
+								} );
+
+							self.setState( {
+								"filePath": ""
+							} );
+						};
+
+						_.each( fileBrowser.files,
+							function onEachFile( file ){
+								fileReader.readAsDataURL( file );
+							} );
+					}
+				},
+
 				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
 					var self = this;
 
-					
+					this.scope.on( "initiate-image-upload",
+						function onInitiateImageUpload( ){
+							var fileBrowserID = self.refs.fileBrowser.props.id;
+
+							var query = [ "#", fileBrowserID ].join( "" );
+							
+							$( query, self.getDOMNode( ) ).click( );
+						} );
+
+					this.scope.on( "show-image-upload",
+						function onShowImageUpload( ){
+							self.scope.publish( "show-image-grid", "image-upload" );
+						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -49,7 +103,7 @@ angular
 				},
 
 				"render": function onRender( ){
-					
+					var filePath = this.state.filePath;
 
 					return; //: @template: template/image-upload.html
 				},
@@ -59,6 +113,12 @@ angular
 				},
 
 				"componentDidMount": function componentDidMount( ){
+					attachImageGrid( {
+						"scope": this.scope,
+						"element": $( ".image-grid", this.getDOMNode( ) ),
+						"namespace": "image-upload"
+					} );
+
 					this.scope.publish( "image-upload-rendered" );
 				}
 			} );

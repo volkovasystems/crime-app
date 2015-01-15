@@ -19,6 +19,8 @@ var scriptList = [
 	"map-marker.js",
 	"map-info-pin.js",
 	"spinner.js",
+	"image-grid.js",
+	"image-upload.js",
 	
 	"zoom-control.js",
 	"locate-control.js",
@@ -75,7 +77,8 @@ var scriptList = [
 	"crime-zoom-control.js",
 	"crime-locate-control.js",
 	"crime-report-control.js",
-	"crime-confirm-location-control.js"
+	"crime-confirm-location-control.js",
+	"crime-image-upload.js"
 ]
 .map( function onEachScriptFile( scriptFile ){
 	return path.resolve( ".", "client", "script", scriptFile );

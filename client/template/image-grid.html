@@ -1,0 +1,14 @@
+<section
+	className="image-grid-container">
+	<div
+		className="image-grid-component"
+		data-layout={ imageGridLayout }
+		style={
+			{
+				"overflowY": "auto",
+				"height": "300px"
+			}
+		}>
+		{ imageList.map( this.onEachImageItem ) }
+	</div>
+</section>
