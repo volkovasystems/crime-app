@@ -3,21 +3,26 @@ angular
 	.module( "ImageUpload", [ 
 		"Event", 
 		"PageFlow",
-		"ImageGrid"
+		"ImageGrid",
+		"ProgressBar"
 	] )
 	
 	.constant( "UPLOAD_IMAGES_PHRASE", labelData.UPLOAD_IMAGES_PHRASE )
 
 	.factory( "ImageUpload", [
+		"ProgressBar",
 		"attachImageGrid",
 		"UPLOAD_IMAGES_PHRASE",
-		function factory( 
+		function factory(
+			ProgressBar, 
 			attachImageGrid,
 			UPLOAD_IMAGES_PHRASE
 		){
 			var ImageUpload = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
+						ProgressBar( scope );
+
 						var imageUploadComponent = (
 							<ImageUpload 
 								scope={ scope }
@@ -32,7 +37,8 @@ angular
 
 				"getInitialState": function getInitialState( ){
 					return {
-						"filePath": ""
+						"filePath": "",
+						"imageList": [ ]
 					};
 				},
 
@@ -62,9 +68,20 @@ angular
 									"imageFullSource": fileContent
 								} );
 
+							var imageList = _.clone( self.state.imageList );
+
+							imageList.push( fileContent );
+
 							self.setState( {
-								"filePath": ""
+								"filePath": "",
+								"imageList": imageList
 							} );
+
+							self.scope.finishLoading( );
+						};
+
+						fileReader.onabort = function onAbort( ){
+							self.scope.finishLoading( );
 						};
 
 						_.each( fileBrowser.files,
@@ -84,11 +101,31 @@ angular
 							var query = [ "#", fileBrowserID ].join( "" );
 							
 							$( query, self.getDOMNode( ) ).click( );
+
+							self.scope.startLoading( );
 						} );
 
 					this.scope.on( "show-image-upload",
 						function onShowImageUpload( ){
 							self.scope.publish( "show-image-grid", "image-upload" );
+						} );
+
+					this.scope.on( "clear-image-upload-data",
+						function onClearImageUploadData( ){
+							self.setState( {
+								"filePath": "",
+								"imageList": [ ]
+							} );
+
+							self.scope.publish( "clear-image-grid-data", "image-upload" );
+						} );
+
+					this.scope.on( "save-image-list",
+						function onSaveImageList( ){
+							self.scope.publish( "upload-image-list", imageList,
+								function onUploadImageList( ){
+
+								} );
 						} );
 				},
 

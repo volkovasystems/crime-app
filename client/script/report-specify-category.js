@@ -13,6 +13,8 @@ angular
 
 	.constant( "SPECIFY_CATEGORY_PROGRESS_LABEL", labelData.SPECIFY_CATEGORY_PROGRESS_LABEL )
 
+	.constant( "UPLOAD_IMAGES_PROGRESS_LABEL", labelData.UPLOAD_IMAGES_PROGRESS_LABEL )
+
 	.constant( "INCIDENT_DETAIL_PROGRESS_LABEL", labelData.INCIDENT_DETAIL_PROGRESS_LABEL )
 
 	.constant( "REPORT_FINAL_PROGRESS_LABEL", labelData.REPORT_FINAL_PROGRESS_LABEL )
@@ -22,6 +24,14 @@ angular
 	.constant( "CANCEL_BUTTON_LABEL", labelData.CANCEL_BUTTON_LABEL )
 
 	.constant( "UPLOAD_IMAGE_BUTTON_LABEL", labelData.UPLOAD_IMAGE_BUTTON_LABEL )
+
+	.constant( "SAVE_IMAGE_BUTTON_LABEL", labelData.SAVE_IMAGE_BUTTON_LABEL )
+
+	.constant( "BACK_BUTTON_LABEL", labelData.BACK_BUTTON_LABEL )
+
+	.constant( "REMOVE_IMAGE_BUTTON_LABEL", labelData.REMOVE_IMAGE_BUTTON_LABEL )
+
+	.constant( "CLEAR_BUTTON_LABEL", labelData.CLEAR_BUTTON_LABEL )
 
 	.constant( "WARN_IF_NO_SELECTED_CATEGORY_PROMPT", labelData.WARN_IF_NO_SELECTED_CATEGORY_PROMPT )
 
@@ -33,11 +43,16 @@ angular
 		"DEFAULT_MAP_ZOOM",
 		"REPORT_HEADER_TITLE",
 		"SPECIFY_CATEGORY_PROGRESS_LABEL",
+		"UPLOAD_IMAGES_PROGRESS_LABEL",
 		"INCIDENT_DETAIL_PROGRESS_LABEL",
 		"REPORT_FINAL_PROGRESS_LABEL",
 		"CONFIRM_BUTTON_LABEL",
 		"CANCEL_BUTTON_LABEL",
 		"UPLOAD_IMAGE_BUTTON_LABEL",
+		"SAVE_IMAGE_BUTTON_LABEL",
+		"BACK_BUTTON_LABEL",
+		"REMOVE_IMAGE_BUTTON_LABEL",
+		"CLEAR_BUTTON_LABEL",
 		"WARN_IF_NO_SELECTED_CATEGORY_PROMPT",
 		function factory( 
 			MapPreview,
@@ -47,11 +62,16 @@ angular
 			DEFAULT_MAP_ZOOM,
 			REPORT_HEADER_TITLE,
 			SPECIFY_CATEGORY_PROGRESS_LABEL,
+			UPLOAD_IMAGES_PROGRESS_LABEL,
 			INCIDENT_DETAIL_PROGRESS_LABEL,
 			REPORT_FINAL_PROGRESS_LABEL,
 			CONFIRM_BUTTON_LABEL,
 			CANCEL_BUTTON_LABEL,
 			UPLOAD_IMAGE_BUTTON_LABEL,
+			SAVE_IMAGE_BUTTON_LABEL,
+			BACK_BUTTON_LABEL,
+			REMOVE_IMAGE_BUTTON_LABEL,
+			CLEAR_BUTTON_LABEL,
 			WARN_IF_NO_SELECTED_CATEGORY_PROMPT
 		){
 			var ReportSpecifyCategory = React.createClass( {
@@ -95,8 +115,46 @@ angular
 					this.scope.publish( "cancel-report-specify-category" );
 				},
 
+				"onClickClear": function onClickClear( ){
+
+				},
+
+				"onClickRemoveImage": function onClickRemoveImage( ){
+
+				},
+
+				"onClickSaveImage": function onClickSaveImage( ){
+					this.scope.publish( "save-image-list" );
+				},
+
+				"onClickBack": function onClickBack( ){
+					$( ".save-image-button", this.getDOMNode( ) ).hide( );
+					$( ".back-button", this.getDOMNode( ) ).hide( );
+					$( ".confirm-button", this.getDOMNode( ) ).show( );
+					$( ".cancel-button", this.getDOMNode( ) ).show( );
+					$( ".specify-category-progress-label", this.getDOMNode( ) ).show( );
+					$( ".upload-images-progress-label", this.getDOMNode( ) ).hide( );
+
+					this.isUploadingImage = false;
+
+					this.scope.publish( "show-case-category-list", "report-specify-category" );
+
+					this.scope.publish( "close-image-upload" );
+				},
+
 				"onClickUploadImage": function onClickUploadImage( ){
-					this.scope.publish( "hide-case-category-list", "report-specify-category" );
+					if( !this.isUploadingImage ){
+						this.scope.publish( "hide-case-category-list", "report-specify-category" );
+
+						$( ".save-image-button", this.getDOMNode( ) ).show( );
+						$( ".back-button", this.getDOMNode( ) ).show( );
+						$( ".confirm-button", this.getDOMNode( ) ).hide( );
+						$( ".cancel-button", this.getDOMNode( ) ).hide( );
+						$( ".specify-category-progress-label", this.getDOMNode( ) ).hide( );
+						$( ".upload-images-progress-label", this.getDOMNode( ) ).show( );
+
+						this.isUploadingImage = true;
+					}
 
 					this.scope.publish( "open-image-upload" );
 				},
@@ -148,6 +206,12 @@ angular
 					this.scope.on( "show-report-specify-category",
 						function onShowReportSpecifyCategory( ){
 							self.scope.publish( "show-case-category-list", "report-specify-category" );
+
+							$( ".remove-image-button", self.getDOMNode( ) ).hide( );
+							$( ".clear-button", self.getDOMNode( ) ).hide( );
+							$( ".save-image-button", self.getDOMNode( ) ).hide( );
+							$( ".back-button", self.getDOMNode( ) ).hide( );
+							$( ".upload-images-progress-label", self.getDOMNode( ) ).hide( );
 						} );
 
 					this.scope.on( "hide-report-specify-category",

@@ -109,6 +109,18 @@ Crime
 		}
 	] )
 
+	.factory( "getMediaAppServerData", [
+		"$rootScope",
+		"resolveURL",
+		function factory( $rootScope, resolveURL ){
+			var getMediaServerData = function getMediaServerData( ){
+				return resolveURL( $rootScope.serverSet.media );
+			};
+
+			return getMediaServerData;
+		}
+	] )
+
 	.run( [
 		"$rootScope",
 		"ProgressBar",

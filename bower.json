@@ -51,7 +51,9 @@
     "xxhash": "https://github.com/pierrec/js-xxhash.git",
     "DotNavigationStyles": "https://github.com/codrops/DotNavigationStyles.git",
     "photoset-grid": "~1.0.1",
-    "photoswipe": "https://github.com/dimsemenov/PhotoSwipe.git#~4.0.3"
+    "photoswipe": "https://github.com/dimsemenov/PhotoSwipe.git#~4.0.3",
+    "image-centering": "https://github.com/volkovasystems/image-centering.git",
+    "jsSHA": "https://github.com/Caligatio/jsSHA.git#~1.5.0"
   },
   "resolutions": {
     "react": "~0.12.0",

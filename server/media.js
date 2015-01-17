@@ -146,7 +146,7 @@ app.post( "/api/:accessID/media/image/upload",
 				}
 			},
 
-			function saveImage( ){
+			function saveImage( imageData ){
 				var newImage = new Image( {
 					"imageID": 			request.param( "imageID" ),
 					"imageReference": 	request.param( "imageReference" ),
@@ -194,7 +194,9 @@ app.post( "/api/:accessID/media/image/upload",
 
 app.get( "/media/image/:imageReference",
 	function onMediaImage( request, response ){
-		
+		var Image = mongoose.model( "Image" );
+
+
 	} );
 
 require( "./start-app.js" ).startApp( app, port, host );

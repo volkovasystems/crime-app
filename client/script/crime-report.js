@@ -12,7 +12,8 @@ Crime
 			ProgressBar, 
 			$http,
 			getReportServerData,
-			getAppServerData
+			getAppServerData,
+			getStaticServerData
 		){
 			var sendReport = function sendReport( scope, callback ){
 				callback = callback || function callback( ){ };

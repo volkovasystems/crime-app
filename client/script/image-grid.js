@@ -1,7 +1,7 @@
 angular
 
 	.module( "ImageGrid", [ "Event", "PageFlow" ] )
-
+	
 	.factory( "ImageGrid", [
 		function factory( ){
 			var ImageGrid = React.createClass( {
@@ -21,7 +21,8 @@ angular
 				"getInitialState": function getInitialState( ){
 					return {
 						"imageList": [ ],
-						"imageGridLayout": ""
+						"imageGridLayout": "",
+						"selectedImageList": [ ]
 					};
 				},
 
@@ -49,16 +50,60 @@ angular
 					
 				},
 
-				"onEachImageItem": function onEachImageItem( imageData ){
+				"onClickImageItem": function onClickImageItem( event ){
+					var selectedImageList = _.clone( this.state.selectedImageList );
+
+					var imageReference = $( event.currentTarget ).attr( "value" );
+
+					if( !_.contains( selectedImageList, imageReference ) ){
+						selectedImageList.push( imageReference );
+
+						this.setState( {
+							"selectedImageList": selectedImageList
+						} );
+
+					}else{
+						selectedImageList = _.without( selectedImageList, imageReference );
+
+						this.setState( {
+							"selectedImageList": selectedImageList
+						} );
+					}
+				},
+
+				"onEachImageItem": function onEachImageItem( imageData, index ){
+					var selectedImageList = this.state.selectedImageList;
+
 					var imageDisplaySource = imageData.imageDisplaySource;
 
 					var imageFullSource = imageData.imageFullSource;
 
-					var width = $( this.getDOMNode( ) ).width( ) / 3;
+					var hashObject = new jsSHA( imageFullSource, "TEXT" );
+					var hash = hashObject.getHash( "SHA-512", "HEX" );
+					var key = hash;
 
-					width = width - 20;
+					var imageReference = hash.substring( 0, 5 );
 
-					width = [ width, "px" ].join( "" );
+					var isSelected = _.contains( selectedImageList, imageReference );
+
+					var size = $( this.getDOMNode( ) ).width( ) / 3;
+
+					size = size - 20;
+
+					size = [ size, "px" ].join( "" );
+
+					if( this.state.imageList.length == ( index + 1 ) ){
+						var self = this;
+
+						var timeout = setTimeout( function onTimeout( ){
+							$( ".image-container img", self.getDOMNode( ) )
+								.imgCentering( {
+									"forceSmart": true
+								} );
+
+							clearTimeout( timeout );
+						}, 0 );
+					}
 
 					return; //: @template: template/image-grid-item.html
 				},
@@ -75,6 +120,15 @@ angular
 
 								self.setState( {
 									"imageList": imageList
+								} );
+							}
+						} );
+
+					this.scope.on( "clear-image-grid-data",
+						function onClearImageGridData( namespace ){
+							if( self.scope.namespace == namespace ){
+								self.setState( {
+									"imageList": [ ]
 								} );
 							}
 						} );

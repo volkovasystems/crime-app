@@ -24,8 +24,12 @@
 				<section 
 					className="prog1 text-active">
 					<p 
-						className="label">
+						className="specify-category-progress-label label">
 						{ SPECIFY_CATEGORY_PROGRESS_LABEL }
+					</p>
+					<p 
+						className="upload-images-progress-label label">
+						{ UPLOAD_IMAGES_PROGRESS_LABEL }
 					</p>
 					<a 
 						href="#">
@@ -93,6 +97,16 @@
 					className="save-image-button btn btn-primary btn-xlarge"
 					onClick={ this.onClickSaveImage }>
 					{ SAVE_IMAGE_BUTTON_LABEL }
+				</button>
+				<button 
+					className="remove-image-button btn btn-primary btn-xlarge"
+					onClick={ this.onClickRemoveImage }>
+					{ REMOVE_IMAGE_BUTTON_LABEL }
+				</button>
+				<button 
+					className="clear-button btn btn-gray btn-xlarge"
+					onClick={ this.onClickClear }>
+					{ CLEAR_BUTTON_LABEL }
 				</button>
 				<button 
 					className="back-button btn btn-gray btn-xlarge"

@@ -21,8 +21,9 @@ database.createDatabase( "Media", "mediadb", host, databasePort,
 			/*:
 				imageID does not change so what we can do here is,
 
-					hash = XXH( filename ) + XXH( timestamp ) + SHA( imageData );
-					imageReference = hash
+					hash = XXH( timestamp ) + SHA( imageData );
+					imageHash = hash
+					imageReference = SHA( hash )
 					imageID = uuid + hash
 
 				imageReference will be used to get the image because
@@ -30,11 +31,11 @@ database.createDatabase( "Media", "mediadb", host, databasePort,
 			*/
 			var image = mongoose.Schema( {
 				"imageID": String,
-				"imageReference": String,
 				"imageHash": String,
+				"imageReference": String,
+				"imageTimestamp": Date,
 				"imageRawData": String,
 				"imageURL": String,
-				"imageTimestamp": Date,
 				"imageBoundReference": [String]
 			} );
 

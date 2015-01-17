@@ -74,5 +74,8 @@ var labelData = {
 
 	"REPORT_NOT_FOUND_PROMPT": "Sorry, the report was not found.",
 
-	"UPLOAD_IMAGES_PHRASE": "Upload your crime scene captures:"
+	"UPLOAD_IMAGES_PHRASE": "Upload your crime scene captures:",
+	"SAVE_IMAGE_BUTTON_LABEL": "Save Image",
+	"BACK_BUTTON_LABEL": "Back",
+	"UPLOAD_IMAGES_PROGRESS_LABEL": "Upload Images"
 };
