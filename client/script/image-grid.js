@@ -22,7 +22,10 @@ angular
 					return {
 						"imageList": [ ],
 						"imageGridLayout": "",
-						"selectedImageList": [ ]
+						"selectedImageList": [ ],
+						"processedImageList": [ ],
+						"failedImageList": [ ],
+						"pendingImageList": [ ]
 					};
 				},
 
@@ -73,8 +76,6 @@ angular
 
 				"onEachImageItem": function onEachImageItem( imageData, index ){
 					var selectedImageList = this.state.selectedImageList;
-
-					var imageDisplaySource = imageData.imageDisplaySource;
 
 					var imageFullSource = imageData.imageFullSource;
 
@@ -129,6 +130,40 @@ angular
 							if( self.scope.namespace == namespace ){
 								self.setState( {
 									"imageList": [ ]
+								} );
+							}
+						} );
+
+					this.scope.on( "set-processed-image",
+						function onSetProcessedImage( namespace, rawImage ){
+							if( self.scope.namespace == namespace ){
+								var hashObject = new jsSHA( rawImage, "TEXT" );
+								var hash = hashObject.getHash( "SHA-512", "HEX" );
+								var imageReference = hash.substring( 0, 5 );
+
+								var processedImageList = _.clone( self.state.processedImageList );
+
+								processedImageList.push( imageReference );
+
+								self.setState( {
+									"processedImageList": processedImageList
+								} );
+							}
+						} );
+
+					this.scope.on( "set-pending-image",
+						function onSetProcessedImage( namespace, rawImage ){
+							if( self.scope.namespace == namespace ){
+								var hashObject = new jsSHA( rawImage, "TEXT" );
+								var hash = hashObject.getHash( "SHA-512", "HEX" );
+								var imageReference = hash.substring( 0, 5 );
+
+								var processedImageList = _.clone( self.state.processedImageList );
+
+								processedImageList.push( imageReference );
+
+								self.setState( {
+									"processedImageList": processedImageList
 								} );
 							}
 						} );

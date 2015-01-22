@@ -525,10 +525,11 @@ app.post( "/user/register",
 					"userAccountType": 			request.param( "userAccountType" ),
 					"userAccountToken": 		request.param( "userAccountToken" ),
 					"userAccountEMail": 		request.param( "userAccountEMail" ),
-					"userAccountCreationTime": 	request.param( "userAccountCreationTime" ),
 					"userProfileName": 			request.param( "userProfileName" ),
 					"userProfileLink": 			request.param( "userProfileLink" ),
-					"userProfileImageURL": 		request.param( "userProfileImageURL" )
+					"userProfileImageURL": 		request.param( "userProfileImageURL" ),
+					"userCreationTimestamp": 	request.param( "userCreationTimestamp" ),
+					"userUpdateTimestamp": 		request.param( "userUpdateTimestamp" )
 				} );
 
 				newUser.save( function onSave( error ){
@@ -648,6 +649,8 @@ app.post( "/user/login",
 				userData.userProfileName = request.param( "userProfileName" );
 
 				userData.userProfileImageURL = request.param( "userProfileImageURL" );
+
+				userData.userUpdateTimestamp = request.param( "userUpdateTimestamp" );
 
 				userData.save( function onSave( error ){
 					//: @todo: This is bad. But we want to ensure that the database already has the saved data.

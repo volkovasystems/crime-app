@@ -4,11 +4,13 @@ Crime
 		"Event",
 		"ProgressBar",
 		"$http",
+		"getMediaServerData",
 		"getStaticServerData",
 		function factory(
 			Event,
 			ProgressBar,
 			$http,
+			getMediaServerData,
 			getStaticServerData
 		){
 			var uploadImageList = function uploadImageList( scope, imageList, callback ){
@@ -63,15 +65,13 @@ Crime
 					},
 
 					function prepareImageList( userData, callback ){
-						var xxHash = XXH( 0xCAFE );
-						
-						var imageList = _.map( imageList,
+						var formattedImageList = _.map( imageList,
 							function onEachImageItem( rawImage ){
 								var imageTimestamp = Date.now( );
 
 								var imageHash = [
-									XXH( imageTimestamp, 0xCAFE ).toString( 16 ),
-									( new jsSHA( rawImage, "TEXT" ) ).getHash( "SHA-512", "HEX" );
+									XXH( imageTimestamp.toString( ), 0xCAFE ).toString( 16 ),
+									( new jsSHA( rawImage, "TEXT" ) ).getHash( "SHA-512", "HEX" )
 								].join( "-" );
 
 								var imageID = [
@@ -97,27 +97,73 @@ Crime
 
 								var imageURL = [
 									currentHostAddress,
-									
-								];
+									"action/get-image/media",
+									imageReference
+								].join( "/" );
 
 								return {
 									"imageTimestamp": imageTimestamp,
 									"imageHash": imageHash,
 									"imageID": imageID,
 									"imageReference": imageReference,
-									"imageRawData": imageRawData
+									"imageRawData": imageRawData,
+									"imageURL": imageURL,
+									"imageBoundReference": [
+										userData.userID
+									]
 								};
 							} );
 
-						callback( null, userData, imageList );
+						callback( null, userData.accessID, formattedImageList );
 					},
 
 					function uploadImageList( accessID, imageList, callback ){
+						var requestEndpoint = getMediaServerData( ).joinPath( "api/:accessID/media/image/upload" );
 
+						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
+
+						var uploaderList = _.map( imageList,
+							function onEachImageData( imageData ){
+								return function uploader( callback ){
+									$http.post( requestEndpoint, imageData )
+										.success( function onSuccess( response, status ){
+											if( response.status == "failed" ){
+												imageData.uploadState = response.data;
+
+												callback( null, imageData );
+
+											}else{
+												imageData.uploadState = true;
+
+												callback( null, imageData );
+											}
+										} )
+										.error( function onError( response, status ){
+											imageData.uploadState = new Error( "error uploading media data" )
+											
+											callback( null, imageData );
+										} );
+								}
+							} );
+
+						async.parallel( uploaderList,
+							function lastly( error, imageList ){
+								callback( error, imageList );
+							} );
 					}
 				],
-					function lastly( ){
+					function lastly( state, imageList ){
+						scope.finishLoading( );
 
+						if( typeof state == "string" ){
+							callback( state )
+
+						}else if( state instanceof Error ){
+							callback( state );
+
+						}else{
+							callback( null, imageList );
+						}
 					} );
 			};
 

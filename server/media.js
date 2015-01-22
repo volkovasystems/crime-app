@@ -3,10 +3,8 @@ require( "./media-data.js" );
 var _ = require( "lodash" );
 var async = require( "async" );
 var argv = require( "yargs" ).argv;
-var bodyParser = require( "body-parser" );
 var express = require( "express" );
 var mongoose = require( "mongoose" );
-var session = require( "express-session" );
 var unirest = require( "unirest" );
 var util = require( "util" );
 

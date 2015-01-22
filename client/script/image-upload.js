@@ -38,7 +38,9 @@ angular
 				"getInitialState": function getInitialState( ){
 					return {
 						"filePath": "",
-						"imageList": [ ]
+						"imageList": [ ],
+						"uploadedImageList": [ ],
+						"failedImageList": [ ]
 					};
 				},
 
@@ -63,10 +65,7 @@ angular
 							var fileContent = fileLoadedEvent.target.result;
 
 							self.scope.publish( "push-image-data", "image-upload",
-								{
-									"imageDisplaySource": fileContent,
-									"imageFullSource": fileContent
-								} );
+								{ "imageFullSource": fileContent } );
 
 							var imageList = _.clone( self.state.imageList );
 
@@ -120,11 +119,52 @@ angular
 							self.scope.publish( "clear-image-grid-data", "image-upload" );
 						} );
 
+					this.scope.on( "clear-all-image-upload-data",
+						function onClearAllImageUploadData( ){
+							self.setState( {
+								"uploadedImageList": [ ],
+								"failedImageList": [ ]
+							} );
+
+							self.scope.publish( "clear-image-upload-data" );
+						} );
+
 					this.scope.on( "save-image-list",
 						function onSaveImageList( ){
-							self.scope.publish( "upload-image-list", imageList,
-								function onUploadImageList( ){
+							var uploadedImageList = _.map( self.state.uploadedImageList,
+								function onEachUploadedImageData( imageData ){
+									return imageData.imageRawData;
+								} );
 
+							var imageList = _.filter( self.state.imageList,
+								funtion onEachImageItem( rawImage ){
+									return !_.contains( uploadedImageList, rawImage );
+								} );
+
+							self.scope.publish( "upload-image-list", imageList,
+								function onUploadImageList( error, imageList ){
+									if( error ){
+
+									}else{
+										var failedImageList = _.filter( imageList,
+											function onEachImageData( imageData ){
+												return imageData.imageStatus !== true;
+											} );
+
+										var successImageList = _.filter( imageList,
+											function onEachImageData( imageData ){
+												return imageData.imageStatus === true;
+											} );
+
+										var uploadedImageList = _.clone( self.state.uploadedImageList );
+
+										uploadedImageList = _.union( uploadedImageList, successImageList );
+
+										self.setState( {
+											"uploadedImageList": uploadedImageList,
+											"failedImageList": failedImageList
+										} );
+									}
 								} );
 						} );
 				},
