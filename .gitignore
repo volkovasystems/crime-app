@@ -15,3 +15,4 @@ reportdb
 appdb
 *.log
 *.db
+*.bat
