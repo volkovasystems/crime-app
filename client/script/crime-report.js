@@ -134,6 +134,31 @@ Crime
 							} );
 					},
 
+					function getReportImageList( userData, reportData, callback ){
+						scope.publish( "get-image-url-list",
+							function onGetImageURLList( error, imageURLList ){
+								if( error ){
+									callback( error );
+
+								}else if( !_.isEmpty( imageURLList ) ){
+									var reportMediaList = _.map( imageURLList,
+										function onEachImageURL( imageURL ){
+											return {
+												"type": "image",
+												"URL": imageURL
+											};
+										} );
+
+									reportData.reportMediaList = reportMediaList;
+
+									callback( null, userData, reportData );
+
+								}else{
+									callback( null, userData, reportData );
+								}
+							} );
+					},
+
 					function applyServerFormat( userData, reportData, callback ){
 						var hashedValue = btoa( JSON.stringify( reportData ) );
 
@@ -205,7 +230,8 @@ Crime
 							"reportAddress": 		reportData.address,
 							"reportReferenceTitle": reportReferenceTitle, 
 							"reportReferenceID": 	reportReferenceID,
-							"reportShareURL": 		reportShareURL
+							"reportShareURL": 		reportShareURL,
+							"reportMediaList": 		reportData.reportMediaList 
 						};
 
 						callback( null, userData, formattedReportData );

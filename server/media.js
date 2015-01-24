@@ -144,7 +144,7 @@ app.post( "/api/:accessID/media/image/upload",
 				}
 			},
 
-			function saveImage( imageData ){
+			function saveImage( callback ){
 				var newImage = new Image( {
 					"imageID": 			request.param( "imageID" ),
 					"imageReference": 	request.param( "imageReference" ),
@@ -163,7 +163,7 @@ app.post( "/api/:accessID/media/image/upload",
 				} );
 			}
 		],
-			function lastly( ){
+			function lastly( state ){
 				if( state === "image-existing" ){
 					response
 						.status( 200 )

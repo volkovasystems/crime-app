@@ -109,7 +109,7 @@ Crime
 		}
 	] )
 
-	.factory( "getMediaAppServerData", [
+	.factory( "getMediaServerData", [
 		"$rootScope",
 		"resolveURL",
 		function factory( $rootScope, resolveURL ){

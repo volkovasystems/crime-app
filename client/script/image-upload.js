@@ -137,7 +137,7 @@ angular
 								} );
 
 							var imageList = _.filter( self.state.imageList,
-								funtion onEachImageItem( rawImage ){
+								function onEachImageItem( rawImage ){
 									return !_.contains( uploadedImageList, rawImage );
 								} );
 
@@ -148,12 +148,12 @@ angular
 									}else{
 										var failedImageList = _.filter( imageList,
 											function onEachImageData( imageData ){
-												return imageData.imageStatus !== true;
+												return imageData.uploadState !== true;
 											} );
 
 										var successImageList = _.filter( imageList,
 											function onEachImageData( imageData ){
-												return imageData.imageStatus === true;
+												return imageData.uploadState === true;
 											} );
 
 										var uploadedImageList = _.clone( self.state.uploadedImageList );
@@ -166,6 +166,16 @@ angular
 										} );
 									}
 								} );
+						} );
+				
+					this.scope.on( "get-image-url-list",
+						function onGetImageURLList( callback ){
+							var imageURLList = _.map( self.state.uploadedImageList,
+								function onEachUploadedImage( imageData ){
+									return imageData.imageURL
+								} );
+
+							callback( null, imageURLList );
 						} );
 				},
 

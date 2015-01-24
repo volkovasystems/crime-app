@@ -139,7 +139,7 @@ Crime
 											}
 										} )
 										.error( function onError( response, status ){
-											imageData.uploadState = new Error( "error uploading media data" )
+											imageData.uploadState = new Error( "error uploading media data" );
 											
 											callback( null, imageData );
 										} );
