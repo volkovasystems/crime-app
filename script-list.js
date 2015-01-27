@@ -19,7 +19,9 @@ var scriptList = [
 	"map-marker.js",
 	"map-info-pin.js",
 	"spinner.js",
+	"image-upload-grid.js",
 	"image-grid.js",
+	"image-swipe.js",
 	"image-upload.js",
 	
 	"zoom-control.js",

@@ -77,5 +77,8 @@ var labelData = {
 	"UPLOAD_IMAGES_PHRASE": "Upload your crime scene captures:",
 	"SAVE_IMAGE_BUTTON_LABEL": "Save Image",
 	"BACK_BUTTON_LABEL": "Back",
-	"UPLOAD_IMAGES_PROGRESS_LABEL": "Upload Images"
+	"UPLOAD_IMAGES_PROGRESS_LABEL": "Upload Images",
+
+	"SHOW_IMAGES_LABEL": "Show Images",
+	"CLOSE_IMAGES_LABEL": "Close Images"
 };

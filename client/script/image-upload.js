@@ -3,7 +3,7 @@ angular
 	.module( "ImageUpload", [ 
 		"Event", 
 		"PageFlow",
-		"ImageGrid",
+		"ImageUploadGrid",
 		"ProgressBar"
 	] )
 	
@@ -11,11 +11,11 @@ angular
 
 	.factory( "ImageUpload", [
 		"ProgressBar",
-		"attachImageGrid",
+		"attachImageUploadGrid",
 		"UPLOAD_IMAGES_PHRASE",
 		function factory(
 			ProgressBar, 
-			attachImageGrid,
+			attachImageUploadGrid,
 			UPLOAD_IMAGES_PHRASE
 		){
 			var ImageUpload = React.createClass( {
@@ -42,10 +42,6 @@ angular
 						"uploadedImageList": [ ],
 						"failedImageList": [ ]
 					};
-				},
-
-				"onClickCloseImageUpload": function onClickCloseImageUpload( event ){
-					
 				},
 
 				"onChangeFileSelection": function onChangeFileSelection( event ){
@@ -106,7 +102,7 @@ angular
 
 					this.scope.on( "show-image-upload",
 						function onShowImageUpload( ){
-							self.scope.publish( "show-image-grid", "image-upload" );
+							self.scope.publish( "show-image-upload-grid", "image-upload" );
 						} );
 
 					this.scope.on( "clear-image-upload-data",
@@ -116,7 +112,7 @@ angular
 								"imageList": [ ]
 							} );
 
-							self.scope.publish( "clear-image-grid-data", "image-upload" );
+							self.scope.publish( "clear-image-upload-grid-data", "image-upload" );
 						} );
 
 					this.scope.on( "clear-all-image-upload-data",
@@ -144,6 +140,7 @@ angular
 							self.scope.publish( "upload-image-list", imageList,
 								function onUploadImageList( error, imageList ){
 									if( error ){
+										//: @todo: Do error prompt here.
 
 									}else{
 										var failedImageList = _.filter( imageList,
@@ -200,9 +197,9 @@ angular
 				},
 
 				"componentDidMount": function componentDidMount( ){
-					attachImageGrid( {
+					attachImageUploadGrid( {
 						"scope": this.scope,
-						"element": $( ".image-grid", this.getDOMNode( ) ),
+						"element": $( ".image-upload-grid", this.getDOMNode( ) ),
 						"namespace": "image-upload"
 					} );
 
@@ -280,4 +277,4 @@ angular
 				}
 			}
 		}
-	] )
+	] );

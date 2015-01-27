@@ -11,15 +11,77 @@
 		style={ {
 			"height": "100%"
 		} }>
+
 		<section 
+			className="close-action pull-right">
+			<a 
+				className="icon md-2x md-close" 
+				href="#"
+				onClick={ this.onClickCloseReportPreview }>
+			</a>
+		</section>
+
+		<section
+			className="image-grid">
+		</section>
+
+		<section
+			className="report-header-image-view">
+			<h4 
+				className="name">
+				{ reportCaseTitle } { REPORT_CASE_TITLE_PHRASE }
+			</h4>
+			<section 
+				className="crime-time-relative">
+				<section 
+					className="time">
+					<span 
+						className="prefix">
+						{ timeFromNowData.prefix }
+					</span>
+					<span 
+						className="digit">
+						{ timeFromNowData.digit }
+					</span>
+					<span 
+						className="unit">
+						{ timeFromNowData.unit }
+					</span>
+					<span 
+						className="suffix">
+						{ timeFromNowData.suffix }
+					</span>
+				</section>
+			</section>
+		</section>
+
+		<section
+			className="report-info-image-view">
+			<div
+				className="icon-container">
+				<img 
+					alt={ reportCaseTitle } 
+					className="img" 
+					src={ categoryIconSource } />
+			</div>
+			<div
+				className="info-container">
+				<p
+					className="title">
+					{ reportTitle }
+				</p>
+				<p
+					className="date-time">
+					{ descriptiveDateAndTime }
+				</p>
+			</div>
+		</section>
+
+		<section
 			className="crime-detail-teaser"
 			style={ {
 				"height": "100%"
 			} }>
-			<section 
-				className="status owned">
-			</section>
-
 			<section 
 				className="teaser">
 				<section 
@@ -46,15 +108,6 @@
 				</section>
 
 				<section 
-					className="close-action pull-right">
-					<a 
-						className="icon md-2x md-close" 
-						href="#"
-						onClick={ this.onClickCloseReportPreview }>
-					</a>
-				</section>
-
-				<section 
 					className="crime-icon">
 					<img 
 						alt={ reportCaseTitle } 
@@ -64,31 +117,13 @@
 
 				<h4 
 					className="name">
-				
 					{ reportCaseTitle } { REPORT_CASE_TITLE_PHRASE }
 				</h4>
 
-				<div 
-					className={ [
-						"navigation",
-						"dotstyle",
-						"dotstyle-circlegrow"
-					].join( " " ) }>
-					<ul>
-						<li 
-							className="current">
-							<a 
-								href="#"
-								onClick={ this.onNavigateMainTeaser }>
-							</a>
-						</li>
-						<li>
-							<a 
-								href="#"
-								onClick={ this.onNavigateImageGallery }>
-							</a>
-						</li>
-					</ul>
+				<div
+					className="show-images-button"
+					onClick={ this.onClickShowImages }>
+					{ SHOW_IMAGES_LABEL }
 				</div>
 			</section>
 
@@ -119,25 +154,34 @@
 			<section
 				className="report-sharing">
 			</section>
+		</section>
 
-			<section 
-				className="action"
+		<section 
+			className="action"
+			style={ {
+				"position": "absolute",
+				"bottom": "0px",
+				"width": "100%"
+			} }>
+			<button 
+				className="more-detail-button btn btn-large btn-gray"
 				style={ {
-					"position": "absolute",
-					"bottom": "0px",
-					"width": "100%"
-				} }>
-				<button 
-					className="btn btn-large btn-gray"
-					style={ {
-						"width": "100%",
-						"padding": "5px"
-					} }
-					
-					onClick={ this.onClickMoreDetail }>
-					{ MORE_DETAIL_LABEL }
-				</button>
-			</section>
+					"width": "100%",
+					"padding": "5px"
+				} }
+				onClick={ this.onClickMoreDetail }>
+				{ MORE_DETAIL_LABEL }
+			</button>
+
+			<button 
+				className="close-images-button btn btn-large btn-gray"
+				style={ {
+					"width": "100%",
+					"padding": "5px"
+				} }
+				onClick={ this.onClickCloseImages }>
+				{ CLOSE_IMAGES_LABEL }
+			</button>
 		</section>
 	</section>
 </section>

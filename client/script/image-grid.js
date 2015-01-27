@@ -20,29 +20,85 @@ angular
 
 				"getInitialState": function getInitialState( ){
 					return {
-						"imageList": [ ],
-						"imageGridLayout": "",
-						"selectedImageList": [ ],
-						"processedImageList": [ ],
-						"failedImageList": [ ],
-						"pendingImageList": [ ]
+						"imageList": [ 
+							{
+								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/nyc1-highres.jpg"
+							},
+							{
+								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/nyc2-500px.jpg"
+							},
+							{
+								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/nyc3-500px.jpg"
+							},
+							{
+								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/print1-500px.jpg"
+							},
+							/*{
+								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/print3-highres.jpg"
+							},
+							{
+								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/withhearts5-highres.jpg"
+							},
+							{
+								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/withhearts4-500px.jpg"
+							},
+							{
+								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/withhearts2-500px.jpg"
+							}*/
+						],
+						"imageGridLayout": ""
 					};
 				},
 
-				"updateImageGridLayout": function updateImageGridLayout( ){
-					var imageCount = this.state.imageList.length;
+				"updateImageGridLayout": function updateImageGridLayout( imageCount ){
+					var imageCount = imageCount || this.state.imageList.length;
 
-					var countFactor = Math.floor( imageCount / 3 );
+					var layoutList = [ ];
 
-					var remainingFactor = imageCount % 3;
+					
 
-					if( remainingFactor != 0 ){
-						countFactor += 1;
+					switch( imageCount ){
+						case 1:
+							layoutList = [ 1 ];
+							break;
+
+						case 2:
+							layoutList = [ 1, 1 ];
+							break;
+
+						case 3:
+							layoutList = [ 1, 2 ];
+							break;
+
+						case 4:
+							layoutList = [ 2, 2 ];
+							break;
+
+						case 5:
+							layoutList = [ 1, 2, 2 ];
+							break;
+
+						case 6:
+							layoutList = [ 1, 2, 3 ];
+							break;
+
+						default:
+							var reducer = 3;
+							do{
+								if( imageCount && imageCount >= reducer ){
+									layoutList.push( reducer );
+
+									imageCount -= reducer;
+
+								}else{
+									reducer--;
+								}
+
+							}while( imageCount && reducer );		
 					}
+					
 
-					var imageGridLayout = ( new Array( countFactor + 1 ) ).join( "3" );
-
-					var self = this;
+					var imageGridLayout = layoutList.join( "" );
 
 					this.setState( {
 						"imageGridLayout": imageGridLayout
@@ -54,29 +110,10 @@ angular
 				},
 
 				"onClickImageItem": function onClickImageItem( event ){
-					var selectedImageList = _.clone( this.state.selectedImageList );
-
-					var imageReference = $( event.currentTarget ).attr( "value" );
-
-					if( !_.contains( selectedImageList, imageReference ) ){
-						selectedImageList.push( imageReference );
-
-						this.setState( {
-							"selectedImageList": selectedImageList
-						} );
-
-					}else{
-						selectedImageList = _.without( selectedImageList, imageReference );
-
-						this.setState( {
-							"selectedImageList": selectedImageList
-						} );
-					}
+					
 				},
 
 				"onEachImageItem": function onEachImageItem( imageData, index ){
-					var selectedImageList = this.state.selectedImageList;
-
 					var imageFullSource = imageData.imageFullSource;
 
 					var hashObject = new jsSHA( imageFullSource, "TEXT" );
@@ -85,22 +122,16 @@ angular
 
 					var imageReference = hash.substring( 0, 5 );
 
-					var isSelected = _.contains( selectedImageList, imageReference );
-
-					var size = $( this.getDOMNode( ) ).width( ) / 3;
-
-					size = size - 20;
-
-					size = [ size, "px" ].join( "" );
-
 					if( this.state.imageList.length == ( index + 1 ) ){
 						var self = this;
 
 						var timeout = setTimeout( function onTimeout( ){
-							$( ".image-container img", self.getDOMNode( ) )
-								.imgCentering( {
-									"forceSmart": true
-								} );
+							$( self.getDOMNode( ) ).photosetGrid( );
+
+							$( self.getDOMNode( ) ).mCustomScrollbar( {
+								"theme": "minimal-dark",
+								"setHeight": 300
+							} );
 
 							clearTimeout( timeout );
 						}, 0 );
@@ -124,49 +155,6 @@ angular
 								} );
 							}
 						} );
-
-					this.scope.on( "clear-image-grid-data",
-						function onClearImageGridData( namespace ){
-							if( self.scope.namespace == namespace ){
-								self.setState( {
-									"imageList": [ ]
-								} );
-							}
-						} );
-
-					this.scope.on( "set-processed-image",
-						function onSetProcessedImage( namespace, rawImage ){
-							if( self.scope.namespace == namespace ){
-								var hashObject = new jsSHA( rawImage, "TEXT" );
-								var hash = hashObject.getHash( "SHA-512", "HEX" );
-								var imageReference = hash.substring( 0, 5 );
-
-								var processedImageList = _.clone( self.state.processedImageList );
-
-								processedImageList.push( imageReference );
-
-								self.setState( {
-									"processedImageList": processedImageList
-								} );
-							}
-						} );
-
-					this.scope.on( "set-pending-image",
-						function onSetProcessedImage( namespace, rawImage ){
-							if( self.scope.namespace == namespace ){
-								var hashObject = new jsSHA( rawImage, "TEXT" );
-								var hash = hashObject.getHash( "SHA-512", "HEX" );
-								var imageReference = hash.substring( 0, 5 );
-
-								var processedImageList = _.clone( self.state.processedImageList );
-
-								processedImageList.push( imageReference );
-
-								self.setState( {
-									"processedImageList": processedImageList
-								} );
-							}
-						} );
 				},
 
 				"componentWillMount": function componentWillMount( ){
@@ -176,16 +164,9 @@ angular
 				},
 
 				"componentWillUpdate": function componentWillUpdate( nextProps, nextState ){
-					/*if( !_.isEqual( nextState.imageList, this.state.imageList ) ){
-						$( ".image-grid-component", this.getDOMNode( ) ).removeData( );
-						
-						$( "img", this.getDOMNode( ) ).removeData( );
-
-						$( "img", this.getDOMNode( ) ).detach( )
-							.appendTo( $( ".image-grid-component", this.getDOMNode( ) ) );
-
-						$( ".photoset-row", this.getDOMNode( ) ).remove( );
-					}*/
+					if( !_.isEqual( this.state.imageList, nextState.imageList ) ){
+						this.updateImageGridLayout( nextState.imageList.length );
+					}
 				},
 
 				"render": function onRender( ){
@@ -197,18 +178,12 @@ angular
 				},
 
 				"componentDidUpdate": function componentDidUpdate( prevProps, prevState ){
-					/*if( !_.isEqual( prevState.imageList, this.state.imageList ) ){
-						this.updateImageGridLayout( );
 
-						$( ".image-grid-component", this.getDOMNode( ) )
-							.photosetGrid( {
-								"layout": this.state.imageGridLayout,
-								"width": [ $( this.getDOMNode( ) ).width( ) / 3, "px" ].join( "" )
-							} );
-					}*/
 				},
 
 				"componentDidMount": function componentDidMount( ){
+					this.updateImageGridLayout( this.state.imageList.length );
+
 					this.scope.publish( "image-grid-rendered" );
 				}
 			} );
@@ -277,12 +252,19 @@ angular
 	.directive( "imageGrid", [
 		"attachImageGrid",
 		function directive( attachImageGrid ){
-			attachImageGrid( {
-				"scope": scope,
-				"element": element,
-				"attributeSet": attributeSet,
-				"embedState": "no-embed",
-				"namespace": "image-grid"
-			} );
+			return {
+				"restrict": "EA",
+				"scope": true,
+				"priority": 3,
+				"link": function onLink( scope, element, attributeSet ){
+					attachImageGrid( {
+						"scope": scope,
+						"element": element,
+						"attributeSet": attributeSet,
+						"embedState": "no-embed",
+						"namespace": "image-grid"
+					} );
+				}
+			};
 		}
 	] );

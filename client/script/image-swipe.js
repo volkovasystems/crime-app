@@ -4,7 +4,7 @@ angular
 
 	.factory( "ImageSwipe", [
 		function factory( ){
-			var ImageSwipe = function ImageSwipe( ){
+			var ImageSwipe = React.createClass( {
 				"statics": {
 					"attach": function attach( scope, container ){
 						var imageSwipeComponent = (
@@ -56,7 +56,7 @@ angular
 				"componentDidMount": function componentDidMount( ){
 					this.scope.publish( "image-swipe-rendered" );
 				}
-			};
+			} );
 
 			return ImageSwipe;
 		}
@@ -118,6 +118,19 @@ angular
 	.directive( "imageSwipe", [
 		"attachImageSwipe",
 		function directive( attachImageSwipe ){
-			
+			return {
+				"restrict": "EA",
+				"scope": true,
+				"priority": 3,
+				"link": function onLink( scope, element, attributeSet ){
+					attachImageSwipe( {
+						"scope": scope,
+						"element": element,
+						"attributeSet": attributeSet,
+						"embedState": "no-embed",
+						"namespace": "image-swipe"
+					} );
+				}
+			};
 		}
 	] );

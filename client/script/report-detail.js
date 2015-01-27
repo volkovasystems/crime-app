@@ -46,6 +46,10 @@ angular
 					}
 				},
 
+				"onClickShowImages": function onClickShowImages( ){
+					$( ".crime-detail-teaser", this.getDOMNode( ) ).hide( );
+				},
+
 				"onClickCloseReportDetail": function onClickCloseReportDetail( ){
 					this.scope.publish( "close-report-detail", this.props.reportDetailID, true );
 				},
@@ -148,11 +152,6 @@ angular
 						"element": $( ".report-sharing", this.getDOMNode( ) ),
 						"namespace": reportDetailID
 					} );
-
-					$( ".dotstyle > ul", this.getDOMNode( ) )
-						.each( function onEachDot( ){
-							new DotNav( $( this )[ 0 ] );
-						} );
 
 					var container = this.props.container;
 

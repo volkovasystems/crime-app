@@ -1,4 +1,11 @@
-angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
+angular
+	
+	.module( "ReportPreview", [ 
+		"Event", 
+		"PageFlow", 
+		"ReportSharing",
+		"ImageGrid"
+	] )
 	
 	.constant( "REPORT_CASE_TITLE_PHRASE", labelData.REPORT_CASE_TITLE_PHRASE )
 
@@ -8,18 +15,28 @@ angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 
 	.constant( "MORE_DETAIL_LABEL", labelData.MORE_DETAIL_LABEL )
 
+	.constant( "SHOW_IMAGES_LABEL", labelData.SHOW_IMAGES_LABEL )
+
+	.constant( "CLOSE_IMAGES_LABEL", labelData.CLOSE_IMAGES_LABEL )
+
 	.factory( "ReportPreview", [
 		"attachReportSharing",
+		"attachImageGrid",
 		"REPORT_CASE_TITLE_PHRASE",
 		"DATE_AND_TIME_LABEL",
 		"REPORT_TITLE_LABEL",
 		"MORE_DETAIL_LABEL",
+		"SHOW_IMAGES_LABEL",
+		"CLOSE_IMAGES_LABEL",
 		function factory(
 			attachReportSharing,
+			attachImageGrid,
 			REPORT_CASE_TITLE_PHRASE,
 			DATE_AND_TIME_LABEL,
 			REPORT_TITLE_LABEL,
-			MORE_DETAIL_LABEL
+			MORE_DETAIL_LABEL,
+			SHOW_IMAGES_LABEL,
+			CLOSE_IMAGES_LABEL
 		){
 			var ReportPreview = React.createClass( {
 				"statics": {
@@ -36,6 +53,34 @@ angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 
 						return this;
 					}
+				},
+
+				"onClickCloseImages": function onClickCloseImages( ){
+					$( ".crime-detail-teaser", this.getDOMNode( ) ).show( );
+
+					$( ".close-images-button", this.getDOMNode( ) ).hide( );
+
+					$( ".more-detail-button", this.getDOMNode( ) ).show( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+				},
+
+				"onClickShowImages": function onClickShowImages( ){
+					$( ".crime-detail-teaser", this.getDOMNode( ) ).hide( );
+
+					$( ".close-images-button", this.getDOMNode( ) ).show( );
+
+					$( ".more-detail-button", this.getDOMNode( ) ).hide( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "visible" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "visible" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "visible" );
 				},
 
 				"onClickCloseReportPreview": function onClickCloseReportPreview( ){
@@ -141,12 +186,21 @@ angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 						"namespace": reportPreviewID
 					} );
 
-					$( ".dotstyle > ul", this.getDOMNode( ) )
-						.each( function onEachDot( ){
-							new DotNav( $( this )[ 0 ] );
-						} );
+					attachImageGrid( {
+						"scope": this.scope,
+						"element": $( ".image-grid", this.getDOMNode( ) ),
+						"namespace": reportPreviewID
+					} );
 					
 					var container = this.props.container;
+
+					$( ".close-images-button", this.getDOMNode( ) ).hide( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
 
 					this.scope.publish( "report-preview-rendered", reportPreviewID, container );
 				}

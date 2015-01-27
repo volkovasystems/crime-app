@@ -17,10 +17,6 @@
 				"height": "100%"
 			} }>
 			<section 
-				className="status owned">
-			</section>
-
-			<section 
 				className="teaser">
 				<section 
 					className="crime-time-relative">
@@ -67,27 +63,10 @@
 					{ reportCaseTitle } { REPORT_CASE_TITLE_PHRASE }
 				</h4>
 
-				<div 
-					className={ [
-						"navigation",
-						"dotstyle",
-						"dotstyle-circlegrow"
-					].join( " " ) }>
-					<ul>
-						<li 
-							className="current">
-							<a 
-								href="#"
-								onClick={ this.onNavigateMainTeaser }>
-							</a>
-						</li>
-						<li>
-							<a 
-								href="#"
-								onClick={ this.onNavigateImageGallery }>
-							</a>
-						</li>
-					</ul>
+				<div
+					className="show-images-button"
+					onClick={ this.onClickShowImages }>
+					Show Images
 				</div>
 			</section>
 
@@ -103,7 +82,6 @@
 					pinIconURL={ categoryIconPinSource }
 					height={ 250 }
 					width={ 600 } />
-				
 			</section>
 
 			<section 
