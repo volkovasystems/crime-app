@@ -31,6 +31,7 @@ var labelData = {
 	"REPORT_CONTROL_LABEL": "Report a Crime",
 	"CONFIRM_LOCATION_CONTROL_LABEL": "Confirm",
 	"CANCEL_LOCATION_CONTROL_LABEL": "Cancel",
+	"UPLOAD_IMAGE_BUTTON_LABEL": "Upload Image",
 
 	"REPORT_CASE_TITLE_PHRASE": "Incident",
 	"DATE_AND_TIME_LABEL": "Date and Time",
@@ -72,5 +73,13 @@ var labelData = {
 
 	"CASE_CATEGORY_FILTER_HEADER_LABEL": "Crime Category Filter",
 
-	"REPORT_NOT_FOUND_PROMPT": "Sorry, the report was not found."
+	"REPORT_NOT_FOUND_PROMPT": "Sorry, the report was not found.",
+
+	"UPLOAD_IMAGES_PHRASE": "Upload your crime scene captures:",
+	"SAVE_IMAGE_BUTTON_LABEL": "Save Image",
+	"BACK_BUTTON_LABEL": "Back",
+	"UPLOAD_IMAGES_PROGRESS_LABEL": "Upload Images",
+
+	"SHOW_IMAGES_LABEL": "Show Images",
+	"CLOSE_IMAGES_LABEL": "Close Images"
 };

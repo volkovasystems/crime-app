@@ -191,6 +191,8 @@ Crime
 
 						var hashedValue = btoa( JSON.stringify( userData ) ).replace( /[^A-Za-z0-9]/g, "" );
 
+						var timestamp = Date.now( );
+
 						var formattedUserData = {
 							"userID": 					hashedValue,
 							"userAccountID": 			userAccountData.userID,
@@ -200,7 +202,8 @@ Crime
 							"userProfileName": 			userProfileData.profileName,
 							"userProfileLink": 			userProfileData.profileURL,
 							"userProfileImageURL": 		userProfileData.profileImage,
-							"userCreationTimestamp": 	Date.now( )
+							"userCreationTimestamp": 	timestamp,
+							"userUpdateTimestamp": 		timestamp
 						};
 
 						callback( null, formattedUserData );

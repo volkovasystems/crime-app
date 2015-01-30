@@ -18,10 +18,25 @@ database.createDatabase( "Media", "mediadb", host, databasePort,
 
 			mongoose.connect( connectionString );	
 
+			/*:
+				imageID does not change so what we can do here is,
+
+					hash = XXH( timestamp ) + SHA( imageData );
+					imageHash = hash
+					imageReference = SHA( hash )
+					imageID = uuid + hash
+
+				imageReference will be used to get the image because
+					it tends to change.
+			*/
 			var image = mongoose.Schema( {
 				"imageID": String,
-				"imageData": String,
-				"imageURL": String
+				"imageHash": String,
+				"imageReference": String,
+				"imageTimestamp": Date,
+				"imageRawData": String,
+				"imageURL": String,
+				"imageBoundReference": [String]
 			} );
 
 			mongoose.model( "Image", image );

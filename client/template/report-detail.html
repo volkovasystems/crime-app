@@ -17,10 +17,6 @@
 				"height": "100%"
 			} }>
 			<section 
-				className="status owned">
-			</section>
-
-			<section 
 				className="teaser">
 				<section 
 					className="crime-time-relative">
@@ -66,6 +62,12 @@
 					className="name">
 					{ reportCaseTitle } { REPORT_CASE_TITLE_PHRASE }
 				</h4>
+
+				<div
+					className="show-images-button"
+					onClick={ this.onClickShowImages }>
+					Show Images
+				</div>
 			</section>
 
 			<section 
@@ -80,7 +82,6 @@
 					pinIconURL={ categoryIconPinSource }
 					height={ 250 }
 					width={ 600 } />
-				
 			</section>
 
 			<section 

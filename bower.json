@@ -47,7 +47,13 @@
     "URIjs": "https://github.com/medialize/URI.js.git#~1.14.1",
     "history.js": "https://github.com/browserstate/history.js.git#~1.8.0",
     "material-design-iconic-font": "https://github.com/zavoloklom/material-design-iconic-font.git#~1.0.1",
-    "tablesaw": "https://github.com/filamentgroup/tablesaw.git"
+    "tablesaw": "https://github.com/filamentgroup/tablesaw.git",
+    "xxhash": "https://github.com/pierrec/js-xxhash.git",
+    "photoset-grid": "~1.0.1",
+    "photoswipe": "https://github.com/dimsemenov/PhotoSwipe.git#~4.0.3",
+    "image-centering": "https://github.com/volkovasystems/image-centering.git",
+    "jsSHA": "https://github.com/Caligatio/jsSHA.git#~1.5.0",
+    "malihu-custom-scrollbar-plugin": "~3.0.7"
   },
   "resolutions": {
     "react": "~0.12.0",

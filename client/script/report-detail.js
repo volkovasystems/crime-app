@@ -46,6 +46,10 @@ angular
 					}
 				},
 
+				"onClickShowImages": function onClickShowImages( ){
+					$( ".crime-detail-teaser", this.getDOMNode( ) ).hide( );
+				},
+
 				"onClickCloseReportDetail": function onClickCloseReportDetail( ){
 					this.scope.publish( "close-report-detail", this.props.reportDetailID, true );
 				},
@@ -149,7 +153,7 @@ angular
 						"namespace": reportDetailID
 					} );
 
-					var container = this.props.container
+					var container = this.props.container;
 
 					this.scope.publish( "report-detail-rendered", reportDetailID, container );
 				}

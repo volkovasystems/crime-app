@@ -42,7 +42,7 @@ if( argv.production ){
 var googleURLShortenerAPIURL = "https://www.googleapis.com/urlshortener/v1/url?key=@googleAPIKey"
 	.replace( "@googleAPIKey", googleAPIKey );
 
-const DEFAULT_MAXIMUM_DISTANCE = 500;
+const DEFAULT_MAXIMUM_DISTANCE = 50000;
 
 const EARTH_RADIUS_RADIAN = 6371;
 
@@ -706,7 +706,6 @@ app.get( "/api/:accessID/report/get/all/near/:reporterID",
 
 		if( latitude && longitude ){
 			Report
-			
 				.find( {
 					"reporterID": request.param( "reporterID" ),
 					"reportLocation.coordinate": {
@@ -825,7 +824,8 @@ app.post( "/api/:accessID/report/add",
 					"reportAddress": 		request.param( "reportAddress" ),
 					"reportReferenceID": 	request.param( "reportReferenceID" ),
 					"reportShareURL": 		request.param( "reportShareURL" ),
-					"reportReferenceTitle": request.param( "reportReferenceTitle" )
+					"reportReferenceTitle": request.param( "reportReferenceTitle" ),
+					"reportMediaList": 		request.param( "reportMediaList" )
 				} );
 
 				newReport.save( function onSave( error ){
@@ -914,6 +914,8 @@ app.post( "/api/:accessID/report/:reportID/update",
 				reportData.reportShareURL = request.param( "reportShareURL" ) || reportData.reportShareURL;
 
 				reportData.reportReferenceTitle = request.param( "reportReferenceTitle" ) || reportData.reportReferenceTitle;
+
+				reportData.reportMediaList = request.param( "reportMediaList" ) || reportData.reportMediaList;
 
 				reportData.save( function onSave( error ){
 					//: @todo: This is bad. But we want to ensure that the database already has the saved data.
