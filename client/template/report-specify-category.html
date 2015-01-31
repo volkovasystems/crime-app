@@ -24,8 +24,12 @@
 				<section 
 					className="prog1 text-active">
 					<p 
-						className="label">
+						className="specify-category-progress-label label">
 						{ SPECIFY_CATEGORY_PROGRESS_LABEL }
+					</p>
+					<p 
+						className="upload-images-progress-label label">
+						{ UPLOAD_IMAGES_PROGRESS_LABEL }
 					</p>
 					<a 
 						href="#">
@@ -77,17 +81,45 @@
 		<section 
 			className="card-body form">
 			<section 
+				className="image-upload">
+			</section>
+			<section 
 				className="case-category-list">
 			</section>
 			<section 
 				className="form-actions">
 				<button 
-					className="btn btn-primary btn-xlarge"
+					className="image-upload-button btn btn-gray btn-xlarge float-left"
+					onClick={ this.onClickUploadImage }>
+					{ UPLOAD_IMAGE_BUTTON_LABEL }
+				</button>
+				<button 
+					className="save-image-button btn btn-primary btn-xlarge"
+					onClick={ this.onClickSaveImage }>
+					{ SAVE_IMAGE_BUTTON_LABEL }
+				</button>
+				<button 
+					className="remove-image-button btn btn-primary btn-xlarge"
+					onClick={ this.onClickRemoveImage }>
+					{ REMOVE_IMAGE_BUTTON_LABEL }
+				</button>
+				<button 
+					className="clear-button btn btn-gray btn-xlarge"
+					onClick={ this.onClickClear }>
+					{ CLEAR_BUTTON_LABEL }
+				</button>
+				<button 
+					className="back-button btn btn-gray btn-xlarge"
+					onClick={ this.onClickBack }>
+					{ BACK_BUTTON_LABEL }
+				</button>
+				<button 
+					className="confirm-button btn btn-primary btn-xlarge"
 					onClick={ this.onClickConfirm }>
 					{ CONFIRM_BUTTON_LABEL }
 				</button>
 				<button 
-					className="btn btn-gray btn-xlarge"
+					className="cancel-button btn btn-gray btn-xlarge"
 					onClick={ this.onClickCancel }>
 					{ CANCEL_BUTTON_LABEL }
 				</button>

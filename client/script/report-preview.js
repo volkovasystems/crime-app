@@ -1,4 +1,11 @@
-angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
+angular
+	
+	.module( "ReportPreview", [ 
+		"Event", 
+		"PageFlow", 
+		"ReportSharing",
+		"ImageGrid"
+	] )
 	
 	.constant( "REPORT_CASE_TITLE_PHRASE", labelData.REPORT_CASE_TITLE_PHRASE )
 
@@ -8,18 +15,28 @@ angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 
 	.constant( "MORE_DETAIL_LABEL", labelData.MORE_DETAIL_LABEL )
 
+	.constant( "SHOW_IMAGES_LABEL", labelData.SHOW_IMAGES_LABEL )
+
+	.constant( "CLOSE_IMAGES_LABEL", labelData.CLOSE_IMAGES_LABEL )
+
 	.factory( "ReportPreview", [
 		"attachReportSharing",
+		"attachImageGrid",
 		"REPORT_CASE_TITLE_PHRASE",
 		"DATE_AND_TIME_LABEL",
 		"REPORT_TITLE_LABEL",
 		"MORE_DETAIL_LABEL",
+		"SHOW_IMAGES_LABEL",
+		"CLOSE_IMAGES_LABEL",
 		function factory(
 			attachReportSharing,
+			attachImageGrid,
 			REPORT_CASE_TITLE_PHRASE,
 			DATE_AND_TIME_LABEL,
 			REPORT_TITLE_LABEL,
-			MORE_DETAIL_LABEL
+			MORE_DETAIL_LABEL,
+			SHOW_IMAGES_LABEL,
+			CLOSE_IMAGES_LABEL
 		){
 			var ReportPreview = React.createClass( {
 				"statics": {
@@ -36,6 +53,34 @@ angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 
 						return this;
 					}
+				},
+
+				"onClickCloseImages": function onClickCloseImages( ){
+					$( ".crime-detail-teaser", this.getDOMNode( ) ).show( );
+
+					$( ".close-images-button", this.getDOMNode( ) ).hide( );
+
+					$( ".more-detail-button", this.getDOMNode( ) ).show( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+				},
+
+				"onClickShowImages": function onClickShowImages( ){
+					$( ".crime-detail-teaser", this.getDOMNode( ) ).hide( );
+
+					$( ".close-images-button", this.getDOMNode( ) ).show( );
+
+					$( ".more-detail-button", this.getDOMNode( ) ).hide( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "visible" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "visible" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "visible" );
 				},
 
 				"onClickCloseReportPreview": function onClickCloseReportPreview( ){
@@ -58,9 +103,62 @@ angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 						"reportData": { }
 					};
 				},
+
+				"loadImageList": function loadImageList( ){
+					var reportMediaList = this.state.reportData.reportMediaList;
+
+					reportMediaList = reportMediaList || this.props.reportData.reportMediaList;
+
+					if( !_.isEmpty( reportMediaList ) ){
+						var imageList = _.filter( reportMediaList,
+							function onEachMediaItem( mediaData ){
+								return mediaData.type == "image";
+							} );
+
+						var self = this;
+						this.scope.publish( "download-image-list", imageList,
+							function onDownloadImageList( error, rawImageList ){
+								if( error ){
+
+								}else{
+									var reportPreviewID = self.props.reportPreviewID;
+									
+									var imageList = _.map( rawImageList,
+										function onEachRawImage( rawImage ){
+											return {
+												"imageFullSource": rawImage
+											};
+										} );
+
+									attachImageGrid( {
+										"scope": self.scope,
+										"element": $( ".image-grid", self.getDOMNode( ) ),
+										"namespace": reportPreviewID,
+										"imageList": imageList
+									} );
+								}
+							} );
+					
+					}else{
+						$( ".show-images-button", this.getDOMNode( ) ).hide( );	
+					}
+				},
+
+				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+					var self = this;
+
+					this.scope.on( "show-report-preview",
+						function onShowReportPreview( reportPreviewID ){
+							if( self.props.reportPreviewID == reportPreviewID ){
+								self.loadImageList( );				
+							}
+						} );
+				},
 				
 				"componentWillMount": function componentWillMount( ){
 					this.scope = this.props.scope;
+
+					this.attachAllComponentEventListener( );
 				},
 
 				"shouldComponentUpdate": function shouldComponentUpdate( nextProps, nextState ){
@@ -141,7 +239,15 @@ angular.module( "ReportPreview", [ "Event", "PageFlow", "ReportSharing" ] )
 						"namespace": reportPreviewID
 					} );
 					
-					var container = this.props.container
+					var container = this.props.container;
+
+					$( ".close-images-button", this.getDOMNode( ) ).hide( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
 
 					this.scope.publish( "report-preview-rendered", reportPreviewID, container );
 				}

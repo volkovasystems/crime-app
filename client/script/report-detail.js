@@ -1,6 +1,12 @@
 angular
 	
-	.module( "ReportDetail", [ "Event", "PageFlow", "MapPreview", "ReportSharing" ] )
+	.module( "ReportDetail", [ 
+		"Event", 
+		"PageFlow", 
+		"MapPreview", 
+		"ReportSharing",
+		"ImageGrid"
+	] )
 	
 	.constant( "REPORT_CASE_TITLE_PHRASE", labelData.REPORT_CASE_TITLE_PHRASE )
 
@@ -12,22 +18,32 @@ angular
 
 	.constant( "LESS_DETAIL_LABEL", labelData.LESS_DETAIL_LABEL )
 
+	.constant( "SHOW_IMAGES_LABEL", labelData.SHOW_IMAGES_LABEL )
+
+	.constant( "CLOSE_IMAGES_LABEL", labelData.CLOSE_IMAGES_LABEL )
+
 	.factory( "ReportDetail", [
 		"MapPreview",
 		"attachReportSharing",
+		"attachImageGrid",
 		"REPORT_CASE_TITLE_PHRASE",
 		"DATE_AND_TIME_LABEL",
 		"REPORT_TITLE_LABEL",
 		"REPORT_DETAIL_LABEL",
 		"LESS_DETAIL_LABEL",
+		"SHOW_IMAGES_LABEL",
+		"CLOSE_IMAGES_LABEL",
 		function factory( 
 			MapPreview,
 			attachReportSharing,
+			attachImageGrid,
 			REPORT_CASE_TITLE_PHRASE,
 			DATE_AND_TIME_LABEL,
 			REPORT_TITLE_LABEL,
 			REPORT_DETAIL_LABEL,
-			LESS_DETAIL_LABEL
+			LESS_DETAIL_LABEL,
+			SHOW_IMAGES_LABEL,
+			CLOSE_IMAGES_LABEL
 		){
 			var ReportDetail = React.createClass( {
 				"statics": {
@@ -44,6 +60,38 @@ angular
 
 						return this;
 					}
+				},
+
+				"onClickCloseImages": function onClickCloseImages( ){
+					$( ".crime-detail-teaser", this.getDOMNode( ) ).show( );
+
+					$( ".close-images-button", this.getDOMNode( ) ).hide( );
+
+					$( ".less-detail-button", this.getDOMNode( ) ).show( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".location-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+				},
+
+				"onClickShowImages": function onClickShowImages( ){
+					$( ".crime-detail-teaser", this.getDOMNode( ) ).hide( );
+
+					$( ".close-images-button", this.getDOMNode( ) ).show( );
+
+					$( ".less-detail-button", this.getDOMNode( ) ).hide( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "visible" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "visible" );
+
+					$( ".location-image-view", this.getDOMNode( ) ).css( "visibility", "visible" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "visible" );
 				},
 
 				"onClickCloseReportDetail": function onClickCloseReportDetail( ){
@@ -66,9 +114,62 @@ angular
 						"reportData": { }
 					};
 				},
-				
+
+				"loadImageList": function loadImageList( ){
+					var reportMediaList = this.state.reportData.reportMediaList;
+
+					reportMediaList = reportMediaList || this.props.reportData.reportMediaList;
+
+					if( !_.isEmpty( reportMediaList ) ){
+						var imageList = _.filter( reportMediaList,
+							function onEachMediaItem( mediaData ){
+								return mediaData.type == "image";
+							} );
+
+						var self = this;
+						this.scope.publish( "download-image-list", imageList,
+							function onDownloadImageList( error, rawImageList ){
+								if( error ){
+
+								}else{
+									var reportDetailID = self.props.reportDetailID;
+									
+									var imageList = _.map( rawImageList,
+										function onEachRawImage( rawImage ){
+											return {
+												"imageFullSource": rawImage
+											};
+										} );
+
+									attachImageGrid( {
+										"scope": self.scope,
+										"element": $( ".image-grid", self.getDOMNode( ) ),
+										"namespace": reportDetailID,
+										"imageList": imageList
+									} );
+								}
+							} );
+					
+					}else{
+						$( ".show-images-button", this.getDOMNode( ) ).hide( );	
+					}
+				},
+
+				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+					var self = this;
+
+					this.scope.on( "show-report-detail",
+						function onShowReportDetail( reportDetailID ){
+							if( self.props.reportDetailID == reportDetailID ){
+								self.loadImageList( );				
+							}
+						} );
+				},
+
 				"componentWillMount": function componentWillMount( ){
 					this.scope = this.props.scope;
+
+					this.attachAllComponentEventListener( );
 				},
 
 				"shouldComponentUpdate": function shouldComponentUpdate( nextProps, nextState ){
@@ -149,7 +250,17 @@ angular
 						"namespace": reportDetailID
 					} );
 
-					var container = this.props.container
+					var container = this.props.container;
+
+					$( ".close-images-button", this.getDOMNode( ) ).hide( );
+
+					$( ".image-grid", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-header-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".location-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
+
+					$( ".report-info-image-view", this.getDOMNode( ) ).css( "visibility", "hidden" );
 
 					this.scope.publish( "report-detail-rendered", reportDetailID, container );
 				}

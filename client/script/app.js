@@ -24,7 +24,10 @@ angular
 		"ReportList",
 		"UserReportList",
 		"CaseCategoryFilter",
-		"Notify"
+		"Notify",
+		"ImageUploadGrid",
+		"ImageUpload",
+		"ImageSwipe"
 	] )
 
 	.run( [
