@@ -194,7 +194,37 @@ app.get( "/media/image/:imageReference",
 	function onMediaImage( request, response ){
 		var Image = mongoose.model( "Image" );
 
+		var imageReference = request.param( "imageReference" );
 
+		Image
+			.findOne( { 
+				"imageReference": imageReference
+			}, function onFound( error, imageData ){
+				if( error ){
+					response
+						.status( 500 )
+						.json( {
+							"status": "error",
+							"data": state.message
+						} );
+
+				}else if( _.isEmpty( imageData ) ){
+					response
+						.status( 200 )
+						.json( {
+							"status": "failed",
+							"data": "no-image"
+						} );
+
+				}else{
+					response
+						.status( 200 )
+						.json( {
+							"status": "success",
+							"data": imageData
+						} );
+				}
+			} );
 	} );
 
 require( "./start-app.js" ).startApp( app, port, host );

@@ -6,10 +6,11 @@ angular
 		function factory( ){
 			var ImageGrid = React.createClass( {
 				"statics": {
-					"attach": function attach( scope, container ){
+					"attach": function attach( scope, container, optionSet ){
 						var imageGridComponent = (
 							<ImageGrid
-								scope={ scope } />
+								scope={ scope }
+								imageList={ optionSet.imageList } />
 						);
 
 						React.render( imageGridComponent, container[ 0 ] );
@@ -18,44 +19,14 @@ angular
 					}
 				},
 
-				"getInitialState": function getInitialState( ){
+				"getDefaultProps": function getDefaultProps( ){
 					return {
-						"imageList": [ 
-							{
-								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/nyc1-highres.jpg"
-							},
-							{
-								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/nyc2-500px.jpg"
-							},
-							{
-								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/nyc3-500px.jpg"
-							},
-							{
-								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/print1-500px.jpg"
-							},
-							/*{
-								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/print3-highres.jpg"
-							},
-							{
-								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/withhearts5-highres.jpg"
-							},
-							{
-								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/withhearts4-500px.jpg"
-							},
-							{
-								"imageFullSource": "http://stylehatch.github.io/photoset-grid/img/demo/withhearts2-500px.jpg"
-							}*/
-						],
-						"imageGridLayout": ""
+						"imageList": [ ]
 					};
 				},
 
-				"updateImageGridLayout": function updateImageGridLayout( imageCount ){
-					var imageCount = imageCount || this.state.imageList.length;
-
+				"getImageGridLayout": function getImageGridLayout( imageCount ){
 					var layoutList = [ ];
-
-					
 
 					switch( imageCount ){
 						case 1:
@@ -96,24 +67,17 @@ angular
 
 							}while( imageCount && reducer );		
 					}
-					
 
 					var imageGridLayout = layoutList.join( "" );
 
-					this.setState( {
-						"imageGridLayout": imageGridLayout
-					} );
-				},
-
-				"onClickCloseImageGrid": function onClickCloseImageGrid( event ){
-					
+					return imageGridLayout;
 				},
 
 				"onClickImageItem": function onClickImageItem( event ){
 					
 				},
 
-				"onEachImageItem": function onEachImageItem( imageData, index ){
+				"onEachImageItem": function onEachImageItem( imageData, index, imageList ){
 					var imageFullSource = imageData.imageFullSource;
 
 					var hashObject = new jsSHA( imageFullSource, "TEXT" );
@@ -122,7 +86,7 @@ angular
 
 					var imageReference = hash.substring( 0, 5 );
 
-					if( this.state.imageList.length == ( index + 1 ) ){
+					if( imageList.length == ( index + 1 ) ){
 						var self = this;
 
 						var timeout = setTimeout( function onTimeout( ){
@@ -140,39 +104,17 @@ angular
 					return; //: @template: template/image-grid-item.html
 				},
 
-				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
-					var self = this;
-
-					this.scope.on( "push-image-data",
-						function onPushImageData( namespace, imageData ){
-							if( self.scope.namespace == namespace ){
-								var imageList = _.clone( self.state.imageList );
-
-								imageList.push( imageData );
-
-								self.setState( {
-									"imageList": imageList
-								} );
-							}
-						} );
-				},
-
 				"componentWillMount": function componentWillMount( ){
 					this.scope = this.props.scope;
-
-					this.attachAllComponentEventListener( );
 				},
 
 				"componentWillUpdate": function componentWillUpdate( nextProps, nextState ){
-					if( !_.isEqual( this.state.imageList, nextState.imageList ) ){
-						this.updateImageGridLayout( nextState.imageList.length );
-					}
 				},
 
 				"render": function onRender( ){
-					var imageList = this.state.imageList;
+					var imageList = this.props.imageList;
 
-					var imageGridLayout = this.state.imageGridLayout;
+					var imageGridLayout = this.getImageGridLayout( imageList.length );
 
 					return; //: @template: template/image-grid.html
 				},
@@ -182,8 +124,6 @@ angular
 				},
 
 				"componentDidMount": function componentDidMount( ){
-					this.updateImageGridLayout( this.state.imageList.length );
-
 					this.scope.publish( "image-grid-rendered" );
 				}
 			} );
@@ -242,7 +182,9 @@ angular
 
 				scope.publish( "hide-image-grid" );
 
-				ImageGrid.attach( scope, element );
+				ImageGrid.attach( scope, element, {
+					"imageList": optionSet.imageList
+				} );
 			};
 
 			return attachImageGrid;

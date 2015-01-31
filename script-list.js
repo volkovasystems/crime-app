@@ -80,7 +80,8 @@ var scriptList = [
 	"crime-locate-control.js",
 	"crime-report-control.js",
 	"crime-confirm-location-control.js",
-	"crime-image-upload.js"
+	"crime-image-upload.js",
+	"crime-image.js"
 ]
 .map( function onEachScriptFile( scriptFile ){
 	return path.resolve( ".", "client", "script", scriptFile );

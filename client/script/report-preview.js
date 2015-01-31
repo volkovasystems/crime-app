@@ -103,9 +103,59 @@ angular
 						"reportData": { }
 					};
 				},
+
+				"loadImageList": function loadImageList( ){
+					var reportMediaList = this.state.reportData.reportMediaList;
+
+					reportMediaList = reportMediaList || this.props.reportData.reportMediaList;
+
+					if( !_.isEmpty( reportMediaList ) ){
+						var imageList = _.filter( reportMediaList,
+							function onEachMediaItem( mediaData ){
+								return mediaData.type == "image";
+							} );
+
+						var self = this;
+						this.scope.publish( "download-image-list", imageList,
+							function onDownloadImageList( error, rawImageList ){
+								if( error ){
+
+								}else{
+									var reportPreviewID = self.props.reportPreviewID;
+									
+									var imageList = _.map( rawImageList,
+										function onEachRawImage( rawImage ){
+											return {
+												"imageFullSource": rawImage
+											};
+										} );
+
+									attachImageGrid( {
+										"scope": self.scope,
+										"element": $( ".image-grid", self.getDOMNode( ) ),
+										"namespace": reportPreviewID,
+										"imageList": imageList
+									} );
+								}
+							} );
+					}
+				},
+
+				"attachAllComponentEventListener": function attachAllComponentEventListener( ){
+					var self = this;
+
+					this.scope.on( "show-report-preview",
+						function onShowReportPreview( reportPreviewID ){
+							if( self.props.reportPreviewID == reportPreviewID ){
+								self.loadImageList( );				
+							}
+						} );
+				},
 				
 				"componentWillMount": function componentWillMount( ){
 					this.scope = this.props.scope;
+
+					this.attachAllComponentEventListener( );
 				},
 
 				"shouldComponentUpdate": function shouldComponentUpdate( nextProps, nextState ){
@@ -183,12 +233,6 @@ angular
 					attachReportSharing( {
 						"scope": this.scope,
 						"element": $( ".report-sharing", this.getDOMNode( ) ),
-						"namespace": reportPreviewID
-					} );
-
-					attachImageGrid( {
-						"scope": this.scope,
-						"element": $( ".image-grid", this.getDOMNode( ) ),
 						"namespace": reportPreviewID
 					} );
 					
