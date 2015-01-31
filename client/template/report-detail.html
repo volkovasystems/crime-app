@@ -11,6 +11,93 @@
 		style={ {
 			"height": "100%"
 		} }>
+
+		<section 
+			className="close-action pull-right">
+			<a 
+				className="icon md-2x md-close" 
+				href="#"
+				onClick={ this.onClickCloseReportDetail }>
+			</a>
+		</section>
+
+		<section
+			className="report-header-image-view">
+			<h4 
+				className="name">
+				{ reportCaseTitle } { REPORT_CASE_TITLE_PHRASE }
+			</h4>
+			<section 
+				className="crime-time-relative">
+				<section 
+					className="time">
+					<span 
+						className="prefix">
+						{ timeFromNowData.prefix }
+					</span>
+					<span 
+						className="digit">
+						{ timeFromNowData.digit }
+					</span>
+					<span 
+						className="unit">
+						{ timeFromNowData.unit }
+					</span>
+					<span 
+						className="suffix">
+						{ timeFromNowData.suffix }
+					</span>
+				</section>
+			</section>
+		</section>
+
+		<section 
+			className="location-image-view"
+			style={ {
+				"overflow": "hidden"
+			} }>
+
+			<MapPreview
+				position={ position }
+				zoom={ zoom }
+				pinIconURL={ categoryIconPinSource }
+				height={ 250 }
+				width={ 600 } />
+		</section>
+
+		<section
+			className="image-grid">
+		</section>
+
+		<section
+			className="report-info-image-view">
+			<div
+				className="icon-container">
+				<img 
+					alt={ reportCaseTitle } 
+					className="img" 
+					src={ categoryIconSource } />
+			</div>
+			<div
+				className="info-container">
+				<p
+					className="title">
+					{ reportTitle }
+				</p>
+				<p
+					className="date-time">
+					{ descriptiveDateAndTime }
+				</p>
+
+				<div 
+					className="details">
+					<p>
+						{ reportDescription }
+					</p>
+				</div>
+			</div>
+		</section>
+
 		<section 
 			className="crime-detail-teaser"
 			style={ {
@@ -39,15 +126,6 @@
 							{ timeFromNowData.suffix }
 						</span>
 					</section>
-				</section>
-
-				<section 
-					className="close-action pull-right">
-					<a 
-						className="icon md-2x md-close" 
-						href="#"
-						onClick={ this.onClickCloseReportDetail }>
-					</a>
 				</section>
 
 				<section 
@@ -120,20 +198,30 @@
 			<section
 				className="report-sharing">
 			</section>
+		</section>
 
-			<section 
-				className="action"
+		<section 
+			className="action"
+			style={ {
+				"position": "absolute",
+				"bottom": "0px",
+				"width": "100%"
+			} }>
+			<button 
+				className="less-detail-button btn btn-large btn-gray"
+				onClick={ this.onClickLessDetail }>
+				{ LESS_DETAIL_LABEL }
+			</button>
+
+			<button 
+				className="close-images-button btn btn-large btn-gray"
 				style={ {
-					"position": "absolute",
-					"bottom": "0px",
-					"width": "100%"
-				} }>
-				<button 
-					className="btn btn-large btn-gray"
-					onClick={ this.onClickLessDetail }>
-					{ LESS_DETAIL_LABEL }
-				</button>
-			</section>
+					"width": "100%",
+					"padding": "5px"
+				} }
+				onClick={ this.onClickCloseImages }>
+				{ CLOSE_IMAGES_LABEL }
+			</button>
 		</section>
 	</section>
 </section>

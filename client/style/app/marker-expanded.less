@@ -52,6 +52,11 @@
 			}
 		}
 
+		.location-image-view {
+			position: absolute !important;
+			top: 350px !important;
+		}
+
 		.report-info-image-view {
 			position: absolute;
 			bottom: 50px;
@@ -68,13 +73,25 @@
 			}
 
 			.info-container {
-				p:first-child {
+				p.title {
 					font-size: 1.2em;
 					padding-top: 5px;
 				}
 
-				p:last-child {
+				p.date-time {
 					line-height: 1;
+				}
+
+				div.details {
+					overflow-y: auto !important;
+					max-height: 100px;
+					padding-top: 5px;
+					max-width: 350px;
+
+					p {
+						font-size: 1em;
+						font-weight: 100;
+					}
 				}
 
 				p {

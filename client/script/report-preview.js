@@ -138,6 +138,9 @@ angular
 									} );
 								}
 							} );
+					
+					}else{
+						$( ".show-images-button", this.getDOMNode( ) ).hide( );	
 					}
 				},
 

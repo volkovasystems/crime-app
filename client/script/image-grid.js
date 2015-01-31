@@ -42,7 +42,7 @@ angular
 							break;
 
 						case 4:
-							layoutList = [ 2, 2 ];
+							layoutList = [ 1, 1, 2 ];
 							break;
 
 						case 5:
@@ -90,7 +90,9 @@ angular
 						var self = this;
 
 						var timeout = setTimeout( function onTimeout( ){
-							$( self.getDOMNode( ) ).photosetGrid( );
+							$( self.getDOMNode( ) ).photosetGrid( {
+								"gutter": "1px"
+							} );
 
 							$( self.getDOMNode( ) ).mCustomScrollbar( {
 								"theme": "minimal-dark",
