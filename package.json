@@ -83,7 +83,7 @@
       "port": 10000
     },
     "media": {
-      "remote": "",
+      "remote": "ec2-54-154-112-240.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 10001
     },
