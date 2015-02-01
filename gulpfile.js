@@ -117,7 +117,9 @@ gulp.task( "copy-library",
 				"bower_components/*/build/**/*.js",
 				"bower_components/*/build/**/*.css",
 				"bower_components/URIjs/src/*.js",
+				"bower_components/jsSHA/src/*.js",
 				"bower_components/history.js/scripts/compressed/*.js",
+				"bower_components/DotNavigationStyles/js/dots.js",
 				"bower_components/*/css/*.css",
 				"bower_components/*/fonts/*.eot",
 				"bower_components/*/fonts/*.svg",
@@ -125,7 +127,10 @@ gulp.task( "copy-library",
 				"bower_components/*/fonts/*.woff",
 				"!bower_components/mathjs/lib/**/*.js",
 				"!**/Gruntfile.js",
-				"!**/index.js"
+				"!**/index.js",
+				"!**/main.css",
+				"!**/colorbox.css",
+				"!**/jquery.colorbox.js"
 			] )
 			.pipe( plumber( ) )
 			.pipe( flatten( ) )

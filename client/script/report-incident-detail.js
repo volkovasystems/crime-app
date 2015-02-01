@@ -1,4 +1,6 @@
-angular.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
+angular
+	
+	.module( "ReportIncidentDetail", [ "Event", "PageFlow" ] )
 	
 	.constant( "REPORT_HEADER_TITLE", labelData.REPORT_HEADER_TITLE )
 

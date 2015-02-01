@@ -9,6 +9,10 @@ var serverData = serverSet[ "static" ];
 var host = argv.host || serverData.host;
 var port = parseInt( argv.port || 0 ) || serverData.port;
 
+var resolveURL = require( "./resolve-url.js" ).resolveURL;
+resolveURL( serverSet.media );
+var mediaServer = serverSet.media;
+
 var app = express( );
 
 require( "./configure-app.js" ).configureApp( app );
@@ -30,7 +34,19 @@ app.get( "/action/:action/:actionType/:actionValue",
 		var actionType = request.param( "actionType" );
 		var actionValue = request.param( "actionValue" );
 
-		if( action == "render-template" && 
+		if( action == "get-image" &&
+			actionType == "media" )
+		{
+			var redirectURL = mediaServer
+				.joinPath( [
+					"media/image",
+					actionValue
+				].join( "/" ) );
+
+			response
+				.redirect( 301, redirectURL );
+
+		}else if( action == "render-template" && 
 			actionType == "template" )
 		{
 			var template = querystring.unescape( new Buffer( actionValue, "base64" ).toString( ) );

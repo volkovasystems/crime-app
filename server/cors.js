@@ -3,7 +3,7 @@ var argv = require( "yargs" ).argv;
 
 var publicPathList = require( "./package.js" ).packageData.publicPathList;
 
-var allowedOriginDomainPattern = /^(https?\:\/\/)?localhost\:\d{4,5}$/;
+var allowedOriginDomainPattern = /^(https?\:\/\/)?(localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\:\d{4,5}$/;
 if( argv.production ){
 	allowedOriginDomainPattern = /^(https?\:\/\/)?[a-z]+\.crimewatch\.ph\/?$|^(https?\:\/\/)?localhost\:\d{4,5}$/;
 }

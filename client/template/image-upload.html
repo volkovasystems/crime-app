@@ -1,0 +1,22 @@
+<section
+	className="image-upload-container">
+	<p>
+		{ UPLOAD_IMAGES_PHRASE }
+	</p>
+	<section
+		className="image-upload-grid">
+	</section>
+	<input
+		ref="fileBrowser"
+		id="file-browser"
+		type="file"
+		accept="*"
+		onChange={ this.onChangeFileSelection }
+		style={
+			{
+				"width": "0px",
+				"height": "0px"
+			}
+		}
+		value={ filePath }/>
+</section>

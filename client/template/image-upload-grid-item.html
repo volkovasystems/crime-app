@@ -1,0 +1,20 @@
+<div
+	key={ key }
+	className={ [
+		"image-container",
+		( isSelected )? "selected" : "",
+		( isPending )? "pending" : "",
+		( isProcessed )? "processed" : "",
+		( isFailed )? "failed" : ""
+	].join( " " ) }
+	style={
+		{
+			"width": size,
+			"height": size
+		}
+	}
+	onClick={ this.onClickImageItem }
+	value={ imageReference }>
+	<img 
+		src={ imageFullSource }/>
+</div>
