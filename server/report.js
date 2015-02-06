@@ -811,7 +811,7 @@ app.post( "/api/:accessID/report/add",
 			function saveReport( callback ){
 				var newReport = new Report( {
 					"reportID": 			request.param( "reportID" ),
-					"reportState": 			"pending",
+					"reportState": 			"approved",
 					"reporterID": 			request.param( "reporterID" ),
 					"reporterState": 		request.param( "reporterState" ),
 					"reportTimestamp": 		request.param( "reportTimestamp" ),
