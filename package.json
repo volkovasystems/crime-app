@@ -63,22 +63,22 @@
   "serverSet": {
     "static": {
       "domain": "test.crimewatch.ph",
-      "remote": "ec2-54-154-206-225.eu-west-1.compute.amazonaws.com",
+      "remote": "ec2-54-171-148-208.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 8000
     },
     "user": {
-      "remote": "ec2-54-154-177-199.eu-west-1.compute.amazonaws.com",
+      "remote": "ec2-54-154-52-101.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 9000
     },
     "report": {
-      "remote": "ec2-54-154-83-234.eu-west-1.compute.amazonaws.com",
+      "remote": "ec2-54-72-15-24.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 9001
     },
     "app": {
-      "remote": "ec2-54-77-162-45.eu-west-1.compute.amazonaws.com",
+      "remote": "ec2-54-154-238-128.eu-west-1.compute.amazonaws.com",
       "host": "localhost",
       "port": 10000
     },
