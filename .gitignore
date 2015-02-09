@@ -16,3 +16,4 @@ appdb
 *.log
 *.db
 *.bat
+*.key
