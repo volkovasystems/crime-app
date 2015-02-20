@@ -137,6 +137,8 @@ app.all( "/api/:accessID/*",
 
 					}else{
 						var userData = response.body.data;
+
+						console.log( "VERIFYING USER DATA: ", JSON.stringify( userData ) );
 						
 						request.session.userData = userData;
 
