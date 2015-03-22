@@ -37,7 +37,8 @@ Crime
 					},
 
 					function processRequestEndpoint( accessID, callback ){
-						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/get/all/near" );
+						//: TODO: Change this to get all near again.
+						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/get/all" );
 
 						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
