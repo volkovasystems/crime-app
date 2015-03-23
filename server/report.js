@@ -808,9 +808,21 @@ app.post( "/api/:accessID/report/add",
 				}
 			},
 
-			function saveReport( callback ){
+			function createReportID( callback ){
+				var reportData = [
+					[ "location", 		request.param( "reportLocation" ) ],
+					[ "title", 			request.param( "reportTitle" ) ],
+					[ "description", 	request.param( "reportDescription" ) ]
+				];
+
+				var reportID = new Buffer( JSON.stringify( reportData ) ).toString( "base64" ).replace( /[^A-Za-z0-9]/g, "" );
+
+				callback( null, reportID );
+			},
+
+			function saveReport( reportID, callback ){
 				var newReport = new Report( {
-					"reportID": 			request.param( "reportID" ),
+					"reportID": 			request.param( "reportID" ) || reportID,
 					"reportState": 			"pending",
 					"reporterID": 			request.param( "reporterID" ),
 					"reporterState": 		request.param( "reporterState" ),

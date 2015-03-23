@@ -507,17 +507,29 @@ app.post( "/user/register",
 				}
 			},
 
-			function processAccessID( callback ){
+			function createUserID( callback ){
+				var userData = [
+					[ "userID", 		request.param( "userAccountID" ) ],
+					[ "profileName", 	request.param( "userProfileName" ) ],
+					[ "eMail", 			request.param( "userAccountEMail" ) ]
+				];
+
+				var userID = new Buffer( JSON.stringify( userData ) ).toString( "base64" ).replace( /[^A-Za-z0-9]/g, "" );
+
+				callback( null, userID );
+			},
+
+			function processAccessID( userID, callback ){
 				var accessToken = request.param( "userAccountToken" );
 				
 				var hashedAccessID = new Buffer( accessToken ).toString( "base64" ).replace( /[^A-Za-z0-9]/g, "" );
 
-				callback( null, hashedAccessID );
+				callback( null, userID, hashedAccessID );
 			},
 
-			function registerUser( accessID, callback ){
+			function registerUser( userID, accessID, callback ){
 				var newUser = new User( {
-					"userID": 					request.param( "userID" ),
+					"userID": 					request.param( "userID" ) || userID,
 					"userState": 				"logged-in",
 					"accessState": 				"pending",
 					"accessID": 				accessID,
