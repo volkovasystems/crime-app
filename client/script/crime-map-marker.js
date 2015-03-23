@@ -37,8 +37,7 @@ Crime
 					},
 
 					function processRequestEndpoint( accessID, callback ){
-						//: TODO: Change this to get all near again.
-						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/get/all" );
+						var requestEndpoint = getReportServerData( ).joinPath( "api/:accessID/report/get/all/near" );
 
 						requestEndpoint = requestEndpoint.replace( ":accessID", accessID );
 
@@ -56,7 +55,8 @@ Crime
 
 						requestEndpoint = [ requestEndpoint, "?",
 							[ "latitude", radianLatitude ].join( "=" ), "&",
-							[ "longitude", radianLongitude ].join( "=" ) ].join( "" );
+							[ "longitude", radianLongitude ].join( "=" ), "&",
+							[ "distance", "10000000" ].join( "=" ) ].join( "" );
 
 						callback( null, requestEndpoint );
 					},
@@ -158,7 +158,8 @@ Crime
 							"latitude": latitude,
 							"longitude": longitude,
 							"count": count,
-							"index": index
+							"index": index,
+							"distance": "10000000"
 						} );
 
 						requestEndpoint = [
