@@ -202,7 +202,7 @@ angular
 								"title": self.state.title.trim( ),
 								"description": self.state.description.trim( ),
 								"timestamp": timestamp,
-								"anonymous": self.state.isAnonymous
+								"anonymous": self.state.isAnonymous? "anonymous": "public"
 							};
 
 							callback( null, reportData );
