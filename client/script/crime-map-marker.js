@@ -56,7 +56,7 @@ Crime
 						requestEndpoint = [ requestEndpoint, "?",
 							[ "latitude", radianLatitude ].join( "=" ), "&",
 							[ "longitude", radianLongitude ].join( "=" ), "&",
-							[ "distance", "10000000" ].join( "=" ) ].join( "" );
+							[ "distance", "100000000000" ].join( "=" ) ].join( "" );
 
 						callback( null, requestEndpoint );
 					},
@@ -159,7 +159,7 @@ Crime
 							"longitude": longitude,
 							"count": count,
 							"index": index,
-							"distance": "10000000"
+							"distance": "100000000000"
 						} );
 
 						requestEndpoint = [
