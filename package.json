@@ -57,7 +57,7 @@
     "map-stream": "0.0.5",
     "mongoose": "^3.8.19",
     "node-mandrill": "^1.0.1",
-    "unirest": "^0.2.9",
+    "unirest": "^0.5.1",
     "yargs": "^1.3.2"
   },
   "serverSet": {
